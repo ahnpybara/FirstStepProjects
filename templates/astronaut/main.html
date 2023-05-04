@@ -18,7 +18,7 @@
     <!--  jQuery를 사용하기 위한 선언  -->
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 
-    <title>Hello, world!</title>
+    <title>Astroaunt</title>
 
     <style>
         /* 프로필 화면 박스 */
@@ -36,11 +36,11 @@
             object-fit: cover;
         }
 
-        /* 피드 화면 박스 */
+        /* 피드 화면 박스 유재우: 피드에 색깔 변경 */
         .feed_box {
             margin: 20px 0;
             border: solid 1px gray;
-            background-color: white
+            background-color: snow;
         }
 
         /* 모달창의 바깥 영역 */
@@ -167,17 +167,18 @@
                     <b>{{ feed.nickname }}</b> {{ feed.content }}
                 </div>
                 <!--댓글리스트-->
-                <div id="reply_list_{{ feed.id }}">
+                <div id="reply_list_{{ feed.id }}" >
                     {% for reply in feed.reply_list %}
                         <div style="margin: 0 20px;text-align: left;font-size: 14px">
                             <b>{{ reply.nickname }}</b> {{ reply.reply_content }}</div>
                     {% endfor %}
                 </div>
 
-                <!-- 댓글을 입력하는 텍스트 박스 -->
-                <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px gray ">
+                <!-- 댓글을 입력하는 텍스트 박스 유재우: 댓글바에 색상 -->
+                <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px gray">
                     <input id="reply_{{ feed.id }}" type="text" class="form-control"
-                           style="box-shadow: none; border: none; outline: none"
+
+                           style="box-shadow: none; border: none; outline: none;background-color: snow"
                            placeholder="댓글 달기..">
                     <!-- 게시 버튼 -->
                     <div feed_id="{{ feed.id }}" class="upload_reply"
@@ -342,7 +343,8 @@
             </div>
         </div>
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div class="img_upload_space" style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
+        <div class="img_upload_space" id="image_maodal1"
+             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
 
         </div>
     </div>
@@ -497,12 +499,22 @@
     });
     // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
+        //유재우: 모달창 닫았을 때 스크롤 가능하게 하는 부분
+        $(document.body).css({
+            overflow: 'visible'
+        });
+        //유재우: 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
+        $('.img_upload_space').css({
+            "background-color": "White",
+            "background-image": ""
+        });
         $('#first_modal').css({
             display: 'none'
         });
         $('#second_modal').css({
             display: 'none'
         });
+
     });
 
     // 사용 범위를 위해 전역 변수 files 선언
@@ -604,7 +616,7 @@
             $('#first_modal').css({
                 display: 'none'
             });
-            
+
             // 글 내용 작성 모달창을 띄움
             $('#second_modal').css({
                 display: 'flex'
@@ -614,8 +626,8 @@
             $('.img_upload_space').css({
                 "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
                 "outline": "none",
-                "background-size": "100%",
                 "background-repeat": "no-repeat",
+                "background-size": "contain",
                 "background-position": "center"
             });
         } else {
