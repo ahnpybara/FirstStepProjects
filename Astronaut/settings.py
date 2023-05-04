@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'Astronaut.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '15.164.48.131',
+        'HOST': '3.39.32.237',
         'NAME': 'astronaut_table',
         'USER': 'root',
         'PASSWORD': 'password',
