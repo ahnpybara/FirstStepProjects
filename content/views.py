@@ -20,7 +20,7 @@ class Main(APIView):
         if email is None:
             return render(request, "user/login.html")
 
-        # 세션정보가 저장된 이메일을 필터링 조건으로 대입해서 유저테이블을 필터링을 진행 -> 결과를 user 변수에 저장
+        # 세션정보가 저장된 이메일을 필터링 조건으로 대입해서 유저테이블을 필터링을 진행 -> 결과를 user_session 변수에 저장
         user_session = User.objects.filter(email=email).first()
         # 세션에 이메일 정보가 있는데 그 이메일 주소가 우리 회원이 아닌경우 -> 로그인 페이지로 이동시킴
         if user_session is None:
@@ -52,7 +52,7 @@ class Main(APIView):
                                   is_marked=is_marked
                                   ))
 
-        # 필터링을 거쳐서 나온 유저 정보가 담긴 user와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
+        # 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
         return render(request, "astronaut/main.html", context=dict(feeds=feed_list, user_session=user_session))
 
 
