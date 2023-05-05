@@ -347,6 +347,7 @@
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
         <div class="img_upload_space" id="image_maodal1"
              style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
+            여기에 드롭하거나 여기를 클릭해주세요
 
         </div>
     </div>
@@ -510,6 +511,8 @@
             "background-color": "White",
             "background-image": ""
         });
+        // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
+        $('#input_feed_content').each(function () { $(this).val(''); });
         $('#first_modal').css({
             display: 'none'
         });
