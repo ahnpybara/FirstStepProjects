@@ -495,7 +495,7 @@
         });
 
     });
-    // 유재우 : 모달창 닫기 버튼 이벤트 처리
+    // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
         //모달창 닫았을 때 스크롤 가능
         $(document.body).css({
@@ -572,7 +572,7 @@
     $('.img_upload_space')
         .on("dragover", dragOver)
         .on("dragleave", dragOver)
-        .on("drop", uploadFiles);
+        .on("drop", uploadFiles)
 
     // 마우스를 드래그 했을 때
     function dragOver(e) {
