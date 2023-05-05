@@ -40,7 +40,7 @@
         .feed_box {
             margin: 20px 0;
             border: solid 1px gray;
-            background-color: white
+            background-color: snow
         }
 
         /* 모달창의 바깥 영역 */
@@ -177,7 +177,7 @@
                 <!-- 댓글을 입력하는 텍스트 박스 -->
                 <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px gray ">
                     <input id="reply_{{ feed.id }}" type="text" class="form-control"
-                           style="box-shadow: none; border: none; outline: none"
+                           style="box-shadow: none; border: none; outline: none; background-color: snow"
                            placeholder="댓글 달기..">
                     <!-- 게시 버튼 -->
                     <div feed_id="{{ feed.id }}" class="upload_reply"
@@ -497,6 +497,15 @@
     });
     // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
+        //모달창 닫았을 때 스크롤 가능
+        $(document.body).css({
+            overflow: 'visible'
+        });
+        //모달창 닫았을 때 백그리운드 색 및 이미지 리셋
+        $('.img_upload_space').css({
+            "background-color": "White",
+            "background-image": ""
+        });
         $('#first_modal').css({
             display: 'none'
         });
@@ -604,7 +613,7 @@
             $('#first_modal').css({
                 display: 'none'
             });
-            
+
             // 글 내용 작성 모달창을 띄움
             $('#second_modal').css({
                 display: 'flex'
