@@ -127,9 +127,9 @@
         <!-- 반복문을 통한 피드를 생성하는 파이썬 코드 -->
         {% for feed in feeds %}
             <div class="feed_box">
-                <!--사용자 프로필 사진과 사용자 이름-->
+                <!--안치윤 : 사용자 프로필 사진과 사용자 이름, 간격 조절-->
                 <div style="display: flex;flex-direction: row; align-items: center; margin: 20px">
-                    <div class="box" style="width: 35px; height: 35px">
+                    <div class="box" style="width: 35px; height: 35px; margin-right: 10px">
                         <!-- 안치윤 : 피드에서 프로필 사진 클릭시 프로필로 이동-->
                         <a href="/content/profile"> <img class="profile"
                                                          src="{% get_media_prefix %}{{ feed.profile_image }}"
@@ -145,7 +145,7 @@
                           src="{% get_media_prefix %}{{ feed.image }}" alt="text">
                 </div>
                 <!--좋아요 댓글 보내기 북마크 아이콘-->
-                <div style="margin: 0 20px;display: flex; flex-direction: row; justify-content: space-between">
+                <div style="margin: 5px 20px; display: flex; flex-direction: row; justify-content: space-between">
                     <div>
                         <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
                               class="favorite material-icons-outlined"
@@ -164,19 +164,19 @@
 
                     </div>
                 </div>
-                <!--작성자이름과 좋아요 수-->
-                <div style="margin: 0 20px;text-align: left;font-size: 14px"> 이 게시글을 <b>{{ feed.like_count }}명</b>이
+                <!-- 안치윤 : 간격 조절, 좋아요 수-->
+                <div style="margin: 2px 20px; text-align: left;font-size: 14px"> 이 게시글을 <b>{{ feed.like_count }}명</b>이
                     좋아합니다.
                 </div>
-                <!-- 작성자 글내용 -->
-                <div style="margin: 0 20px;text-align: left;font-size: 16px">
+                <!-- 안치윤 : 간격 조절, 작성자 글내용 -->
+                <div style="margin-left: 20px; margin-bottom: 7px; text-align: left;font-size: 16px">
                     <b>{{ feed.nickname }}</b> {{ feed.content }}
                 </div>
                 <!--댓글리스트-->
                 <div id="reply_list_{{ feed.id }}">
                     {% for reply in feed.reply_list %}
                         <div style="margin: 0 20px;text-align: left;font-size: 14px">
-                            <!--댓글 닉네임 클릭시 사용자 프로필로 이동-->
+                            <!--안치윤 : 댓글 닉네임 클릭시 사용자 프로필로 이동 (추가 작업)-->
                             <b class="reply_nickname">{{ reply.nickname }}</b> {{ reply.reply_content }}</div>
                     {% endfor %}
                 </div>
