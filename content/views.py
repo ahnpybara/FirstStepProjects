@@ -113,6 +113,22 @@ class Profile(APIView):
                                                                     bookmark_feed_list=bookmark_feed_list,
                                                                     user=user))
 
+    def post(self, request):
+        # 댓글 단 사용자의 닉네임을 받아옴
+        reply_name = request.data.get('reply_name', None)
+        # 댓글 닉네임을 변수 nickname에 저장
+        nickname = reply_name
+        # 닉네임을 가지고 유저 테이블에서 필터링한 결과를 user에 저장
+        user = User.objects.filter(nickname=nickname).first()
+        # 필터링한 유저의 이메일을 구함
+        email = user.email
+        # 출력해봄 확인
+        print(email)
+        # 프로필 화면에서 게시글 조회할 때 필요한 리스트를 구하는 과정
+
+        # 프로플 화면에서 게시글을 조회할 때 필요한 유저 정보를 profile.html로 전달
+        return render(request, 'content/profile.html', context=dict(user=user))
+
 
 # 서버로 전달된 댓글 내용과 댓글을 입력한 사용자의 이메일 받아서 각 변수에 넣고 댓글 테이블에 저장
 class UploadReply(APIView):
