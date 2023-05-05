@@ -8,7 +8,7 @@ from .models import Feed, Reply, Like, Bookmark
 from user.models import User
 import os
 
-
+# 안치윤 댓글입력시 프로필 이동 TODO
 # Main 클래스는 여러 테이블에서 데이터를 가져와 피드리스트 변수에 저장하고 main.html과
 # main.html에서 피드를 사용자에게 보여주는데 필요한 피드리스트와 user 정보를 브라우저에게 보내는 클래스입니다.
 class Main(APIView):
