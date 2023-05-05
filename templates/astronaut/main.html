@@ -40,7 +40,11 @@
         .feed_box {
             margin: 20px 0;
             border: solid 1px gray;
+<<<<<<< HEAD
             background-color: snow;
+=======
+            background-color: white;
+>>>>>>> 30e43ab1ae4949344194f7fbba3cbadbc58db28e
         }
 
         /* 모달창의 바깥 영역 */
@@ -177,8 +181,8 @@
                 <!-- 댓글을 입력하는 텍스트 박스 유재우: 댓글바에 색상 -->
                 <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px gray">
                     <input id="reply_{{ feed.id }}" type="text" class="form-control"
-
                            style="box-shadow: none; border: none; outline: none;background-color: snow"
+                           style="box-shadow: none; border: none; outline: none; background-color: white"
                            placeholder="댓글 달기..">
                     <!-- 게시 버튼 -->
                     <div feed_id="{{ feed.id }}" class="upload_reply"
@@ -505,15 +509,24 @@
     });
     // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
+
         //유재우: 모달창 닫았을 때 스크롤 가능하게 하는 부분
         $(document.body).css({
             overflow: 'visible'
         });
         //유재우: 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
+
+        //모달창 닫았을 때 스크롤 가능
+        $(document.body).css({
+            overflow: 'visible'
+        });
+        //모달창 닫았을 때 백그리운드 색 및 이미지 리셋
+
         $('.img_upload_space').css({
             "background-color": "White",
             "background-image": ""
         });
+
         // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
         $('#input_feed_content').each(function () { $(this).val(''); });
         $('#first_modal').css({
