@@ -353,7 +353,6 @@
             <div>
                 <!-- 유재우 :id 추가 -->
                 <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
-                <span class="material-icons-outlined" style="margin-right: 40px">settings</span>
                 새 이미지 업로드
             </div>
             <!-- 모달창 닫기 버튼 -->
@@ -363,9 +362,10 @@
         </div>
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
         <!-- 유재우 :id 추가 -->
-        <div class="img_upload_space" id="image_maodal1"
+        <div class="img_upload_space" id="image_upload_modal"
              style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
             <!-- 유재우 :내용 추가 -->
+            <!-- 유재우 : 위치를 중간에 고정 해야함-->
             여기에 드롭하거나 여기를 클릭해주세요
 
         </div>
@@ -550,13 +550,11 @@
         $(document.body).css({
             overflow: 'visible'
         });
-        //유재우: 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
 
         //모달창 닫았을 때 스크롤 가능
         $(document.body).css({
             overflow: 'visible'
         });
-        //모달창 닫았을 때 백그리운드 색 및 이미지 리셋
         //유재우: 모달창 닫았을 때 스크롤 가능하게 하는 부분
         $(document.body).css({
             overflow: 'visible'
@@ -632,7 +630,7 @@
         });
     });
     // 유재우: 이미지업로드 버튼 클릭
-    $('#image_maodal1').click(function () {
+    $('#image_upload_modal').click(function () {
         $('#input_image_upload').click();
     })
 
