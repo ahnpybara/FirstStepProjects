@@ -188,8 +188,7 @@ class ToggleBookmark(APIView):
         return Response(status=200)
 
 
-
-# 안치윤 : 댓글 프로필 이동 api
+# 댓글에서 닉네임 클릭시 해당 사용자의 프로필로 이동 api
 class ReplyProfile(APIView):
     def get(self, request):
         # 댓글 단 사용자의 닉네임을 받아옴

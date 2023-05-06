@@ -10,6 +10,5 @@ urlpatterns = [
     path('bookmark', ToggleBookmark.as_view()),
     path('profile', Profile.as_view()),
     path('main', Main.as_view()),
-    # 안치윤 : url 추가 댓글클릭-> 프로필이동
     path('reprofile', ReplyProfile.as_view())
 ]

@@ -36,8 +36,7 @@
             object-fit: cover;
         }
 
-        /* 피드 화면 박스 유재우: 피드에 색깔 변경 */
-        /* 피드 화면 박스 유재우: 피드에 색깔 변경 (수정 필요) */
+        /* 피드 화면 박스 */
         .feed_box {
             margin: 20px 0;
             border: solid 1px gray;
@@ -48,7 +47,6 @@
         .modal_overlay {
             width: 100%;
             height: 100%;
-            /* 유재우 모달창을 고정된 위치에 나오게 하기위해 포지션을 fixed로 고침 */
             position: fixed;
             left: 0;
             top: 0;
@@ -89,10 +87,8 @@
         <input class="form-control me-2" style="width: 400px" type="search" placeholder="Search" aria-label="Search">
         <!-- 메뉴 아이콘 들 -->
         <div style="display: flex">
-            <!--안치윤 : 홈 메뉴 아이콘-->
             <a href="/main" style="color: black"><span class="material-icons"
                                                        style="padding-right: 10px"> home</span></a>
-            <!--안치윤 : 피드 추가 아이콘-->
             <span id="nav_bar_add_box" class="material-icons-outlined" style="padding-right: 10px; cursor: pointer">add_box</span>
             <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
             <div class="dropdown">
@@ -107,7 +103,6 @@
                     </div>
                 </a>
                 <!-- 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
-
                 <ul class="dropdown-menu" style="left:-158px" aria-labelledby="dropdownMenuLink">
                     <li><a class="dropdown-item" href="/content/profile">프로필</a></li>
                     <li>
@@ -126,20 +121,18 @@
 <div style="display: flex; flex-direction: row;text-align: center; justify-content: center;padding-top: 60px; background-color:#FAFAFA">
     <!--피드들이 올라오는 영역 -->
     <div style="width: 500px;min-width: 500px;margin-right: 300px">
-
         <!-- 반복문을 통한 피드를 생성하는 파이썬 코드 -->
         {% for feed in feeds %}
             <div class="feed_box">
-                <!--안치윤 : 사용자 프로필 사진과 사용자 이름, 간격 조절-->
                 <div style="display: flex;flex-direction: row; align-items: center; margin: 20px">
                     <div class="box" style="width: 35px; height: 35px; margin-right: 10px">
-                        <!-- 안치윤 : 피드에서 프로필 사진 클릭시 프로필로 이동-->
+                        <!-- 안치윤 : 피드에서 프로필 사진 클릭시 프로필로 이동 TODO -->
                         <a href="/content/profile"> <img class="profile"
                                                          src="{% get_media_prefix %}{{ feed.profile_image }}"
                                                          alt="text"></a>
                     </div>
                     <div>
-                        <!-- 안치윤 : 피드에서 닉네임 클릭시 프로필로 이동-->
+                        <!-- 안치윤 : 피드에서 닉네임 클릭시 프로필로 이동 TODO -->
                         <a href="/content/profile" style="color: black; text-decoration: none">{{ feed.nickname }}</a>
                     </div>
                 </div>
@@ -150,12 +143,14 @@
                 <!--좋아요 댓글 보내기 북마크 아이콘-->
                 <div style="margin: 5px 20px; display: flex; flex-direction: row; justify-content: space-between">
                     <div>
+                        <!--좋아요-->
                         <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
                               class="favorite material-icons-outlined"
                               style="color: red;cursor: pointer">{% if feed.is_liked %}
                             favorite{% else %}favorite_border{% endif %}</span>
                     </div>
                     <div>
+                        <!--북마크-->
                         <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}"
                               class="bookmark material-icons-outlined" style="cursor: pointer">
                             {% if feed.is_marked %}
@@ -164,14 +159,13 @@
                                 bookmark_border
                             {% endif %}
                         </span>
-
                     </div>
                 </div>
-                <!-- 안치윤 : 간격 조절, 좋아요 수-->
+                <!-- 좋아요 수-->
                 <div style="margin: 2px 20px; text-align: left;font-size: 14px"> 이 게시글을 <b>{{ feed.like_count }}명</b>이
                     좋아합니다.
                 </div>
-                <!-- 안치윤 : 간격 조절, 작성자 글내용 -->
+                <!-- 작성자 글내용 -->
                 <div style="margin-left: 20px; margin-bottom: 7px; text-align: left;font-size: 16px">
                     <b>{{ feed.nickname }}</b> {{ feed.content }}
                 </div>
@@ -179,20 +173,18 @@
                 <div id="reply_list_{{ feed.id }}">
                     {% for reply in feed.reply_list %}
                         <div style="margin: 0 20px;text-align: left;font-size: 14px">
-                            <!--안치윤 : 댓글 닉네임 클릭시 사용자 프로필로 이동 (TODO)-->
+                            <!--댓글 닉네임 클릭시 사용자 프로필로 이동-->
                             <b class="reply_nickname"
                                id="{{ reply.nickname }}">{{ reply.nickname }}</b> {{ reply.reply_content }}
                         </div>
                     {% endfor %}
                 </div>
 
-                <!-- 댓글을 입력하는 텍스트 박스 유재우: 댓글바에 색상 -->
+                <!-- 댓글을 입력하는 텍스트 박스 -->
                 <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px gray">
                     <input id="reply_{{ feed.id }}" type="text" class="form-control"
-                           style="box-shadow: none; border: none; outline: none;background-color: snow"
                            style="box-shadow: none; border: none; outline: none; background-color: white"
                            placeholder="댓글 달기..">
-                    <!-- 안치윤 : 커서 포인터 변경 게시 버튼 -->
                     <div feed_id="{{ feed.id }}" class="upload_reply"
                          style="width: 50px;color: cornflowerblue; font-weight: bold; cursor: pointer">
                         게시
@@ -205,20 +197,22 @@
 
     <!-- 팔로우 추천 화면 및 내 프로필 표시 -->
     <div style="width: 400px; height: 1000px; position: fixed;left: 62%; z-index: 0">
-        <!-- 내 프로필 표시 -->
+        <!-- 내 프로필 표시 영역 -->
         <div style="display: flex;flex-direction: row; align-items: center; margin: 20px">
             <div class="box" style="width: 70px; height: 70px">
-                <!--안치윤 : 프로필 사진 클릭시 내 프로필 이동 수정-->
+                <!--프로필, 사진 클릭시 내 프로필 이동 -->
                 <a href="/content/profile"> <img class="profile"
                                                  src="{% get_media_prefix %}{{ user_session.profile_image }}"
                                                  alt="text"></a>
             </div>
             <div style="margin-left: 10px; text-align: left">
+
                 <div style="font-weight: bold">
-                    <!-- 안치윤 : 닉네임 클릭시 프로필로 이동-->
+                    <!-- 닉네임, 클릭시 프로필로 이동-->
                     <a href="/content/profile"
                        style="color: black; text-decoration: none">{{ user_session.nickname }}</a>
                 </div>
+                <!--이름-->
                 <div style="color: gray">
                     {{ user_session.name }}
                 </div>
@@ -352,8 +346,6 @@
                 <!-- 공백 -->
             </div>
             <div>
-                <!-- 유재우 :id 추가 -->
-                <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
                 새 이미지 업로드
             </div>
             <!-- 모달창 닫기 버튼 -->
@@ -361,24 +353,25 @@
                 <span class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
+
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
-
         <div class="img_upload_space"
-             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px;text-align: center">
-            <!-- 유재우 :내용 추가 -->
-            <!-- 유재우 : 위치를 중간에 고정 해야함-->
-            여기에 드롭하거나
-            <!-- 유재우 :id => image_upload_btn 추가 -->
-            <div style="">
-
-                <button id="image_upload_btn" type="button" class="btn btn-primary"
-                        style="width: 200px">
-                    클릭하세요
-                </button>
+             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px; text-align: center">
+            <div style="margin-top: 200px; color: gray; font-weight: bold">
+                이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
             </div>
 
+            <!--사진 찾는 파일 시스템을 여는 버튼-->
+            <button id="image_upload_btn" type="button" class="btn btn-primary"
+                    style="width: 200px; margin-top: 20px">
+                사진 추가
+            </button>
+            <!--파일 입력 폼-->
+            <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
         </div>
+
     </div>
+</div>
 </div>
 
 <!-- 글 내용 작성 모달창 두번째 모달 -->
@@ -408,15 +401,8 @@
                               id="exampleFormControlTextarea1" rows="5"></textarea>
                 </div>
                 <!-- 공유하기 버튼 -->
-                <!-- 05-06 유재우: 공유하기 버튼에 안보이게하는 부분 추가 -->
                 <button id="feed_create_button" type="button" class="btn btn-primary"
-                        style="width: 100%; display: none">
-                    공유하기
-                </button>
-                <!-- 공유하기 버튼 -->
-                <!-- 05-06 유재우: 파일 추가로 업로드를 시도할 시 버튼이며 id는 feed_create_button_clickedbtn로 부여함 -->
-                <button id="feed_create_button_clickedbtn" type="button" class="btn btn-primary"
-                        style="width: 100%; display: none">
+                        style="width: 100%">
                     공유하기
                 </button>
             </div>
@@ -428,11 +414,11 @@
 
 <!-- 자바 스크립트 영역 이벤트처리나 서버로 데이터를 전달하는 과정(ajax) -->
 <script>
-    // 안치윤 : 댓글에 사용자 닉네임 클릭시 해당 사용자의 프로필로 이동 TODO
+    // 댓글에 사용자 닉네임 클릭시 해당 사용자의 프로필로 이동
     $(".reply_nickname").click(function (event) {
         let reply_id = event.target.id;
         let reply_name = $.trim($('#' + reply_id).html());
-        location.href = "/content/reprofile?reply_name="+reply_name;
+        location.href = "/content/reprofile?reply_name=" + reply_name;
     });
 
     // 북마크 아이콘 클릭 이벤트 처리
@@ -544,40 +530,20 @@
         });
 
     });
+
     // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
-
-        //유재우: 모달창 닫았을 때 스크롤 가능하게 하는 부분
+        // 모달창 닫았을 때 본문 스크롤 가능
         $(document.body).css({
             overflow: 'visible'
         });
-        //모달창 닫았을 때 스크롤 가능
-        $(document.body).css({
-            overflow: 'visible'
-        });
-        //유재우: 모달창 닫았을 때 스크롤 가능하게 하는 부분
-        $(document.body).css({
-            overflow: 'visible'
-        });
-        //유재우: 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
+        // 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
         $('.img_upload_space').css({
             "background-color": "White",
             "background-image": ""
         });
-        //05-06 유재우 : 모달창이 닫치면 공유하기 버튼을 숨김
-        $('#feed_create_button').css({
-            display: "none"
-        })
-        //05-06 유재우 : 모달창이 닫치면 공유하기 버튼을 숨김
-        $('#feed_create_button_clickedbtn').css({
-            display: "none"
-        })
 
-        // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
-        $('#input_feed_content').each(function () {
-            $(this).val('');
-        });
-        // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
+        // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
         $('#input_feed_content').each(function () {
             $(this).val('');
         });
@@ -603,7 +569,6 @@
         $(document.body).css({
             overflow: 'hidden'
         });
-
     });
     // 공유하기 버튼 클릭시 이벤트 처리
     $('#feed_create_button').click(function () {
@@ -640,61 +605,13 @@
         });
     });
 
-    // 05-06 유재우 : 파일추가로 업로드 시도시의 이벤트 처리
-    $('#feed_create_button_clickedbtn').click(function () {
-        alert("공유하기 눌렀다.");
-
-        let file = $('#input_image_upload')[0].files[0];
-        let image = $('#input_image_upload')[0].files[0].name;
-        let content = $('#input_feed_content').val();
-
-        // 파일을 업로드 하는 것이므로 formdata 형태로 서버에 전달해야 함, formdata 객체를 생성한 뒤 서버로 보낼 데이터를 객체에 추가해줌
-        let fd = new FormData();
-
-        fd.append('file', file);
-        fd.append('image', image);
-        fd.append('content', content);
-
-        //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
-        $.ajax({
-            url: "/content/upload",
-            data: fd,
-            method: "POST",
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                console.log("성공");
-            },
-            error: function (request, status, error) {
-                console.log("에러");
-            },
-            complete: function () {
-                console.log("완료");
-                location.replace("/main");
-            }
-        });
-    });
-
-    // 유재우: 이미지 업로드 버튼 클릭으로 접근
-    $('#image_upload_btn').click(function () {
-        $('#input_image_upload').click();
-
-        //05-06 유재우 : 숨겨져있던 공유하기 버튼을 나타나게 함
-        $('#feed_create_button_clickedbtn').css({
-            display: "block"
-        })
-        //05-06 유재우 : 만일 버튼이 버튼이 나타나있을때 공유하기 버튼을 숨김 함
-        $('#feed_create_button').css({
-            display: "none"
-        })
-    })
-
-
     // 이미지 업로드 공간에 특정 이벤트 발생시 해당하는 함수를 실행
     $('.img_upload_space')
         .on("dragover", dragOver)
         .on("dragleave", dragOver)
         .on("drop", uploadFiles)
+        .on("change", uploadFiles)
+
 
     // 마우스를 드래그 했을 때
     function dragOver(e) {
@@ -702,9 +619,9 @@
         e.stopPropagation();
         e.preventDefault();
 
-        // 파일을 드래그해서 업로드 공간에 올리면 화면이 검정색으로 바뀜
-        // 마우스가 업로드 공간에서 떠나면 화면이 회색으로 바뀜
-        if (e.type == "dragover") {
+        // 파일을 드래그해서 업로드 공간에 올릴때 이벤트  이쁘게 수정 필요 TODO
+        // 마우스가 업로드 공간에서 떠나면 이벤트 이쁘게 수정 필요 TODO
+        if (e.type === "dragover") {
             $(e.target).css({
                 "background-color": "black",
                 "outline-offset": "-20px"
@@ -722,14 +639,6 @@
         e.stopPropagation();
         e.preventDefault();
 
-        //05-06 유재우 : 숨겨져있던 공유하기 버튼을 나타나게 함
-        $('#feed_create_button').css({
-            display: "block"
-        })
-        //05-06 유재우 : 만일 버튼이 버튼이 나타나있을때 공유하기 버튼을 숨김 함
-        $('#feed_create_button_clickedbtn').css({
-            display: "none"
-        })
         // 실질적으로 파일을 업로드 하는 부분
         e.dataTransfer = e.originalEvent.dataTransfer;
         files = e.target.files || e.dataTransfer.files;
@@ -757,28 +666,32 @@
             $('.img_upload_space').css({
                 "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
                 "outline": "none",
+                "background-size": "100%",
                 "background-repeat": "no-repeat",
-                "background-size": "contain",
                 "background-position": "center"
             });
         } else {
             alert('이미지가 아닙니다.');
-            return;
+            return 0;
         }
+
     }
 
-    // 유재우 이미지 파일을 버튼을 이용해 진행했을 경우
-    function image_upload(e) {
+    // 모달창의 사진 추가 버튼 클릭했을 시
+    $('#image_upload_btn').click(function () {
+        $('#input_image_upload').click();
+    });
+
+    // 파일 입력 폼에서 변화 발생시 해당 함수가 실행
+    function image_upload() {
         // 이미지 업로드시 사진업로드 모달창을 가림
         $('#first_modal').css({
             display: 'none'
         });
-
         // 글 내용 작성 모달창을 띄움
         $('#second_modal').css({
             display: 'flex'
         });
-
         // 업로드 창 배경을 업로드된 이미지로 변경
         $('.img_upload_space').css({
             "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
@@ -787,7 +700,6 @@
             "background-size": "contain",
             "background-position": "center"
         });
-
 
     }
 </script>

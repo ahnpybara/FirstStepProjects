@@ -144,19 +144,19 @@
 <div style="border-top: solid 2px rgba(50,50,50,0.1); width: 100%">
     <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; margin: 20px">
         <!-- 내가 작성한 게시글들을 보기 위한 버튼 -->
-        <!-- 정유진: 초기 화면에 활성화된 버튼에 밑줄표시 -->
+        <!-- 초기 화면에 활성화된 버튼에 밑줄표시 -->
         <div id="button_feed_list"
              style="cursor: pointer;margin: 0 30px;display: flex; flex-direction: row;align-items: center; border-bottom-style: solid; border-bottom-width: 1px;" ><span
                 class="material-icons-outlined">grid_on</span>내 게시물
         </div>
         <!-- 내가 좋아요한 게시글들을 보기 위한 버튼 -->
-        <!-- 정유진: 초기 화면에 비활성화된 버튼에 밑줄의 두께 설정 -->
+        <!-- 초기 화면에 비활성화된 버튼에 밑줄의 두께 설정 -->
         <div id="button_feed_like_list"
              style="cursor: pointer;margin: 0 30px;display: flex; flex-direction: row;align-items: center; border-bottom-width: 1px;"><span
                 class="material-icons-outlined">favorite_border</span>좋아요
         </div>
         <!-- 내가 북마크한 게시글들을 보기 위한 버튼 -->
-        <!-- 정유진: 초기 프로필 화면에 비활성화된 버튼에 밑줄의 두께 설정 -->
+        <!-- 초기 프로필 화면에 비활성화된 버튼에 밑줄의 두께 설정 -->
         <div id="button_feed_bookmark_list"
              style="cursor: pointer;margin: 0 30px;display: flex; flex-direction: row;align-items: center ; border-bottom-width: 1px;"><span
                 class="material-icons-outlined">bookmark_border</span>북마크
@@ -270,15 +270,15 @@
 <script>
     // 내가 쓴 게시물 이벤트 처리
     $("#button_feed_list").click(function () {
-        // 정유진: 프로필 화면의 내 게시물 버튼 활성화 표시
+        // 프로필 화면의 내 게시물 버튼 활성화 표시
         $('#button_feed_list').css({
             borderBottomStyle : "solid"
         });
-        // 정유진: 프로필 화면의 좋아요 버튼 비활성화 표시
+        // 프로필 화면의 좋아요 버튼 비활성화 표시
         $('#button_feed_like_list').css({
             borderBottomStyle : "none"
         });
-        // 정유진: 프로필 화면의 북마크 버튼 비활성화 표시
+        // 프로필 화면의 북마크 버튼 비활성화 표시
         $('#button_feed_bookmark_list').css({
             borderBottomStyle : "none"
         });
@@ -298,15 +298,15 @@
 
     // 내가 좋아요한 게시물 이벤트 처리
     $("#button_feed_like_list").click(function () {
-        // 정유진: 프로필 화면의 내 게시물 버튼 비활성화 표시
+        // 프로필 화면의 내 게시물 버튼 비활성화 표시
         $('#button_feed_list').css({
             borderBottomStyle : "none"
         });
-        // 정유진: 프로필 화면의 좋아요 버튼 활성화 표시
+        // 프로필 화면의 좋아요 버튼 활성화 표시
         $('#button_feed_like_list').css({
             borderBottomStyle : "solid"
         });
-        // 정유진: 프로필 화면의 북마크 버튼 비활성화 표시
+        // 프로필 화면의 북마크 버튼 비활성화 표시
         $('#button_feed_bookmark_list').css({
             borderBottomStyle : "none"
         });
@@ -326,15 +326,15 @@
 
     // 내가 북마크한 게시물 이벤트 처리
     $("#button_feed_bookmark_list").click(function () {
-        //정유진: 프로필 화면의 내 게시물 버튼 비활성화 표시
+        //프로필 화면의 내 게시물 버튼 비활성화 표시
         $('#button_feed_list').css({
             borderBottomStyle : "none"
         });
-        //정유진: 프로필 화면의 좋아요 버튼 비활성화 표시
+        //프로필 화면의 좋아요 버튼 비활성화 표시
         $('#button_feed_like_list').css({
             borderBottomStyle : "none"
         });
-        // 정유진: 프로필 화면의 북마크 버튼 활성화 표시
+        // 프로필 화면의 북마크 버튼 활성화 표시
         $('#button_feed_bookmark_list').css({
             borderBottomStyle : "solid"
         });
@@ -354,16 +354,16 @@
 
     // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
-        //유재우: 모달창 닫았을 때 스크롤 가능하게 하는 부분
+        // 모달창 닫았을 때 스크롤 가능하게 하는 부분
         $(document.body).css({
             overflow: 'visible'
         });
-        //유재우: 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
+        // 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
         $('.img_upload_space').css({
             "background-color": "White",
             "background-image": ""
         });
-        // 유재우:  모달창 닫았을 때 글 내용을 리셋하는 부분
+        // 모달창 닫았을 때 글 내용을 리셋하는 부분
         $('#input_feed_content').each(function () {
             $(this).val('');
         });
@@ -379,7 +379,7 @@
     let files;
     // 게시글 추가 버튼 이벤트 처리
     $('#nav_bar_add_box').click(function () {
-        //+버튼을 누르면 업로드 창이뜨게 함
+        // +버튼을 누르면 업로드 창이뜨게 함
         $('#first_modal').css({
             display: 'flex'
         });
@@ -494,12 +494,12 @@
         }
 
     }
-
+    // 프로필 사진 업로드 버튼 클릭시 이벤트 처리
     $('#button_profile_upload').click(function () {
         $('#input_fileupload').click();
     });
 
-    // 프로파일 업로드
+    // 프로필 사진 업로드 하는 함수와  ajax
     function profile_upload() {
         let file = $('#input_fileupload')[0].files[0];
 
