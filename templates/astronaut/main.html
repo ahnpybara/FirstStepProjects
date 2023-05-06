@@ -18,7 +18,7 @@
     <!--  jQuery를 사용하기 위한 선언  -->
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 
-    <title>Hello, world!</title>
+    <title>Astroaunt</title>
 
     <style>
         /* 프로필 화면 박스 */
@@ -35,7 +35,7 @@
             height: 100%;
             object-fit: cover;
         }
-
+        /* 피드 화면 박스 유재우: 피드에 색깔 변경 */
         /* 피드 화면 박스 유재우: 피드에 색깔 변경 (수정 필요) */
         .feed_box {
             margin: 20px 0;
@@ -351,6 +351,8 @@
                 <!-- 공백 -->
             </div>
             <div>
+                <!-- 유재우 :id 추가 -->
+                <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
                 새 이미지 업로드
             </div>
             <!-- 모달창 닫기 버튼 -->
@@ -359,7 +361,12 @@
             </div>
         </div>
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div class="img_upload_space" style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
+        <!-- 유재우 :id 추가 -->
+        <div class="img_upload_space" id="image_upload_modal"
+             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
+            <!-- 유재우 :내용 추가 -->
+            <!-- 유재우 : 위치를 중간에 고정 해야함-->
+            여기에 드롭하거나 여기를 클릭해주세요
 
         </div>
     </div>
@@ -539,6 +546,16 @@
     });
     // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
+
+        //유재우: 모달창 닫았을 때 스크롤 가능하게 하는 부분
+        $(document.body).css({
+            overflow: 'visible'
+        });
+
+        //모달창 닫았을 때 스크롤 가능
+        $(document.body).css({
+            overflow: 'visible'
+        });
         //유재우: 모달창 닫았을 때 스크롤 가능하게 하는 부분
         $(document.body).css({
             overflow: 'visible'
@@ -548,6 +565,9 @@
             "background-color": "White",
             "background-image": ""
         });
+
+        // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
+        $('#input_feed_content').each(function () { $(this).val(''); });
         // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
         $('#input_feed_content').each(function () {
             $(this).val('');
@@ -558,6 +578,7 @@
         $('#second_modal').css({
             display: 'none'
         });
+
     });
 
     // 사용 범위를 위해 전역 변수 files 선언
@@ -609,6 +630,11 @@
             }
         });
     });
+    // 유재우: 이미지업로드 버튼 클릭
+    $('#image_upload_modal').click(function () {
+        $('#input_image_upload').click();
+    })
+
 
     // 이미지 업로드 공간에 특정 이벤트 발생시 해당하는 함수를 실행
     $('.img_upload_space')
@@ -642,6 +668,7 @@
         e.stopPropagation();
         e.preventDefault();
 
+
         // 실질적으로 파일을 업로드 하는 부분
         e.dataTransfer = e.originalEvent.dataTransfer;
         files = e.target.files || e.dataTransfer.files;
@@ -669,14 +696,37 @@
             $('.img_upload_space').css({
                 "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
                 "outline": "none",
-                "background-size": "100%",
                 "background-repeat": "no-repeat",
+                "background-size": "contain",
                 "background-position": "center"
             });
         } else {
             alert('이미지가 아닙니다.');
             return;
         }
+    }
+
+    // 유재우 이미지 파일을 버튼을 이용해 진행했을 경우
+    function image_upload(e) {
+
+        // 이미지 업로드시 사진업로드 모달창을 가림
+        $('#first_modal').css({
+            display: 'none'
+        });
+
+        // 글 내용 작성 모달창을 띄움
+        $('#second_modal').css({
+            display: 'flex'
+        });
+
+        // 업로드 창 배경을 업로드된 이미지로 변경
+        $('.img_upload_space').css({
+            "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
+            "outline": "none",
+            "background-repeat": "no-repeat",
+            "background-size": "contain",
+            "background-position": "center"
+        });
 
     }
 </script>
