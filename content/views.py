@@ -199,6 +199,16 @@ class ReplyProfile(APIView):
         print(nickname)
         # 닉네임을 가지고 유저 테이블에서 필터링한 결과를 user에 저장
         user = User.objects.filter(nickname=nickname).first()
-        # 필터링한 유저의 이메일을 구함
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
-        return render(request, 'content/profile.html', context=dict(user=user))
+        email = user.email
+        # 프로필 화면에서 게시글 조회할 때 필요한 리스트를 구하는 과정 (노션참고)
+        feed_list = Feed.objects.filter(email=email)
+        like_list = list(Like.objects.filter(email=email, is_like=True).values_list('feed_id', flat=True))
+        like_feed_list = Feed.objects.filter(id__in=like_list)
+        bookmark_list = list(Bookmark.objects.filter(email=email, is_marked=True).values_list('feed_id', flat=True))
+        bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
+        # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
+        return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
+                                                                    like_feed_list=like_feed_list,
+                                                                    bookmark_feed_list=bookmark_feed_list,
+                                                                    user=user))
