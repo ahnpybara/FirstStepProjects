@@ -35,6 +35,7 @@
             height: 100%;
             object-fit: cover;
         }
+
         /* 피드 화면 박스 유재우: 피드에 색깔 변경 */
         /* 피드 화면 박스 유재우: 피드에 색깔 변경 (수정 필요) */
         .feed_box {
@@ -361,12 +362,20 @@
             </div>
         </div>
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <!-- 유재우 :id 추가 -->
-        <div class="img_upload_space" id="image_upload_modal"
-             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
+
+        <div class="img_upload_space"
+             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px;text-align: center">
             <!-- 유재우 :내용 추가 -->
             <!-- 유재우 : 위치를 중간에 고정 해야함-->
-            여기에 드롭하거나 여기를 클릭해주세요
+            여기에 드롭하거나
+            <!-- 유재우 :id => image_upload_btn 추가 -->
+            <div style="">
+
+                <button id="image_upload_btn" type="button" class="btn btn-primary"
+                        style="width: 200px">
+                    클릭하세요
+                </button>
+            </div>
 
         </div>
     </div>
@@ -399,7 +408,15 @@
                               id="exampleFormControlTextarea1" rows="5"></textarea>
                 </div>
                 <!-- 공유하기 버튼 -->
-                <button id="feed_create_button" type="button" class="btn btn-primary" style="width: 100%">
+                <!-- 05-06 유재우: 공유하기 버튼에 안보이게하는 부분 추가 -->
+                <button id="feed_create_button" type="button" class="btn btn-primary"
+                        style="width: 100%; display: none">
+                    공유하기
+                </button>
+                <!-- 공유하기 버튼 -->
+                <!-- 05-06 유재우: 파일 추가로 업로드를 시도할 시 버튼이며 id는 feed_create_button_clickedbtn로 부여함 -->
+                <button id="feed_create_button_clickedbtn" type="button" class="btn btn-primary"
+                        style="width: 100%; display: none">
                     공유하기
                 </button>
             </div>
@@ -550,7 +567,6 @@
         $(document.body).css({
             overflow: 'visible'
         });
-
         //모달창 닫았을 때 스크롤 가능
         $(document.body).css({
             overflow: 'visible'
@@ -564,9 +580,19 @@
             "background-color": "White",
             "background-image": ""
         });
+        //05-06 유재우 : 모달창이 닫치면 공유하기 버튼을 숨김
+        $('#feed_create_button').css({
+            display: "none"
+        })
+        //05-06 유재우 : 모달창이 닫치면 공유하기 버튼을 숨김
+        $('#feed_create_button_clickedbtn').css({
+            display: "none"
+        })
 
         // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
-        $('#input_feed_content').each(function () { $(this).val(''); });
+        $('#input_feed_content').each(function () {
+            $(this).val('');
+        });
         // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
         $('#input_feed_content').each(function () {
             $(this).val('');
@@ -629,9 +655,54 @@
             }
         });
     });
-    // 유재우: 이미지업로드 버튼 클릭
-    $('#image_upload_modal').click(function () {
+
+    // 05-06 유재우 : 파일추가로 업로드 시도시의 이벤트 처리
+    $('#feed_create_button_clickedbtn').click(function () {
+        alert("공유하기 눌렀다.");
+
+        let file = $('#input_image_upload')[0].files[0];
+        let image = $('#input_image_upload')[0].files[0].name;
+        let content = $('#input_feed_content').val();
+
+        // 파일을 업로드 하는 것이므로 formdata 형태로 서버에 전달해야 함, formdata 객체를 생성한 뒤 서버로 보낼 데이터를 객체에 추가해줌
+        let fd = new FormData();
+
+        fd.append('file', file);
+        fd.append('image', image);
+        fd.append('content', content);
+
+        //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
+        $.ajax({
+            url: "/content/upload",
+            data: fd,
+            method: "POST",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log("성공");
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+                location.replace("/main");
+            }
+        });
+    });
+
+    // 유재우: 이미지 업로드 버튼 클릭으로 접근
+    $('#image_upload_btn').click(function () {
         $('#input_image_upload').click();
+
+        //05-06 유재우 : 숨겨져있던 공유하기 버튼을 나타나게 함
+        $('#feed_create_button_clickedbtn').css({
+            display: "block"
+        })
+        //05-06 유재우 : 만일 버튼이 버튼이 나타나있을때 공유하기 버튼을 숨김 함
+        $('#feed_create_button').css({
+            display: "none"
+        })
     })
 
 
@@ -667,7 +738,14 @@
         e.stopPropagation();
         e.preventDefault();
 
-
+        //05-06 유재우 : 숨겨져있던 공유하기 버튼을 나타나게 함
+        $('#feed_create_button').css({
+            display: "block"
+        })
+        //05-06 유재우 : 만일 버튼이 버튼이 나타나있을때 공유하기 버튼을 숨김 함
+        $('#feed_create_button_clickedbtn').css({
+            display: "none"
+        })
         // 실질적으로 파일을 업로드 하는 부분
         e.dataTransfer = e.originalEvent.dataTransfer;
         files = e.target.files || e.dataTransfer.files;
@@ -707,7 +785,6 @@
 
     // 유재우 이미지 파일을 버튼을 이용해 진행했을 경우
     function image_upload(e) {
-
         // 이미지 업로드시 사진업로드 모달창을 가림
         $('#first_modal').css({
             display: 'none'
@@ -726,6 +803,7 @@
             "background-size": "contain",
             "background-position": "center"
         });
+
 
     }
 </script>
