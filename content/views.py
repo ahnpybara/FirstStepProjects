@@ -8,6 +8,7 @@ from .models import Feed, Reply, Like, Bookmark
 from user.models import User
 import os
 
+
 # 안치윤 댓글입력시 프로필 이동 TODO
 # Main 클래스는 여러 테이블에서 데이터를 가져와 피드리스트 변수에 저장하고 main.html과
 # main.html에서 피드를 사용자에게 보여주는데 필요한 피드리스트와 user 정보를 브라우저에게 보내는 클래스입니다.
@@ -113,22 +114,6 @@ class Profile(APIView):
                                                                     bookmark_feed_list=bookmark_feed_list,
                                                                     user=user))
 
-    def post(self, request):
-        # 댓글 단 사용자의 닉네임을 받아옴
-        reply_name = request.data.get('reply_name', None)
-        # 댓글 닉네임을 변수 nickname에 저장
-        nickname = reply_name
-        # 닉네임을 가지고 유저 테이블에서 필터링한 결과를 user에 저장
-        user = User.objects.filter(nickname=nickname).first()
-        # 필터링한 유저의 이메일을 구함
-        email = user.email
-        # 출력해봄 확인
-        print(email)
-        # 프로필 화면에서 게시글 조회할 때 필요한 리스트를 구하는 과정
-
-        # 프로플 화면에서 게시글을 조회할 때 필요한 유저 정보를 profile.html로 전달
-        return render(request, 'content/profile.html', context=dict(user=user))
-
 
 # 서버로 전달된 댓글 내용과 댓글을 입력한 사용자의 이메일 받아서 각 변수에 넣고 댓글 테이블에 저장
 class UploadReply(APIView):
@@ -201,3 +186,27 @@ class ToggleBookmark(APIView):
             Bookmark.objects.create(feed_id=feed_id, is_marked=is_marked, email=email)
 
         return Response(status=200)
+
+
+
+# 안치윤 : 댓글 프로필 이동 api
+reply_nickname = "None"
+class ReplyProfile(APIView):
+    def get(self, request):
+        nickname = reply_nickname
+        print(nickname)
+        user = User.objects.filter(nickname=nickname).first()
+        return render(request, 'content/profile.html', context=dict(user=user))
+
+    def post(self, request):
+        # 댓글 단 사용자의 닉네임을 받아옴
+        reply_name = request.data.get('reply_name', None)
+        # 댓글 닉네임을 변수 nickname에 저장
+        reply_nickname = reply_name
+        print(reply_nickname)
+        nickname = reply_nickname
+        # 닉네임을 가지고 유저 테이블에서 필터링한 결과를 user에 저장
+        user = User.objects.filter(nickname=nickname).first()
+        # 필터링한 유저의 이메일을 구함
+        # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
+        return render(request, 'content/profile.html', context=dict(user=user))
