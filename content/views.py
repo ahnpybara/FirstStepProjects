@@ -190,21 +190,13 @@ class ToggleBookmark(APIView):
 
 
 # 안치윤 : 댓글 프로필 이동 api
-reply_nickname = "None"
 class ReplyProfile(APIView):
     def get(self, request):
-        nickname = reply_nickname
-        print(nickname)
-        user = User.objects.filter(nickname=nickname).first()
-        return render(request, 'content/profile.html', context=dict(user=user))
-
-    def post(self, request):
         # 댓글 단 사용자의 닉네임을 받아옴
-        reply_name = request.data.get('reply_name', None)
+        reply_name = request.GET.get('reply_name')
         # 댓글 닉네임을 변수 nickname에 저장
-        reply_nickname = reply_name
-        print(reply_nickname)
-        nickname = reply_nickname
+        nickname = reply_name
+        print(nickname)
         # 닉네임을 가지고 유저 테이블에서 필터링한 결과를 user에 저장
         user = User.objects.filter(nickname=nickname).first()
         # 필터링한 유저의 이메일을 구함

@@ -415,24 +415,7 @@
     $(".reply_nickname").click(function (event) {
         let reply_id = event.target.id;
         let reply_name = $.trim($('#' + reply_id).html());
-
-        $.ajax({
-            url: "/content/reprofile",
-            data: {
-                reply_name: reply_name
-            },
-            method: "POST",
-            success: function (data) {
-                console.log("성공");
-                location.replace("/content/reprofile")
-            },
-            error: function (request, status, error) {
-                console.log("에러");
-            },
-            complete: function () {
-                console.log("완료");
-            }
-        });
+        location.href = "/content/reprofile?reply_name="+reply_name;
     });
 
     // 북마크 아이콘 클릭 이벤트 처리
