@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UploadFeed, Profile, Main, UploadReply, ToggleLike, ToggleBookmark, ReplyProfile, FeedProfile
+from .views import UploadFeed, Profile, Main, UploadReply, ToggleLike, ToggleBookmark, ReplyProfile
 
 # 사용자가 어떤 url를 요청하느냐에 따라 어떤 뷰를 실행할지 결정하는 리스트
 urlpatterns = [
@@ -11,6 +11,4 @@ urlpatterns = [
     path('profile', Profile.as_view()),
     path('main', Main.as_view()),
     path('reprofile', ReplyProfile.as_view()),
-    #  안치윤 피드에서 닉네임 사진 클릭시 url 추가
-    path('feprofile', FeedProfile.as_view()),
 ]

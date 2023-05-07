@@ -415,21 +415,21 @@
 <script>
     // 안치윤 : 피드에서 프로필 이미지 클릭시 해당 사용자의 프로필로 이동
     $(".feed_profile_image").click(function (event) {
-        let feed_id_image = event.target.id;
-        location.href = "/content/feprofile?feed_id_image=" + feed_id_image;
+        let feed_nickname = event.target.id;
+        location.href = "/content/reprofile?feed_nickname=" + feed_nickname;
     });
 
     // 안치윤 : 피드에서 프로필 닉네임 클릭시 해당 사용자의 프로필로 이동
     $(".feed_nickname").click(function (event) {
-        let feed_nickname_id = event.target.id;
-        location.href = "/content/feprofile?feed_profile_nickname=" + feed_nickname_id;
+        let feed_nickname = event.target.id;
+        location.href = "/content/reprofile?feed_nickname=" + feed_nickname;
     });
 
-    // 댓글에 사용자 닉네임 클릭시 해당 사용자의 프로필로 이동
+    // 안치윤 : 댓글에 사용자 닉네임 클릭시 해당 사용자의 프로필로 이동
     $(".reply_nickname").click(function (event) {
-        let reply_id = event.target.id;
-        let reply_name = $.trim($('#' + reply_id).html());
-        location.href = "/content/reprofile?reply_name=" + reply_name;
+        let feed_nickname = event.target.id;
+        location.href = "/content/reprofile?feed_nickname=" + feed_nickname;
+        console.log(feed_nickname);
     });
 
     // 북마크 아이콘 클릭 이벤트 처리
