@@ -127,7 +127,7 @@
                 <div style="display: flex;flex-direction: row; align-items: center; margin: 20px">
                     <div class="box" style="width: 35px; height: 35px; margin-right: 10px">
                         <!-- 안치윤 : 피드에서 프로필 사진 클릭시 프로필로 이동 TODO -->
-                        <img class="profile feed_profile_image" id="{{ feed.profile_image }}"
+                        <img class="profile feed_profile_image" id="{{ feed.nickname }}"
                              src="{% get_media_prefix %}{{ feed.profile_image }}"
                              alt="text">
                     </div>
@@ -421,10 +421,8 @@
 
     // 안치윤 : 피드에서 프로필 닉네임 클릭시 해당 사용자의 프로필로 이동
     $(".feed_nickname").click(function (event) {
-        let feed_id = event.target.id;
-        let feed_profile_nickname = $.trim($('#' + feed_id).html());
-        console.log(feed_profile_nickname);
-        location.href = "/content/feprofile?feed_profile_nickname=" + feed_profile_nickname;
+        let feed_nickname_id = event.target.id;
+        location.href = "/content/feprofile?feed_profile_nickname=" + feed_nickname_id;
     });
 
     // 댓글에 사용자 닉네임 클릭시 해당 사용자의 프로필로 이동

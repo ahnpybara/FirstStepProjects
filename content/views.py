@@ -233,6 +233,7 @@ class FeedProfile(APIView):
         # 댓글 단 사용자의 닉네임을 받아옴
         feed_profile_image = request.GET.get('feed_id_image')
         feed_profile_nickname = request.GET.get('feed_profile_nickname')
+        print(feed_profile_image)
 
         # 댓글 닉네임을 변수 nickname에 저장
         profile_image = feed_profile_image
@@ -255,7 +256,8 @@ class FeedProfile(APIView):
                                                                         user=user))
 
         if profile_image is not None:
-            user = User.objects.filter(profile_image=profile_image).first()
+            nickname = profile_image
+            user = User.objects.filter(nickname=nickname).first()
             email = user.email
             feed_list = Feed.objects.filter(email=email)
             like_list = list(Like.objects.filter(email=email, is_like=True).values_list('feed_id', flat=True))
