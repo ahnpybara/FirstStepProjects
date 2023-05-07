@@ -231,14 +231,14 @@ class ReplyProfile(APIView):
 class FeedProfile(APIView):
     def get(self, request):
         # 댓글 단 사용자의 닉네임을 받아옴
-        feed_id_image = request.GET.get('feed_id_image')
+        feed_profile_image = request.GET.get('feed_id_image')
         feed_profile_nickname = request.GET.get('feed_profile_nickname')
 
         # 댓글 닉네임을 변수 nickname에 저장
-        profile_image = feed_id_image
+        profile_image = feed_profile_image
         nickname = feed_profile_nickname
-        print(feed_profile_nickname)
-        print(feed_id_image)
+        print(profile_image)
+        print(nickname)
 
         if nickname is not None:
             user = User.objects.filter(nickname=nickname).first()
@@ -253,6 +253,7 @@ class FeedProfile(APIView):
                                                                         like_feed_list=like_feed_list,
                                                                         bookmark_feed_list=bookmark_feed_list,
                                                                         user=user))
+
         if profile_image is not None:
             user = User.objects.filter(profile_image=profile_image).first()
             email = user.email
