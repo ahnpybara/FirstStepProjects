@@ -212,14 +212,28 @@ class ReplyProfile(APIView):
         user = User.objects.filter(nickname=nickname).first()
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
         email = user.email
-        # 프로필 화면에서 게시글 조회할 때 필요한 리스트를 구하는 과정 (노션참고)
-        feed_list = Feed.objects.filter(email=email)
+        # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
+        feed_list = Feed.objects.filter(email=email).order_by('-id')
         like_list = list(Like.objects.filter(email=email, is_like=True).values_list('feed_id', flat=True))
         like_feed_list = Feed.objects.filter(id__in=like_list)
         bookmark_list = list(Bookmark.objects.filter(email=email, is_marked=True).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
+
+        # 정유진: 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        count_list = []
+        for feed in feed_list:
+            # 정유진: 좋아요 수 확인.
+            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            # 정유진: 댓글 수 확인.
+            reply_count = Reply.objects.filter(feed_id=feed.id).count()
+            count_list.append(dict(id=feed.id,
+                                   like_count=like_count,
+                                   reply_count=reply_count))
+
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
+        # 정유진: 전달할 카운트 리스트(count_list) 추가.
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
-                                                                    user=user))
+                                                                    user=user,
+                                                                    count_list=count_list))
