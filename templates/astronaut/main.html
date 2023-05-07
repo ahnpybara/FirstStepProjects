@@ -18,7 +18,7 @@
     <!--  jQuery를 사용하기 위한 선언  -->
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 
-    <title>Hello, world!</title>
+    <title>Astroaunt</title>
 
     <style>
         /* 프로필 화면 박스 */
@@ -36,7 +36,7 @@
             object-fit: cover;
         }
 
-        /* 피드 화면 박스 유재우: 피드에 색깔 변경 (수정 필요) */
+        /* 피드 화면 박스 */
         .feed_box {
             margin: 20px 0;
             border: solid 1px gray;
@@ -47,7 +47,7 @@
         .modal_overlay {
             width: 100%;
             height: 100%;
-            position: absolute;
+            position: fixed;
             left: 0;
             top: 0;
             display: none;
@@ -80,16 +80,15 @@
     <div class="container-fluid" style="justify-content: space-between;flex-wrap: nowrap; min-width: 1000px">
         <!-- 로고 -->
         <a class="navbar-brand" href="/main"><img style="width: 167px"
-                                                  src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png">
+                                                  src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png"
+                                                  alt="text">
         </a>
         <!-- 검색창 -->
         <input class="form-control me-2" style="width: 400px" type="search" placeholder="Search" aria-label="Search">
         <!-- 메뉴 아이콘 들 -->
         <div style="display: flex">
-            <!--안치윤 : 홈 메뉴 아이콘-->
             <a href="/main" style="color: black"><span class="material-icons"
                                                        style="padding-right: 10px"> home</span></a>
-            <!--안치윤 : 피드 추가 아이콘-->
             <span id="nav_bar_add_box" class="material-icons-outlined" style="padding-right: 10px; cursor: pointer">add_box</span>
             <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
             <div class="dropdown">
@@ -104,7 +103,6 @@
                     </div>
                 </a>
                 <!-- 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
-
                 <ul class="dropdown-menu" style="left:-158px" aria-labelledby="dropdownMenuLink">
                     <li><a class="dropdown-item" href="/content/profile">프로필</a></li>
                     <li>
@@ -123,20 +121,18 @@
 <div style="display: flex; flex-direction: row;text-align: center; justify-content: center;padding-top: 60px; background-color:#FAFAFA">
     <!--피드들이 올라오는 영역 -->
     <div style="width: 500px;min-width: 500px;margin-right: 300px">
-
         <!-- 반복문을 통한 피드를 생성하는 파이썬 코드 -->
         {% for feed in feeds %}
             <div class="feed_box">
-                <!--안치윤 : 사용자 프로필 사진과 사용자 이름, 간격 조절-->
                 <div style="display: flex;flex-direction: row; align-items: center; margin: 20px">
                     <div class="box" style="width: 35px; height: 35px; margin-right: 10px">
-                        <!-- 안치윤 : 피드에서 프로필 사진 클릭시 프로필로 이동-->
+                        <!-- 안치윤 : 피드에서 프로필 사진 클릭시 프로필로 이동 TODO -->
                         <a href="/content/profile"> <img class="profile"
                                                          src="{% get_media_prefix %}{{ feed.profile_image }}"
                                                          alt="text"></a>
                     </div>
                     <div>
-                        <!-- 안치윤 : 피드에서 닉네임 클릭시 프로필로 이동-->
+                        <!-- 안치윤 : 피드에서 닉네임 클릭시 프로필로 이동 TODO -->
                         <a href="/content/profile" style="color: black; text-decoration: none">{{ feed.nickname }}</a>
                     </div>
                 </div>
@@ -147,12 +143,14 @@
                 <!--좋아요 댓글 보내기 북마크 아이콘-->
                 <div style="margin: 5px 20px; display: flex; flex-direction: row; justify-content: space-between">
                     <div>
+                        <!--좋아요-->
                         <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
                               class="favorite material-icons-outlined"
                               style="color: red;cursor: pointer">{% if feed.is_liked %}
                             favorite{% else %}favorite_border{% endif %}</span>
                     </div>
                     <div>
+                        <!--북마크-->
                         <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}"
                               class="bookmark material-icons-outlined" style="cursor: pointer">
                             {% if feed.is_marked %}
@@ -161,14 +159,13 @@
                                 bookmark_border
                             {% endif %}
                         </span>
-
                     </div>
                 </div>
-                <!-- 안치윤 : 간격 조절, 좋아요 수-->
+                <!-- 좋아요 수-->
                 <div style="margin: 2px 20px; text-align: left;font-size: 14px"> 이 게시글을 <b>{{ feed.like_count }}명</b>이
                     좋아합니다.
                 </div>
-                <!-- 안치윤 : 간격 조절, 작성자 글내용 -->
+                <!-- 작성자 글내용 -->
                 <div style="margin-left: 20px; margin-bottom: 7px; text-align: left;font-size: 16px">
                     <b>{{ feed.nickname }}</b> {{ feed.content }}
                 </div>
@@ -176,17 +173,18 @@
                 <div id="reply_list_{{ feed.id }}">
                     {% for reply in feed.reply_list %}
                         <div style="margin: 0 20px;text-align: left;font-size: 14px">
-                            <!--안치윤 : 댓글 닉네임 클릭시 사용자 프로필로 이동 (추가 작업)-->
-                            <b class="reply_nickname">{{ reply.nickname }}</b> {{ reply.reply_content }}</div>
+                            <!--댓글 닉네임 클릭시 사용자 프로필로 이동-->
+                            <b class="reply_nickname"
+                               id="{{ reply.nickname }}">{{ reply.nickname }}</b> {{ reply.reply_content }}
+                        </div>
                     {% endfor %}
                 </div>
 
-                <!-- 댓글을 입력하는 텍스트 박스 유재우: 댓글바에 색상 (수정필요) -->
-                <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px gray ">
+                <!-- 댓글을 입력하는 텍스트 박스 -->
+                <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px gray">
                     <input id="reply_{{ feed.id }}" type="text" class="form-control"
                            style="box-shadow: none; border: none; outline: none; background-color: white"
                            placeholder="댓글 달기..">
-                    <!-- 안치윤 : 게시 버튼 클릭시 커서 번경 -->
                     <div feed_id="{{ feed.id }}" class="upload_reply"
                          style="width: 50px;color: cornflowerblue; font-weight: bold; cursor: pointer">
                         게시
@@ -199,19 +197,22 @@
 
     <!-- 팔로우 추천 화면 및 내 프로필 표시 -->
     <div style="width: 400px; height: 1000px; position: fixed;left: 62%; z-index: 0">
-        <!-- 내 프로필 표시 -->
+        <!-- 내 프로필 표시 영역 -->
         <div style="display: flex;flex-direction: row; align-items: center; margin: 20px">
             <div class="box" style="width: 70px; height: 70px">
-                <!--안치윤 : 프로필 사진 클릭시 내 프로필 이동 수정-->
+                <!--프로필, 사진 클릭시 내 프로필 이동 -->
                 <a href="/content/profile"> <img class="profile"
-                                                 src="{% get_media_prefix %}{{ user_session.profile_image }}"></a>
+                                                 src="{% get_media_prefix %}{{ user_session.profile_image }}"
+                                                 alt="text"></a>
             </div>
             <div style="margin-left: 10px; text-align: left">
+
                 <div style="font-weight: bold">
-                    <!-- 안치윤 : 닉네임 클릭시 프로필로 이동-->
+                    <!-- 닉네임, 클릭시 프로필로 이동-->
                     <a href="/content/profile"
                        style="color: black; text-decoration: none">{{ user_session.nickname }}</a>
                 </div>
+                <!--이름-->
                 <div style="color: gray">
                     {{ user_session.name }}
                 </div>
@@ -231,7 +232,8 @@
             <div style="display: flex; flex-direction: row">
                 <div class="box" style="width: 35px; height: 35px">
                     <img class="profile"
-                         src="http://file3.instiz.net/data/file3/2021/05/31/e/b/8/eb8d9ad2d779ca2a0b7acc2b67694a23.png">
+                         src="http://file3.instiz.net/data/file3/2021/05/31/e/b/8/eb8d9ad2d779ca2a0b7acc2b67694a23.png"
+                         alt="text">
                 </div>
                 <div style="margin-left: 10px; text-align: left">
                     <div style="font-weight: bold;font-size: 14px">
@@ -351,11 +353,25 @@
                 <span class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
-        <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div class="img_upload_space" style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
 
+        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <div class="img_upload_space"
+             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px; text-align: center">
+            <div style="margin-top: 200px; color: gray; font-weight: bold">
+                이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
+            </div>
+
+            <!--사진 찾는 파일 시스템을 여는 버튼-->
+            <button id="image_upload_btn" type="button" class="btn btn-primary"
+                    style="width: 200px; margin-top: 20px">
+                사진 추가
+            </button>
+            <!--파일 입력 폼-->
+            <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
         </div>
+
     </div>
+</div>
 </div>
 
 <!-- 글 내용 작성 모달창 두번째 모달 -->
@@ -385,7 +401,8 @@
                               id="exampleFormControlTextarea1" rows="5"></textarea>
                 </div>
                 <!-- 공유하기 버튼 -->
-                <button id="feed_create_button" type="button" class="btn btn-primary" style="width: 100%">
+                <button id="feed_create_button" type="button" class="btn btn-primary"
+                        style="width: 100%">
                     공유하기
                 </button>
             </div>
@@ -397,6 +414,13 @@
 
 <!-- 자바 스크립트 영역 이벤트처리나 서버로 데이터를 전달하는 과정(ajax) -->
 <script>
+    // 댓글에 사용자 닉네임 클릭시 해당 사용자의 프로필로 이동
+    $(".reply_nickname").click(function (event) {
+        let reply_id = event.target.id;
+        let reply_name = $.trim($('#' + reply_id).html());
+        location.href = "/content/reprofile?reply_name=" + reply_name;
+    });
+
     // 북마크 아이콘 클릭 이벤트 처리
     $(".bookmark").click(function (event) {
         // 북마크 아이콘 태그의 id 속성 값을 가져옴
@@ -406,7 +430,7 @@
         // 북마크 아이콘 태그의 본문 내용을 가져옴
         let bookmark_text = $.trim($('#' + bookmark_id).html());
         // 토글이므로 현재 북마크 상태이면 북마크 취소로 변경
-        if (bookmark_text == 'bookmark') {
+        if (bookmark_text === 'bookmark') {
             $('#' + bookmark_id).html('bookmark_border');
         } else {
             $('#' + bookmark_id).html('bookmark');
@@ -462,6 +486,7 @@
             },
             complete: function () {
                 console.log("완료");
+
             }
         });
     });
@@ -505,18 +530,20 @@
         });
 
     });
+
     // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
-        //모달창 닫았을 때 스크롤 가능
+        // 모달창 닫았을 때 본문 스크롤 가능
         $(document.body).css({
             overflow: 'visible'
         });
-        // 유재우 : 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
+        // 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
         $('.img_upload_space').css({
             "background-color": "White",
             "background-image": ""
         });
-        // 유재우:  모달창 닫았을 때 글내용을 리셋하는 부분
+
+        // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
         $('#input_feed_content').each(function () {
             $(this).val('');
         });
@@ -526,6 +553,7 @@
         $('#second_modal').css({
             display: 'none'
         });
+
     });
 
     // 사용 범위를 위해 전역 변수 files 선언
@@ -541,7 +569,6 @@
         $(document.body).css({
             overflow: 'hidden'
         });
-
     });
     // 공유하기 버튼 클릭시 이벤트 처리
     $('#feed_create_button').click(function () {
@@ -583,6 +610,8 @@
         .on("dragover", dragOver)
         .on("dragleave", dragOver)
         .on("drop", uploadFiles)
+        .on("change", uploadFiles)
+
 
     // 마우스를 드래그 했을 때
     function dragOver(e) {
@@ -590,9 +619,9 @@
         e.stopPropagation();
         e.preventDefault();
 
-        // 파일을 드래그해서 업로드 공간에 올리면 화면이 검정색으로 바뀜
-        // 마우스가 업로드 공간에서 떠나면 화면이 회색으로 바뀜
-        if (e.type == "dragover") {
+        // 파일을 드래그해서 업로드 공간에 올릴때 이벤트  이쁘게 수정 필요 TODO
+        // 마우스가 업로드 공간에서 떠나면 이벤트 이쁘게 수정 필요 TODO
+        if (e.type === "dragover") {
             $(e.target).css({
                 "background-color": "black",
                 "outline-offset": "-20px"
@@ -643,8 +672,34 @@
             });
         } else {
             alert('이미지가 아닙니다.');
-            return;
+            return 0;
         }
+
+    }
+
+    // 모달창의 사진 추가 버튼 클릭했을 시
+    $('#image_upload_btn').click(function () {
+        $('#input_image_upload').click();
+    });
+
+    // 파일 입력 폼에서 변화 발생시 해당 함수가 실행
+    function image_upload() {
+        // 이미지 업로드시 사진업로드 모달창을 가림
+        $('#first_modal').css({
+            display: 'none'
+        });
+        // 글 내용 작성 모달창을 띄움
+        $('#second_modal').css({
+            display: 'flex'
+        });
+        // 업로드 창 배경을 업로드된 이미지로 변경
+        $('.img_upload_space').css({
+            "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
+            "outline": "none",
+            "background-repeat": "no-repeat",
+            "background-size": "contain",
+            "background-position": "center"
+        });
 
     }
 </script>
