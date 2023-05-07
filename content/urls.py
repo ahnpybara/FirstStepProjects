@@ -11,5 +11,6 @@ urlpatterns = [
     path('profile', Profile.as_view()),
     path('main', Main.as_view()),
     path('reprofile', ReplyProfile.as_view()),
+    #  안치윤 피드에서 닉네임 사진 클릭시 url 추가
     path('feprofile', FeedProfile.as_view())
 ]
