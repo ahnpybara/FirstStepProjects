@@ -202,7 +202,7 @@ class ToggleBookmark(APIView):
         return Response(status=200)
 
 
-# 댓글에서 닉네임 클릭시 해당 사용자의 프로필로 이동 api
+# 안치윤 : 댓글에서 닉네임 클릭시 해당 사용자의 프로필로 이동 api
 class ReplyProfile(APIView):
     def get(self, request):
         # 댓글 단 사용자의 닉네임을 받아옴
@@ -225,3 +225,44 @@ class ReplyProfile(APIView):
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
                                                                     user=user))
+
+
+# 안치윤 : 피드에서 닉네임 클릭시 해당 사용자의 프로필로 이동 api
+class FeedProfile(APIView):
+    def get(self, request):
+        # 댓글 단 사용자의 닉네임을 받아옴
+        feed_id_image = request.GET.get('feed_id_image')
+        feed_profile_nickname = request.GET.get('feed_profile_nickname')
+
+        # 댓글 닉네임을 변수 nickname에 저장
+        profile_image = feed_id_image
+        nickname = feed_profile_nickname
+        print(feed_profile_nickname)
+        print(feed_id_image)
+
+        if nickname is not None:
+            user = User.objects.filter(nickname=nickname).first()
+            email = user.email
+            feed_list = Feed.objects.filter(email=email)
+            like_list = list(Like.objects.filter(email=email, is_like=True).values_list('feed_id', flat=True))
+            like_feed_list = Feed.objects.filter(id__in=like_list)
+            bookmark_list = list(Bookmark.objects.filter(email=email, is_marked=True).values_list('feed_id', flat=True))
+            bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
+            # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
+            return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
+                                                                        like_feed_list=like_feed_list,
+                                                                        bookmark_feed_list=bookmark_feed_list,
+                                                                        user=user))
+        if profile_image is not None:
+            user = User.objects.filter(profile_image=profile_image).first()
+            email = user.email
+            feed_list = Feed.objects.filter(email=email)
+            like_list = list(Like.objects.filter(email=email, is_like=True).values_list('feed_id', flat=True))
+            like_feed_list = Feed.objects.filter(id__in=like_list)
+            bookmark_list = list(Bookmark.objects.filter(email=email, is_marked=True).values_list('feed_id', flat=True))
+            bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
+            # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
+            return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
+                                                                        like_feed_list=like_feed_list,
+                                                                        bookmark_feed_list=bookmark_feed_list,
+                                                                        user=user))

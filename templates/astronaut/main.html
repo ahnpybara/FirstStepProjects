@@ -127,13 +127,13 @@
                 <div style="display: flex;flex-direction: row; align-items: center; margin: 20px">
                     <div class="box" style="width: 35px; height: 35px; margin-right: 10px">
                         <!-- 안치윤 : 피드에서 프로필 사진 클릭시 프로필로 이동 TODO -->
-                        <a href="/content/profile"> <img class="profile"
-                                                         src="{% get_media_prefix %}{{ feed.profile_image }}"
-                                                         alt="text"></a>
+                        <img class="profile feed_profile_image" id="{{ feed.profile_image }}"
+                             src="{% get_media_prefix %}{{ feed.profile_image }}"
+                             alt="text">
                     </div>
                     <div>
                         <!-- 안치윤 : 피드에서 닉네임 클릭시 프로필로 이동 TODO -->
-                        <a href="/content/profile" style="color: black; text-decoration: none">{{ feed.nickname }}</a>
+                        <span class="feed_nickname" id="{{ feed.nickname }}">{{ feed.nickname }}</span>
                     </div>
                 </div>
                 <!--게시글 이미지-->
@@ -372,7 +372,6 @@
 
     </div>
 </div>
-</div>
 
 <!-- 글 내용 작성 모달창 두번째 모달 -->
 <div id="second_modal" class="modal_overlay">
@@ -414,6 +413,20 @@
 
 <!-- 자바 스크립트 영역 이벤트처리나 서버로 데이터를 전달하는 과정(ajax) -->
 <script>
+    // 안치윤 : 피드에서 프로필 이미지 클릭시 해당 사용자의 프로필로 이동
+    $(".feed_profile_image").click(function (event) {
+        let feed_id_image = event.target.id;
+        location.href = "/content/feprofile?feed_id_image=" + feed_id_image;
+    });
+
+    // 안치윤 : 피드에서 프로필 닉네임 클릭시 해당 사용자의 프로필로 이동
+    $(".feed_nickname").click(function (event) {
+        let feed_id = event.target.id;
+        let feed_profile_nickname = $.trim($('#' + feed_id).html());
+        console.log(feed_profile_nickname);
+        location.href = "/content/feprofile?feed_profile_nickname=" + feed_profile_nickname;
+    });
+
     // 댓글에 사용자 닉네임 클릭시 해당 사용자의 프로필로 이동
     $(".reply_nickname").click(function (event) {
         let reply_id = event.target.id;
@@ -623,7 +636,6 @@
         // 마우스가 업로드 공간에서 떠나면 이벤트 이쁘게 수정 필요 TODO
         if (e.type === "dragover") {
             $(e.target).css({
-                "background-color": "black",
                 "outline-offset": "-20px"
             });
         } else {

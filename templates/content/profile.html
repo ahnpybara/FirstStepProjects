@@ -40,7 +40,7 @@
         .modal_overlay {
             width: 100%;
             height: 100%;
-            position: absolute;
+            position: fixed;
             left: 0;
             top: 0;
             display: none;
@@ -65,21 +65,25 @@
             position: relative;
             padding: 10px;
         }
+
         /*정유진: class profile_feed_mouse_over 와 feed_count 추가 */
         /*정유진: 게시물에 마우스 커서룰 올리기 전 상태.*/
         .profile_feed_mouse_over {
             background-color: rgba(0, 0, 0, 0);
         }
+
         /*정유진: 게시물에 마우스 커서를 올리면 밝기가 낮아진다.*/
         .profile_feed_mouse_over:hover {
             background-color: rgba(0, 0, 0, 0.5);
         }
+
         /* 정유진: 게시글 좋아요 수와 댓글을 숨긴다.*/
-        .profile_feed_mouse_over > .feed_count{
+        .profile_feed_mouse_over > .feed_count {
             display: none;
         }
+
         /*정유진: 게시물의 좋아요 수와 댓글 수를 보여준다.*/
-        .profile_feed_mouse_over:hover > .feed_count{
+        .profile_feed_mouse_over:hover > .feed_count {
             color: white;
             display: flex;
         }
@@ -189,7 +193,8 @@
             <div style="width: 300px;height: 300px; margin: 10px 5px 0 5px;">
                 <div style="position: relative;width: 100%; height: 100%;">
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
-                    <div class="profile_feed_mouse_over" style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
+                    <div class="profile_feed_mouse_over"
+                         style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
                         {% for count in count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
@@ -223,7 +228,8 @@
             <div style="width: 300px;height: 300px; margin: 10px 5px 0 5px;">
                 <div style="position: relative;width: 100%; height: 100%;">
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
-                    <div class="profile_feed_mouse_over" style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
+                    <div class="profile_feed_mouse_over"
+                         style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
                         {% for count in count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
@@ -257,7 +263,8 @@
             <div style="width: 300px;height: 300px; margin: 10px 5px 0 5px;">
                 <div style="position: relative;width: 100%; height: 100%;">
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
-                    <div class="profile_feed_mouse_over" style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
+                    <div class="profile_feed_mouse_over"
+                         style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
                         {% for count in count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
@@ -299,10 +306,23 @@
                 <span class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
-        <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div class="img_upload_space" style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px">
 
+        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <div class="img_upload_space"
+             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px; text-align: center">
+            <div style="margin-top: 200px; color: gray; font-weight: bold">
+                이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
+            </div>
+
+            <!--사진 찾는 파일 시스템을 여는 버튼-->
+            <button id="image_upload_btn" type="button" class="btn btn-primary"
+                    style="width: 200px; margin-top: 20px">
+                사진 추가
+            </button>
+            <!--파일 입력 폼-->
+            <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
         </div>
+
     </div>
 </div>
 
@@ -333,7 +353,8 @@
                               id="exampleFormControlTextarea1" rows="5"></textarea>
                 </div>
                 <!-- 공유하기 버튼 -->
-                <button id="feed_create_button" type="button" class="btn btn-primary" style="width: 100%">
+                <button id="feed_create_button" type="button" class="btn btn-primary"
+                        style="width: 100%">
                     공유하기
                 </button>
             </div>
@@ -429,7 +450,7 @@
 
     // 모달창 닫기 버튼 이벤트 처리
     $(".modal_close").click(function () {
-        // 모달창 닫았을 때 스크롤 가능하게 하는 부분
+        // 모달창 닫았을 때 본문 스크롤 가능
         $(document.body).css({
             overflow: 'visible'
         });
@@ -438,7 +459,8 @@
             "background-color": "White",
             "background-image": ""
         });
-        // 모달창 닫았을 때 글 내용을 리셋하는 부분
+
+        // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
         $('#input_feed_content').each(function () {
             $(this).val('');
         });
@@ -448,13 +470,14 @@
         $('#second_modal').css({
             display: 'none'
         });
+
     });
 
     // 사용 범위를 위해 전역 변수 files 선언
     let files;
     // 게시글 추가 버튼 이벤트 처리
     $('#nav_bar_add_box').click(function () {
-        // +버튼을 누르면 업로드 창이뜨게 함
+        //+버튼을 누르면 업로드 창이뜨게 함
         $('#first_modal').css({
             display: 'flex'
         });
@@ -463,7 +486,6 @@
         $(document.body).css({
             overflow: 'hidden'
         });
-
     });
     // 공유하기 버튼 클릭시 이벤트 처리
     $('#feed_create_button').click(function () {
@@ -505,6 +527,8 @@
         .on("dragover", dragOver)
         .on("dragleave", dragOver)
         .on("drop", uploadFiles)
+        .on("change", uploadFiles)
+
 
     // 마우스를 드래그 했을 때
     function dragOver(e) {
@@ -512,8 +536,8 @@
         e.stopPropagation();
         e.preventDefault();
 
-        // 파일을 드래그해서 업로드 공간에 올리면 화면이 검정색으로 바뀜
-        // 마우스가 업로드 공간에서 떠나면 화면이 회색으로 바뀜
+        // 파일을 드래그해서 업로드 공간에 올릴때 이벤트  이쁘게 수정 필요 TODO
+        // 마우스가 업로드 공간에서 떠나면 이벤트 이쁘게 수정 필요 TODO
         if (e.type === "dragover") {
             $(e.target).css({
                 "background-color": "black",
@@ -568,6 +592,31 @@
             return 0;
         }
 
+    }
+
+    // 모달창의 사진 추가 버튼 클릭했을 시
+    $('#image_upload_btn').click(function () {
+        $('#input_image_upload').click();
+    });
+
+    // 파일 입력 폼에서 변화 발생시 해당 함수가 실행
+    function image_upload() {
+        // 이미지 업로드시 사진업로드 모달창을 가림
+        $('#first_modal').css({
+            display: 'none'
+        });
+        // 글 내용 작성 모달창을 띄움
+        $('#second_modal').css({
+            display: 'flex'
+        });
+        // 업로드 창 배경을 업로드된 이미지로 변경
+        $('.img_upload_space').css({
+            "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
+            "outline": "none",
+            "background-repeat": "no-repeat",
+            "background-size": "contain",
+            "background-position": "center"
+        });
     }
 
     // 프로필 사진 업로드 버튼 클릭시 이벤트 처리
