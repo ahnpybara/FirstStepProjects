@@ -79,7 +79,6 @@ class LogOut(APIView):
 class UploadProfile(APIView):
     # noinspection PyMethodMayBeStatic
     def post(self, request):
-
         # 서버로 올라온 폼 데이터에서 파일과 이메일을 꺼냄
         file = request.FILES['file']
         email = request.data.get('email')
@@ -104,3 +103,17 @@ class UploadProfile(APIView):
 
         return Response(status=200)
 
+
+# 05-07 유재우 : 프로파일 리셋부분 TODO
+class ResetProfile(APIView):
+    # noinspection PyMethodMayBeStatic
+    def post(self, request):
+        email = request.data.get('email')
+
+        user = User.objects.filter(email=email).first()
+
+        # 해당 유저의 프로필 사진을 post요청으로 받은 사진으로 변경
+        user.profile_image = "default_profile.png"
+        # 변경 사항을 저장함 create할때는 자동으로 저장되지만 수정은 수동으로 save를 해줘야 함
+        user.save()
+        return Response(status=200)

@@ -237,4 +237,3 @@ class ReplyProfile(APIView):
                                                                     bookmark_feed_list=bookmark_feed_list,
                                                                     user=user,
                                                                     count_list=count_list))
-
