@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from content.views import Main
-from . import views
 from .settings import MEDIA_URL, MEDIA_ROOT
 from django.conf.urls.static import static
 
