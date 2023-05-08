@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from content.views import Main
@@ -16,3 +17,4 @@ urlpatterns = [
 ]
 # 미디어 폴더에 접근해서 파일들을 조회할 수 있도록 하는 코드입니다.
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
