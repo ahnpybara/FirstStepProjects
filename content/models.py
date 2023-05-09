@@ -1,4 +1,12 @@
 from django.db import models
+from django.utils.timezone import now
+
+
+# class TimesModel(models.Model):
+#     create_at = models.DateTimeField(auto_now_add=True)     # 작성시간
+#
+#     class Meta:
+#         abstract = True
 
 
 # 피드 테이블
@@ -6,7 +14,7 @@ class Feed(models.Model):
     content = models.TextField()                            # 글내용
     image = models.TextField()                              # 피드에 업로드되는 이미지
     email = models.EmailField(default='')                   # 이메일
-
+    create_at = models.DateTimeField(auto_now_add=True)
 
 # 좋아요 테이블
 class Like(models.Model):

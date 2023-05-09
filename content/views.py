@@ -49,7 +49,8 @@ class Main(APIView):
                                   nickname=user.nickname,
                                   reply_list=reply_list,
                                   is_liked=is_liked,
-                                  is_marked=is_marked
+                                  is_marked=is_marked,
+                                  create_at=feed.create_at
                                   ))
 
         # 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
