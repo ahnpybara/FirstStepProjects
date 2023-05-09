@@ -285,3 +285,11 @@ class ReplyProfile(APIView):
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list))
+
+# 05-09 유재우 : 피드지우기
+class RemoveFeed(APIView):
+    def post(self, request):
+        feed_id = request.data.get('feed_id')
+        feeds = Feed.objects.filter(id = feed_id).first()
+        feeds.delete()
+        return Response(status=200)

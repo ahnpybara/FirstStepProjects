@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UploadFeed, Profile, Main, UploadReply, ToggleLike, ToggleBookmark, ReplyProfile
+from .views import UploadFeed, Profile, Main, UploadReply, ToggleLike, ToggleBookmark, ReplyProfile, RemoveFeed
 
 # 사용자가 어떤 url를 요청하느냐에 따라 어떤 뷰를 실행할지 결정하는 리스트
 urlpatterns = [
@@ -10,5 +10,6 @@ urlpatterns = [
     path('bookmark', ToggleBookmark.as_view()),
     path('profile/', Profile.as_view()),
     path('main/', Main.as_view()),
-    path('reprofile/', ReplyProfile.as_view())
+    path('reprofile/', ReplyProfile.as_view()),
+    path('removefeed', RemoveFeed.as_view())
 ]
