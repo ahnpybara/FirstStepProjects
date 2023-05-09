@@ -273,7 +273,6 @@ class ReplyProfile(APIView):
             bookmark_count_list.append(dict(id=feed.id,
                                             like_count=like_count,
                                             reply_count=reply_count))
-
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
         # 정유진: 전달할 카운트 리스트(count_list) 추가.
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
