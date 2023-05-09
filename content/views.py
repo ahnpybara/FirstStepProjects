@@ -109,16 +109,37 @@ class Profile(APIView):
         bookmark_list = list(Bookmark.objects.filter(email=email, is_marked=True).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
 
-        # 정유진: 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
-        count_list = []
+        # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        feed_count_list = []
         for feed in feed_list:
             # 정유진: 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
             # 정유진: 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
-            count_list.append(dict(id=feed.id,
-                                   like_count=like_count,
-                                   reply_count=reply_count))
+            feed_count_list.append(dict(id=feed.id,
+                                        like_count=like_count,
+                                        reply_count=reply_count))
+
+        # 정유진: 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        like_count_list = []
+        for feed in like_feed_list:
+            # 정유진: 좋아요 수 확인.
+            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            # 정유진: 댓글 수 확인.
+            reply_count = Reply.objects.filter(feed_id=feed.id).count()
+            like_count_list.append(dict(id=feed.id,
+                                        like_count=like_count,
+                                        reply_count=reply_count))
+        # 정유진: 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        bookmark_count_list = []
+        for feed in bookmark_feed_list:
+            # 정유진: 좋아요 수 확인.
+            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            # 정유진: 댓글 수 확인.
+            reply_count = Reply.objects.filter(feed_id=feed.id).count()
+            bookmark_count_list.append(dict(id=feed.id,
+                                            like_count=like_count,
+                                            reply_count=reply_count))
 
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
         # 정유진: 전달할 카운트 리스트(count_list) 추가.
@@ -126,7 +147,9 @@ class Profile(APIView):
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
                                                                     user=user,
-                                                                    count_list=count_list))
+                                                                    feed_count_list=feed_count_list,
+                                                                    like_count_list=like_count_list,
+                                                                    bookmark_count_list=bookmark_count_list))
 
 
 # 서버로 전달된 댓글 내용과 댓글을 입력한 사용자의 이메일 받아서 각 변수에 넣고 댓글 테이블에 저장
@@ -219,16 +242,38 @@ class ReplyProfile(APIView):
         bookmark_list = list(Bookmark.objects.filter(email=email, is_marked=True).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
 
-        # 정유진: 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
-        count_list = []
+        # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        feed_count_list = []
         for feed in feed_list:
             # 정유진: 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
             # 정유진: 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
-            count_list.append(dict(id=feed.id,
-                                   like_count=like_count,
-                                   reply_count=reply_count))
+            feed_count_list.append(dict(id=feed.id,
+                                        like_count=like_count,
+                                        reply_count=reply_count))
+
+        # 정유진: 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        like_count_list = []
+        for feed in like_feed_list:
+            # 정유진: 좋아요 수 확인.
+            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            # 정유진: 댓글 수 확인.
+            reply_count = Reply.objects.filter(feed_id=feed.id).count()
+            like_count_list.append(dict(id=feed.id,
+                                        like_count=like_count,
+                                        reply_count=reply_count))
+        # 정유진: 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        bookmark_count_list = []
+        for feed in bookmark_feed_list:
+            # 정유진: 좋아요 수 확인.
+            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            # 정유진: 댓글 수 확인.
+            reply_count = Reply.objects.filter(feed_id=feed.id).count()
+            bookmark_count_list.append(dict(id=feed.id,
+                                            like_count=like_count,
+                                            reply_count=reply_count))
+
 
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
         # 정유진: 전달할 카운트 리스트(count_list) 추가.
@@ -236,4 +281,6 @@ class ReplyProfile(APIView):
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
                                                                     user=user,
-                                                                    count_list=count_list))
+                                                                    feed_count_list=feed_count_list,
+                                                                    like_count_list=like_count_list,
+                                                                    bookmark_count_list=bookmark_count_list))
