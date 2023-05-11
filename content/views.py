@@ -28,6 +28,7 @@ class Main(APIView):
 
         # 노션에 정리된 글 참고, 요약 main.html로 보낼 피드 리스트와 user 정보를 처리
         feed_object_list = Feed.objects.all().order_by('-id')
+        user_object_list = User.objects.all()
         feed_list = []
 
         for feed in feed_object_list:
@@ -38,9 +39,9 @@ class Main(APIView):
                 reply_user = User.objects.filter(email=reply.email).first()
                 reply_list.append(dict(reply_content=reply.reply_content,
                                        nickname=reply_user.nickname, profile_image=reply_user.profile_image))
-            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
-            is_liked = Like.objects.filter(feed_id=feed.id, email=email, is_like=True).exists()
-            is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email, is_marked=True).exists()
+            like_count = Like.objects.filter(feed_id=feed.id).count()
+            is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+            is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
             feed_list.append(dict(id=feed.id,
                                   image=feed.image,
                                   content=feed.content,
@@ -53,8 +54,9 @@ class Main(APIView):
                                   create_at=feed.create_at
                                   ))
 
-        # 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
-        return render(request, "astronaut/main.html", context=dict(feeds=feed_list, user_session=user_session))
+        # 안치윤 : 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
+        return render(request, "astronaut/main.html",
+                      context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list))
 
 
 # 피드를 업로드 할 때 서버로 넘어오는 데이터를 받아서 각 변수에 저장 후 출력
@@ -105,16 +107,16 @@ class Profile(APIView):
         # 프로필 화면에서 게시글 조회할 때 필요한 리스트를 구하는 과정 (노션참고)
         # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         feed_list = Feed.objects.filter(email=email).order_by('-id')
-        like_list = list(Like.objects.filter(email=email, is_like=True).values_list('feed_id', flat=True))
+        like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
         like_feed_list = Feed.objects.filter(id__in=like_list)
-        bookmark_list = list(Bookmark.objects.filter(email=email, is_marked=True).values_list('feed_id', flat=True))
+        bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
 
         # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
         for feed in feed_list:
             # 정유진: 좋아요 수 확인.
-            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            like_count = Like.objects.filter(feed_id=feed.id).count()
             # 정유진: 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             feed_count_list.append(dict(id=feed.id,
@@ -125,7 +127,7 @@ class Profile(APIView):
         like_count_list = []
         for feed in like_feed_list:
             # 정유진: 좋아요 수 확인.
-            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            like_count = Like.objects.filter(feed_id=feed.id).count()
             # 정유진: 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             like_count_list.append(dict(id=feed.id,
@@ -135,7 +137,7 @@ class Profile(APIView):
         bookmark_count_list = []
         for feed in bookmark_feed_list:
             # 정유진: 좋아요 수 확인.
-            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            like_count = Like.objects.filter(feed_id=feed.id).count()
             # 정유진: 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             bookmark_count_list.append(dict(id=feed.id,
@@ -175,25 +177,18 @@ class ToggleLike(APIView):
     # noinspection PyMethodMayBeStatic
     def post(self, request):
         feed_id = request.data.get('feed_id', None)
-        favorite_text = request.data.get('favorite_text', True)
+        favorite_color = request.data.get('favorite_color', True)
         email = request.session.get('email', None)
-
-        # 좋아요 여부는 텍스트로 전달 되었기 때문에 이걸 불린 값으러 맞게 설정
-        if favorite_text == 'favorite_border':
-            is_like = True
-        else:
-            is_like = False
 
         # 해당 피드에 현재 세션의 사용자가 좋아요를 누른 정보가 있다면 뽑아서 like에 저장
         like = Like.objects.filter(feed_id=feed_id, email=email).first()
 
         # 뽑은 레코드의 is_like 필드 값을 토글시키고 저장
         if like is not None:
-            like.is_like = is_like
-            like.save()
+            like.delete()
         # 현재 세션의 사용자가 해당 피드에 좋아요를 한 흔적이 없다면 이 사용자가 해당 피드에는 좋아요를 눌렀다는 정보를 테이블에 추가
         else:
-            Like.objects.create(feed_id=feed_id, is_like=is_like, email=email)
+            Like.objects.create(feed_id=feed_id, email=email)
 
         return Response(status=200)
 
@@ -203,25 +198,18 @@ class ToggleBookmark(APIView):
     # noinspection PyMethodMayBeStatic
     def post(self, request):
         feed_id = request.data.get('feed_id', None)
-        bookmark_text = request.data.get('bookmark_text', True)
+        bookmark_color = request.data.get('bookmark_color', True)
         email = request.session.get('email', None)
-
-        # 북마크 여부는 텍스트로 전달 되었기 때문에 이걸 불린 값으로 맞게 설정
-        if bookmark_text == 'bookmark_border':
-            is_marked = True
-        else:
-            is_marked = False
 
         # 현재 세션의 사용자가 해당 피드에 북마크를 누른 정보가 있다면 뽑아서 bookmark에 저장
         bookmark = Bookmark.objects.filter(feed_id=feed_id, email=email).first()
 
         # 뽑은 레코드의 is_marked 필드 값을 토글시키고 저장
         if bookmark is not None:
-            bookmark.is_marked = is_marked
-            bookmark.save()
+            bookmark.delete()
         # 현재 세션의 사용자가 해당 피드에 북마크를 한 흔적이 없다면 이 사용자가 해당 피드에는 북마크를 눌렀다는 정보를 테이블에 추가
         else:
-            Bookmark.objects.create(feed_id=feed_id, is_marked=is_marked, email=email)
+            Bookmark.objects.create(feed_id=feed_id, email=email)
 
         return Response(status=200)
 
@@ -238,16 +226,16 @@ class ReplyProfile(APIView):
         email = user.email
         # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         feed_list = Feed.objects.filter(email=email).order_by('-id')
-        like_list = list(Like.objects.filter(email=email, is_like=True).values_list('feed_id', flat=True))
+        like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
         like_feed_list = Feed.objects.filter(id__in=like_list)
-        bookmark_list = list(Bookmark.objects.filter(email=email, is_marked=True).values_list('feed_id', flat=True))
+        bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
 
         # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
         for feed in feed_list:
             # 정유진: 좋아요 수 확인.
-            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            like_count = Like.objects.filter(feed_id=feed.id).count()
             # 정유진: 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             feed_count_list.append(dict(id=feed.id,
@@ -258,7 +246,7 @@ class ReplyProfile(APIView):
         like_count_list = []
         for feed in like_feed_list:
             # 정유진: 좋아요 수 확인.
-            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            like_count = Like.objects.filter(feed_id=feed.id).count()
             # 정유진: 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             like_count_list.append(dict(id=feed.id,
@@ -268,13 +256,12 @@ class ReplyProfile(APIView):
         bookmark_count_list = []
         for feed in bookmark_feed_list:
             # 정유진: 좋아요 수 확인.
-            like_count = Like.objects.filter(feed_id=feed.id, is_like=True).count()
+            like_count = Like.objects.filter(feed_id=feed.id).count()
             # 정유진: 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             bookmark_count_list.append(dict(id=feed.id,
                                             like_count=like_count,
                                             reply_count=reply_count))
-
 
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
         # 정유진: 전달할 카운트 리스트(count_list) 추가.
@@ -286,10 +273,55 @@ class ReplyProfile(APIView):
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list))
 
+
 # 05-09 유재우 : 피드지우기
 class RemoveFeed(APIView):
     def post(self, request):
         feed_id = request.data.get('feed_id')
-        feeds = Feed.objects.filter(id = feed_id).first()
+        feeds = Feed.objects.filter(id=feed_id).first()
         feeds.delete()
         return Response(status=200)
+
+
+# 안치윤 : 검색기능
+class SearchFeed(APIView):
+    def get(self, request):
+        searchKeyword = request.GET.get("search", "")
+        email = request.session.get('email', None)
+        user_session = User.objects.filter(email=email).first()
+
+
+        feed_search_list = Feed.objects.filter(content__contains=searchKeyword).order_by('-id')
+        user_object_list = User.objects.filter(nickname__contains=searchKeyword).order_by('-id')
+
+        feed_list = []
+
+        for feed in feed_search_list:
+            user = User.objects.filter(email=feed.email).first()
+            reply_object_list = Reply.objects.filter(feed_id=feed.id)
+            reply_list = []
+            for reply in reply_object_list:
+                reply_user = User.objects.filter(email=reply.email).first()
+                reply_list.append(dict(reply_content=reply.reply_content,
+                                       nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+            like_count = Like.objects.filter(feed_id=feed.id).count()
+            is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+            is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+            feed_list.append(dict(id=feed.id,
+                                  image=feed.image,
+                                  content=feed.content,
+                                  like_count=like_count,
+                                  profile_image=user.profile_image,
+                                  nickname=user.nickname,
+                                  reply_list=reply_list,
+                                  is_liked=is_liked,
+                                  is_marked=is_marked,
+                                  create_at=feed.create_at
+                                  ))
+
+        # 안치윤 : 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
+        return render(request, "astronaut/main.html",
+                      context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list))
+
+
+
