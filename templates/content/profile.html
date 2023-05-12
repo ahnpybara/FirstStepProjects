@@ -389,7 +389,7 @@
     </div>
 </div>
 
-<!-- 정유진: 하나의 게시물를 보는 모달창 -->
+<!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
 <div id="feed_modal" class="modal_overlay">
     <div class="modal_window" style="display: flex;flex-direction: column;justify-content: space-between;">
         <div style="display: flex; flex-direction: row; justify-content: space-between">
@@ -483,7 +483,7 @@
 
 <!-- 자바 스크립트 영역 이벤트처리나 서버로 데이터를 전달하는 과정(ajax) -->
 <script>
-    // 정유진: 클릭한 게시물의 feed_id를 모달에 넘겨 주는 이벤트 처리
+    // 정유진: 클릭한 게시물의 feed_id를 모달에 넘겨 주는 이벤트 처리. 추가되는 태그의 id 값는 모두 앞에 feed_modal을 붙였다.
     $(".profile_feed_mouse_over").click(function () {
         // 정유진: 클릭한 게시물의 feed_id 값을 뽑아 낸다.
         var feed_id = $(this).attr('feed_id');
