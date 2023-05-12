@@ -534,9 +534,8 @@
         var feed_id = $(this).attr('feed_id');
         // 정유진: feed_modal에 feed_id 요소 추가
         document.getElementById("feed_modal").setAttribute("feed_id", feed_id);
+        // 정유진: feed_modal의 댓글 게시 부분에 feed_id 요소 추가
         document.getElementById("reply_content_upload").setAttribute("feed_id", feed_id);
-
-        console.log(feed_id);
 
         $.ajax({
             url: "/content/feedmodal",
@@ -546,21 +545,19 @@
             method: "GET",
             success: function (data) {
                 console.log("성공");
-
-                var imageUrl = "{% get_media_prefix %}" + data['image'];
+                // 정유진: 서버에서 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 변수에 따로 할당.
+                var feed_image = "{% get_media_prefix %}" + data['image'];
                 var feed_content = data['feed_content'];
                 var writer_profile_image = "{% get_media_prefix %}" + data['writer_profile_image'];
                 var writer_nickname = data['writer_nickname'];
 
+                // 정유진: 모달에 남았는 댓글 리스트 리셋.
                 $("#feed_modal_reply_list").html('');
+                // 정유진: 서버에서 받은 댓글 리스트 변수에 할당 후 추가.
                 for (var i = 0; i < data['reply_list'].length; i++) {
                     var reply_profile_image = "{% get_media_prefix %}" + data['reply_list'][i].profile_image;
                     var reply_nickname = data['reply_list'][i].nickname;
                     var reply_content = data['reply_list'][i].reply_content;
-                    console.log(reply_profile_image)
-                    console.log(reply_nickname)
-                    console.log(reply_content)
-                    console.log("--------")
 
                     $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + i + '" style="display: flex;margin-bottom: 15px;"></div>');
 
@@ -574,18 +571,19 @@
                     $("#feed_modal_reply_nickname_" + i).append('<div>' + reply_nickname + '</div>');
                     $("#feed_modal_reply_content_" + i).append('<div>' + reply_content + '</div>');
                 }
-
+                // 정유진: 좋아요, 북마크, 좋아요 수, 게시물 작성시간 값 할당.
                 var is_liked = data['is_liked'];
-                console.log(is_liked)
                 var is_marked = data['is_marked'];
                 var like_count = data['like_count'];
                 var feed_create_at = data['feed_create_at'];
 
-                $("#feed_modal_image").html('<img style="width: 100%" src="' + imageUrl + '">');
+                // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
+                $("#feed_modal_image").html('<img style="width: 100%" src="' + feed_image + '">');
                 $("#feed_modal_feed_content").html('<div>' + feed_content + '</div>');
                 $("#feed_modal_writer_profile_image").html('<img  style="width: 100%; height: 100%" src="' + writer_profile_image + '">');
                 $("#feed_modal_writer_nickname").html('<div>' + writer_nickname + '</div>');
 
+                // 정유진: 좋아요, 북마크 여부 확인 후 모달에 추가
                 if (is_liked)
                     $("#feed_modal_is_liked").html(
                         '<span id="favorite_' + feed_id + '" feed_id="' + feed_id + '" style="color: red" class="uTrue favorite material-symbols-outlined">favorite</span>');
@@ -600,6 +598,7 @@
                     $("#feed_modal_is_marked").html(
                         '<span id="bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse bookmark material-symbols-outlined">bookmark</span>');
 
+                // 정유진: 좋아요 수, 게시물 작성시간 모달에 추가
                 $("#feed_modal_like_count").html('<div> 좋아요 수 ' + like_count + '</div>');
                 $("#feed_modal_feed_create_at").html(
                     '<div style="font-size: 12px; color: gray; text-align: left; margin-bottom: 10px; margin-left: 10px">'
