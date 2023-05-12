@@ -358,8 +358,6 @@ class FeedModal(APIView):
             'image': feed_modal.image,
             'feed_content': feed_modal.content,
 
-            # 정유진: 에러.
-            # feed_create_at 추가하면 에러뜸.erorr. 500 (Iternal Server Error)
             # 데이터를 JSON 형식으로 변환
             'feed_create_at': feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'),
 
