@@ -8,6 +8,8 @@ from .models import Feed, Reply, Like, Bookmark
 from user.models import User
 import os
 
+import json
+from django.http import HttpResponse
 
 # Main 클래스는 여러 테이블에서 데이터를 가져와 피드리스트 변수에 저장하고 main.html과
 # main.html에서 피드를 사용자에게 보여주는데 필요한 피드리스트와 user 정보를 브라우저에게 보내는 클래스입니다.
@@ -324,4 +326,54 @@ class SearchFeed(APIView):
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list))
 
 
+
+# 정유진" 하나의 게시물을 모달로 띄워줄 때 필요한 데이터들을 보내준다.
+class FeedModal(APIView):
+    def get(self, request):
+        feed_id = int(request.GET.get('feed_id', None))
+        email = request.session.get('email', None)
+
+        # 정유진: 해당 피드의 정보. 게시물의 이미지,
+        feed_modal = Feed.objects.filter(id=feed_id).first()
+
+        # 정유진: 게시물 작성자 정보. 이메일. 닉네임. 프로필 이미지.
+        feed_modal_writer = User.objects.filter(email=feed_modal.email).first()
+
+        # 정유진: 게시물 댓글 리스트 정보. 이메일. 프로필 이미지
+        feed_modal_reply_object_list = Reply.objects.filter(feed_id=feed_id)
+
+        reply_list = []
+        print(feed_modal_reply_object_list)
+        for reply in feed_modal_reply_object_list:
+            reply_user = User.objects.filter(email=reply.email).first()
+            reply_list.append(dict(reply_content=reply.reply_content,
+                                   nickname=reply_user.nickname,
+                                   profile_image=reply_user.profile_image))
+        like_count = Like.objects.filter(feed_id=feed_modal.id).count()
+        is_liked = Like.objects.filter(feed_id=feed_modal.id, email=email).exists()
+        is_marked = Bookmark.objects.filter(feed_id=feed_modal.id, email=email).exists()
+        print(feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'))
+        data = {
+            'id': feed_modal.id,
+            'image': feed_modal.image,
+            'feed_content': feed_modal.content,
+
+            # 정유진: 에러.
+            # feed_create_at 추가하면 에러뜸.erorr. 500 (Iternal Server Error)
+            # 데이터를 JSON 형식으로 변환
+            'feed_create_at': feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'),
+
+            'writer_profile_image': feed_modal_writer.profile_image,
+            'writer_nickname': feed_modal_writer.nickname,
+
+            'reply_list': reply_list,
+
+            'is_liked': is_liked,
+            'is_marked': is_marked,
+            'like_count': like_count
+        }
+
+        json_data = json.dumps(data)
+
+        return HttpResponse(json_data, content_type='application/json')
 

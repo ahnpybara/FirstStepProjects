@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UploadFeed, Profile, Main, UploadReply, ToggleLike, ToggleBookmark, ReplyProfile, RemoveFeed, SearchFeed
+from .views import UploadFeed, Profile, Main, UploadReply, ToggleLike, ToggleBookmark, ReplyProfile, RemoveFeed, SearchFeed, FeedModal
 
 app_name = 'content'
 
@@ -14,5 +14,6 @@ urlpatterns = [
     path('main/', Main.as_view()),
     path('reprofile/', ReplyProfile.as_view()),
     path('removefeed', RemoveFeed.as_view()),
-    path('search/', SearchFeed.as_view(), name='feed_search')
+    path('search/', SearchFeed.as_view(), name='feed_search'),
+    path('feedmodal/', FeedModal.as_view())
 ]
