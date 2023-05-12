@@ -151,7 +151,7 @@ class Profile(APIView):
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
-                                                                    user=user,
+                                                                    user_session=user,
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list))
@@ -222,6 +222,19 @@ class ReplyProfile(APIView):
         # 사용자의 닉네임을 받아옴
         nickname = request.GET.get('feed_nickname')
 
+        # 정유진: 사용자 세션을 받아옴. nav부분의 프로필 사진을 얻기 위해서.
+        email_session = request.session.get('email', None)
+
+        # 세션에 이메일 정보가 없는경우 -> 로그인을 하지 않고 메인페이지에 접속했다는 뜻 -> 로그인 페이지로 이동시킴
+        if email_session is None:
+            return render(request, "user/login.html")
+
+        # 세션정보가 저장된 이메일을 필터링 조건으로 대입해서 유저테이블을 필터링을 진행 -> 결과를 user_session 변수에 저장
+        user_session = User.objects.filter(email=email_session).first()
+        # 세션에 이메일 정보가 있는데 그 이메일 주소가 우리 회원이 아닌경우 -> 로그인 페이지로 이동시킴
+        if user_session is None:
+            return render(request, "user/login.html")
+
         # 닉네임을 가지고 유저 테이블에서 필터링한 결과를 user에 저장
         user = User.objects.filter(nickname=nickname).first()
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
@@ -273,7 +286,8 @@ class ReplyProfile(APIView):
                                                                     user=user,
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
-                                                                    bookmark_count_list=bookmark_count_list))
+                                                                    bookmark_count_list=bookmark_count_list,
+                                                                    user_session=user_session))
 
 
 # 05-09 유재우 : 피드지우기

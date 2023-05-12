@@ -24,6 +24,60 @@
     <title>프로필</title>
 
     <style>
+        /* 안치윤 : 모달창 닫기 버튼 margin style 속성으로 안먹음*/
+        .modal_close {
+            margin-right: 10px;
+        }
+        /* 안치윤 : 검색창 css */
+        .bar_search {
+            position: relative;
+        }
+
+        .bar_search input {
+            width: 400px;
+            padding: 8px 16px 8px 40px;
+            background-color: #efefef;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: lighter;
+        }
+
+        .bar_search input:focus {
+            outline: none;
+        }
+
+        /* 안치윤 : 메뉴 폰트 사이즈 수정 */
+        .material_menu_icon {
+            font-size: 32px; /* Preferred icon size */
+            wght: 100;
+        }
+
+        /* 안치윤 : 반응형 웹을 위한 코드 */
+        @media (max-width: 1000px) {
+            .follow-side {
+                display: none;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .search-form {
+                display: none;
+            }
+
+            .navbar-brand {
+                position: absolute;
+                top: 8px;
+                left: 12px;
+            }
+
+            .menu_icons {
+                position: absolute;
+                top: 8px;
+                right: 12px;
+            }
+        }
+
         /* 프로필 화면 박스 */
         .box {
             width: 150px;
@@ -66,7 +120,13 @@
             width: 800px;
             height: 600px;
             position: relative;
-            padding: 10px;
+        }
+
+        /* 안치윤 : 이 웹에선 클릭시 하이라이트가 생기지 않게 함 */
+        html {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         }
 
         /*정유진: class profile_feed_mouse_over 와 feed_count 추가 */
@@ -91,55 +151,39 @@
             display: flex;
         }
 
-        /* 안치윤 : 구글 심볼 */
-        .uTrue {
-            cursor: pointer;
-            color: rgb(0, 0, 1);
-            font-size: 28px;
-            font-variation-settings: 'FILL' 1,
-            'wght' 500,
-            'GRAD' 0,
-            'opsz' 48
-        }
-
-        /* 안치윤 : 구글 심볼 */
-        .uFalse {
-            cursor: pointer;
-            color: black;
-            font-size: 28px;
-            font-variation-settings: 'FILL' 0,
-            'wght' 500,
-            'GRAD' 0,
-            'opsz' 48
-        }
-
     </style>
 </head>
 <body>
 <!-- 맨 위 상단 메뉴바(로고 검색 기타메뉴)를 만드는 코드 -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="position: fixed;width: 100%; z-index: 999">
-    <div class="container-fluid" style="justify-content: space-between;flex-wrap: nowrap; min-width: 1000px">
+<nav class="navbar navbar-expand-lg navbar-white bg-white"
+     style="position: fixed; width: 100%; height: 61px; z-index: 999; border-bottom: 1px solid #e1e1e1">
+    <!-- 안치윤 : 메뉴바 style 수정(아이콘 크기 및 색깔) -->
+    <div class="menu_bar"
+         style="display: flex; width: 100%; flex-direction:row; justify-content: space-around; min-width: 800px">
         <!-- 로고 -->
         <a class="navbar-brand" href="/main"><img style="width: 167px"
                                                   src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png"
-                                                  alt=" text">
+                                                  alt="text">
         </a>
-        <!-- 검색창 -->
-        <input class="form-control me-2" style="width: 400px" type="search" placeholder="Search" aria-label="Search">
-        <!-- 메뉴아이콘들 -->
-        <div style="display: flex">
-            <a href="/main" style="color: black"><span class="material-icons"
-                                                       style="padding-right: 10px"> home</span></a>
-            <span id="nav_bar_add_box" class="material-icons-outlined" style="padding-right: 10px">add_box</span>
+        <!-- 안치윤 : 검색창 -->
+        <form class="bar_search" action="{% url 'content:feed_search' %}" method="GET">
+            <input type="text" name="search" placeholder="Search">
+        </form>
+        <!-- 안치윤 : 클래스명 부여, 스타일 수정 메뉴 아이콘 들 -->
+        <div class="menu_icons" style="display: flex; padding-top: 5px">
+            <a href="/main" style="color: black"><span class="material_menu_icon material-icons"
+                                                       style="padding-right: 20px"> home</span></a>
+            <span id="nav_bar_add_box" class="material_menu_icon material-icons-outlined"
+                  style="padding-right: 20px; cursor: pointer">add_box</span>
             <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
             <div class="dropdown">
                 <a href="#" role="button" id="dropdownMenuLink"
                    data-bs-toggle="dropdown" aria-expanded="false">
                     <!-- 주 메뉴(프로필 사진)-->
-                    <div class="box" style="width: 25px; height: 25px">
+                    <div class="box" style="width: 32px; height: 32px">
 
                         <img class="profile"
-                             src="{% get_media_prefix %}{{ user.profile_image }}" alt="text">
+                             src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
 
                     </div>
                 </a>
@@ -157,6 +201,7 @@
         </div>
     </div>
 </nav>
+
 
 <!-- 프로필 사진과 프로필 정보 텍스트 영역 -->
 <div style="display: flex; flex-direction: row;text-align: center; justify-content: center;padding-top: 60px; background-color:#FAFAFA">
@@ -405,9 +450,9 @@
             </div>
         </div>
         <div style="width: 100%;height: 100%;">
-            <div style="width: 100%;height: 100%;border-top: solid 1px gray;display: flex;flex-direction: row;margin-top: 10px">
+            <div style="width: 100%;height: 100%;border-top: solid 1px gray;display: flex;flex-direction: row">
                 <div id="feed_modal_image"
-                     style="width: 100%;height: 100%;display: flex;align-items: center;background-color: black;">
+                     style="width: 100%;height: 100%;display: flex;align-items: center;background-color: black;border-radius: 10px;">
                     <!-- 이미지 -->
                 </div>
                 <div style="width: 500px;border-left: solid 1px gray;display: flex;flex-direction: column;justify-content: space-between;">
