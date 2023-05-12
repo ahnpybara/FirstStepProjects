@@ -110,9 +110,9 @@ class Profile(APIView):
         # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         feed_list = Feed.objects.filter(email=email).order_by('-id')
         like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
-        like_feed_list = Feed.objects.filter(id__in=like_list)
+        like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
-        bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
+        bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
 
         # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
@@ -152,6 +152,7 @@ class Profile(APIView):
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
                                                                     user_session=user,
+                                                                    user=user,
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list))
