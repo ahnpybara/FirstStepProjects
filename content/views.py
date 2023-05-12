@@ -8,6 +8,8 @@ from .models import Feed, Reply, Like, Bookmark
 from user.models import User
 import os
 
+import json
+from django.http import HttpResponse
 
 # Main 클래스는 여러 테이블에서 데이터를 가져와 피드리스트 변수에 저장하고 main.html과
 # main.html에서 피드를 사용자에게 보여주는데 필요한 피드리스트와 user 정보를 브라우저에게 보내는 클래스입니다.
@@ -108,9 +110,9 @@ class Profile(APIView):
         # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         feed_list = Feed.objects.filter(email=email).order_by('-id')
         like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
-        like_feed_list = Feed.objects.filter(id__in=like_list)
+        like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
-        bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
+        bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
 
         # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
@@ -149,6 +151,7 @@ class Profile(APIView):
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
+                                                                    user_session=user,
                                                                     user=user,
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
@@ -220,6 +223,19 @@ class ReplyProfile(APIView):
         # 사용자의 닉네임을 받아옴
         nickname = request.GET.get('feed_nickname')
 
+        # 정유진: 사용자 세션을 받아옴. nav부분의 프로필 사진을 얻기 위해서.
+        email_session = request.session.get('email', None)
+
+        # 세션에 이메일 정보가 없는경우 -> 로그인을 하지 않고 메인페이지에 접속했다는 뜻 -> 로그인 페이지로 이동시킴
+        if email_session is None:
+            return render(request, "user/login.html")
+
+        # 세션정보가 저장된 이메일을 필터링 조건으로 대입해서 유저테이블을 필터링을 진행 -> 결과를 user_session 변수에 저장
+        user_session = User.objects.filter(email=email_session).first()
+        # 세션에 이메일 정보가 있는데 그 이메일 주소가 우리 회원이 아닌경우 -> 로그인 페이지로 이동시킴
+        if user_session is None:
+            return render(request, "user/login.html")
+
         # 닉네임을 가지고 유저 테이블에서 필터링한 결과를 user에 저장
         user = User.objects.filter(nickname=nickname).first()
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
@@ -271,7 +287,8 @@ class ReplyProfile(APIView):
                                                                     user=user,
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
-                                                                    bookmark_count_list=bookmark_count_list))
+                                                                    bookmark_count_list=bookmark_count_list,
+                                                                    user_session=user_session))
 
 
 # 05-09 유재우 : 피드지우기
@@ -325,3 +342,50 @@ class SearchFeed(APIView):
 
 
 
+# 정유진" 하나의 게시물을 모달로 띄워줄 때 필요한 데이터들을 보내준다.
+class FeedModal(APIView):
+    def get(self, request):
+        feed_id = int(request.GET.get('feed_id', None))
+        email = request.session.get('email', None)
+
+        # 정유진: 해당 피드의 정보. 게시물의 이미지,
+        feed_modal = Feed.objects.filter(id=feed_id).first()
+
+        # 정유진: 게시물 작성자 정보. 이메일. 닉네임. 프로필 이미지.
+        feed_modal_writer = User.objects.filter(email=feed_modal.email).first()
+
+        # 정유진: 게시물 댓글 리스트 정보. 이메일. 프로필 이미지
+        feed_modal_reply_object_list = Reply.objects.filter(feed_id=feed_id)
+
+        reply_list = []
+        print(feed_modal_reply_object_list)
+        for reply in feed_modal_reply_object_list:
+            reply_user = User.objects.filter(email=reply.email).first()
+            reply_list.append(dict(reply_content=reply.reply_content,
+                                   nickname=reply_user.nickname,
+                                   profile_image=reply_user.profile_image))
+        like_count = Like.objects.filter(feed_id=feed_modal.id).count()
+        is_liked = Like.objects.filter(feed_id=feed_modal.id, email=email).exists()
+        is_marked = Bookmark.objects.filter(feed_id=feed_modal.id, email=email).exists()
+        print(feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'))
+        data = {
+            'id': feed_modal.id,
+            'image': feed_modal.image,
+            'feed_content': feed_modal.content,
+
+            # 데이터를 JSON 형식으로 변환
+            'feed_create_at': feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'),
+
+            'writer_profile_image': feed_modal_writer.profile_image,
+            'writer_nickname': feed_modal_writer.nickname,
+
+            'reply_list': reply_list,
+
+            'is_liked': is_liked,
+            'is_marked': is_marked,
+            'like_count': like_count
+        }
+
+        json_data = json.dumps(data)
+
+        return HttpResponse(json_data, content_type='application/json')
