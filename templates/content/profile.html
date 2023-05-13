@@ -261,12 +261,15 @@
 <!-- 내가 작성한 게시물 목록 -->
 <div id="feed_list" style="width: 100%; display: flex; align-items: center;justify-content: center">
     <div style="display: flex; flex-direction: row; flex-wrap: wrap; width: 1000px; justify-content: center">
+        <!--피드 리스트를 보여주는 반복문-->
         {% for feed in feed_list %}
-            <div style="width: 100%;height: 300px; margin: 10px 5px 0 5px;">
+            <div style="width: 300px;height: 300px; margin: 10px 5px 0 5px;">
+                <!-- 좋아요 북마크 수 보여주기 위한 창 -->
                 <div style="position: relative;width: 100%; height: 100%;">
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
                     <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}" class="profile_feed_mouse_over"
                          style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
+                        <!--좋아요 수 북마크 수를 계산하기 위한 반복문-->
                         {% for count in feed_count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
@@ -437,7 +440,7 @@
 <!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
 <div id="feed_modal" class="modal_overlay">
     <div class="modal_window" style="display: flex;flex-direction: column;justify-content: space-between;">
-        <div style="display: flex; flex-direction: row; justify-content: space-between">
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
             <div>
                 <!-- 공백 -->
             </div>
@@ -450,24 +453,25 @@
             </div>
         </div>
         <div style="width: 100%;height: 100%;">
-            <div style="width: 100%;height: 100%;border-top: solid 1px gray;display: flex;flex-direction: row;margin-top: 10px">
+            <div style="width: 100%;height: 100%;border-top: solid 1px #e1e1e1;display: flex;flex-direction: row">
                 <div id="feed_modal_image"
-                     style="width: 100%;height: 100%;display: flex;align-items: center;background-color: black;">
-                    <!-- 이미지 -->
+                     style="width: 100%;height: 100%;display: flex;align-items: center">
+                    <!-- ajax로 이미지를 받아옴 -->
                 </div>
-                <div style="width: 500px;border-left: solid 1px gray;display: flex;flex-direction: column;justify-content: space-between;">
+                <!--이미지와 글 영역 구분-->
+                <div style="width: 500px;border-left: solid 1px #e1e1e1;display: flex;flex-direction: column;justify-content: space-between;">
                     <div>
-                        <!-- 작성자 -->
+                        <!-- ajax로 작성자 받음 -->
                         <div style="display: flex;margin: 15px;align-items: center;flex-direction: row;">
                             <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
                                  style="width: 35px;height: 35px;margin-right: 15px;">
-                                <!-- 작성자 프로필 사진 -->
+                                <!-- ajax로 받아옴 작성자 프로필 사진 -->
                             </div>
                             <div id="feed_modal_writer_nickname">
-                                <!-- 작성자 닉네임 -->
+                                <!-- ajax로 받아옴 작성자 닉네임 -->
                             </div>
                             <div id="feed_modal_feed_content">
-                                <!-- 게시물 내용 -->
+                                <!-- ajax로 받아옴 게시물 내용 -->
                             </div>
                         </div>
                         <!-- 댓글 리스트 -->
@@ -491,19 +495,18 @@
                         <div>
                             <div style="display: flex;margin: 15px;justify-content: space-between;">
                                 <div id="feed_modal_is_liked">
-                                    <!-- 좋아요 -->
+                                    <!-- ajax로 받아옴 좋아요 -->
                                 </div>
                                 <div id="feed_modal_is_marked">
-                                    <!-- 북마크 -->
+                                    <!-- ajax로 받아옴 북마크 -->
                                 </div>
                             </div>
                             <div id="feed_modal_like_count" style="margin: 15px">
-                                <!-- 좋아요 수 -->
+                                <!-- ajax로 받아옴 좋아요 수 -->
                             </div>
                         </div>
-                        <!--게시물 업로드 시간-->
                         <div id="feed_modal_feed_create_at">
-                            <!--게시물 업로드 시간-->
+                            <!-- ajax로 받아옴 게시물 업로드 시간-->
                         </div>
                         <!-- 댓글 작성 -->
                         <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px #e1e1e1; margin-top: 10px">
@@ -559,8 +562,10 @@
                     var reply_nickname = data['reply_list'][i].nickname;
                     var reply_content = data['reply_list'][i].reply_content;
 
+                    // 댓글 리스트
                     $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + i + '" style="display: flex;margin-bottom: 15px;"></div>');
 
+                    // 댓글들, 프로필 이미지 -
                     $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile feed_profile_image" style="width: 35px;height: 35px;margin-right: 15px;"></div>');
                     $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: center;"></div>');
 

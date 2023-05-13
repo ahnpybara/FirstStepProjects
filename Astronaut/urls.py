@@ -5,6 +5,7 @@ from content.views import Main
 from .settings import MEDIA_URL, MEDIA_ROOT
 from django.conf.urls.static import static
 
+
 # 사용자가 어떤 url를 요청하느냐에 따라 어떤 뷰를 실행할지 결정하는 리스트
 urlpatterns = [
     # 사용자가 특정 url을 요청하면, 해당 url과 매핑된 클래스를 뷰로 실행한다.

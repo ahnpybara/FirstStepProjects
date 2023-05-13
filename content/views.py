@@ -221,7 +221,7 @@ class ToggleBookmark(APIView):
 class ReplyProfile(APIView):
     def get(self, request):
         # 사용자의 닉네임을 받아옴
-        nickname = request.GET.get('feed_nickname')
+        nickname = request.GET.get('user_nickname')
 
         # 정유진: 사용자 세션을 받아옴. nav부분의 프로필 사진을 얻기 위해서.
         email_session = request.session.get('email', None)
@@ -243,9 +243,9 @@ class ReplyProfile(APIView):
         # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         feed_list = Feed.objects.filter(email=email).order_by('-id')
         like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
-        like_feed_list = Feed.objects.filter(id__in=like_list)
+        like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
-        bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list)
+        bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
 
         # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
@@ -345,6 +345,7 @@ class SearchFeed(APIView):
 # 정유진" 하나의 게시물을 모달로 띄워줄 때 필요한 데이터들을 보내준다.
 class FeedModal(APIView):
     def get(self, request):
+        # 받은 값은 문자열이니 정수로 변환
         feed_id = int(request.GET.get('feed_id', None))
         email = request.session.get('email', None)
 
@@ -358,7 +359,6 @@ class FeedModal(APIView):
         feed_modal_reply_object_list = Reply.objects.filter(feed_id=feed_id)
 
         reply_list = []
-        print(feed_modal_reply_object_list)
         for reply in feed_modal_reply_object_list:
             reply_user = User.objects.filter(email=reply.email).first()
             reply_list.append(dict(reply_content=reply.reply_content,
@@ -387,5 +387,5 @@ class FeedModal(APIView):
         }
 
         json_data = json.dumps(data)
-
+        # ajax를 이용해서 html 추가하거나 변경할려면 이런방식을 써야한다.
         return HttpResponse(json_data, content_type='application/json')
