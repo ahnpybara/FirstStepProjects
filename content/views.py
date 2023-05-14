@@ -389,4 +389,3 @@ class FeedModal(APIView):
         json_data = json.dumps(data)
         # ajax를 이용해서 html 추가하거나 변경할려면 이런방식을 써야한다.
         return HttpResponse(json_data, content_type='application/json')
-
