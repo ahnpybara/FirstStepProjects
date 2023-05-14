@@ -11,6 +11,7 @@ import os
 import json
 from django.http import HttpResponse
 
+
 # Main 클래스는 여러 테이블에서 데이터를 가져와 피드리스트 변수에 저장하고 main.html과
 # main.html에서 피드를 사용자에게 보여주는데 필요한 피드리스트와 user 정보를 브라우저에게 보내는 클래스입니다.
 class Main(APIView):
@@ -108,6 +109,8 @@ class Profile(APIView):
 
         # 프로필 화면에서 게시글 조회할 때 필요한 리스트를 구하는 과정 (노션참고)
         # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
+        # 안치윤 : 작성 게시물 개수 추가
+        user_feed_count = Feed.objects.filter(email=email).count()
         feed_list = Feed.objects.filter(email=email).order_by('-id')
         like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
         like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
@@ -155,7 +158,8 @@ class Profile(APIView):
                                                                     user=user,
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
-                                                                    bookmark_count_list=bookmark_count_list))
+                                                                    bookmark_count_list=bookmark_count_list,
+                                                                    user_feed_count=user_feed_count))
 
 
 # 서버로 전달된 댓글 내용과 댓글을 입력한 사용자의 이메일 받아서 각 변수에 넣고 댓글 테이블에 저장
@@ -241,6 +245,8 @@ class ReplyProfile(APIView):
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
         email = user.email
         # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
+        # 안치윤 : 내가 작성한 게시글의 숫자
+        user_feed_count = Feed.objects.filter(email=email).count()
         feed_list = Feed.objects.filter(email=email).order_by('-id')
         like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
         like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
@@ -288,7 +294,8 @@ class ReplyProfile(APIView):
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list,
-                                                                    user_session=user_session))
+                                                                    user_session=user_session,
+                                                                    user_feed_count=user_feed_count))
 
 
 # 05-09 유재우 : 피드지우기
@@ -306,7 +313,6 @@ class SearchFeed(APIView):
         searchKeyword = request.GET.get("search", "")
         email = request.session.get('email', None)
         user_session = User.objects.filter(email=email).first()
-
 
         feed_search_list = Feed.objects.filter(content__contains=searchKeyword).order_by('-id')
         user_object_list = User.objects.filter(nickname__contains=searchKeyword).order_by('-id')

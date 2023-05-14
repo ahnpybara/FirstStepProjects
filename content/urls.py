@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import UploadFeed, Profile, Main, UploadReply, ToggleLike, ToggleBookmark, ReplyProfile, RemoveFeed, SearchFeed, FeedModal
+from .views import UploadFeed, Profile, Main, UploadReply, ToggleLike, ToggleBookmark, ReplyProfile, RemoveFeed, \
+    SearchFeed, FeedModal
 
 app_name = 'content'
 
