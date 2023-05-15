@@ -26,15 +26,27 @@ class Join(APIView):
         name = request.data.get('name', None)
         password = request.data.get('password', None)
 
-        # 전달 받은 데이터를 토대로 유저 테이블에 새로운 튜플을 생성
-        User.objects.create(email=email,
-                            nickname=nickname,
-                            name=name,
-                            password=make_password(password),
-                            profile_image="default_profile.png")
+        # 정유진: User 테이블에 존재하는지 확인
+        check_user_email = User.objects.filter(email=email).exists()
+        check_user_nickname = User.objects.filter(nickname=nickname).exists()
 
-        # 성공적으로 전달되었다는 응답을 줌
-        return Response(status=200)
+        # 정유진: 이미 존재하는 경우 출력할 메시지 전달.
+        if check_user_email or check_user_nickname:
+            if check_user_email:
+                return Response(status=200, data=dict(message="이미 가입된 이메일입니다."))
+            if check_user_nickname:
+                return Response(status=200, data=dict(message="이미 존재하는 닉네임입니다."))
+        # 정유진: 존재하지 않는 경우 생성
+        else:
+            # 전달 받은 데이터를 토대로 유저 테이블에 새로운 튜플을 생성
+            User.objects.create(email=email,
+                                nickname=nickname,
+                                name=name,
+                                password=make_password(password),
+                                profile_image="default_profile.png")
+
+            # 성공적으로 전달되었다는 응답을 줌
+            return Response(status=200)
 
 
 # Login 클래스는 사용자의 요청 방식에 따라 Login.html을 보여주거나, 로그인시 이메일이나 비밀번호가 일치한지 확인
@@ -55,7 +67,7 @@ class Login(APIView):
 
         # 이메일이 일치하지 않을 경우
         if user is None:
-            return Response(status=400, data=dict(message="회원정보가 잘못되었습니다."))
+            return Response(status=200, data=dict(message="회원정보가 잘못되었습니다."))
 
         # 이메일이 있을 때 비밀번호가 일치한지 확인
         if user.check_password(password):
@@ -63,7 +75,7 @@ class Login(APIView):
             request.session['email'] = email
             return Response(status=200)
         else:
-            return Response(status=400, data=dict(message="회원정보가 잘못되었습니다."))
+            return Response(status=200, data=dict(message="회원정보가 잘못되었습니다."))
 
 
 # 로그아웃을 할 땐 세션을 비워줘야 하며 사용자에게 로그인 페이지로 이동시키는 응답을 줌
