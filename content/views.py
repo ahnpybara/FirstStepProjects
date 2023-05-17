@@ -108,7 +108,7 @@ class Profile(APIView):
             return render(request, "user/login.html")
 
         # 프로필 화면에서 게시글 조회할 때 필요한 리스트를 구하는 과정 (노션참고)
-        # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
+        # 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         # 안치윤 : 작성 게시물 개수 추가
         user_feed_count = Feed.objects.filter(email=email).count()
         feed_list = Feed.objects.filter(email=email).order_by('-id')
@@ -117,40 +117,40 @@ class Profile(APIView):
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
 
-        # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
         for feed in feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             feed_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
                                         reply_count=reply_count))
 
-        # 정유진: 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         like_count_list = []
         for feed in like_feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             like_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
                                         reply_count=reply_count))
-        # 정유진: 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         bookmark_count_list = []
         for feed in bookmark_feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             bookmark_count_list.append(dict(id=feed.id,
                                             like_count=like_count,
                                             reply_count=reply_count))
 
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
-        # 정유진: 전달할 카운트 리스트(count_list) 추가.
+        # 전달할 카운트 리스트(count_list) 추가.
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
@@ -228,7 +228,7 @@ class ReplyProfile(APIView):
         # 사용자의 닉네임을 받아옴
         nickname = request.GET.get('user_nickname')
 
-        # 정유진: 사용자 세션을 받아옴. nav부분의 프로필 사진을 얻기 위해서.
+        # 사용자 세션을 받아옴. nav부분의 프로필 사진을 얻기 위해서.
         email_session = request.session.get('email', None)
 
         # 세션에 이메일 정보가 없는경우 -> 로그인을 하지 않고 메인페이지에 접속했다는 뜻 -> 로그인 페이지로 이동시킴
@@ -245,7 +245,7 @@ class ReplyProfile(APIView):
         user = User.objects.filter(nickname=nickname).first()
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
         email = user.email
-        # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
+        # 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         # 안치윤 : 내가 작성한 게시글의 숫자
         user_feed_count = Feed.objects.filter(email=email).count()
         feed_list = Feed.objects.filter(email=email).order_by('-id')
@@ -254,40 +254,40 @@ class ReplyProfile(APIView):
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
 
-        # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
         for feed in feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             feed_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
                                         reply_count=reply_count))
 
-        # 정유진: 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         like_count_list = []
         for feed in like_feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             like_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
                                         reply_count=reply_count))
-        # 정유진: 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         bookmark_count_list = []
         for feed in bookmark_feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             bookmark_count_list.append(dict(id=feed.id,
                                             like_count=like_count,
                                             reply_count=reply_count))
 
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
-        # 정유진: 전달할 카운트 리스트(count_list) 추가.
+        # 전달할 카운트 리스트(count_list) 추가.
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
