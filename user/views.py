@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Astronaut.settings import MEDIA_ROOT
+from content.models import Feed, Reply
 from .models import User
 from django.contrib.auth.hashers import make_password
 
@@ -104,7 +105,7 @@ class UploadProfile(APIView):
         return Response(status=200)
 
 
-# 05-07 유재우 : 프로파일 리셋부분 TODO
+# 05-07 유재우 : 프로파일 리셋부분
 class ResetProfile(APIView):
     # noinspection PyMethodMayBeStatic
     def post(self, request):
@@ -115,5 +116,69 @@ class ResetProfile(APIView):
         # 해당 유저의 프로필 사진을 post요청으로 받은 사진으로 변경
         user.profile_image = "default_profile.png"
         # 변경 사항을 저장함 create할때는 자동으로 저장되지만 수정은 수동으로 save를 해줘야 함
+        user.save()
+        return Response(status=200)
+
+
+# 05-12 유재우 유저탈퇴 부분
+class RemoveProfile(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        user = User.objects.filter(email=email).first()
+        reply = Reply.objects.filter(email=email)
+        reply.delete()
+        feeds = Feed.objects.filter(email=email)
+        feeds.delete()
+        user.delete()
+        return render(request, "user/join.html")
+
+
+# 05-16유재우 : 닉네임 수정
+class UpdateNickname(APIView):
+    def post(self, request):
+        user_email = request.data.get('email')
+        user_nickname = request.data.get('nickname')
+        user = User.objects.filter(email=user_email).first()
+        user.nickname = user_nickname
+        user.save()
+        return Response(status=200)
+
+
+# 05-16유재우 : 비밀번호 수정
+class UpdatePassword(APIView):
+    def post(self, request):
+        user_email = request.data.get('email')
+        user_password = request.data.get('password')
+        user = User.objects.filter(email=user_email).first()
+        user.password = make_password(user_password)
+        user.save()
+
+        return Response(status=200)
+
+
+# 05-09 유재우 : 세팅
+class Settings(APIView):
+    def get(self, request):
+        email = request.session.get('email', None)
+        user_session = User.objects.filter(email=email).first()
+
+        return render(request, "content/settings.html", dict(user_sesiion=user_session))
+
+
+# 05-15 유재우 : 이메일 변경
+class UpdateEmail(APIView):
+    def post(self, request):
+        #TODO 변경할 이메일과 현재 사용중인 이메일 구분?
+        user_email = request.data.get('user_email')
+        email = request.data.get('email')
+        user = User.objects.filter(email=user_email).first()
+        reply = Reply.objects.filter(email=user_email)
+        feed = Feed.objects.filter(email=user_email)
+
+        #TODO 왜 방식이 다른가?
+        user.email = email
+        request.session['email'] = email
+        reply.update(email=email)
+        feed.update(email=email)
         user.save()
         return Response(status=200)

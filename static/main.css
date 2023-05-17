@@ -57,7 +57,7 @@ body {
 }
 
 /* 링크 태그 디자인 수정 */
-.a {
+a {
     color: black;
     text-decoration: none;
 }
@@ -240,41 +240,6 @@ body {
 /* 작성자 프로필 */
 .feed_writer_content > .movetoprofile {
     margin-right: 10px;
-}
-
-/* 댓글 목록 영역 */
-.reply_area {
-    margin: 0 10px;
-    text-align: left;
-    font-size: 14px;
-}
-
-/* 댓글 입력 박스 */
-.reply_input_box {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border-top: solid 1px #e1e1e1;
-    margin-top: 10px;
-    justify-content: space-between;
-
-}
-
-/* 댓글 입력창 */
-.reply_input_box > .text_input {
-    box-shadow: none !important;
-    border: none !important;
-    outline: none !important;
-    background-color: white !important;
-    width: 100% !important;
-}
-
-/* 댓글 게시버튼 */
-.upload_reply {
-    width: 50px;
-    color: cornflowerblue;
-    font-weight: bold;
-    cursor: pointer
 }
 
 /* 내 프로필 표시 및 팔로우 추천 영역 */

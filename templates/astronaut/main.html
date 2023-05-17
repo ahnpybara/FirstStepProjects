@@ -120,7 +120,8 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <div class="dropdown-item" href="#">수정</div>
+                                <!--유재우 : 수정-->
+                                <div feed_id="{{ feed.id }}" class="update_feed dropdown-item" href="#"> 수정</div>
                             </li>
                         </ul>
                     </div>
@@ -165,19 +166,63 @@
                 <!--댓글리스트-->
                 <div id="reply_list_{{ feed.id }}">
                     {% for reply in feed.reply_list %}
-                        <div class="reply_area">
-                            <!--댓글 닉네임 클릭시 사용자 프로필로 이동-->
-                            <b class="movetoprofile reply_nickname"
-                               id="{{ reply.nickname }}">{{ reply.nickname }}</b> {{ reply.reply_content }}
+                        <div style="margin: 0 10px; text-align: left; font-size: 14px; display: flex ;flex-direction: row ">
+                            <div style="width: 80%">
+                                <!--댓글 닉네임 클릭시 사용자 프로필로 이동-->
+                                <b class="movetoprofile reply_nickname" style="cursor: pointer"
+                                   id="{{ reply.nickname }}">{{ reply.nickname }}</b> {{ reply.reply_content }}
+                            </div>
+                            <div>
+                                <div class="dropdown"
+                                     style="display: none; {% if reply.nickname == user_session.nickname %} display: flex; {% elif feed.nickname == user_session.nickname %} display: flex  {% endif %}">
+                                    <!-- 05-12유재우 : 댓글 삭제 및 수정버튼 추가 -->
+                                    <a href="#" role="button" id="dropdownMenuLink"
+                                       data-bs-toggle="dropdown" aria-expanded="false"
+                                       style="color: gray; margin-left: 280px;
+                                               {% if feed.nickname != user_session.nickname or reply.nickname != user_session.nickname %} display: none {% endif %}}">
+                                        <span class="material-icons-round">more_horiz</span>
+                                    </a>
+                                    <ul class="dropdown-menu"
+                                        style="text-align: center; min-width: 6rem; border-radius: 9%"
+                                        aria-labelledby="dropdownMenuLink">
+                                        <li reply_id="{{ reply.id }}" class="remove_reply dropdown-item"
+                                            style="cursor: pointer">
+                                            <b style="color:red">삭제</b>
+                                        </li>
+                                        <li style="display: none;{% if reply.nickname == user_session.nickname %} display: flex {% endif %}">
+                                            <!-- 구분선 -->
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li style="display: none;{% if reply.nickname == user_session.nickname %} display: flex {% endif %}">
+                                            <div reply_id="{{ reply.id }}" class="update_reply dropdown-item">
+                                                수정
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 05-12 유재우 : 댓글 수정을 위해 추가한 텍스트 박스 -->
+                        <div style="display:none;flex-direction: row;align-items: center; border-top: solid 1px #e1e1e1; margin-top: 10px"
+                             id="reply_div{{ reply.id }}">
+                            <input id="reply_{{ reply.id }}" type="text" class="form-control"
+                                   style="box-shadow: none; border: none; outline: none; background-color: white"
+                                   placeholder="댓글 달기..">
+                            <div class="update_replys" id="update_reply_btn"
+                                 style="width: 50px;color: cornflowerblue; font-weight: bold; cursor: pointer">
+                                수정
+                            </div>
                         </div>
                     {% endfor %}
                 </div>
 
-                <!-- 댓글을 입력하는 텍스트 박스 -->
-                <div class="reply_input_box">
-                    <input id="reply_{{ feed.id }}" type="text" class="text_input form-control"
+                <!-- 색 변경, 댓글을 입력하는 텍스트 박스 -->
+                <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px #e1e1e1; margin-top: 10px">
+                    <input id="reply_{{ feed.id }}" type="text" class="form-control"
+                           style="box-shadow: none; border: none; outline: none; background-color: white"
                            placeholder="댓글 달기..">
-                    <div feed_id="{{ feed.id }}" user_session="{{ user_session.nickname }}"  class="upload_reply">
+                    <div feed_id="{{ feed.id }}" class="upload_reply"
+                         style="width: 50px;color: cornflowerblue; font-weight: bold; cursor: pointer">
                         게시
                     </div>
                 </div>
@@ -310,6 +355,40 @@
                 <button id="feed_create_button" type="button" class="btn btn-primary">
                     공유하기
                 </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 05-12 유재우 3번쨰 모달창 피트 수정 용 (수정 필요) TODO-->
+<div id="third_modal" class="modal_overlay">
+    <div class="modal_window">
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px 0">
+            <div>
+                <p style="margin-left: 30px"></p>
+            </div>
+            <div>
+                <b>새로운 피드 생성</b>
+            </div>
+            <!-- 모달창 닫기 버튼 -->
+            <div style="border-top: solid 1px #d8d8d8; display: flex; flex-direction: row">
+                <div style="border-top: solid 1px #d8d8d8; display: flex; flex-direction: row">
+                    <div class="img_upload_space" style="width: 500px; height: 540px" id="update_img">
+                    </div>
+                    <div style="border-left: solid 1px #d8d8d8">
+                        <!-- 게시글 작성 텍스트박스 -->
+                        <div>
+                    <textarea id="input_updatefeed_content1" class="form-control"
+                              style="width: 276px; height: 500px; box-shadow: none; border: none; outline: none"
+                              id="exampleFormControlTextarea2" rows="5" placeholder="글 내용 작성..."> </textarea>
+                        </div>
+                        <!-- 공유하기 버튼 -->
+                        <button id="feed_update_button" type="button" class="btn btn-primary"
+                                style="width: 100%; background-color: rgb(0, 149, 246)">
+                            수정하기
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

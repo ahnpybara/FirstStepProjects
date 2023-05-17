@@ -92,7 +92,8 @@ $(".favorite").click(function (event) {
 $(".upload_reply").click(function (event) {
     // 게시 버튼 태그의 id 속성 값을 가져옴
     let feed_id = event.target.attributes.getNamedItem('feed_id').value;
-    let user_session = event.target.attributes.getNamedItem('user_session').value;
+    var user_session = $(this).attr('user_session');
+    console.log(user_session);
     let reply_id = 'reply_' + feed_id;
     // 댓글 입력 폼 아이디를 이용해서 입력 폼의 내용을 가져옴
     let reply_content = $('#' + reply_id).val();
@@ -264,7 +265,7 @@ function uploadFiles(e) {
         $('.img_upload_space').css({
             "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
             "outline": "none",
-            "background-size": "100%",
+            "background-size": "cover",
             "background-repeat": "no-repeat",
             "background-position": "center"
         });
@@ -295,7 +296,7 @@ function image_upload() {
         "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
         "outline": "none",
         "background-repeat": "no-repeat",
-        "background-size": "contain",
+        "background-size": "cover",
         "background-position": "center"
     });
 
@@ -324,3 +325,95 @@ $('.remove_feed').click(function (event) {
         }
     });
 })
+
+// 05-12 유재우: 댓글 삭제
+$('.remove_reply').click(function (event) {
+    var reply_id = $(this).attr('reply_id');
+
+    $.ajax({
+        url: "/content/removereply",
+        data: {
+            reply_id: reply_id,
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+            alert("댓글을 성공적으로 삭제 하었습니다.");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+            location.replace("/main");
+        }
+    });
+})
+
+// 05-12 유재우 : 피드 수정하기를 눌렸을 때 모달창을 띄움 (이미지 띄우는 부분 필요) TODO
+$('.update_feed').click(function (event) {
+    Feeds_id = event.target.attributes.getNamedItem('feed_id').value;
+    $('#third_modal').css({
+        display: 'flex'
+    });
+});
+// 05-12 유재우 : 피드 수정하기를 눌렸을 때 수정이 되도록 하는 부분
+$('#feed_update_button').click(function (event) {
+    let feed_id = Feeds_id
+
+    let content = $('#input_updatefeed_content').val();
+
+    //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
+    $.ajax({
+        url: "/content/updatefeed",
+        data: {
+            feed_id: feed_id,
+            content: content
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+            location.replace("/main");
+        }
+    });
+});
+
+// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 댓글 수정창을 띄움
+$('.update_reply').click(function (event) {
+    Reply_id = $(this).attr('reply_id');
+    $('#reply_div' + Reply_id).css({
+        display: 'flex'
+    });
+});
+// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 수정이 되도록 하는 부분
+$('.update_replys').click(function (event) {
+    let reply_id = Reply_id
+
+    let content = $('#reply_' + Reply_id).val();
+
+    //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
+    $.ajax({
+        url: "/content/updatereply",
+        data: {
+            reply_id: reply_id,
+            content: content
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+            location.replace("/main");
+        }
+    });
+});
