@@ -152,9 +152,13 @@
             -webkit-backdrop-filter: blur(14px);
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.18);
-            width: 800px;
+            width: 40%;
             height: 600px;
-            position: relative;
+            min-width: 500px;
+        }
+
+        .follow_button {
+
         }
 
         /* 안치윤 : 이 웹에선 클릭시 하이라이트가 생기지 않게 함 */
@@ -506,22 +510,22 @@
                 </div>
                 <!--안치윤 : 디자인 수정, 이미지와 글 영역 구분-->
                 <div style="width: 70%; border-left: solid 1px #e1e1e1;display: flex;flex-direction: column;justify-content: space-between;">
-                    <div class="modal_text_area" style="overflow-y: auto">
-                        <div style="text-align: right; height: 60px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1">
-                            <div style="display: flex;margin: 15px;align-items: center;flex-direction: row">
-                                <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
-                                     style="width: 32px;height: 32px;margin-right: 15px;">
-                                    <!-- ajax로 받아옴 작성자 프로필 사진 -->
-                                </div>
-                                <div id="feed_modal_writer_nickname" class="feed_nickname">
-                                    <!-- ajax로 받아옴 작성자 닉네임 -->
-                                </div>
+                    <div style="text-align: right; height: 60px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1">
+                        <div style="display: flex;margin: 15px;align-items: center;flex-direction: row">
+                            <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
+                                 style="width: 32px;height: 32px;margin-right: 15px;">
+                                <!-- ajax로 받아옴 작성자 프로필 사진 -->
                             </div>
-                            <div>
-                                <span class="modal_close material-icons-outlined">close</span>
+                            <div id="feed_modal_writer_nickname" class="feed_nickname">
+                                <!-- ajax로 받아옴 작성자 닉네임 -->
                             </div>
                         </div>
-                        <!-- ajax로 작성자 받음 -->
+                        <div>
+                            <span class="modal_close material-icons-outlined">close</span>
+                        </div>
+                    </div>
+                    <!-- ajax로 작성자 받음 -->
+                    <div class="modal_text_area" style="overflow-y: auto; height: 100%">
                         <div style="display: flex;margin: 15px;align-items: center;flex-direction: row;">
                             <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
                                  style="width: 32px;height: 32px;margin-right: 15px;">
@@ -793,9 +797,6 @@
             success: function (data) {
                 console.log("성공");
                 alert("댓글 성공");
-                // 비동기식 댓글 업로드를 위한 구현
-                {#$("#reply_list_" + feed_id).append("<div style='margin: 0 20px;text-align: left;font-size: 14px'><b>{{ user_session.nickname }}</b> " + reply_content + "</div>")#}
-
             },
             error: function (request, status, error) {
                 console.log("에러");
