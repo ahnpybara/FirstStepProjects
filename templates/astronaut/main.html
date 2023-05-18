@@ -166,8 +166,8 @@
                 <!--댓글리스트-->
                 <div id="reply_list_{{ feed.id }}">
                     {% for reply in feed.reply_list %}
-                        <div style="margin: 0 10px; text-align: left; font-size: 14px; display: flex ;flex-direction: row ">
-                            <div style="width: 80%">
+                        <div style="margin: 0 10px; text-align: left; font-size: 14px; display: flex ;flex-direction: row; justify-content: space-between ">
+                            <div style="overflow-wrap: break-word">
                                 <!--댓글 닉네임 클릭시 사용자 프로필로 이동-->
                                 <b class="movetoprofile reply_nickname" style="cursor: pointer"
                                    id="{{ reply.nickname }}">{{ reply.nickname }}</b> {{ reply.reply_content }}
@@ -178,7 +178,7 @@
                                     <!-- 05-12유재우 : 댓글 삭제 및 수정버튼 추가 -->
                                     <a href="#" role="button" id="dropdownMenuLink"
                                        data-bs-toggle="dropdown" aria-expanded="false"
-                                       style="color: gray; margin-left: 280px;
+                                       style="color: gray
                                                {% if feed.nickname != user_session.nickname or reply.nickname != user_session.nickname %} display: none {% endif %}}">
                                         <span class="material-icons-round">more_horiz</span>
                                     </a>

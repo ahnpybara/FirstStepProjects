@@ -388,7 +388,6 @@ class UpdateReply(APIView):
         reply = Reply.objects.filter(id=reply_id)
 
         reply.update(id=reply_id, reply_content=content)
-        reply.save()
 
         return Response(status=200)
 

@@ -269,8 +269,9 @@
                 {{ user.nickname }}
             </div>
             <!-- 05-17 유재우 : 셋팅이랑 연결-->
-            <a style="color: black" href="/user/profile/setting"><span
-                    class="material-symbols-outlined">manage_accounts</span></a>
+            <a style="color: black; {% if user_session.email != user.email %} display: none{% endif %}"
+               href="/user/profile/setting"><span class="material-symbols-outlined">manage_accounts</span></a>
+
         </div>
         <!-- 프로필 설명란(팔로워 팔로잉 사용자 이름) -->
         <div style="display: flex; flex-direction: row; justify-content: center ;margin-bottom: 20px; margin-right: 40px; font-size: 16px">
