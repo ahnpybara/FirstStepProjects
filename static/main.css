@@ -1,0 +1,519 @@
+/* 최상단 네비 바 부분 css */
+
+body {
+    background: #FAFAFA!important;
+}
+
+/* 네비바 */
+.navbar {
+    position: fixed;
+    width: 100%;
+    height: 61px;
+    z-index: 999;
+    border-bottom: 1px solid #e1e1e1
+}
+
+/* 메뉴 바 */
+.menu_bar {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    min-width: 800px;
+    align-items: center;
+}
+
+/* 로고 */
+.astro_logo {
+    width: 167px;
+}
+
+/* 검색창 */
+.bar_search {
+    position: relative;
+}
+
+/* 검색창과 인풋태그 */
+.bar_search input {
+    width: 400px;
+    padding: 8px 16px 8px 40px;
+    background-color: #efefef;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: lighter;
+}
+
+/* 검색창과 인풋 태그가 포커스 되었을 때 */
+.bar_search input:focus {
+    outline: none;
+    background-color: #efefef;
+}
+
+/* 네비바 메뉴 아이콘  */
+.menu_icons {
+    display: flex;
+    padding-top: 5px;
+}
+
+/* 링크 태그 디자인 수정 */
+a {
+    color: black;
+    text-decoration: none;
+}
+
+/* 프로필 사진 외부 박스 */
+.profile_box {
+    width: 32px;
+    height: 32px;
+    border-radius: 70%;
+    overflow: hidden;
+}
+
+/* 프로필 사진 */
+.profile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* 프로필 정보 커서 변경 */
+.movetoprofile {
+    cursor: pointer;
+}
+
+/* 네비바 드롭다운 메뉴 */
+#nav_dropdown {
+    left: 8px;
+    text-align: center;
+    min-width: 8rem
+}
+
+/* 네비바 드롭메뉴 로그아웃 */
+#logout_menu {
+    font-weight: bold;
+    color: red;
+}
+
+/* 피드 생성 영역과 팔로우 영역 */
+.main_container {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    padding-top: 40px;
+    background-color: #FAFAFA
+}
+
+/* 피드들이 생성되는 공간 */
+.feed_area {
+    width: 480px;
+    min-width: 480px;
+    margin-right: 0px;
+    margin-top: 30px;
+}
+
+/* 피드 박스 */
+.feed_box {
+    margin: 30px 0;
+    border: solid 1px #e1e1e1;
+    background-color: white;
+    border-radius: 2%;
+}
+
+/* 피드 */
+.feed {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px
+}
+
+/* 피드 작성자 프로필 */
+.feed > .profile_box {
+    width: 35px;
+    height: 35px;
+    margin-right: 10px;
+
+}
+
+/* 작성자의 피드 이미지 */
+.feed_writer_image {
+    width: 100%;
+}
+
+
+/* 삭제 관련 텍스트 */
+.delete_text {
+    color: red;
+}
+
+/* 삭제 관련 텍스트 */
+.delete_textd {
+    color: red;
+}
+
+/* 피드 드롭 다운메뉴 */
+#feed_dropdown {
+    color: gray;
+    margin-left: 280px;
+}
+
+/* 피드 하위 드롭 다운 메뉴 */
+#feed_dropdown > .dropdown-menu {
+    text-align: center;
+    min-width: 6rem;
+    border-radius: 9%
+}
+
+/* 드롭다운 메뉴 */
+.dropdown-menu {
+    cursor: pointer;
+}
+
+/* 피드 드롭다운 메뉴 */
+#dropdownMenuLink {
+    color: black;
+}
+
+/* 북마크와 좋아요 영역 */
+.like_bookmark {
+    margin: 0 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* 좋아요 아이콘 */
+.likeicon > .uTrue {
+    color: red;
+}
+
+/* 구글 심볼 아이콘이 true인 경우 */
+.uTrue {
+    cursor: pointer;
+    color: rgb(0, 0, 1);
+    font-size: 28px;
+    font-variation-settings: 'FILL' 1,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+/* 구글 심볼 아이콘이 false인 경우 */
+.uFalse {
+    cursor: pointer;
+    color: black;
+    font-size: 28px;
+    font-variation-settings: 'FILL' 0,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+/* 피드 좋아요 수 */
+.feed_like_count {
+    margin: 4px 10px;
+    text-align: left;
+    font-size: 14px
+}
+
+/* 피드 작성 시간 */
+.feed_create_time {
+    font-size: 12px;
+    color: gray;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+/* 피드 작성 글 내용 */
+.feed_writer_content {
+    margin-left: 10px;
+    margin-bottom: 7px;
+    text-align: left;
+    font-size: 16px
+}
+
+/* 작성자 프로필 */
+.feed_writer_content > .movetoprofile {
+    margin-right: 10px;
+}
+
+/* 내 프로필 표시 및 팔로우 추천 영역 */
+.follow_side_area {
+    width: 320px;
+    height: 1000px;
+    z-index: 0;
+    margin-left: 100px
+}
+
+/* 내 프로필 표시 영역 */
+.my_profile_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 60px;
+    margin-bottom: 30px;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+/* 팔로우 영역에서의 자신 프로필 사진 */
+#my_profile_image {
+    width: 70px;
+    height: 70px;
+}
+
+/* 팔로우 영역 닉네임 이름 */
+.my_profile_nickname_name {
+    margin-left: 20px;
+    text-align: left
+}
+
+/* 팔로우 영역 닉네임 */
+#my_profile_nickname {
+    color: black;
+    text-decoration: none
+}
+
+/* 팔로우 영역 이름 */
+.my_profile_name {
+    color: gray;
+}
+
+/* 팔로우 추천 시작 영역 */
+.follow_recommend_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* 회원님을 위한 추천 */
+.follow_recommend_text {
+    font-weight: bold;
+    color: gray;
+    margin-bottom: 10px
+}
+
+/* 팔로우 추천 리스트 모두 보기 */
+.follow_recommend_list_all {
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+/* 팔로우 추천인 프로필 영역 */
+.follow_recommend_profile_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 팔로우 추천인 프로필 */
+.follow_recommend_profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 팔로우 추천인 프로필사진 */
+#f_recommender_profile {
+    width: 35px;
+    height: 35px
+}
+
+/* 팔로우 추천인 프로필 닉네임 및 설명 */
+.follow_profile_nickname_explain {
+    margin-left: 10px;
+    text-align: left;
+}
+
+/* 팔로우 추천인 프로필 닉네임 */
+.follow_profile_nickname {
+    font-weight: bold;
+    font-size: 14px
+}
+
+/* 팔로우 추천인 이유 */
+.follow_profile_explain {
+    color: gray;
+    font-size: 14px
+}
+
+/* 팔로우 버튼 */
+.follow_button {
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(0, 149, 246);
+}
+
+/* 설명란 */
+.Astro_explain1 {
+    margin-top: 40px;
+    font-size: 12px;
+    color: gray;
+    text-align: left;
+}
+
+.Astro_explain2 {
+    margin-top: 20px;
+    font-size: 12px;
+    color: gray;
+    text-align: left;
+}
+
+/* 모달창의 바깥 영역 */
+.modal_overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 10000;
+}
+
+/* 모달창의 영역 */
+.modal_window {
+    background: white;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    width: 40%;
+    height: 575px;
+    min-width: 500px;
+}
+
+/* 피드 업로드 모달 바  */
+.feed_upload_modal_bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+/* 피드 업로드 모달 바 공백 */
+.space {
+    margin-left: 30px;
+}
+
+/* 피드 업로드 모달 바 닫기 버튼 */
+#modal_close_button {
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* 피드 업로드 모달창 이미지 영역 */
+.img_upload_space {
+    border-top: solid 1px #d8d8d8;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+/* 이미지를 여기로 드래그 하세요 */
+.drag_here_image {
+    margin-top: 200px;
+    color: black;
+    font-weight: 500;
+    font-size: 19px;
+}
+
+/* 피드 업로드 모달창 이미지 업로드 버튼 */
+#image_upload_btn {
+    width: 130px;
+    margin-top: 20px;
+    font-weight: bold;
+    background-color: rgb(0, 149, 246);
+}
+
+/* 파일 시스템 */
+#input_image_upload {
+    display: none;
+}
+
+/* 피드 업로드 후 텍스트 모달창 */
+.feed_image_text_modal {
+    border-top: solid 1px #d8d8d8;
+    display: flex;
+    flex-direction: row;
+}
+
+/* 두 번째 모달창 이미지 공간 */
+.feed_image_text_modal > .img_upload_space {
+    border-top: none;
+    width: 500px;
+    height: 521px;
+}
+
+/* 글 내용 입력 창 */
+#input_feed_content {
+    width: 276px;
+    height: 503px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+
+/* 두 번째 모달창 글 내용 공간 */
+.modal_text_area {
+    height: 475px;
+}
+
+/**/
+.feed_content_input {
+    border-left: solid 1px #d8d8d8;
+    height: 484px;
+}
+
+/* 피드 생성버튼 */
+#feed_create_button {
+    width: 100%;
+    background-color: rgb(0, 149, 246);
+}
+
+
+/* 이 웹에선 클릭시 하이라이트가 생기지 않게 함 */
+html {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* 반응형 웹을 위한 코드 */
+@media (max-width: 1000px) {
+    .follow_side_area {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .bar_search {
+        display: none;
+    }
+
+    .navbar-brand {
+        position: absolute;
+        top: 8px;
+        left: 12px;
+    }
+
+    .menu_icons {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+    }
+}

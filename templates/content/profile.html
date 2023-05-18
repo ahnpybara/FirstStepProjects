@@ -152,9 +152,13 @@
             -webkit-backdrop-filter: blur(14px);
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.18);
-            width: 800px;
+            width: 40%;
             height: 600px;
-            position: relative;
+            min-width: 500px;
+        }
+
+        .follow_button {
+
         }
 
         /* 안치윤 : 이 웹에선 클릭시 하이라이트가 생기지 않게 함 */
@@ -264,7 +268,9 @@
             <div style="font-size: 20px; margin-right: 20px">
                 {{ user.nickname }}
             </div>
-            <span class="material-symbols-outlined">manage_accounts</span>
+            <!-- 05-17 유재우 : 셋팅이랑 연결-->
+            <a style="color: black" href="/user/profile/setting"><span
+                    class="material-symbols-outlined">manage_accounts</span></a>
         </div>
         <!-- 프로필 설명란(팔로워 팔로잉 사용자 이름) -->
         <div style="display: flex; flex-direction: row; justify-content: center ;margin-bottom: 20px; margin-right: 40px; font-size: 16px">
@@ -506,22 +512,22 @@
                 </div>
                 <!--안치윤 : 디자인 수정, 이미지와 글 영역 구분-->
                 <div style="width: 70%; border-left: solid 1px #e1e1e1;display: flex;flex-direction: column;justify-content: space-between;">
-                        <div style="text-align: right; height: 60px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1">
-                            <div style="display: flex;margin: 15px;align-items: center;flex-direction: row">
-                                <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
-                                     style="width: 32px;height: 32px;margin-right: 15px;">
-                                    <!-- ajax로 받아옴 작성자 프로필 사진 -->
-                                </div>
-                                <div id="feed_modal_writer_nickname" class="feed_nickname">
-                                    <!-- ajax로 받아옴 작성자 닉네임 -->
-                                </div>
+                    <div style="text-align: right; height: 60px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1">
+                        <div style="display: flex;margin: 15px;align-items: center;flex-direction: row">
+                            <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
+                                 style="width: 32px;height: 32px;margin-right: 15px;">
+                                <!-- ajax로 받아옴 작성자 프로필 사진 -->
                             </div>
-                            <div>
-                                <span class="modal_close material-icons-outlined">close</span>
+                            <div id="feed_modal_writer_nickname" class="feed_nickname">
+                                <!-- ajax로 받아옴 작성자 닉네임 -->
                             </div>
                         </div>
-                        <!-- ajax로 작성자 받음 -->
-                    <div class="modal_text_area" style="overflow-y: auto;height: 100%;">
+                        <div>
+                            <span class="modal_close material-icons-outlined">close</span>
+                        </div>
+                    </div>
+                    <!-- ajax로 작성자 받음 -->
+                    <div class="modal_text_area" style="overflow-y: auto; height: 100%">
                         <div style="display: flex;margin: 15px;align-items: center;flex-direction: row;">
                             <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
                                  style="width: 32px;height: 32px;margin-right: 15px;">
@@ -535,8 +541,6 @@
                             </div>
                         </div>
                         <!-- 댓글 리스트 -->
-
-
                         <div id="feed_modal_reply_list"
                              style="display: flex;flex-direction: column;margin: 15px;align-items: flex-start;">
                             {#                            <div id="feed_modal_reply_profile_image_">#}

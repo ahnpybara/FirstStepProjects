@@ -41,7 +41,8 @@ class Main(APIView):
             for reply in reply_object_list:
                 reply_user = User.objects.filter(email=reply.email).first()
                 reply_list.append(dict(reply_content=reply.reply_content,
-                                       nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+                                       nickname=reply_user.nickname, profile_image=reply_user.profile_image,
+                                       id=reply.id))
             like_count = Like.objects.filter(feed_id=feed.id).count()
             is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
             is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
@@ -58,8 +59,10 @@ class Main(APIView):
                                   ))
 
         # 안치윤 : 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
+        # 유재우 : 댓글삭제 및 수정을 위해 댓글 정보가 담긴 reply를 클라이언트에게 보냄
         return render(request, "astronaut/main.html",
-                      context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list))
+                      context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list
+                                   ))
 
 
 # 피드를 업로드 할 때 서버로 넘어오는 데이터를 받아서 각 변수에 저장 후 출력
@@ -305,6 +308,9 @@ class RemoveFeed(APIView):
         feed_id = request.data.get('feed_id')
         feeds = Feed.objects.filter(id=feed_id).first()
         feeds.delete()
+        reply = Reply.objects.filter(feed_id=feed_id)
+        reply.delete()
+
         return Response(status=200)
 
 
@@ -347,6 +353,45 @@ class SearchFeed(APIView):
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list))
 
+
+# 05-12 유재우 : 댓글 지우기
+class RemoveReply(APIView):
+    def post(self, request):
+        reply_id = request.data.get('reply_id')
+        print(reply_id)
+
+        replys = Reply.objects.filter(id=reply_id)
+
+        replys.delete()
+
+        return Response(status=200)
+
+
+# 05-12 유재우 : 피드 수정
+class UpdateFeed(APIView):
+    def post(self, request):
+        content = request.data.get('content')
+        feed_id = request.data.get('feed_id')
+
+        feed = Feed.objects.filter(id=feed_id)
+
+        feed.update(id=feed_id, content=content)
+        feed.save()
+
+        return Response(status=200)
+
+    # 05-12 유재우 : 댓글 수정
+class UpdateReply(APIView):
+    def post(self, request):
+        content = request.data.get('content')
+        reply_id = request.data.get('reply_id')
+
+        reply = Reply.objects.filter(id=reply_id)
+
+        reply.update(id=reply_id, reply_content=content)
+        reply.save()
+
+        return Response(status=200)
 
 
 # 정유진" 하나의 게시물을 모달로 띄워줄 때 필요한 데이터들을 보내준다.
