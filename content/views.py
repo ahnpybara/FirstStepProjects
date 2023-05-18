@@ -174,12 +174,13 @@ class UploadReply(APIView):
         reply_content = request.data.get('reply_content', None)
         # 댓글은 여러 사람이 작성하므로 댓글을 게시한 사용자들이 누군지 구분이 필요하기 때문에 세션 정보에 저장된 이메일을 이용해야 합니다.
         email = request.session.get('email', None)
+        user = User.objects.filter(email=email).first()
 
         # 서버로 전달된 데이터를 토대로 Reply 테이블에 새로운 튜플을 생성
         Reply.objects.create(feed_id=feed_id, reply_content=reply_content, email=email)
 
         # 성공적으로 전달이 되었다는 응답을 줌
-        return Response(status=200)
+        return Response(status=200, data=dict(user_nickname=user.nickname))
 
 
 # 특정 피드에 좋아요가 되면 좋아요 여부와 피드id를 받아서 변수에 넣고 간단한 조건문을 실행 후 좋아요 테이블에 저장
@@ -379,7 +380,9 @@ class UpdateFeed(APIView):
 
         return Response(status=200)
 
-    # 05-12 유재우 : 댓글 수정
+
+
+# 05-12 유재우 : 댓글 수정
 class UpdateReply(APIView):
     def post(self, request):
         content = request.data.get('content')

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
 
+    <!-- css 분리 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'settings.css' %}">
     <!-- Bootstrap CSS 사용하기 위한 선언  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -20,89 +22,54 @@
 
     <title>설정</title>
     <style>
-        /* 프로필 화면 박스 */
-        .box {
-            width: 150px;
-            height: 150px;
-            border-radius: 70%;
-            overflow: hidden;
-        }
-
-        /* 프로필 사진 */
-        .profile {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* 모달창의 바깥 영역 */
-        .modal_overlay {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            left: 0;
-            top: 0;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            z-index: 10000;
-        }
-
-        /* 모달창의 영역 */
-        .modal_window {
-            background: white;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            width: 800px;
-            height: 600px;
-            position: relative;
-            padding: 10px;
+        /* 구글 머리티얼 아이콘은 css 분리가 안됨 */
+        .menu_icon {
+            font-size: 32px;
+            wght: 100;
+            padding-right: 20px;
+            cursor: pointer;
+            color: black;
         }
     </style>
 </head>
 <body>
-<!-- 맨 위 상단 메뉴바(로고 검색 기타메뉴)를 만드는 코드 -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="position: fixed;width: 100%; z-index: 999">
-    <div class="container-fluid" style="justify-content: space-between;flex-wrap: nowrap; min-width: 1000px">
+<!-- 맨 위 상단 메뉴바( 로고 검색 기타메뉴 )-->
+<nav class="navbar navbar-expand-lg navbar-white bg-white">
+    <!-- 메뉴바 -->
+    <div class="menu_bar">
         <!-- 로고 -->
-        <a class="navbar-brand" href="/main"><img style="width: 167px"
+        <a class="navbar-brand" href="/main"><img class="astro_logo"
                                                   src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png"
-                                                  alt=" text">
+                                                  alt="text">
         </a>
         <!-- 검색창 -->
-        <input class="form-control me-2" style="width: 400px" type="search" placeholder="Search" aria-label="Search">
-        <!-- 메뉴아이콘들 -->
-        <div style="display: flex">
-            <a href="/main" style="color: black"><span class="material-icons"
-                                                       style="padding-right: 10px"> home</span></a>
-            <span id="nav_bar_add_box" class="material-icons-outlined" style="padding-right: 10px">add_box</span>
+        <form class="bar_search" action="{% url 'content:feed_search' %}" method="GET">
+            <input type="text" name="search" placeholder="Search">
+        </form>
+        <!-- 메뉴 아이콘 들 -->
+        <div class="menu_icons">
+            <a href="/main"><span class="menu_icon material-icons"> home</span></a>
             <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
             <div class="dropdown">
                 <a href="#" role="button" id="dropdownMenuLink"
                    data-bs-toggle="dropdown" aria-expanded="false">
                     <!-- 주 메뉴(프로필 사진)-->
-                    <div class="box" style="width: 25px; height: 25px">
+                    <div class="profile_box">
 
                         <img class="profile"
-                             src="{% get_media_prefix %}{{ user_sesiion.profile_image }}" alt="text">
+                             src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
 
                     </div>
                 </a>
                 <!-- 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
-                <ul class="dropdown-menu" style="left:-158px" aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" href="/content/profile">프로필</a></li>
+                <ul id="nav_dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="/content/profile"><b>프로필</b></a></li>
                     <li>
                         <!-- 구분선 -->
                         <hr class="dropdown-divider">
                     </li>
                     <!-- 로그아웃 버튼 클릭시 현재 경로에서 /user/logout으로 이동 -->
-                    <li><a class="dropdown-item" href="/user/logout">로그아웃</a></li>
+                    <li><a id="logout_menu" class="dropdown-item" href="/user/logout">로그아웃</a></li>
                 </ul>
             </div>
         </div>
@@ -119,24 +86,28 @@
                     <div style="padding: 8% 60px">
                         <div class="box" style="width: 125px; height: 125px;">
                             <img class="profile"
-                                 src="{% get_media_prefix %}{{ user_sesiion.profile_image }}" alt="text">
+                                 src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
                         </div>
                     </div>
-                    {{ user_sesiion.nickname }}</div>
+                    {{ user_session.nickname }}</div>
                 <!-- 프로필 정보 편집 -->
                 <div style="padding-top: 9%; padding-left: 1%">
                     <div style="display: table-cell; vertical-align: middle;">
                         <textarea id="nikname_ta"
-                                  style="resize: none; width: 252px; height: 30px;row-gap: 25px; margin-top: 5px">{{ user_sesiion.nickname }}</textarea>
-                        <button id="update_nikname_btn" style="position: absolute; margin-top: 5px; margin-left: 50px; border: 1px darkgrey solid">
+                                  style="resize: none; width: 252px; height: 30px;row-gap: 25px; margin-top: 5px">{{ user_session.nickname }}</textarea>
+                        <button id="update_nikname_btn"
+                                style="position: absolute; margin-top: 5px; margin-left: 50px; border: 1px darkgrey solid">
                             닉네임 수정
                         </button>
                     </div>
                     <div style="">
-                        <button id="button_profile_upload" style="margin-right: 18px; width: 190px; border: 1px darkgrey solid"> 프로필 사진 편집</button>
+                        <button id="button_profile_upload"
+                                style="margin-right: 18px; width: 190px; border: 1px darkgrey solid"> 프로필 사진 편집
+                        </button>
                         <input type="file" id="input_profileimage_upload" onchange="profile_upload();"
                                style="display: none"/>
-                        <button id="button_profile_reset" style="width: 190px ; border: 1px darkgrey solid"> 프로필 사진 삭제</button>
+                        <button id="button_profile_reset" style="width: 190px ; border: 1px darkgrey solid"> 프로필 사진 삭제
+                        </button>
                     </div>
                 </div>
             </div>
@@ -148,8 +119,9 @@
                         이메일 수정
                     </c>
                     <textarea id="email_ta"
-                              style="resize: none; width: 250px; height: 30px;row-gap: 25px">{{ user_sesiion.email }}</textarea>
-                    <button id="update_email_btn" style="position: absolute; margin-left: 500px ; border: 1px darkgrey solid">
+                              style="resize: none; width: 250px; height: 30px;row-gap: 25px">{{ user_session.email }}</textarea>
+                    <button id="update_email_btn"
+                            style="position: absolute; margin-left: 500px ; border: 1px darkgrey solid">
                         수정
                     </button>
                 </div>
@@ -160,7 +132,8 @@
                     <input type="password" class="form-control"
                            style="font-size: 25px; height: 30px;margin-left: 55px;margin-right: 50px;width: 250px;"
                            id="input_password">
-                    <button id="update_password_btn" style="position: absolute; margin-left: 500px; border: 1px darkgrey solid">
+                    <button id="update_password_btn"
+                            style="position: absolute; margin-left: 500px; border: 1px darkgrey solid">
                         수정
                     </button>
                 </div>
@@ -168,425 +141,14 @@
 
             <!-- 회원 탈퇴-->
             <div style="padding-top: 25px; padding-left: 50px; padding-bottom: 25px; border-right: black 1px solid; border-left: black 1px solid; border-bottom: 1px black solid">
-                <button id="profile_dele_btn" style="margin-right: 40px; border: none; color: red; background: none"> 회원 탈퇴</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 사진 업로드 창 첫번째 모달 -->
-<div id="first_modal" class="modal_overlay">
-    <div class="modal_window">
-        <div style="display: flex; flex-direction: row; justify-content: space-between">
-            <div>
-                <!-- 공백 -->
-            </div>
-            <div>
-                새 이미지 업로드
-            </div>
-            <!-- 모달창 닫기 버튼 -->
-            <div>
-                <span class="modal_close material-icons-outlined">close</span>
-            </div>
-        </div>
-
-        <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div class="img_upload_space"
-             style="border-top: solid 1px gray;width: 778px; height: 540px;margin-top: 10px; text-align: center">
-            <div style="margin-top: 200px; color: gray; font-weight: bold">
-                이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
-            </div>
-
-            <!--사진 찾는 파일 시스템을 여는 버튼-->
-            <button id="image_upload_btn" type="button" class="btn btn-primary"
-                    style="width: 200px; margin-top: 20px">
-                사진 추가
-            </button>
-            <!--파일 입력 폼-->
-            <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
-        </div>
-
-    </div>
-</div>
-
-<!-- 글 내용 작성 모달창 두번째 모달 -->
-<div id="second_modal" class="modal_overlay">
-    <div class="modal_window">
-        <div style="display: flex; flex-direction: row; justify-content: space-between">
-            <div>
-                <!-- 공백 -->
-            </div>
-            <div>
-                새 이미지 업로드
-            </div>
-            <!-- 모달창 닫기 버튼 -->
-            <div>
-                <span class="modal_close material-icons-outlined">close</span>
-            </div>
-        </div>
-        <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div style="border-top: solid 1px gray;display: flex; flex-direction: row;margin-top: 10px">
-            <div class="img_upload_space" style="width: 500px; height: 540px;">
-
-            </div>
-            <div style="border-left: solid 1px gray">
-                <!-- 게시글 작성 텍스트박스 -->
-                <div>
-                    <textarea id="input_feed_content" class="form-control" style="width: 276px; height: 400px"
-                              id="exampleFormControlTextarea1" rows="5"></textarea>
-                </div>
-                <!-- 공유하기 버튼 -->
-                <button id="feed_create_button" type="button" class="btn btn-primary"
-                        style="width: 100%">
-                    공유하기
+                <button id="profile_dele_btn" style="margin-right: 40px; border: none; color: red; background: none"> 회원
+                    탈퇴
                 </button>
             </div>
-
         </div>
-
     </div>
 </div>
 
-
-<!-- 자바 스크립트 영역 이벤트처리나 서버로 데이터를 전달하는 과정(ajax) -->
-<script>
-
-    // 05-09 유재우 회원탈퇴를 위한
-    $('#profile_dele_btn').click(function () {
-        if (confirm("유저 정보를 삭제 하시겠습니까?")) {
-            delete_profile_Fn()
-        }
-    });
-    function delete_profile_Fn() {
-        let email = "{{ user_sesiion.email }}"
-
-        $.ajax({
-            url: "/user/profile/remove",
-            data: {
-                email: email
-            },
-            method: "POST",
-            success: function (data) {
-                console.log("성공");
-                alert("프로필이 성공적으로 삭제 되었습니다.");
-                location.replace("");
-            },
-            error: function (request, status, error) {
-                console.log("에러")
-                alert(email);
-            },
-            complete: function () {
-                console.log("완료");
-            }
-        })
-    }
-
-
-    // 모달창 닫기 버튼 이벤트 처리
-    $(".modal_close").click(function () {
-        // 모달창 닫았을 때 본문 스크롤 가능
-        $(document.body).css({
-            overflow: 'visible'
-        });
-        // 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
-        $('.img_upload_space').css({
-            "background-color": "White",
-            "background-image": ""
-        });
-
-        // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
-        $('#input_feed_content').each(function () {
-            $(this).val('');
-        });
-        $('#first_modal').css({
-            display: 'none'
-        });
-        $('#second_modal').css({
-            display: 'none'
-        });
-    });
-
-
-    // 사용 범위를 위해 전역 변수 files 선언
-    let files;
-    // 게시글 추가 버튼 이벤트 처리
-    $('#nav_bar_add_box').click(function () {
-        //+버튼을 누르면 업로드 창이뜨게 함
-        $('#first_modal').css({
-            display: 'flex'
-        });
-
-        // 업로드 창이 떴을때 스크롤이 사라지게 함
-        $(document.body).css({
-            overflow: 'hidden'
-        });
-    });
-
-    // 공유하기 버튼 클릭시 이벤트 처리
-    $('#feed_create_button').click(function () {
-        alert("공유하기 눌렀다.");
-
-        let file = files[0];
-        let image = files[0].name;
-        let content = $('#input_feed_content').val();
-
-        // 파일을 업로드 하는 것이므로 formdata 형태로 서버에 전달해야 함, formdata 객체를 생성한 뒤 서버로 보낼 데이터를 객체에 추가해줌
-        let fd = new FormData();
-
-        fd.append('file', file);
-        fd.append('image', image);
-        fd.append('content', content);
-
-        //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
-        $.ajax({
-            url: "/content/upload",
-            data: fd,
-            method: "POST",
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                console.log("성공");
-            },
-            error: function (request, status, error) {
-                console.log("에러");
-            },
-            complete: function () {
-                console.log("완료");
-                location.replace("/main");
-            }
-        });
-    });
-
-    // 이미지 업로드 공간에 특정 이벤트 발생시 해당하는 함수를 실행
-    $('.img_upload_space')
-        .on("dragover", dragOver)
-        .on("dragleave", dragOver)
-        .on("drop", uploadFiles)
-        .on("change", uploadFiles)
-
-
-    // 마우스를 드래그 했을 때
-    function dragOver(e) {
-        // 이벤트 전파 차단
-        e.stopPropagation();
-        e.preventDefault();
-
-        // 파일을 드래그해서 업로드 공간에 올릴때 이벤트  이쁘게 수정 필요
-        // 마우스가 업로드 공간에서 떠나면 이벤트 이쁘게 수정 필요
-        if (e.type === "dragover") {
-            $(e.target).css({
-                "outline-offset": "-20px"
-            });
-        } else {
-            $(e.target).css({
-                "outline-offset": "-10px"
-            });
-        }
-    }
-
-    // 파일을 드래그 한 상태에서 마우스가 드랍이 되었을 때
-    function uploadFiles(e) {
-        // 이벤트 전파 차단
-        e.stopPropagation();
-        e.preventDefault();
-
-        // 실질적으로 파일을 업로드 하는 부분
-        e.dataTransfer = e.originalEvent.dataTransfer;
-        files = e.target.files || e.dataTransfer.files;
-
-        // 여러개의 파일을 한번에 올릴려고 하면 리턴
-        if (files.length > 1) {
-            alert('하나만 올려라.');
-            return;
-        }
-
-        // 타입을 판별하고 이미지면 아래 로식을 실행
-        if (files[0].type.match(/image.*/)) {
-
-            // 이미지 업로드시 사진업로드 모달창을 가림
-            $('#first_modal').css({
-                display: 'none'
-            });
-
-            // 글 내용 작성 모달창을 띄움
-            $('#second_modal').css({
-                display: 'flex'
-            });
-
-            // 업로드 창 배경을 업로드된 이미지로 변경
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-                "outline": "none",
-                "background-size": "100%",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        } else {
-            alert('이미지가 아닙니다.');
-            return 0;
-        }
-
-    }
-
-    // 모달창의 사진 추가 버튼 클릭했을 시
-    $('#image_upload_btn').click(function () {
-        $('#input_image_upload').click();
-    });
-
-    // 파일 입력 폼에서 변화 발생시 해당 함수가 실행
-    function image_upload() {
-        // 이미지 업로드시 사진업로드 모달창을 가림
-        $('#first_modal').css({
-            display: 'none'
-        });
-        // 글 내용 작성 모달창을 띄움
-        $('#second_modal').css({
-            display: 'flex'
-        });
-        // 업로드 창 배경을 업로드된 이미지로 변경
-        $('.img_upload_space').css({
-            "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
-            "outline": "none",
-            "background-repeat": "no-repeat",
-            "background-size": "contain",
-            "background-position": "center"
-        });
-    }
-
-    // 프로필 사진 업로드 버튼 클릭시 이벤트 처리
-    $('#button_profile_upload').click(function () {
-        $('#input_profileimage_upload').click();
-    });
-
-    // 프로필 사진 업로드 하는 함수와  ajax
-    function profile_upload() {
-        let file = $('#input_profileimage_upload')[0].files[0];
-        let email = "{{ user_sesiion.email }}"
-        let fd = new FormData();
-
-        fd.append('file', file);
-        fd.append('email', email);
-
-        $.ajax({
-            url: "/user/profile/upload",
-            data: fd,
-            method: "POST",
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                console.log("성공");
-
-            },
-            error: function (request, status, error) {
-                console.log("에러");
-            },
-            complete: function () {
-                console.log("완료");
-                location.replace("/user/profile/setting");
-            }
-        });
-
-    }
-
-    // 05-07 유재우 : 프로필 사진 삭제 버튼 눌렸을 때 프로필 사진을 디폴트 값으로 바꿔주는 부분 TODO
-    $('#button_profile_reset').click(function () {
-
-        let email = "{{ user_sesiion.email }}";
-
-        $.ajax({
-            url: "/user/profile/reset",
-            data: {
-                email: email
-            },
-            method: "POST",
-            success: function (data) {
-                console.log("성공");
-                alert("프로필이 성공적으로 삭제 되었습니다.");
-                location.replace("/user/profile/setting");
-            },
-            error: function (request, status, error) {
-                console.log("에러")
-            },
-            complete: function () {
-                console.log("완료");
-            }
-        })
-    });
-
-    //05-14 유재우 : 비밀번호 변경
-    $('#update_password_btn').click(function () {
-        let email = "{{ user_sesiion.email }}";
-        let password = $('#input_password').val();
-        $.ajax({
-            url: "/user/updatepassword",
-            data: {
-                email: email,
-                password: password
-            },
-            method: "POST",
-            success: function (data) {
-                console.log("성공");
-                location.replace('/user/profile/setting');
-
-            },
-            error: function (request, status, error) {
-                console.log("에러");
-            },
-            complete: function () {
-                console.log("완료");
-            }
-        });
-    })
-
-    //05-14 유재우 : 닉네임 변경
-    $('#update_nikname_btn').click(function () {
-        let email = "{{ user_sesiion.email }}";
-        let nikname = $('#nikname_ta').val();
-        $.ajax({
-            url: "/user/profile/updatenickname",
-            data: {
-                email: email,
-                nickname: nikname
-            },
-            method: "POST",
-            success: function (data) {
-                console.log("성공");
-                location.replace('/user/profile/setting');
-            },
-            error: function (request, status, error) {
-                console.log("에러");
-            },
-            complete: function () {
-                console.log("완료");
-            }
-        });
-    })
-    //05-15 유재우 : 이메일 변경
-    $('#update_email_btn').click(function () {
-        let user_email = "{{ user_sesiion.email }}";
-        let email = $('#email_ta').val();
-
-        $.ajax({
-            url: "/user/profile/updateemail",
-            data: {
-                user_email: user_email,
-                email: email
-            },
-            method: "POST",
-            success: function (data) {
-                console.log("성공");
-                location.replace('/user/profile/setting');
-
-            },
-            error: function (request, status, error) {
-                console.log("에러");
-            },
-            complete: function () {
-                console.log("완료");
-            }
-        });
-    })
-</script>
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
@@ -597,5 +159,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
+<script src="{% static 'settings.js' %}"></script>
 </body>
 </html>

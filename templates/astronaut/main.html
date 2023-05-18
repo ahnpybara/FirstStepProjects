@@ -124,9 +124,7 @@
                             </li>
                             <li>
                                 <!--유재우 : 수정-->
-                                <div class="feed_content_update" feed_id="{{ feed.id }}"
-                                     class="update_feed dropdown-item" href="#"> 수정
-                                </div>
+                                <div feed_id="{{ feed.id }}" class="update_feed dropdown-item" href="#"> 수정</div>
                             </li>
                         </ul>
                     </div>
@@ -214,7 +212,8 @@
                             <div reply_id="{{ reply.id }}" class="update_replys" id="update_reply_btn">
                                 수정
                             </div>
-                            <span reply_id="{{ reply.id }}" id="reply_close_button" class="reply_close_btn material-icons-outlined">close</span>
+                            <span reply_id="{{ reply.id }}" id="reply_close_button"
+                                  class="reply_close_btn material-icons-outlined">close</span>
                         </div>
                     {% endfor %}
                 </div>
