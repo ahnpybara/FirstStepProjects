@@ -93,7 +93,7 @@ $(".upload_reply").click(function (event) {
     // 게시 버튼 태그의 id 속성 값을 가져옴
     let feed_id = event.target.attributes.getNamedItem('feed_id').value;
     var user_session = $(this).attr('user_session');
-    console.log(user_session);
+
     let reply_id = 'reply_' + feed_id;
     // 댓글 입력 폼 아이디를 이용해서 입력 폼의 내용을 가져옴
     let reply_content = $('#' + reply_id).val();
@@ -117,7 +117,7 @@ $(".upload_reply").click(function (event) {
             console.log("성공");
             alert("댓글 성공");
             // 비동기식 댓글 업로드를 위한 구현
-            $("#reply_list_" + feed_id).append("<div style='margin: 0 10px;text-align: left;font-size: 14px'><b>" + user_session + "</b> " + reply_content + "</div>")
+            $("#reply_list_" + feed_id).append("<div style='margin: 0 10px; text-align: left;font-size: 14px'><b>" + user_session + "</b> " + reply_content + "</div>")
         },
         error: function (request, status, error) {
             console.log("에러");
@@ -172,11 +172,18 @@ $('#nav_bar_add_box').click(function () {
 });
 // 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
-    alert("공유하기 눌렀다.");
 
     let file = files[0];
     let image = files[0].name;
     let content = $('#input_feed_content').val();
+
+    // 안치윤: 피드 내용의 길이가 0보다 작으면 알림창 뜸
+    if (content.length <= 0) {
+        alert("피드 내용을 입력하세요");
+        return 0;
+    } else {
+        alert("공유하기 눌렀다.");
+    }
 
     // 파일을 업로드 하는 것이므로 formdata 형태로 서버에 전달해야 함, formdata 객체를 생성한 뒤 서버로 보낼 데이터를 객체에 추가해줌
     let fd = new FormData();
@@ -384,18 +391,43 @@ $('#feed_update_button').click(function (event) {
     });
 });
 
-// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 댓글 수정창을 띄움
+// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 댓글 수정창을 띄움, 안치윤: 전역변수 제거
 $('.update_reply').click(function (event) {
-    Reply_id = $(this).attr('reply_id');
-    $('#reply_div' + Reply_id).css({
+    let reply_id = $(this).attr('reply_id');
+    $('#reply_div' + reply_id).css({
+        display: 'flex'
+    });
+    $('#reply_menu_' + reply_id).css({
+        display: 'none'
+    });
+
+});
+
+// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 댓글 수정창을 띄움, 안치윤: 전역변수 제거
+$('.reply_close_btn').click(function (event) {
+    let reply_id = $(this).attr('reply_id');
+    console.log(reply_id);
+    $('#reply_div' + reply_id).css({
+        display: 'none'
+    });
+    $('#reply_menu_' + reply_id).css({
         display: 'flex'
     });
 });
-// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 수정이 되도록 하는 부분
-$('.update_replys').click(function (event) {
-    let reply_id = Reply_id
 
-    let content = $('#reply_' + Reply_id).val();
+
+// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 수정이 되도록 하는 부분, 안치윤 : 댓글 내용없으면 알림
+$('.update_replys').click(function (event) {
+    let reply_id = $(this).attr('reply_id');
+
+    let content = $('#reply_' + reply_id).val();
+
+
+    // 댓글의 길이가 0보다 작으면 알림창 뜸
+    if (content.length <= 0) {
+        alert("댓글을 입력하세요");
+        return 0;
+    }
 
     //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
     $.ajax({

@@ -1,7 +1,7 @@
 /* 최상단 네비 바 부분 css */
 
 body {
-    background: #FAFAFA!important;
+    background: #FAFAFA !important;
 }
 
 /* 네비바 */
@@ -122,20 +122,31 @@ a {
     border-radius: 2%;
 }
 
-/* 피드 */
-.feed {
+/* 피드 상단 부분 */
+.feed_bar {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 20px
+    margin: 20px;
+    justify-content: space-between;
 }
 
-/* 피드 작성자 프로필 */
-.feed > .profile_box {
+/* 피드 작성자 정보 */
+.feed_user_writer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 피드 작성자 프로필 사진*/
+.feed_bar > .profile_box {
     width: 35px;
     height: 35px;
-    margin-right: 10px;
+}
 
+/* 피드 작성자 닉네임 */
+.feed_nickname {
+    margin-left: 10px;
 }
 
 /* 작성자의 피드 이미지 */
@@ -143,21 +154,9 @@ a {
     width: 100%;
 }
 
-
-/* 삭제 관련 텍스트 */
-.delete_text {
-    color: red;
-}
-
-/* 삭제 관련 텍스트 */
-.delete_textd {
-    color: red;
-}
-
-/* 피드 드롭 다운메뉴 */
-#feed_dropdown {
-    color: gray;
-    margin-left: 280px;
+/* 피드 드롭다운 메뉴 */
+#dropdownMenuLink {
+    color: darkgray;
 }
 
 /* 피드 하위 드롭 다운 메뉴 */
@@ -167,14 +166,20 @@ a {
     border-radius: 9%
 }
 
-/* 드롭다운 메뉴 */
+/* 하위 드롭다운 메뉴 일괄 설정 */
 .dropdown-menu {
     cursor: pointer;
 }
 
-/* 피드 드롭다운 메뉴 */
-#dropdownMenuLink {
-    color: black;
+/* 드롭다운 삭제 관련 텍스트 일괄 설정 */
+.delete_text {
+    color: red;
+}
+
+/* 하위 피드 수정 메뉴 */
+.feed_content_update {
+    color: cornflowerblue;
+    font-weight: bold;
 }
 
 /* 북마크와 좋아요 영역 */
@@ -235,6 +240,88 @@ a {
     margin-bottom: 7px;
     text-align: left;
     font-size: 16px
+}
+
+/* 댓글 영역 */
+.user_reply_list_area {
+    margin: 0 10px;
+    text-align: left;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* 댓글 내용이 길어지면 줄바꿈 */
+.user_reply {
+    overflow-wrap: break-word;
+}
+
+/* 댓글 드롭 다운 주메뉴 */
+#reply_delete_update_menu {
+    text-align: center;
+    min-width: 6rem;
+    border-radius: 9%;
+}
+
+/* 댓글 드롭다운 하위메뉴 삭제 */
+.remove_reply {
+    cursor: pointer;
+}
+
+/* 댓글 수정하기 위한 텍스트박스 */
+.reply_update_textbox {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 댓글 수정하기 버튼 */
+#update_reply_btn {
+    width: 50px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 댓글 수정하기 위한 인풋 입력박스 */
+.reply_update_textbox .input_reply_update {
+    box-shadow: none !important;
+    border-top: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+    outline: none !important;
+    background-color: white !important;
+}
+
+/* 댓글 수정 닫기 버튼 */
+#reply_close_button {
+    cursor: pointer;
+    margin-right: 7px;
+}
+
+/* 댓글 입력하기 위한 인풋 입력 박스 */
+.reply_add_textbox .input_reply_add {
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+    background-color: white !important;
+}
+
+/* 댓글 입력하기 위한 텍스트 박스 */
+.reply_add_textbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top: solid 1px #e1e1e1;
+    margin-top: 10px;
+}
+
+/* 댓글 게시 버튼 */
+.upload_reply {
+    width: 50px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* 작성자 프로필 */
@@ -420,13 +507,15 @@ a {
 .img_upload_space {
     border-top: solid 1px #d8d8d8;
     width: 100%;
-    height: 100%;
+    height: 521px;
     text-align: center;
 }
 
 /* 이미지를 여기로 드래그 하세요 */
 .drag_here_image {
     margin-top: 200px;
+    margin-left: 15px;
+    margin-right: 15px;
     color: black;
     font-weight: 500;
     font-size: 19px;
@@ -468,12 +557,12 @@ a {
     outline: none;
 }
 
-/* 두 번째 모달창 글 내용 공간 */
+/* 두 번째 모달창 글 내용 공간(부모) */
 .modal_text_area {
     height: 475px;
 }
 
-/**/
+/* 두 번째 모달창 글 내용 공간(자식) */
 .feed_content_input {
     border-left: solid 1px #d8d8d8;
     height: 484px;
