@@ -178,8 +178,8 @@ a {
 
 /* 하위 피드 수정 메뉴 */
 .update_feed {
-    color: cornflowerblue!important;
-    font-weight: bold!important;
+    color: cornflowerblue !important;
+    font-weight: bold !important;
 }
 
 /* 북마크와 좋아요 영역 */
@@ -605,4 +605,14 @@ html {
         top: 8px;
         right: 12px;
     }
+}
+
+/* 자동완성의 스크롤은 동작하지만 보이지 않게 함 */
+.auto_madal_list_area {
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+}
+
+.auto_madal_list_area::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }

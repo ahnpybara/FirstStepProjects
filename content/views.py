@@ -11,6 +11,8 @@ import os
 import json
 from django.http import HttpResponse
 
+from django.db.models import Q
+
 
 # Main 클래스는 여러 테이블에서 데이터를 가져와 피드리스트 변수에 저장하고 main.html과
 # main.html에서 피드를 사용자에게 보여주는데 필요한 피드리스트와 user 정보를 브라우저에게 보내는 클래스입니다.
@@ -36,7 +38,8 @@ class Main(APIView):
 
         for feed in feed_object_list:
             user = User.objects.filter(email=feed.email).first()
-            reply_object_list = Reply.objects.filter(feed_id=feed.id)
+            # 정유진: 댓글의 2개만 가져온다.
+            reply_object_list = Reply.objects.filter(feed_id=feed.id)[:2]
             reply_list = []
             for reply in reply_object_list:
                 reply_user = User.objects.filter(email=reply.email).first()
@@ -111,7 +114,7 @@ class Profile(APIView):
             return render(request, "user/login.html")
 
         # 프로필 화면에서 게시글 조회할 때 필요한 리스트를 구하는 과정 (노션참고)
-        # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
+        # 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         # 안치윤 : 작성 게시물 개수 추가
         user_feed_count = Feed.objects.filter(email=email).count()
         feed_list = Feed.objects.filter(email=email).order_by('-id')
@@ -120,40 +123,40 @@ class Profile(APIView):
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
 
-        # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
         for feed in feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             feed_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
                                         reply_count=reply_count))
 
-        # 정유진: 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         like_count_list = []
         for feed in like_feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             like_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
                                         reply_count=reply_count))
-        # 정유진: 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         bookmark_count_list = []
         for feed in bookmark_feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             bookmark_count_list.append(dict(id=feed.id,
                                             like_count=like_count,
                                             reply_count=reply_count))
 
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
-        # 정유진: 전달할 카운트 리스트(count_list) 추가.
+        # 전달할 카운트 리스트(count_list) 추가.
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
@@ -231,7 +234,7 @@ class ReplyProfile(APIView):
         # 사용자의 닉네임을 받아옴
         nickname = request.GET.get('user_nickname')
 
-        # 정유진: 사용자 세션을 받아옴. nav부분의 프로필 사진을 얻기 위해서.
+        # 사용자 세션을 받아옴. nav부분의 프로필 사진을 얻기 위해서.
         email_session = request.session.get('email', None)
 
         # 세션에 이메일 정보가 없는경우 -> 로그인을 하지 않고 메인페이지에 접속했다는 뜻 -> 로그인 페이지로 이동시킴
@@ -248,7 +251,7 @@ class ReplyProfile(APIView):
         user = User.objects.filter(nickname=nickname).first()
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
         email = user.email
-        # 정유진: 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
+        # 최근에 올린 게시물이 앞에 가도록 정렬기능 추가
         # 안치윤 : 내가 작성한 게시글의 숫자
         user_feed_count = Feed.objects.filter(email=email).count()
         feed_list = Feed.objects.filter(email=email).order_by('-id')
@@ -257,40 +260,40 @@ class ReplyProfile(APIView):
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
 
-        # 정유진: 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
         for feed in feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             feed_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
                                         reply_count=reply_count))
 
-        # 정유진: 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 좋아요의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         like_count_list = []
         for feed in like_feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             like_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
                                         reply_count=reply_count))
-        # 정유진: 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        # 북마크의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         bookmark_count_list = []
         for feed in bookmark_feed_list:
-            # 정유진: 좋아요 수 확인.
+            # 좋아요 수 확인.
             like_count = Like.objects.filter(feed_id=feed.id).count()
-            # 정유진: 댓글 수 확인.
+            # 댓글 수 확인.
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             bookmark_count_list.append(dict(id=feed.id,
                                             like_count=like_count,
                                             reply_count=reply_count))
 
         # 프로플 화면에서 게시글을 조회할 때 필요한 리스트들을 profile.html로 전달
-        # 정유진: 전달할 카운트 리스트(count_list) 추가.
+        # 전달할 카운트 리스트(count_list) 추가.
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
@@ -380,9 +383,7 @@ class UpdateFeed(APIView):
 
         return Response(status=200)
 
-
-
-# 05-12 유재우 : 댓글 수정
+    # 05-12 유재우 : 댓글 수정
 class UpdateReply(APIView):
     def post(self, request):
         content = request.data.get('content')
@@ -441,4 +442,26 @@ class FeedModal(APIView):
 
         json_data = json.dumps(data)
         # ajax를 이용해서 html 추가하거나 변경할려면 이런방식을 써야한다.
+        return HttpResponse(json_data, content_type='application/json')
+
+
+# 정유진: 자동완성 기능에 필요한 데이터를 찾아서 보내준다.
+class Autocomplete(APIView):
+    def get(self, request):
+        search_box_value = request.GET.get('search_box_value', None)
+        # 정유진: 10명만 가져온다.
+        users = User.objects.filter(Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
+
+        autocomplete_user_list = []
+        # 정유진: users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
+        for user in users:
+            autocomplete_user_list.append(dict(profile_image=user.profile_image,
+                                               nickname=user.nickname,
+                                               name=user.name))
+        data = {
+            'autocomplete_user_list': autocomplete_user_list
+        }
+
+        json_data = json.dumps(data)
+        print(json_data)
         return HttpResponse(json_data, content_type='application/json')
