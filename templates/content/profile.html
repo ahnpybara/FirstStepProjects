@@ -634,7 +634,7 @@
                     $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + i + '" style="display: flex;margin-bottom: 15px;"></div>');
 
                     // 댓글들, 프로필 이미지 -
-                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile feed_profile_image" style="width: 32px;height: 32px;margin-right: 15px;"></div>');
+                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile" style="width: 32px;height: 32px;margin-right: 15px;"></div>');
                     $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: center;"></div>');
 
                     $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_nickname_' + i + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
@@ -676,6 +676,10 @@
                     '<div style="font-size: 12px; color: gray; text-align: left; margin-bottom: 10px; margin-left: 16px">'
                     + feed_create_at +
                     '</div>');
+
+                // 정유진: 댓글 게시할 때 댓글리스트에서 몇 번째인지 알려준다.
+                document.getElementById("reply_content_upload").setAttribute("reply_id", data['reply_list'].length);
+
                 $("#feed_modal").css({
                     display: 'flex'
                 });
@@ -780,6 +784,8 @@
     $(".upload_reply").click(function (event) {
         // 게시 버튼 태그의 id 속성 값을 가져옴
         let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+        // reply_content_upload div 요소의 reply_id 값을 가져옴
+        let relpy_upload_id = document.getElementById("reply_content_upload").getAttribute("reply_id");
         // 댓글 입력 폼 아이디를 이용해서 입력 폼의 내용을 가져옴
         let reply_content = $('#reply_content_text').val();
 
@@ -800,6 +806,18 @@
             success: function (data) {
                 console.log("성공");
                 alert("댓글 성공");
+                // 비동기식 댓글 업로드를 위한 구현
+                $("#feed_modal_reply_list").append('<div id="feed_modal_reply_'+ relpy_upload_id +'" style="display: flex;margin-bottom: 15px;"></div>');
+
+                $("#feed_modal_reply_" +relpy_upload_id).append('<div id="feed_modal_reply_profile_image_'+ relpy_upload_id +'" class="box profile feed_profile_image" style="width: 32px;height: 32px;margin-right: 15px;"></div>');
+                $("#feed_modal_reply_" +relpy_upload_id).append('<div id="feed_modal_reply_nickname_content_'+ relpy_upload_id +'" style="display: flex;align-items: center;"></div>');
+
+                $("#feed_modal_reply_nickname_content_" +relpy_upload_id).append('<div id="feed_modal_reply_nickname_'+ relpy_upload_id +'" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
+                $("#feed_modal_reply_nickname_content_" +relpy_upload_id).append('<div id="feed_modal_reply_content_'+ relpy_upload_id +'" style="font-size: 14px"></div>');
+
+                $("#feed_modal_reply_profile_image_" +relpy_upload_id).append('<img style="width: 100%;height: 100%" src="{% get_media_prefix %}{{ user_session.profile_image }}">');
+                $("#feed_modal_reply_nickname_" +relpy_upload_id).append('<div>'+ data['user_nickname'] +'</div>');
+                $("#feed_modal_reply_content_" +relpy_upload_id).append('<div>' + reply_content + '</div>');
             },
             error: function (request, status, error) {
                 console.log("에러");
@@ -808,6 +826,10 @@
                 console.log("완료");
                 // 댓글을 입력하고 나면 입력 폼을 비워야 함
                 $('#reply_content_text').val('');
+                // 정유진: reply_content_upload div 요소의 reply_id 속성에 reply_id 값을 할당함.
+                // + 해당 피드의 마지막 댓글의 다음 번째를 넘겨준다.
+                let relpy_upload_next_id = String(Number(relpy_upload_id) + 1);
+                document.getElementById("reply_content_upload").setAttribute("reply_id", relpy_upload_next_id);
             }
         });
 
