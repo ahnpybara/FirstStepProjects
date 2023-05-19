@@ -11,6 +11,8 @@ import os
 import json
 from django.http import HttpResponse
 
+from django.db.models import Q
+
 
 # Main 클래스는 여러 테이블에서 데이터를 가져와 피드리스트 변수에 저장하고 main.html과
 # main.html에서 피드를 사용자에게 보여주는데 필요한 피드리스트와 user 정보를 브라우저에게 보내는 클래스입니다.
@@ -449,7 +451,7 @@ class Autocomplete(APIView):
     def get(self, request):
         search_box_value = request.GET.get('search_box_value', None)
         # 정유진: 10명만 가져온다.
-        users = User.objects.filter(nickname__contains=search_box_value).order_by('nickname')[:10]
+        users = User.objects.filter(Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
 
         autocomplete_user_list = []
         # 정유진: users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
