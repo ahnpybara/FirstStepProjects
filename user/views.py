@@ -174,7 +174,7 @@ class Settings(APIView):
         email = request.session.get('email', None)
         user_session = User.objects.filter(email=email).first()
 
-        return render(request, "content/settings.html", dict(user_sesiion=user_session))
+        return render(request, "content/settings.html", dict(user_session=user_session))
 
 
 # 05-15 유재우 : 이메일 변경
