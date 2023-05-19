@@ -529,7 +529,7 @@ $('#search_box').mousedown(function () {
                         // 정유진: append에서 id 값을 user_nickname로 하면 $("#" + user_nickname).append가 되지 않아 따로 바꾼다.
                         document.getElementById("auto_modal_object_" + i).setAttribute("id", user_nickname);
 
-                        // 안치윤 : 화면에서 다른사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
+                        // 화면에서 다른사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
                         $(".movetoprofile").click(function (event) {
                             let user_nickname = event.target.id;
                             location.href = "/content/reprofile?user_nickname=" + user_nickname;
