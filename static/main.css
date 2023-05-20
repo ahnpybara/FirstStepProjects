@@ -634,3 +634,21 @@ html {
     display: flex;
     flex-direction: column;
 }
+
+/* 프로필 화면 박스 */
+.box {
+    width: 150px;
+    height: 150px;
+    border-radius: 70%;
+    overflow: hidden;
+}
+
+/* 안치윤 : 스크롤은 동작하지만 보이지 않게 함 */
+.modal_text_area {
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+}
+
+.modal_text_area::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
