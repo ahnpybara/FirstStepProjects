@@ -75,80 +75,82 @@
         </div>
     </div>
 </nav>
-
-<div style="padding-top: 250px">
-    <div>
-        <div style="padding-left: 30%; padding-right: 30%; flex-direction: row">
-            <!-- 프로필 수정 -->
-            <div style="display: flex; padding-bottom: 5%; border-top: 1px black solid; border-right: black 1px solid; border-left: black 1px solid; border-bottom: 1px black dotted">
-                <!-- 프로필 사진 -->
-                <div style="text-align: center">
-                    <div style="padding: 8% 60px">
-                        <div class="box" style="width: 125px; height: 125px;">
-                            <img class="profile"
-                                 src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
-                        </div>
-                    </div>
-                    {{ user_session.nickname }}</div>
-                <!-- 프로필 정보 편집 -->
-                <div style="padding-top: 9%; padding-left: 1%">
-                    <div style="display: table-cell; vertical-align: middle;">
-                        <textarea id="nikname_ta"
-                                  style="resize: none; width: 252px; height: 30px;row-gap: 25px; margin-top: 5px">{{ user_session.nickname }}</textarea>
-                        <button id="update_nikname_btn"
-                                style="position: absolute; margin-top: 5px; margin-left: 50px; border: 1px darkgrey solid">
-                            닉네임 수정
-                        </button>
-                    </div>
-                    <div style="">
-                        <button id="button_profile_upload"
-                                style="margin-right: 18px; width: 190px; border: 1px darkgrey solid"> 프로필 사진 편집
-                        </button>
+<!--설정창 영역-->
+<div id="settings_area">
+    <!--설정창 박스-->
+    <div id="settings_border_outline">
+        <!-- 프로필 수정 영역 -->
+        <div id="profile_settings_area">
+            <!-- 프로필 사진과 닉네임 영역 -->
+            <div id="profile_image_settings_area">
+                <!--프로필 사진 영역-->
+                <div id="profile_image_settings">
+                    <div class="settings_profile_box">
+                        <img id="button_profile_upload" class="profile"
+                             src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
                         <input type="file" id="input_profileimage_upload" onchange="profile_upload();"
                                style="display: none"/>
-                        <button id="button_profile_reset" style="width: 190px ; border: 1px darkgrey solid"> 프로필 사진 삭제
-                        </button>
                     </div>
                 </div>
-            </div>
-
-            <!-- 로그인 수정 -->
-            <div style="padding-top: 25px;  padding-left: 50px; border-left: 1px black solid; border-right: 1px black solid; border-bottom: 1px black dotted">
-                <div style="display: flex; padding-bottom: 50px">
-                    <c style="font-size: 25px; padding-right: 50px; letter-spacing: 5px">
-                        이메일 수정
-                    </c>
-                    <textarea id="email_ta"
-                              style="resize: none; width: 250px; height: 30px;row-gap: 25px">{{ user_session.email }}</textarea>
-                    <button id="update_email_btn"
-                            style="position: absolute; margin-left: 500px ; border: 1px darkgrey solid">
-                        수정
-                    </button>
-                </div>
-                <div style="display: flex; padding-bottom: 50px">
-                    <a style="font-size: 25px; padding-right: 1px">
-                        비밀번호 수정
-                    </a>
-                    <input type="password" class="form-control"
-                           style="font-size: 25px; height: 30px;margin-left: 55px;margin-right: 50px;width: 250px;"
-                           id="input_password">
-                    <button id="update_password_btn"
-                            style="position: absolute; margin-left: 500px; border: 1px darkgrey solid">
-                        수정
-                    </button>
+                <!-- 단순 닉네임 표시 영역-->
+                <div style="text-align: center">
+                    {{ user_session.nickname }}
                 </div>
             </div>
-
-            <!-- 회원 탈퇴-->
-            <div style="padding-top: 25px; padding-left: 50px; padding-bottom: 25px; border-right: black 1px solid; border-left: black 1px solid; border-bottom: 1px black solid">
-                <button id="profile_dele_btn" style="margin-right: 40px; border: none; color: red; background: none"> 회원
-                    탈퇴
-                </button>
+            <!-- 프로필 닉네임 수정 영역 부모 -->
+            <div id="profile_text_settings_area">
+                <!--프로필 닉네임 수정 영역 자식 -->
+                <div id="profile_text_area">
+                    <!--변경할 닉네임 입력란 -->
+                    <div id="join_nickname_box" class="form-floating mb-3">
+                        <input type="text" class="form-control" id="input_nickname"
+                               placeholder="name@example.com">
+                        <label id="nickname_error" for="input_nickname">{{ user_session.nickname }}</label>
+                    </div>
+                    <!--프로필 삭제 버튼-->
+                    <button id="button_profile_reset" type="button" class="btn btn-primary">프로필 사진 삭제</button>
+                </div>
+                <!--프로필 닉네임 수정 버튼-->
+                <div id="update_nickname_btn_area">
+                    <button id="update_nikname_btn" type="button" class="btn btn-primary"><b>수정</b></button>
+                </div>
             </div>
+        </div>
+
+        <!-- 프로필 로그인 정보 수정 -->
+        <div id="Login_profile_area">
+            <!--프로필 이메일 변경 영역-->
+            <div id="Login_profile_email">
+                <c id="email_update_text">이메일 변경</c>
+                <!--변경할 이메일 입력란 -->
+                <div id="join_email_box" class="form-floating mb-3">
+                    <input type="email" class="form-control" id="input_email" placeholder="name@example.com">
+                    <label id="email_error" for="input_email">{{ user_session.email }}</label>
+                </div>
+                <!-- 프로필 이메일 수정 버튼-->
+                <button id="update_email_btn" type="button" class="btn btn-primary"><b>수정</b></button>
+            </div>
+            <!--프로필 비밀번호 변경 영역-->
+            <div id="Login_profile_passwrod">
+                <a id="password_update_text">비밀번호 변경</a>
+                <!--변경할 비밀번호 입력란 -->
+                <div id="join_password_box" class="form-floating mb-3">
+                    <input type="password" class="form-control" id="input_password"
+                           placeholder="name@example.com">
+                    <label id="password_error" for="input_password">비밀번호</label>
+                </div>
+                <!-- 프로필 비밀번호 변경 버튼 -->
+                <button id="update_password_btn" type="button" class="btn btn-primary"><b>수정</b></button>
+
+            </div>
+        </div>
+
+        <!-- 회원 탈퇴-->
+        <div id="user_delete_area">
+            <button id="profile_dele_btn" type="button" class="btn btn-primary"><b>회원 탈퇴</b></button>
         </div>
     </div>
 </div>
-
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
@@ -159,6 +161,172 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'settings.js' %}"></script>
+<script>
+    // 05-09 유재우 회원탈퇴를 위한
+    $('#profile_dele_btn').click(function () {
+        if (confirm("유저 정보를 삭제 하시겠습니까?")) {
+            delete_profile_Fn()
+        }
+    });
+
+    function delete_profile_Fn() {
+        let email = "{{ user_session.email }}"
+
+        $.ajax({
+            url: "/user/profile/remove",
+            data: {
+                email: email
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                alert("프로필이 성공적으로 삭제 되었습니다.");
+                location.replace("");
+            },
+            error: function (request, status, error) {
+                console.log("에러")
+                alert(email);
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        })
+    }
+
+
+    // 프로필 사진 업로드 버튼 클릭시 이벤트 처리
+    $('#button_profile_upload').click(function () {
+        $('#input_profileimage_upload').click();
+    });
+
+    // 프로필 사진 업로드 하는 함수와  ajax
+    function profile_upload() {
+        let file = $('#input_profileimage_upload')[0].files[0];
+        let email = "{{ user_session.email }}"
+        let fd = new FormData();
+
+        fd.append('file', file);
+        fd.append('email', email);
+
+        $.ajax({
+            url: "/user/profile/upload",
+            data: fd,
+            method: "POST",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log("성공");
+
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+                location.replace("/user/profile/setting");
+            }
+        });
+
+    }
+
+    // 05-07 유재우 : 프로필 사진 삭제 버튼 눌렸을 때 프로필 사진을 디폴트 값으로 바꿔주는 부분 TODO
+    $('#button_profile_reset').click(function () {
+
+        let email = "{{ user_session.email }}";
+
+        $.ajax({
+            url: "/user/profile/reset",
+            data: {
+                email: email
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                alert("프로필이 성공적으로 삭제 되었습니다.");
+                location.replace("/user/profile/setting");
+            },
+            error: function (request, status, error) {
+                console.log("에러")
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        })
+    });
+
+    //05-14 유재우 : 비밀번호 변경
+    $('#update_password_btn').click(function () {
+        let email = "{{ user_session.email }}";
+        let password = $('#input_password').val();
+        $.ajax({
+            url: "/user/updatepassword",
+            data: {
+                email: email,
+                password: password
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                location.replace('/user/profile/setting');
+
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        });
+    })
+
+    //05-14 유재우 : 닉네임 변경
+    $('#update_nikname_btn').click(function () {
+        let email = "{{ user_session.email }}";
+        let nikname = $('#input_nickname').val();
+        $.ajax({
+            url: "/user/profile/updatenickname",
+            data: {
+                email: email,
+                nickname: nikname
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                location.replace('/user/profile/setting');
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        });
+    })
+    //05-15 유재우 : 이메일 변경
+    $('#update_email_btn').click(function () {
+        let user_email = "{{ user_session.email }}";
+        let email = $('#input_email').val();
+
+        $.ajax({
+            url: "/user/profile/updateemail",
+            data: {
+                user_email: user_email,
+                email: email
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                location.replace('/user/profile/setting');
+
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        });
+    })
+</script>
 </body>
 </html>
