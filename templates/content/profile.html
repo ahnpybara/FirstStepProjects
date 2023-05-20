@@ -531,7 +531,7 @@
                     <div class="modal_text_area" style="overflow-y: auto; height: 100%">
                         <div style="display: flex;margin: 15px;align-items: center;flex-direction: row;">
                             <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
-                                 style="width: 32px;height: 32px;margin-right: 15px;">
+                                 style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px">
                                 <!-- ajax로 받아옴 작성자 프로필 사진 -->
                             </div>
                             <div id="feed_modal_writer_nickname" class="feed_nickname">
@@ -634,7 +634,7 @@
                     $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + i + '" style="display: flex;margin-bottom: 15px;"></div>');
 
                     // 댓글들, 프로필 이미지 -
-                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile" style="width: 32px;height: 32px;margin-right: 15px;"></div>');
+                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile" style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important"></div>');
                     $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: center;"></div>');
 
                     $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_nickname_' + i + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
@@ -651,7 +651,7 @@
                 var feed_create_at = data['feed_create_at'];
 
                 // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
-                $("#feed_modal_image").html('<img style="width: 100%" src="' + feed_image + '">');
+                $("#feed_modal_image").html('<img style="width: 100%; height: 100%" src="' + feed_image + '">');
                 $("#feed_modal_feed_content").html('<div>' + feed_content + '</div>');
                 $(".feed_profile_image").html('<img  style="width: 100%; height: 100%" src="' + writer_profile_image + '">');
                 $(".feed_nickname").html('<div style="font-weight: bold; margin-right: 8px; font-size: 14px">' + writer_nickname + '</div>');
@@ -809,13 +809,13 @@
                 // 비동기식 댓글 업로드를 위한 구현
                 $("#feed_modal_reply_list").append('<div id="feed_modal_reply_'+ relpy_upload_id +'" style="display: flex;margin-bottom: 15px;"></div>');
 
-                $("#feed_modal_reply_" +relpy_upload_id).append('<div id="feed_modal_reply_profile_image_'+ relpy_upload_id +'" class="box profile feed_profile_image" style="width: 32px;height: 32px;margin-right: 15px;"></div>');
+                $("#feed_modal_reply_" +relpy_upload_id).append('<div id="feed_modal_reply_profile_image_'+ relpy_upload_id +'" class="box profile feed_profile_image" style="width: 32px;height: 32px; margin-right: 15px; min-width: 32px!important"></div>');
                 $("#feed_modal_reply_" +relpy_upload_id).append('<div id="feed_modal_reply_nickname_content_'+ relpy_upload_id +'" style="display: flex;align-items: center;"></div>');
 
                 $("#feed_modal_reply_nickname_content_" +relpy_upload_id).append('<div id="feed_modal_reply_nickname_'+ relpy_upload_id +'" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
                 $("#feed_modal_reply_nickname_content_" +relpy_upload_id).append('<div id="feed_modal_reply_content_'+ relpy_upload_id +'" style="font-size: 14px"></div>');
 
-                $("#feed_modal_reply_profile_image_" +relpy_upload_id).append('<img style="width: 100%;height: 100%" src="{% get_media_prefix %}{{ user_session.profile_image }}">');
+                $("#feed_modal_reply_profile_image_" +relpy_upload_id).append('<img style="width: 100%; height: 100%" src="{% get_media_prefix %}{{ user_session.profile_image }}">');
                 $("#feed_modal_reply_nickname_" +relpy_upload_id).append('<div>'+ data['user_nickname'] +'</div>');
                 $("#feed_modal_reply_content_" +relpy_upload_id).append('<div>' + reply_content + '</div>');
             },
