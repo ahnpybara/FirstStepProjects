@@ -2,12 +2,6 @@ body {
     background: #FAFAFA !important;
 }
 
-
-/* 최상단 네비 바 부분 css */
-body {
-    background: #FAFAFA !important;
-}
-
 /* 네비바 */
 .navbar {
     position: fixed;
@@ -115,32 +109,264 @@ a {
     object-fit: cover;
 }
 
-/* 모달창의 바깥 영역 */
-.modal_overlay {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    display: none;
-    flex-direction: column;
-    align-items: center;
+/* 설정창 최상위 태그 */
+#settings_area {
+    padding-top: 5%;
+    display: flex;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    z-index: 10000;
+    align-items: center;
+}
+/* 설정창 박스 */
+#settings_border_outline {
+    background-color: white;
+    border: 1px solid #e1e1e1;
+    width: 540px;
 }
 
-/* 모달창의 영역 */
-.modal_window {
-    background: white;
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    width: 800px;
-    height: 600px;
-    position: relative;
-    padding: 10px;
+/* 프로필 수정 영역 */
+#profile_settings_area {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5% 5%;
+    border-bottom: 1px #e1e1e1 dotted;
+}
+
+/* 프로필 사진과 닉네임 표시 영역 */
+#profile_image_settings_area {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-right: 30px;
+    width: 300px;
+}
+
+/* 프로필 이미지 수정 영역 */
+#profile_image_settings {
+    margin-left: 20px;
+}
+
+/* 프로필 사진 박스 */
+.settings_profile_box {
+    width: 100px;
+    height: 100px;
+    border-radius: 70%;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+/* 닉네임 수정 영역 */
+#profile_text_settings_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5%;
+
+}
+/* 닉네임 수정 영역 자식 */
+#profile_text_area {
+    width: 180px;
+}
+
+/* 프로필 사진 삭제 버튼 */
+#button_profile_reset {
+    background-color: #d8d8d8;
+    border: none;
+}
+
+/* 닉네임 수정 버튼 영역 */
+#update_nickname_btn_area {
+    width: 130px;
+}
+
+/* 닉네임 수정 버튼 */
+#update_nikname_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 30%;
+    height: 35px;
+    margin-bottom: 35px;
+    background-color: rgb(0, 149, 246);
+}
+
+/* 프로필 로그인 정보 관련 영역 */
+#Login_profile_area {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px #e1e1e1 dotted;
+}
+
+/* 닉네임 입력 박스 */
+#join_nickname_box {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+/* 닉네임 입력란 */
+#input_nickname {
+    font-size: 14px;
+    width: 250px;
+    height: 40px;
+    background: #FAFAFA;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* 닉네임 플로팅 라벨 */
+#nickname_error {
+    font-size: 12px;
+    width: 100%;
+    padding: 8px 15px;
+    text-align: left;
+    color: gray;
+}
+
+/* 이메일 수정 영역 */
+#Login_profile_email {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px 20px;
+    width: 100%;
+    margin-right: 3px;
+}
+/* 여기는 이메일 입니다 */
+#email_update_text {
+    width: 115px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* 이메일 입력 박스 */
+#join_email_box {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+/* 이메일 입력란 */
+#input_email {
+    font-size: 14px;
+    width: 250px;
+    height: 40px;
+    background: #FAFAFA;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* 이메일 플로팅라벨 */
+#email_error {
+    font-size: 12px;
+    width: 100%;
+    padding: 8px 15px;
+    text-align: left;
+    color: gray;
+}
+
+/* 이메일 변경 버튼 */
+#update_email_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    background-color: rgb(0, 149, 246);
+}
+
+/* 프로필 비밀번호 변경 영역 */
+#Login_profile_passwrod {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0px 20px;
+    padding-bottom: 20px;
+    margin-right: 3px;
+    width: 100%;
+}
+
+/* 여기는 비밀번호 입니다. */
+#password_update_text {
+    width: 115px;
+    text-align: center;
+    font-size: 18px;
+}
+
+/* 비밀번호 입력 박스 */
+#join_password_box {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+/* 비밀번호 입력란 */
+#input_password {
+    font-size: 14px;
+    width: 250px;
+    height: 40px;
+    background: #FAFAFA;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* 비밀번호 플로팅라벨 */
+#password_error {
+    font-size: 12px;
+    width: 100%;
+    padding: 8px 15px;
+    text-align: left;
+    color: gray;
+}
+
+/* 비밀번호 변경 버튼 */
+#update_password_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    background-color: rgb(0, 149, 246);
+}
+
+/* 회원정보 삭제 영역 */
+#user_delete_area {
+    text-align: right;
+    padding: 20px 30px;
+}
+
+/* 회원 정보 삭제 버튼 */
+#profile_dele_btn {
+    background-color: indianred;
+    border: none;
+}
+
+/* 반응형 웹을 위한 코드 */
+@media (max-width: 1000px) {
+    .follow_side_area {
+        display: none;
+    }
+}
+
+@media (max-width: 760px) {
+    .bar_search {
+        display: none;
+    }
+
+    .navbar-brand {
+        position: absolute;
+        top: 8px;
+        left: 12px;
+    }
+
+    .menu_icons {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+    }
 }
