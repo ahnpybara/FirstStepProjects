@@ -173,7 +173,8 @@
                             {{ feed.content|truncatechars:10 }}
                         </p>
                     </div>
-                    <p id="{{ feed.id }}" class="feed_content_more" feed_nickname="{{ feed.nickname }}" feed_content="{{ feed.content }}" style="cursor: pointer">더 보기</p>
+                    <p id="{{ feed.id }}" class="feed_content_more" feed_nickname="{{ feed.nickname }}"
+                       feed_content="{{ feed.content }}" style="cursor: pointer">더 보기</p>
                     <!-- 정유진: 댓글 모두 보기 클릭 시 피드모달창이 뜬다 -->
                     <div class="profile_feed_mouse_over" feed_id="{{ feed.id }}" style="cursor: pointer">
                         댓글 모두 보기
@@ -359,10 +360,18 @@
 
             </div>
             <div class="modal_text_area">
-                <!-- 게시글 작성 텍스트박스 -->
+                <!-- 안치윤 : 해시태그 !! 게시글 작성 텍스트박스 -->
                 <div class="feed_content_input">
-                    <textarea id="input_feed_content" class="form-control"
-                              id="exampleFormControlTextarea1" rows="5" placeholder="글 내용 작성..."></textarea>
+                    <div>
+                        <textarea id="input_feed_content" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="글 내용 작성..."></textarea>
+                    </div>
+                    <div>
+                        <textarea id="input_feed_hashtag" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="해시태그 내용 작성..."></textarea>
+                    </div>
                 </div>
                 <!-- 공유하기 버튼 -->
                 <button id="feed_create_button" type="button" class="btn btn-primary">

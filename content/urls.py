@@ -21,5 +21,6 @@ urlpatterns = [
     path('updatefeed', UpdateFeed.as_view()),
     path('updatereply', UpdateReply.as_view()),
     path('feedmodal/', FeedModal.as_view()),
-    path('autocomplete/', Autocomplete.as_view())
+    path('autocomplete/', Autocomplete.as_view()),
+    path('follow', ReplyProfile.as_view())
 ]
