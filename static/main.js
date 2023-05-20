@@ -599,24 +599,24 @@ $(".profile_feed_mouse_over").click(function () {
             $("#feed_modal_reply_list").html('');
             // 정유진: 서버에서 받은 댓글 리스트 변수에 할당 후 추가.
             for (var i = 0; i < data['reply_list'].length; i++) {
-                var reply_profile_image = "/media/" + data['reply_list'][i].profile_image;
-                var reply_nickname = data['reply_list'][i].nickname;
-                var reply_content = data['reply_list'][i].reply_content;
+                    var reply_profile_image = "/media/" + data['reply_list'][i].profile_image;
+                    var reply_nickname = data['reply_list'][i].nickname;
+                    var reply_content = data['reply_list'][i].reply_content;
 
-                // 댓글 리스트
-                $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + i + '" style="display: flex;margin-bottom: 15px;"></div>');
+                    // 댓글 리스트
+                    $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + i + '" style="display: flex;margin-bottom: 15px;"></div>');
 
-                // 댓글들, 프로필 이미지 -
-                $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile" style="width: 32px;height: 32px;margin-right: 15px;"></div>');
-                $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: center;"></div>');
+                    // 댓글들, 프로필 이미지 -
+                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile" style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important"></div>');
+                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: center;"></div>');
 
-                $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_nickname_' + i + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
-                $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_content_' + i + '" style="font-size: 14px"></div>');
+                    $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_nickname_' + i + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
+                    $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_content_' + i + '" style="font-size: 14px"></div>');
 
-                $("#feed_modal_reply_profile_image_" + i).append('<img style="width: 100%;height: 100%" src="' + reply_profile_image + '">');
-                $("#feed_modal_reply_nickname_" + i).append('<div>' + reply_nickname + '</div>');
-                $("#feed_modal_reply_content_" + i).append('<div>' + reply_content + '</div>');
-            }
+                    $("#feed_modal_reply_profile_image_" + i).append('<img style="width: 100%;height: 100%" src="' + reply_profile_image + '">');
+                    $("#feed_modal_reply_nickname_" + i).append('<div>' + reply_nickname + '</div>');
+                    $("#feed_modal_reply_content_" + i).append('<div>' + reply_content + '</div>');
+                }
             // 정유진: 좋아요, 북마크, 좋아요 수, 게시물 작성시간 값 할당.
             var is_liked = data['is_liked'];
             var is_marked = data['is_marked'];
@@ -782,7 +782,7 @@ $(".upload_reply").click(function (event) {
             // 비동기식 댓글 업로드를 위한 구현
             $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + relpy_upload_id + '" style="display: flex;margin-bottom: 15px;"></div>');
 
-            $("#feed_modal_reply_" + relpy_upload_id).append('<div id="feed_modal_reply_profile_image_' + relpy_upload_id + '" class="box profile feed_profile_image" style="width: 32px;height: 32px;margin-right: 15px;"></div>');
+            $("#feed_modal_reply_" + relpy_upload_id).append('<div id="feed_modal_reply_profile_image_' + relpy_upload_id + '" class="box profile feed_profile_image" style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important"></div>');
             $("#feed_modal_reply_" + relpy_upload_id).append('<div id="feed_modal_reply_nickname_content_' + relpy_upload_id + '" style="display: flex;align-items: center;"></div>');
 
             $("#feed_modal_reply_nickname_content_" + relpy_upload_id).append('<div id="feed_modal_reply_nickname_' + relpy_upload_id + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
