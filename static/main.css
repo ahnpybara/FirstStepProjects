@@ -662,3 +662,8 @@ html {
 .modal_text_area::-webkit-scrollbar {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
+
+/* 정유진: 내용 줄바꿈*/
+.text_line {
+    overflow-wrap: anywhere;
+}
