@@ -122,6 +122,9 @@ class Profile(APIView):
         like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
+        # 안치윤 : 팔로우 숫자 추가
+        follower_count = Follow.objects.filter(follower=email).count()
+        following_count = Follow.objects.filter(following=email).count()
 
         # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
@@ -165,7 +168,9 @@ class Profile(APIView):
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list,
-                                                                    user_feed_count=user_feed_count))
+                                                                    user_feed_count=user_feed_count,
+                                                                    follower_count=follower_count,
+                                                                    following_count=following_count))
 
 
 # 서버로 전달된 댓글 내용과 댓글을 입력한 사용자의 이메일 받아서 각 변수에 넣고 댓글 테이블에 저장
@@ -260,6 +265,9 @@ class ReplyProfile(APIView):
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
         is_follow = Follow.objects.filter(follower=email_session, following=email).exists()
+        # 안치윤 : 팔로우 숫자 구함
+        follower_count = Follow.objects.filter(follower=email).count()
+        following_count = Follow.objects.filter(following=email).count()
 
         # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
@@ -304,8 +312,9 @@ class ReplyProfile(APIView):
                                                                     bookmark_count_list=bookmark_count_list,
                                                                     user_session=user_session,
                                                                     user_feed_count=user_feed_count,
-                                                                    is_follow=is_follow))
-
+                                                                    is_follow=is_follow,
+                                                                    follower_count=follower_count,
+                                                                    following_count=following_count))
 
     # 안치윤 : 팔로우는 내 프로필 페이지가 아닌 다른 사용자의 프로필 페이지에 접속했을 때 가능한 것이므로 ReplyProfile 클래스에 post 함수로 추가
     def post(self, request):
@@ -403,6 +412,8 @@ class UpdateFeed(APIView):
         return Response(status=200)
 
     # 05-12 유재우 : 댓글 수정
+
+
 class UpdateReply(APIView):
     def post(self, request):
         content = request.data.get('content')
@@ -469,7 +480,8 @@ class Autocomplete(APIView):
     def get(self, request):
         search_box_value = request.GET.get('search_box_value', None)
         # 정유진: 10명만 가져온다.
-        users = User.objects.filter(Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
+        users = User.objects.filter(
+            Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
 
         autocomplete_user_list = []
         # 정유진: users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
@@ -484,3 +496,48 @@ class Autocomplete(APIView):
         json_data = json.dumps(data)
         print(json_data)
         return HttpResponse(json_data, content_type='application/json')
+
+
+# 팔로우한 유저들의 게시글을 보여주기 위한 뷰
+class FollowerFeed(APIView):
+    def get(self, request):
+        # 세션유저 이메일
+        email = request.session.get('email', None)
+        user_session = User.objects.filter(email=email).first()
+        is_checked = request.GET.get('is_checked', None)
+
+        if is_checked == 'checked':
+            is_checked = True
+        else:
+            is_checked = False
+
+        following_email_list = Follow.objects.filter(follower=email)
+        feed_list = []
+
+        for follow in following_email_list:
+            follwing_feed = Feed.objects.filter(email=follow.following)
+            for feed in follwing_feed:
+                user = User.objects.filter(email=feed.email).first()
+                reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                reply_list = []
+                for reply in reply_object_list:
+                    reply_user = User.objects.filter(email=reply.email).first()
+                    reply_list.append(dict(reply_content=reply.reply_content,
+                                           nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+                like_count = Like.objects.filter(feed_id=feed.id).count()
+                is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                feed_list.append(dict(id=feed.id,
+                                      image=feed.image,
+                                      content=feed.content,
+                                      like_count=like_count,
+                                      profile_image=user.profile_image,
+                                      nickname=user.nickname,
+                                      reply_list=reply_list,
+                                      is_liked=is_liked,
+                                      is_marked=is_marked,
+                                      create_at=feed.create_at
+                                      ))
+
+        return render(request, "astronaut/main.html",
+                      context=dict(feeds=feed_list, user_session=user_session, is_checked=is_checked))
