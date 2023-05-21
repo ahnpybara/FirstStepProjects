@@ -788,7 +788,7 @@ $(".upload_reply").click(function (event) {
             $("#feed_modal_reply_nickname_content_" + relpy_upload_id).append('<div id="feed_modal_reply_nickname_' + relpy_upload_id + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
             $("#feed_modal_reply_nickname_content_" + relpy_upload_id).append('<div id="feed_modal_reply_content_' + relpy_upload_id + '" style="font-size: 14px"></div>');
 
-            $("#feed_modal_reply_profile_image_" + relpy_upload_id).append('<img style="width: 100%;height: 100%" src="/media/{{ user_session.profile_image }}">');
+            $("#feed_modal_reply_profile_image_" + relpy_upload_id).append('<img style="width: 100%;height: 100%" src="/media/' + data['user_profile_image'] + '">');
             $("#feed_modal_reply_nickname_" + relpy_upload_id).append('<div style="padding-top: 3px">' + data['user_nickname'] + '</div>');
             $("#feed_modal_reply_content_" + relpy_upload_id).append('<div style="padding-top: 3px">' + reply_content + '</div>');
         },
