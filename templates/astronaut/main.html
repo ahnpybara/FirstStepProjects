@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
+    <!-- Bootstrap CSS 사용하기 위한 선언  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- css 분리 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}?ver=1">
+
+    <!--  Google 심볼을 사용하기 위한 선언 -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+
+
+    <!--  Google 아이콘 사용하기 위한 선언 -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+            rel="stylesheet">
+
+    <!--  jQuery를 사용하기 위한 선언  -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <title>Astroaunt</title>
+
+    <style>
+        /* 구글 머리티얼 아이콘은 css 분리가 안됨 */
+        .menu_icon {
+            font-size: 32px;
+            wght: 100;
+            padding-right: 20px;
+            cursor: pointer;
+            color: black;
+        }
+    </style>
+
+</head>
+<body>
+<!-- 맨 위 상단 메뉴바( 로고 검색 기타메뉴 )-->
+<nav class="navbar navbar-expand-lg navbar-white bg-white">
+    <!-- 메뉴바 -->
+    <div class="menu_bar">
+        <!-- 로고 -->
+        <a class="navbar-brand" href="/main"><img class="astro_logo"
+                                                  src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png"
+                                                  alt="text">
+        </a>
+        <!-- 검색창 -->
+        <form class="bar_search" action="{% url 'content:feed_search' %}" method="GET">
+            <!-- 정유진: 자동완성에 사용될 id 추가. autocomplete 값을 off로 해서 검색 창에 예전에 입력했던 입력값 안 보이게 수정 -->
+            <input id="search_box" type="text" name="search" placeholder="Search" autocomplete="off">
+        </form>
+        <!-- 메뉴 아이콘 들 -->
+        <div class="menu_icons">
+            <a href="/main"><span class="menu_icon material-icons"> home</span></a>
+            <span id="nav_bar_add_box" class="menu_icon material-icons-outlined">add_box</span>
+            <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
+            <div class="dropdown">
+                <a href="#" role="button" id="dropdownMenuLink"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <!-- 주 메뉴(프로필 사진)-->
+                    <div class="profile_box">
+
+                        <img class="profile"
+                             src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
+
+                    </div>
+                </a>
+                <!-- 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
+                <ul id="nav_dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="/content/profile"><b>프로필</b></a></li>
+                    <li>
+                        <!-- 구분선 -->
+                        <hr class="dropdown-divider">
+                    </li>
+                    <!-- 로그아웃 버튼 클릭시 현재 경로에서 /user/logout으로 이동 -->
+                    <li><a id="logout_menu" class="dropdown-item" href="/user/logout">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 피드가 생성되는 영역, 팔로우 추천 영역 -->
+<div class="main_container">
+    <!--피드들이 생성되는 영역 -->
+    <div class="feed_area">
+        <!-- 반복문을 통한 피드를 생성하는 파이썬 코드 -->
+        {% for feed in feeds %}
+            <div class="feed_box">
+                <div class="feed_bar">
+                    <div class="feed_user_writer">
+                        <div class="profile_box">
+                            <!-- 피드 작성자 프로필 사진  -->
+                            <img class="movetoprofile profile feed_profile_image" id="{{ feed.nickname }}"
+                                 src="{% get_media_prefix %}{{ feed.profile_image }}"
+                                 alt="text">
+                        </div>
+                        <div>
+                            <!-- 피드 작성자 닉네임 -->
+                            <span class="movetoprofile feed_nickname"
+                                  id="{{ feed.nickname }}">{{ feed.nickname }}</span>
+                        </div>
+                    </div>
+                    <!-- 피드 삭제 및 수정 드롭 메뉴-->
+                    <div id="feed_dropdown"
+                         style="color:gray {% if feed.nickname != user_session.nickname %} display: none {% endif %}">
+                        <a href="#" role="button" id="dropdownMenuLink"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="material-icons-round">more_horiz</span>
+                        </a>
+                        <ul class="dropdown-menu"
+                            aria-labelledby="dropdownMenuLink">
+                            <li feed_id="{{ feed.id }}" class="remove_feed dropdown-item">
+                                <b class="delete_text">삭제</b>
+                            </li>
+                            <li>
+                                <!-- 구분선 -->
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <!--유재우 : 수정-->
+                                <div feed_id="{{ feed.id }}" class="update_feed dropdown-item" href="#"> 수정</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!--게시글 이미지-->
+                <div><img class="feed_writer_image" src="{% get_media_prefix %}{{ feed.image }}" alt="text"></div>
+                <!--좋아요-->
+                <div class="like_bookmark">
+                    <div class="likeicon">
+                        {% if feed.is_liked %}
+                            <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  class="uTrue favorite material-symbols-outlined">favorite</span>
+                        {% else %}
+                            <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  class="uFalse favorite material-symbols-outlined">favorite</span>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <!--북마크-->
+                        {% if feed.is_marked %}
+                            <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  class="uTrue bookmark material-symbols-outlined">bookmark</span>
+                        {% else %}
+                            <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  class="uFalse bookmark material-symbols-outlined">bookmark</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- 좋아요 수-->
+                <div class="feed_like_count"> 이 게시글을 <b>{{ feed.like_count }}명</b>이
+                    좋아합니다.
+                </div>
+                <!--작성 시간-->
+                <div class="feed_create_time">
+                    {{ feed.create_at }}
+                </div>
+                <!-- 작성자 글내용, 프로필 이동 추가 -->
+                <div class="feed_writer_content">
+                    <div style="display: flex">
+                        <!-- 정유진: 피드 내용 길이 10글자로 제한 -->
+                        <p id="feed_content_limit_{{ feed.id }}">
+                            <b class="movetoprofile feed_content_nickname" id="{{ feed.nickname }}">
+                                {{ feed.nickname }}
+                            </b>
+                            {{ feed.content|truncatechars:10 }}
+                        </p>
+                    </div>
+                    <p id="{{ feed.id }}" class="feed_content_more" feed_nickname="{{ feed.nickname }}"
+                       feed_content="{{ feed.content }}" style="cursor: pointer">더 보기</p>
+
+                    <!--05-20 유재우 : 해시태그-->
+                    <div>
+                        {% for hashtag in feed.hashtag_list %}
+                            <button class="hashtags" style="color: blue" hashtag_content="{{ hashtag.content }}">
+                                #{{ hashtag.content }}</button>
+                        {% endfor %}
+                    </div>
+                    <!-- 정유진: 댓글 모두 보기 클릭 시 피드모달창이 뜬다 -->
+                    <div class="profile_feed_mouse_over" feed_id="{{ feed.id }}" style="cursor: pointer">
+                        댓글 모두 보기
+                    </div>
+                </div>
+                <!--댓글리스트-->
+                <div id="reply_list_{{ feed.id }}">
+                    {% for reply in feed.reply_list %}
+                        <div class="user_reply_list_area">
+                            <div class="user_reply">
+                                <!--댓글 닉네임 클릭시 사용자 프로필로 이동-->
+                                <b class="movetoprofile reply_nickname"
+                                   id="{{ reply.nickname }}">{{ reply.nickname }}</b> {{ reply.reply_content }}
+                            </div>
+                            <div>
+                                <div id="reply_menu_{{ reply.id }}" reply_id="{{ reply.id }}" class="dropdown"
+                                     style="display: none; {% if reply.nickname == user_session.nickname %} display: flex; {% elif feed.nickname == user_session.nickname %} display: flex  {% endif %}">
+                                    <!-- 05-12유재우 : 댓글 삭제 및 수정버튼 추가 -->
+                                    <a href="#" role="button" id="dropdownMenuLink"
+                                       data-bs-toggle="dropdown" aria-expanded="false"
+                                       style="color: gray
+                                               {% if feed.nickname != user_session.nickname or reply.nickname != user_session.nickname %} display: none {% endif %}}">
+                                        <span class="material-icons-round">more_horiz</span>
+                                    </a>
+                                    <ul id="reply_delete_update_menu" class="dropdown-menu"
+                                        aria-labelledby="dropdownMenuLink">
+                                        <li reply_id="{{ reply.id }}" class="remove_reply dropdown-item">
+                                            <b class="delete_text">삭제</b>
+                                        </li>
+                                        <li>
+                                            <!-- 구분선 -->
+                                            <hr style="display: none;{% if reply.nickname == user_session.nickname %} display: flex {% endif %}"
+                                                class="dropdown-divider">
+                                        </li>
+                                        <li style="display: none;{% if reply.nickname == user_session.nickname %} display: flex {% endif %}">
+                                            <div id="{{ reply.id }}" reply_id="{{ reply.id }}"
+                                                 class="update_reply dropdown-item">
+                                                수정
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 05-12 유재우 : 댓글 수정을 위해 추가한 텍스트 박스 -->
+                        <div class="reply_update_textbox" id="reply_div{{ reply.id }}">
+                            <input id="reply_{{ reply.id }}" type="text" class="input_reply_update form-control"
+                                   placeholder="댓글 수정..">
+                            <div reply_id="{{ reply.id }}" class="update_replys" id="update_reply_btn">
+                                수정
+                            </div>
+                            <span reply_id="{{ reply.id }}" id="reply_close_button"
+                                  class="reply_close_btn material-icons-outlined">close</span>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- 안치윤 : 디자인 및 속성추가 댓글을 입력하는 텍스트 박스 -->
+                <div class="reply_add_textbox">
+                    <input id="reply_{{ feed.id }}" type="text" class="input_reply_add form-control"
+                           placeholder="댓글 달기..">
+                    <div feed_id="{{ feed.id }}" user_session="{{ user_session.nickname }}" class="upload_reply">
+                        게시
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <!-- 여기까지 피드박스 -->
+    </div>
+
+    <!--  팔로우 추천 화면 및 내 프로필 표시 -->
+    <div class="follow_side_area">
+        <!-- 내 프로필 표시 영역 -->
+        <div class="my_profile_area">
+            <div id="my_profile_image" class="profile_box">
+                <!-- 내 프로필 사진-->
+                <a href="/content/profile"> <img class="profile"
+                                                 src="{% get_media_prefix %}{{ user_session.profile_image }}"
+                                                 alt="text"></a>
+            </div>
+            <div class="my_profile_nickname_name">
+
+                <div>
+                    <!-- 내 프로필 닉네임-->
+                    <b><a id="my_profile_nickname" href="/content/profile">{{ user_session.nickname }}</a></b>
+                </div>
+                <!--내 프로필 이름-->
+                <div class="my_profile_name">
+                    {{ user_session.name }}
+                </div>
+            </div>
+        </div>
+        <!-- 추천 목록 표시 -->
+        <div class="follow_recommend_area">
+            <div class="follow_recommend_text">
+                회원님을 위한 추천
+            </div>
+            <div>
+                <a class="follow_recommend_list_all" href="#">모두보기</a>
+            </div>
+        </div>
+        <!-- 팔로우 추천인 프로필 -->
+        <div class="follow_recommend_profile_area">
+            <div class="follow_recommend_profile">
+                <div id="f_recommender_profile" class="profile_box">
+                    <img class="profile"
+                         src="http://file3.instiz.net/data/file3/2021/05/31/e/b/8/eb8d9ad2d779ca2a0b7acc2b67694a23.png"
+                         alt="text">
+                </div>
+                <div class="follow_profile_nickname_explain">
+                    <div class="follow_profile_nickname">
+                        aaaaaaaaaa
+                    </div>
+                    <div class="follow_profile_explain">
+                        나랑 같이 치킨 먹음
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <a class="follow_button" href="#">팔로우</a>
+            </div>
+        </div>
+
+        <div class="Astro_explain1"> 소개 도움말 홍보센터 API <br> 개인정보처리방침 약관 위치
+            인기 계정 해시태그 언어
+        </div>
+        <div class="Astro_explain2"> 2021 인스타그램 프롬 페이스북</div>
+
+    </div>
+</div>
+
+<!-- 안치윤 : 디자인 수정, 사진 업로드 창 첫번째 모달 -->
+<div id="first_modal" class="modal_overlay">
+    <div class="modal_window">
+        <div class="feed_upload_modal_bar">
+            <div>
+                <p class="space"></p>
+            </div>
+            <div>
+                <b>새로운 피드 생성</b>
+            </div>
+            <!-- 모달창 닫기 버튼 -->
+            <div>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+            </div>
+        </div>
+
+        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <div class="img_upload_space">
+            <div class="drag_here_image">
+                이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
+            </div>
+
+            <!--사진 찾는 파일 시스템을 여는 버튼-->
+            <button id="image_upload_btn" type="button" class="btn btn-primary">
+                사진 추가
+            </button>
+            <!--파일 입력 폼-->
+            <input type="file" id="input_image_upload" onchange="image_upload();"/>
+        </div>
+
+    </div>
+</div>
+<!-- 안치윤 : 디자인 수정, 글 내용 작성 모달창 두번째 모달 -->
+<div id="second_modal" class="modal_overlay">
+    <div class="modal_window">
+        <div class="feed_upload_modal_bar">
+            <div>
+                <p class="space"></p>
+            </div>
+            <div>
+                <b>새로운 피드 생성</b>
+            </div>
+            <!-- 모달창 닫기 버튼 -->
+            <div>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+            </div>
+        </div>
+        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <div class="feed_image_text_modal">
+            <div class="img_upload_space">
+
+            </div>
+            <div class="modal_text_area">
+                <!-- 안치윤 : 해시태그 !! 게시글 작성 텍스트박스 -->
+                <div class="feed_content_input">
+                    <div>
+                        <textarea id="input_feed_content" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="글 내용 작성..."></textarea>
+                    </div>
+                    <div>
+                        <textarea id="input_feed_hashtag" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="해시태그 내용 작성..."></textarea>
+                    </div>
+                </div>
+                <!-- 공유하기 버튼 -->
+                <button id="feed_create_button" type="button" class="btn btn-primary">
+                    공유하기
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 05-12 유재우 3번쨰 모달창 피트 수정 용 (수정 필요) TODO-->
+<div id="third_modal" class="modal_overlay">
+    <div class="modal_window">
+        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px 0">
+            <div>
+                <p style="margin-left: 30px"></p>
+            </div>
+            <div>
+                <b>새로운 피드 생성</b>
+            </div>
+            <!-- 모달창 닫기 버튼 -->
+            <div style="border-top: solid 1px #d8d8d8; display: flex; flex-direction: row">
+                <div style="border-top: solid 1px #d8d8d8; display: flex; flex-direction: row">
+                    <div class="img_upload_space" style="width: 500px; height: 540px" id="update_img">
+                    </div>
+                    <div style="border-left: solid 1px #d8d8d8">
+                        <!-- 게시글 작성 텍스트박스 -->
+                        <div>
+                    <textarea id="input_updatefeed_content1" class="form-control"
+                              style="width: 276px; height: 500px; box-shadow: none; border: none; outline: none"
+                              id="exampleFormControlTextarea2" rows="5" placeholder="글 내용 작성..."> </textarea>
+                        </div>
+                        <!-- 공유하기 버튼 -->
+                        <button id="feed_update_button" type="button" class="btn btn-primary"
+                                style="width: 100%; background-color: rgb(0, 149, 246)">
+                            수정하기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 정유진: 자동완성 모달창. 관련 id는 auto_modal로 시작 -->
+<div id="auto_modal">
+    <!-- 자동완성 리스트 -->
+    <div id="auto_modal_list" class="auto_madal_list_area">
+    </div>
+</div>
+<!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
+<div id="feed_modal" class="modal_overlay">
+    <div class="modal_window"
+         style="display: flex;flex-direction: column;justify-content: space-between; width: 50%; height: 90%">
+        <div style="width: 100%;height: 100%;">
+            <div style="width: 100%;height: 100%;display: flex;flex-direction: row">
+                <div id="feed_modal_image"
+                     style="width: 100%;height: 100%;display: flex;align-items: center">
+                    <!-- ajax로 이미지를 받아옴 -->
+                </div>
+                <!--안치윤 : 디자인 수정, 이미지와 글 영역 구분-->
+                <div style="width: 70%; border-left: solid 1px #e1e1e1;display: flex;flex-direction: column;justify-content: space-between;">
+                    <div style="text-align: right; height: 60px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1">
+                        <div style="display: flex;margin: 15px;align-items: center;flex-direction: row">
+                            <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image"
+                                 style="width: 32px;height: 32px;margin-right: 15px;">
+                                <!-- ajax로 받아옴 작성자 프로필 사진 -->
+                            </div>
+                            <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
+                                <!-- ajax로 받아옴 작성자 닉네임 -->
+                            </div>
+                        </div>
+                        <div>
+                            <span class="modal_close material-icons-outlined" style="margin-right: 10px">close</span>
+                        </div>
+                    </div>
+                    <!-- ajax로 작성자 받음 -->
+                    <div class="modal_text_area" style="overflow-y: auto; height: 100%">
+                        <div style="display: flex;margin: 15px;align-items: center;flex-direction: row;">
+                            <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image"
+                                 style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important">
+                                <!-- ajax로 받아옴 작성자 프로필 사진 -->
+                            </div>
+                            <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
+                                <!-- ajax로 받아옴 작성자 닉네임 -->
+                            </div>
+                            <div id="feed_modal_feed_content" style="font-size: 14px">
+                                <!-- ajax로 받아옴 게시물 내용 -->
+                            </div>
+                        </div>
+                        <!-- 댓글 리스트 -->
+                        <div id="feed_modal_reply_list"
+                             style="display: flex;flex-direction: column;margin: 15px;align-items: flex-start;">
+                            {#                            <div id="feed_modal_reply_profile_image_">#}
+                            {#                                <!-- 댓글 작성자 프로필 사진 -->#}
+                            {#                            </div>#}
+                            {#                            <div id="feed_modal_reply_nickname_content_">#}
+                            {#                                <div id="feed_modal_reply_nickname_">#}
+                            {#                                    <!-- 댓글 작성자 닉네임 -->#}
+                            {#                                </div>#}
+                            {#                                <div id="feed_modal_reply_content_">#}
+                            {#                                    <!-- 댓글 내용 -->#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                        </div>
+                    </div>
+                    <div>
+                        <!-- 게시물의 좋아요, 북마크, 좋아요수 -->
+                        <div style="border-top: 1px solid #e1e1e1">
+                            <div style="display: flex;margin: 15px;justify-content: space-between;">
+                                <div id="feed_modal_is_liked">
+                                    <!-- ajax로 받아옴 좋아요 -->
+                                </div>
+                                <div id="feed_modal_is_marked">
+                                    <!-- ajax로 받아옴 북마크 -->
+                                </div>
+                            </div>
+                            <div id="feed_modal_like_count" style="margin: 15px">
+                                <!-- ajax로 받아옴 좋아요 수 -->
+                            </div>
+                        </div>
+                        <div id="feed_modal_feed_create_at">
+                            <!-- ajax로 받아옴 게시물 업로드 시간-->
+                        </div>
+                        <!-- 댓글 작성 -->
+                        <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px #e1e1e1; margin-top: 10px">
+                            <input id="reply_content_text" type="text" class="form-control"
+                                   style="height: 53px; box-shadow: none; border: none; outline: none; background-color: white"
+                                   placeholder="댓글 달기..">
+                            <div id="reply_content_upload" class="upload_reply"
+                                 style="width: 50px;color: cornflowerblue; font-weight: bold; cursor: pointer">
+                                게시
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+<!--
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+-->
+<script src="{% static 'main.js' %}?ver=1"></script>
+</body>
+</html>
