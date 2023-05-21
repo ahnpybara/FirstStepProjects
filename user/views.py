@@ -192,7 +192,7 @@ class UpdateEmail(APIView):
         if check_email:
             return Response(status=200, data=dict(message="존재하는 이메일입니다."))
         else:
-            #TODO 변경할 이메일과 현재 사용중인 이메일 구분?
+            # 사용중인 이메일
             user_email = request.data.get('user_email')
 
             user = User.objects.filter(email=user_email).first()
@@ -202,6 +202,7 @@ class UpdateEmail(APIView):
             like = Like.objects.filter(email=user_email)
             bookmark = Bookmark.objects.filter(email=user_email)
             follower = Follow.objects.filter(follower=user_email)
+            following = Follow.objects.filter(following=user_email)
 
             #TODO 왜 방식이 다른가?
             user.email = email
@@ -212,5 +213,6 @@ class UpdateEmail(APIView):
             like.update(email=email)
             bookmark.update(email=email)
             follower.update(follower=email)
+            following.update(following=email)
             user.save()
             return Response(status=200)
