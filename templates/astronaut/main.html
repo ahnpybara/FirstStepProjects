@@ -173,15 +173,22 @@
                             {{ feed.content|truncatechars:10 }}
                         </p>
                     </div>
+                    <!--05-20 유재우 : 해시태그-->
+                    <div style="display:none;" id="hashtag_space_div_{{ feed.id }}">
+                        <br>
+                    </div>
+                    <div style="display:none;" id="hashtag_div_{{ feed.id }}">
+                        <div>
+                            {% for hashtag in feed.hashtag_list %}
+                                <div class="hashtags" style="color: blue" hashtag_content="{{ hashtag.content }}">
+                                    #{{ hashtag.content }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
                     <p id="{{ feed.id }}" class="feed_content_more" feed_nickname="{{ feed.nickname }}"
                        feed_content="{{ feed.content }}" style="cursor: pointer">더 보기</p>
-                    <!--05-20 유재우 : 해시태그-->
-                    <div>
-                        {% for hashtag in feed.hashtag_list %}
-                            <div class="hashtags" style="color: blue" hashtag_content="{{ hashtag.content }}">
-                                #{{ hashtag.content }}</div>
-                        {% endfor %}
-                    </div>
+
+
                     <!-- 정유진: 댓글 모두 보기 클릭 시 피드모달창이 뜬다 -->
                     <div class="profile_feed_mouse_over" feed_id="{{ feed.id }}" style="cursor: pointer">
                         댓글 모두 보기

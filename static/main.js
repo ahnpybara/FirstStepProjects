@@ -570,6 +570,13 @@ $('.feed_content_more').click(function (event) {
     $('#' + feed_id).css({
         display: 'none'
     })
+    // 05-21 유재우 : 더보기 클릭 시 해시태그 나타남
+    $('#hashtag_div_' + feed_id).css({
+        display: 'flex'
+    })
+    $('#hashtag_space_div_' + feed_id).css({
+        display: 'flex'
+    })
 
 });
 // 정유진: 클릭한 게시물의 feed_id를 모달에 넘겨 주는 이벤트 처리. 추가되는 태그의 id 값는 모두 앞에 feed_modal을 붙였다.
