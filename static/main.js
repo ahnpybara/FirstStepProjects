@@ -560,7 +560,7 @@ $('.feed_content_more').click(function (event) {
     let feed_content_more = document.getElementById(feed_id).getAttribute("feed_content");
 
     $('#feed_content_limit_' + feed_id).text(feed_content_more);
-    $('#feed_content_limit_' + feed_id).html('<b class="movetoprofile feed_content_nickname" id="' + feed_nickname + '">' + feed_nickname + '</b>' + feed_content_more)
+    $('#feed_content_limit_' + feed_id).html('<b class="movetoprofile feed_content_nickname" style="margin-right: 6px" id="' + feed_nickname + '">' + feed_nickname + '</b>' + feed_content_more)
 
     // 정유진: 더 보기 클릭 시 더보기 버튼 사라짐
     $('#' + feed_id).css({
@@ -608,13 +608,13 @@ $(".profile_feed_mouse_over").click(function () {
 
                     // 댓글들, 프로필 이미지 -
                     $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile" style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important"></div>');
-                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: center;"></div>');
+                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: start"></div>');
 
                     $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_nickname_' + i + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
                     $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_content_' + i + '" style="font-size: 14px"></div>');
 
                     $("#feed_modal_reply_profile_image_" + i).append('<img style="width: 100%;height: 100%" src="' + reply_profile_image + '">');
-                    $("#feed_modal_reply_nickname_" + i).append('<div>' + reply_nickname + '</div>');
+                    $("#feed_modal_reply_nickname_" + i).append('<div style="margin-top: 5px">' + reply_nickname + '</div>');
                     $("#feed_modal_reply_content_" + i).append('<div>' + reply_content + '</div>');
                 }
             // 정유진: 좋아요, 북마크, 좋아요 수, 게시물 작성시간 값 할당.

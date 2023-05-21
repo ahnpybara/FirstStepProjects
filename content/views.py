@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark
+from .models import Feed, Reply, Like, Bookmark, Follow
 from user.models import User
 import os
 
@@ -259,6 +259,7 @@ class ReplyProfile(APIView):
         like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
+        is_follow = Follow.objects.filter(follower=email_session, following=email).exists()
 
         # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
@@ -302,7 +303,25 @@ class ReplyProfile(APIView):
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list,
                                                                     user_session=user_session,
-                                                                    user_feed_count=user_feed_count))
+                                                                    user_feed_count=user_feed_count,
+                                                                    is_follow=is_follow))
+
+
+    # 안치윤 : 팔로우는 내 프로필 페이지가 아닌 다른 사용자의 프로필 페이지에 접속했을 때 가능한 것이므로 ReplyProfile 클래스에 post 함수로 추가
+    def post(self, request):
+        # 팔로우를 하려는 유저
+        user_follower = request.data.get('session_user_email', None)
+        # 팔로우를 당하는 유저
+        user_following = request.data.get('user_email', None)
+        # 팔로우를 한 내 정보와 팔로우를 당한 상대 정보가 Follow 테이블에 있는지 조회
+        follow = Follow.objects.filter(follower=user_follower, following=user_following).first()
+
+        if follow is not None:
+            follow.delete()
+        else:
+            Follow.objects.create(follower=user_follower, following=user_following)
+
+        return Response(status=200)
 
 
 # 05-09 유재우 : 피드지우기

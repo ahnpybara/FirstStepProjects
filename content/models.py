@@ -32,3 +32,9 @@ class Reply(models.Model):
 class Bookmark(models.Model):
     feed_id = models.IntegerField(default=0)                # Feed id
     email = models.EmailField(default='')                   # 이메일
+
+
+# 팔로우 테이블
+class Follow(models.Model):
+    follower = models.EmailField(default='')                # 팔로우 하는 유저 이메일
+    following = models.EmailField(default='')               # 팔로우 당하는 유저 이메일

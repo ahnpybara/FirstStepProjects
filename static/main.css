@@ -551,7 +551,15 @@ a {
 /* 글 내용 입력 창 */
 #input_feed_content {
     width: 276px;
-    height: 503px;
+    height: 303px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+
+/* 글 내용 입력 창 */
+#input_feed_hashtag {
+    width: 276px;
     box-shadow: none;
     border: none;
     outline: none;
@@ -564,6 +572,8 @@ a {
 
 /* 두 번째 모달창 글 내용 공간(자식) */
 .feed_content_input {
+    display: flex;
+    flex-direction: column;
     border-left: solid 1px #d8d8d8;
     height: 484px;
 }
