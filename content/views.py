@@ -104,6 +104,9 @@ class UploadFeed(APIView):
         hashtags_list = set(hashtags_list)
         hashtags_list = list(hashtags_list)
 
+        # 05-21 유재우 : 공백 제거
+        hashtags_list = list(filter(None, hashtags_list))
+
         # 05-21 유재우 : 저장 되는 feedid값을 강제하기 위해 추가
         if(Feed.objects.count() == 0):
             feed_Max_id = 1
@@ -354,12 +357,12 @@ class RemoveFeed(APIView):
     def post(self, request):
         feed_id = request.data.get('feed_id')
         feeds = Feed.objects.filter(id=feed_id).first()
-        feeds.delete()
+
         reply = Reply.objects.filter(feed_id=feed_id)
         reply.delete()
-        for feeds in feeds:
-            hashtags = Hashtag.objects.filter(feed_id=feeds.id)
-            hashtags.delete()
+        hashtags = Hashtag.objects.filter(feed_id=feeds.id)
+        hashtags.delete()
+        feeds.delete()
 
         return Response(status=200)
 

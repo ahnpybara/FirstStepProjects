@@ -175,7 +175,6 @@ $('#nav_bar_add_box').click(function () {
 });
 // 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
-    alert("123")
     let file = files[0];
     let image = files[0].name;
     let content = $('#input_feed_content').val();
