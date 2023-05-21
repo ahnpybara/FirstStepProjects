@@ -362,12 +362,7 @@
             success: function (data) {
                 console.log("성공");
                 location.replace('/user/profile/setting');
-                if (data) {
-                    alert(data.message)
-                } else {
-                    location.replace('/user/login');
-                }
-
+                location.replace('/user/login');
             },
             error: function (request, status, error) {
                 console.log("에러");
@@ -391,11 +386,12 @@
             method: "POST",
             success: function (data) {
                 console.log("성공");
-                location.replace('/user/profile/setting');
                 if (data) {
-                    alert(data.message)
+                    $('#nickname_error').css("color", "#ff0000");
+                    $('#nickname_error').show().text(data.message);
+                    $('#nickname_error').focus();
                 } else {
-                    location.replace('/user/login');
+                    location.replace('/user/profile/setting');
                 }
             },
             error: function (request, status, error) {
@@ -420,11 +416,12 @@
             method: "POST",
             success: function (data) {
                 console.log("성공");
-                location.replace('/user/profile/setting');
                 if (data) {
-                    alert(data.message)
+                    $('#email_error').css("color", "#ff0000");
+                    $('#email_error').show().text(data.message)
+                    $('#email_error').focus();
                 } else {
-                    location.replace('/user/login');
+                    location.replace('/user/profile/setting');
                 }
             },
             error: function (request, status, error) {
