@@ -183,7 +183,8 @@ class UploadReply(APIView):
         Reply.objects.create(feed_id=feed_id, reply_content=reply_content, email=email)
 
         # 성공적으로 전달이 되었다는 응답을 줌
-        return Response(status=200, data=dict(user_nickname=user.nickname))
+        return Response(status=200, data=dict(user_nickname=user.nickname,
+                                              user_profile_image=user.profile_image))
 
 
 # 특정 피드에 좋아요가 되면 좋아요 여부와 피드id를 받아서 변수에 넣고 간단한 조건문을 실행 후 좋아요 테이블에 저장
