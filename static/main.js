@@ -611,7 +611,7 @@ $(".profile_feed_mouse_over").click(function () {
                 $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: start"></div>');
 
                 $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_nickname_' + i + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
-                $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_content_' + i + '" style="font-size: 14px"></div>');
+                $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_content_' + i + '" class="text_line" style="font-size: 14px"></div>');
 
                 $("#feed_modal_reply_profile_image_" + i).append('<img style="width: 100%;height: 100%" src="' + reply_profile_image + '">');
                 $("#feed_modal_reply_nickname_" + i).append('<div style="padding-top: 3px">' + reply_nickname + '</div>');
@@ -625,7 +625,7 @@ $(".profile_feed_mouse_over").click(function () {
 
             // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
             $("#feed_modal_image").html('<img style="width: 100%; height: 100%; border-radius: 10px" src="' + feed_image + '">');
-            $("#feed_modal_feed_content").html('<div>' + feed_content + '</div>');
+            $("#feed_modal_feed_content").html('<div class="text_line">' + feed_content + '</div>');
             $(".feed_modal_profile_image").html('<img  style="width: 100%; height: 100%" src="' + writer_profile_image + '">');
             $(".feed_modal_nickname").html('<div style="font-weight: bold; margin-right: 8px; font-size: 14px">' + writer_nickname + '</div>');
             // 정유진: 좋아요, 북마크 여부 확인 후 모달에 추가
@@ -786,7 +786,7 @@ $(".upload_reply").click(function (event) {
             $("#feed_modal_reply_" + relpy_upload_id).append('<div id="feed_modal_reply_nickname_content_' + relpy_upload_id + '" style="display: flex;align-items: start;"></div>');
 
             $("#feed_modal_reply_nickname_content_" + relpy_upload_id).append('<div id="feed_modal_reply_nickname_' + relpy_upload_id + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
-            $("#feed_modal_reply_nickname_content_" + relpy_upload_id).append('<div id="feed_modal_reply_content_' + relpy_upload_id + '" style="font-size: 14px"></div>');
+            $("#feed_modal_reply_nickname_content_" + relpy_upload_id).append('<div id="feed_modal_reply_content_' + relpy_upload_id + '" class="text_line" style="font-size: 14px"></div>');
 
             $("#feed_modal_reply_profile_image_" + relpy_upload_id).append('<img style="width: 100%;height: 100%" src="/media/' + data['user_profile_image'] + '">');
             $("#feed_modal_reply_nickname_" + relpy_upload_id).append('<div style="padding-top: 3px">' + data['user_nickname'] + '</div>');
