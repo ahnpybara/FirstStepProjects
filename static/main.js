@@ -175,16 +175,16 @@ $('#nav_bar_add_box').click(function () {
 });
 // 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
+    alert("123")
     let file = files[0];
     let image = files[0].name;
     let content = $('#input_feed_content').val();
     //해시태그용 컨탠트 추가
-    let hashtags_content = $('#input_feed_content').val();
+    let hashtags_content = $('#input_feed_hashtag').val();
 
     // 안치윤: 피드 내용의 길이가 0보다 작으면 알림창 뜸
     if (content.length <= 0) {
         alert("피드 내용을 입력하세요");
-
         return 0;
     } else {
         alert("공유하기 눌렀다.");
@@ -198,6 +198,7 @@ $('#feed_create_button').click(function () {
     fd.append('image', image);
     fd.append('content', content);
     fd.append('hashtags_content', hashtags_content);
+
 
     //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
     $.ajax({
@@ -815,4 +816,5 @@ $(".upload_reply").click(function (event) {
 $('.hashtags').click(function (){
     let hashtag_content = $(this).attr('hashtag_content');
     location.href="/content/search/?search=%23"+hashtag_content
-})
+
+});

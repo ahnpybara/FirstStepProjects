@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Astronaut.settings import MEDIA_ROOT
-from content.models import Feed, Reply
+from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark
 from .models import User
 from django.contrib.auth.hashers import make_password
 
@@ -140,6 +140,22 @@ class RemoveProfile(APIView):
         reply = Reply.objects.filter(email=email)
         reply.delete()
         feeds = Feed.objects.filter(email=email)
+        for feeds in feeds:
+            hashtags = Hashtag.objects.filter(feed_id=feeds.id)
+            hashtags.delete()
+            likes = Like.objects.filter(feed_id=feeds.id)
+            likes.delete()
+            bookmark = Bookmark.objects.filter(feed_id=feeds.id)
+            bookmark.delete()
+        likes = Like.objects.filter(email=email)
+        likes.delete()
+        bookmark = Bookmark.objects.filter(email=email)
+        bookmark.delete()
+        follower = Follow.objects.filter(follower=email)
+        follower.delete()
+        following = Follow.objects.filter(following=email)
+        following.delete()
+
         feeds.delete()
         user.delete()
         return render(request, "user/join.html")

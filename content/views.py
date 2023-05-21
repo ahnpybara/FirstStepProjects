@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark, Follow, Hashtag
+from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow
 from user.models import User
 import os
 
@@ -43,7 +43,6 @@ class Main(APIView):
             reply_list = []
             hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
             hashtag_list = []
-
             for reply in reply_object_list:
                 reply_user = User.objects.filter(email=reply.email).first()
                 reply_list.append(dict(reply_content=reply.reply_content,
@@ -95,13 +94,29 @@ class UploadFeed(APIView):
         uuid_name = uuid_name
         content = request.data.get('content')
         email = request.session.get('email', None)
-        hashtags_content = request.data.get('hashtags_content', None)
-        print(content)
-        print(hashtags_content)
+        # 05-21 유재우 : 해시태그
+        hashtags_content = request.data.get('hashtags_content')
+        hashtags_content = hashtags_content.replace(" ", "");
+        # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
+        hashtags_list = hashtags_content.split("#")
+
+        # 05-21 유재우 : 중복 제거
+        hashtags_list = set(hashtags_list)
+        hashtags_list = list(hashtags_list)
+
+        # 05-21 유재우 : 저장 되는 feedid값을 강제하기 위해 추가
+        if(Feed.objects.count() == 0):
+            feed_Max_id = 1
+        else:
+            feed_Max = Feed.objects.order_by('-id').first()
+            feed_Max_id = feed_Max.id + 1
+
 
         # 전달 받은 데이터를 기반으로 Feed 테이블에 새로운 튜플 생성
-        Feed.objects.create(image=uuid_name, content=content, email=email)
+        Feed.objects.create(image=uuid_name, content=content, email=email, id= feed_Max_id)
 
+        for hashtags_list in hashtags_list:
+            Hashtag.objects.create( content=hashtags_list, feed_id=feed_Max_id)
         # 성공적으로 전달 되었다는 응답을 보냄
         return Response(status=200)
 
@@ -342,6 +357,9 @@ class RemoveFeed(APIView):
         feeds.delete()
         reply = Reply.objects.filter(feed_id=feed_id)
         reply.delete()
+        for feeds in feeds:
+            hashtags = Hashtag.objects.filter(feed_id=feeds.id)
+            hashtags.delete()
 
         return Response(status=200)
 
@@ -350,7 +368,6 @@ class RemoveFeed(APIView):
 class SearchFeed(APIView):
     def get(self, request):
         searchKeyword = request.GET.get("search", "")
-
         email = request.session.get('email', None)
         user_session = User.objects.filter(email=email).first()
 
@@ -447,8 +464,6 @@ class UpdateFeed(APIView):
         return Response(status=200)
 
     # 05-12 유재우 : 댓글 수정
-
-
 class UpdateReply(APIView):
     def post(self, request):
         content = request.data.get('content')
@@ -515,8 +530,7 @@ class Autocomplete(APIView):
     def get(self, request):
         search_box_value = request.GET.get('search_box_value', None)
         # 정유진: 10명만 가져온다.
-        users = User.objects.filter(
-            Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
+        users = User.objects.filter(Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
 
         autocomplete_user_list = []
         # 정유진: users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
