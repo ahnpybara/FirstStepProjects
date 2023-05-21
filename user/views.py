@@ -1,6 +1,7 @@
 import os
 from uuid import uuid4
 
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -149,12 +150,12 @@ class RemoveProfile(APIView):
 class UpdateNickname(APIView):
     def post(self, request):
         user_email = request.data.get('email')
+        user_nickname = request.data.get('nickname')
         # 정유진: 닉네임 중복 확인
-        check_nickname = User.objects.filter(email=user_email).exists()
+        check_nickname = User.objects.filter(Q(email=user_email) & Q(nickname=user_nickname)).exists()
         if check_nickname:
             return Response(status=200, data=dict(message="존재하는 닉네임입니다."))
         else:
-            user_nickname = request.data.get('nickname')
             user = User.objects.filter(email=user_email).first()
             user.nickname = user_nickname
             user.save()
