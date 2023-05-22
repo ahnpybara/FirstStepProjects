@@ -754,7 +754,7 @@ $(".profile_feed_mouse_over").click(function () {
 
 
 // 댓글 게시 버튼 이벤트 처리
-$(".upload_reply").click(function (event) {
+$(".modal_upload_reply").click(function (event) {
     // 게시 버튼 태그의 id 속성 값을 가져옴
     let feed_id = event.target.attributes.getNamedItem('feed_id').value;
     // reply_content_upload div 요소의 reply_id 값을 가져옴
