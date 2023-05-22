@@ -115,9 +115,133 @@ $(".upload_reply").click(function (event) {
         method: "POST",
         success: function (data) {
             console.log("성공");
-            alert("댓글 성공");
             // 비동기식 댓글 업로드를 위한 구현
-            $("#reply_list_" + feed_id).append("<div style='margin: 0 10px; text-align: left;font-size: 14px'><b>" + user_session + "</b> " + reply_content + "</div>")
+
+            //댓글 부분
+            $("#reply_list_" + feed_id).append('<div id="feed_reply_list_area_' + data.user_reply_id + '" class="user_reply_list_area"></div>');
+
+            // 닉네임, 댓글 내용 틀
+            $("#feed_reply_list_area_" + data.user_reply_id).append('<div id="feed_user_reply_' + data.user_reply_id + '" class="user_reply text_line" style="display: flex"></div>');
+            //댓글 삭제 수정 버튼 부분
+            $("#feed_reply_list_area_" + data.user_reply_id).append('<div><div id="reply_menu' + data.user_reply_id + '" reply_id="' + data.user_reply_id + '" class="dropdown" style="display: flex"></div></div>');
+
+            // 닉네임, 댓글 내용 값
+            $("#feed_user_reply_" + data.user_reply_id).append('<b class="movetoprofile reply_nickname" id="'+ data.user_nickname +'" style="margin-right: 10px;">'+ data.user_nickname +'</b>'+ reply_content);
+
+            // 댓글 삭제 수정 버튼
+            $("#reply_menu" + data.user_reply_id).append('' +
+                '<a href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">' +
+                    '<span class="material-icons-round">more_horiz</span>' +
+                '</a>');
+            // 댓글 삭제 수정 메뉴창
+            $("#reply_menu" + data.user_reply_id).append('' +
+                '<ul id="reply_delete_update_menu" class="dropdown-menu" aria-labelledby="dropdownMenuLink">' +
+                    '<li reply_id="'+ data.user_reply_id +'" class="remove_reply dropdown-item">' +
+                        '<b class="delete_text">삭제</b>' +
+                    '</li>' +
+                    '<li>' +
+                        '<hr style="display: flex;"class="dropdown-divider">' +
+                    '</li>' +
+                    '<li style="display: flex">' +
+                        '<div id="'+ data.user_nickname +'" reply_id="'+ data.user_nickname +'" class="update_reply dropdown-item">수정</div>' +
+                    '</li>' +
+                '</ul>');
+
+            // 댓글 수정할 때 쓰는 텍스트 박스
+            $("#reply_list_" + feed_id).append('' +
+                '<div class="reply_update_textbox" id="reply_div' + data.user_nickname + '">' +
+                    '<input id="reply_' + data.user_reply_id + '" type="text" class="input_reply_update form-control" placeholder="댓글 수정..">' +
+                        '<div reply_id="' + data.user_reply_id + '" class="update_replys" id="update_reply_btn">' +
+                            '수정' +
+                        '</div>' +
+                    '<span reply_id="' + data.user_reply_id + '" id="reply_close_button" class="reply_close_btn material-icons-outlined">close</span>' +
+                '</div>');
+
+            // 화면에서 다른사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
+            $(".movetoprofile").click(function (event) {
+                let user_nickname = event.target.id;
+                location.href = "/content/reprofile?user_nickname=" + user_nickname;
+            });
+
+            $('.remove_reply').click(function (event) {
+                var reply_id = $(this).attr('reply_id');
+
+                $.ajax({
+                    url: "/content/removereply",
+                    data: {
+                        reply_id: reply_id,
+                    },
+                    method: "POST",
+                    success: function (data) {
+                        console.log("성공");
+                        alert("댓글을 성공적으로 삭제 하었습니다.");
+                    },
+                    error: function (request, status, error) {
+                        console.log("에러");
+                    },
+                    complete: function () {
+                        console.log("완료");
+                        location.replace("/main");
+                    }
+                });
+            })
+
+            $('.update_reply').click(function (event) {
+                let reply_id = $(this).attr('reply_id');
+                $('#reply_div' + reply_id).css({
+                    display: 'flex'
+                });
+                $('#reply_menu_' + reply_id).css({
+                    display: 'none'
+                });
+
+            });
+
+            $('.reply_close_btn').click(function (event) {
+                let reply_id = $(this).attr('reply_id');
+                console.log(reply_id);
+                $('#reply_div' + reply_id).css({
+                    display: 'none'
+                });
+                $('#reply_menu_' + reply_id).css({
+                    display: 'flex'
+                });
+            });
+
+
+            // 05-12 유재우 : 댓글 수정하기를 눌렸을 때 수정이 되도록 하는 부분, 안치윤 : 댓글 내용없으면 알림
+            $('.update_replys').click(function (event) {
+                let reply_id = $(this).attr('reply_id');
+
+                let content = $('#reply_' + reply_id).val();
+
+
+                // 댓글의 길이가 0보다 작으면 알림창 뜸
+                if (content.length <= 0) {
+                    alert("댓글을 입력하세요");
+                    return 0;
+                }
+
+                //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
+                $.ajax({
+                    url: "/content/updatereply",
+                    data: {
+                        reply_id: reply_id,
+                        content: content
+                    },
+                    method: "POST",
+                    success: function (data) {
+                        console.log("성공");
+                    },
+                    error: function (request, status, error) {
+                        console.log("에러");
+                    },
+                    complete: function () {
+                        console.log("완료");
+                        location.replace("/main");
+                    }
+                });
+            });
         },
         error: function (request, status, error) {
             console.log("에러");
