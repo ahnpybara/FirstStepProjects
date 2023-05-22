@@ -370,6 +370,9 @@ $('.update_feed').click(function (event) {
     $('#third_modal').css({
         display: 'flex'
     });
+    var feed_image = "/media/" + data['image'];
+
+    $("#feed_modal_image").html('<img style="width: 100%" src="' + feed_image + '">');
 });
 // 05-12 유재우 : 피드 수정하기를 눌렸을 때 수정이 되도록 하는 부분
 $('#feed_update_button').click(function (event) {
