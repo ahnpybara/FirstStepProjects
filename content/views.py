@@ -642,21 +642,20 @@ class FeedUpdateIMG(APIView):
         for hashtag in hashtag_content_list:
             hashtag_content.append(dict(content=hashtag.content))
 
-        if (str(hashtag_content) == ""):
-            hashtag_list = str(hashtag_content)
-            print(hashtag_list)
-            hashtag_list = hashtag_list.replace(" ", "");
-            hashtag_list = hashtag_list.replace("}", "");
-            hashtag_list = hashtag_list.replace("{", "");
-            hashtag_list = hashtag_list.replace("'", "");
-            hashtag_list = hashtag_list.replace("[", "");
-            hashtag_list = hashtag_list.replace("]", "");
-            hashtag_list = hashtag_list.replace("content", "");
-            hashtag_list = hashtag_list.replace(":", "");
-            hashtag_list = hashtag_list.split(",");
-            hashtag_list = list(filter(None, hashtag_list))
-            # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
-            hashtag_content = '#' + '#'.join(hashtag_list)
+        hashtag_list = str(hashtag_content)
+        print(hashtag_list)
+        hashtag_list = hashtag_list.replace(" ", "");
+        hashtag_list = hashtag_list.replace("}", "");
+        hashtag_list = hashtag_list.replace("{", "");
+        hashtag_list = hashtag_list.replace("'", "");
+        hashtag_list = hashtag_list.replace("[", "");
+        hashtag_list = hashtag_list.replace("]", "");
+        hashtag_list = hashtag_list.replace("content", "");
+        hashtag_list = hashtag_list.replace(":", "");
+        hashtag_list = hashtag_list.split(",");
+        hashtag_list = list(filter(None, hashtag_list))
+        # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
+        hashtag_content = '#' + '#'.join(hashtag_list)
 
         data = {
             'id': feed_modal.id,
