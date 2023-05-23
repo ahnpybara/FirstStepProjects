@@ -187,10 +187,10 @@
                         </p>
                     </div>
                     <!--05-20 유재우 : 해시태그-->
-                    <div style="display:none;flex-direction: row"  id="hashtag_space_div_{{ feed.id }}">
+                    <div class="feed_area_hashtag_space" id="hashtag_space_div_{{ feed.id }}">
                         <br>
                     </div>
-                    <div style="display:none; flex-direction: row; text-align: left" id="hashtag_div_{{ feed.id }}">
+                    <div class="feed_area_hashtags" id="hashtag_div_{{ feed.id }}">
                             {% for hashtag in feed.hashtag_list %}
                                 <div class="hashtags" style="color: blue" hashtag_content="{{ hashtag.content }}">
                                     #{{ hashtag.content }}</div>

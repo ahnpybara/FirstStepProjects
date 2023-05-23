@@ -667,3 +667,15 @@ html {
 .text_line {
     overflow-wrap: anywhere;
 }
+
+/* 유재우: 해시태그 줄바꿈 */
+.feed_area_hashtag_space {
+    display: none
+}
+
+/**/
+.feed_area_hashtags {
+    display: none;
+    flex-direction: row;
+    text-align: left
+}
