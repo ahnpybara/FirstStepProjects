@@ -142,6 +142,10 @@ $(".modal_close").click(function () {
         "background-image": ""
     });
 
+    $('.img_upload_space').css({
+        "background-color": "White",
+        "background-image": ""
+    });
     // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
     $('#input_feed_content').each(function () {
         $(this).val('');

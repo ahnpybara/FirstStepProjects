@@ -395,10 +395,24 @@ class SearchFeed(APIView):
         # 05-20 유재우 : 해시태그 검색
         if (searchKeyword.find("#") == 0):
             text = searchKeyword.replace("#", "");
-            hashtag_search_list = Hashtag.objects.filter(content__contains=text)
+            hashtags_search_list = Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id')
+            print(hashtags_search_list)
+            hashtags_search_list = str(hashtags_search_list)
+            print(hashtags_search_list)
+            hashtags_search_list = hashtags_search_list.replace("<QuerySet [", "");
+            hashtags_search_list = hashtags_search_list.replace(">", "");
+            hashtags_search_list = hashtags_search_list.replace("]", "");
+            hashtags_search_list = hashtags_search_list.replace(" ", "");
+            hashtags_search_list = hashtags_search_list.replace("(", "");
+            hashtags_search_list = hashtags_search_list.replace(")", "");
+            hashtags_search_list = hashtags_search_list.split(",");
+            hashtag_search_list = list(filter(None, hashtags_search_list))
+            print(hashtag_search_list)
 
-            for hashtag in hashtag_search_list:
-                feed_search_list = Feed.objects.filter(id=hashtag.feed_id).order_by('-id')
+            for hashtag_search_list in hashtag_search_list:
+                print("123")
+                feed_search_list = Feed.objects.filter(id=hashtag_search_list)
+
                 for feed in feed_search_list:
                     user = User.objects.filter(email=feed.email).first()
                     reply_object_list = Reply.objects.filter(feed_id=feed.id)
@@ -423,6 +437,7 @@ class SearchFeed(APIView):
                                           create_at=feed.create_at,
                                           hashtag_list=hashtag_list
                                           ))
+
         else:
             for feed in feed_search_list:
                 user = User.objects.filter(email=feed.email).first()

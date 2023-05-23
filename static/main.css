@@ -673,9 +673,15 @@ html {
     display: none
 }
 
-/**/
+/* 해시태그 들이 올라오는 부분 */
 .feed_area_hashtags {
     display: none;
     flex-direction: row;
-    text-align: left
+    width: 100%;
+}
+
+/* 해시태그들 */
+.hashtags {
+    color: blue;
+    padding-right: 5px;
 }

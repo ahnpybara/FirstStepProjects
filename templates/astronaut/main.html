@@ -192,7 +192,7 @@
                     </div>
                     <div class="feed_area_hashtags" id="hashtag_div_{{ feed.id }}">
                             {% for hashtag in feed.hashtag_list %}
-                                <div class="hashtags" style="color: blue" hashtag_content="{{ hashtag.content }}">
+                                <div class="hashtags" hashtag_content="{{ hashtag.content }}">
                                     #{{ hashtag.content }}</div>
                             {% endfor %}
                     </div>
@@ -407,7 +407,7 @@
     </div>
 </div>
 
-<!-- 05-12 유재우 3번쨰 모달창 피트 수정 용 (수정 필요) TODO -->
+<!-- 05-12 유재우 3번쨰 모달창 피트 수정 용 -->
 <div id="third_modal" class="modal_overlay">
     <div class="modal_window">
         <div class="feed_upload_modal_bar">
