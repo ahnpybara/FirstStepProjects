@@ -163,14 +163,6 @@ $(".modal_close").click(function () {
     $('#feed_modal').css({
         display: 'none'
     });
-    // 05-23 유재우 : 피드 업데이트 모달창 닫기와 닫았을 때 해시태그 내용을 리셋하는 부분
-    $('#input_updatefeed_content').each(function () {
-        $(this).val('');
-    });
-    // 05-23 유재우 : 피드 업데이트 모달창 닫기와 닫았을 때 해시태그 내용을 리셋하는 부분
-    $('#input_updatefeed_hashtag').each(function () {
-        $(this).val('');
-    });
 
 });
 
