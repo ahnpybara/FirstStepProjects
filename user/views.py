@@ -1,12 +1,14 @@
 import os
 from uuid import uuid4
 
+from django.db.models import Q
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Astronaut.settings import MEDIA_ROOT
 from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark
+
 from .models import User
 from django.contrib.auth.hashers import make_password
 
@@ -166,10 +168,15 @@ class UpdateNickname(APIView):
     def post(self, request):
         user_email = request.data.get('email')
         user_nickname = request.data.get('nickname')
-        user = User.objects.filter(email=user_email).first()
-        user.nickname = user_nickname
-        user.save()
-        return Response(status=200)
+        # 정유진: 닉네임 중복 확인
+        check_nickname = User.objects.filter(Q(email=user_email) & Q(nickname=user_nickname)).exists()
+        if check_nickname:
+            return Response(status=200, data=dict(message="존재하는 닉네임입니다."))
+        else:
+            user = User.objects.filter(email=user_email).first()
+            user.nickname = user_nickname
+            user.save()
+            return Response(status=200)
 
 
 # 05-16유재우 : 비밀번호 수정
@@ -196,17 +203,33 @@ class Settings(APIView):
 # 05-15 유재우 : 이메일 변경
 class UpdateEmail(APIView):
     def post(self, request):
-        #TODO 변경할 이메일과 현재 사용중인 이메일 구분?
-        user_email = request.data.get('user_email')
+        # 정유진: 바꿀 이메일
         email = request.data.get('email')
-        user = User.objects.filter(email=user_email).first()
-        reply = Reply.objects.filter(email=user_email)
-        feed = Feed.objects.filter(email=user_email)
+        check_email = User.objects.filter(email=email).exists()
+        if check_email:
+            return Response(status=200, data=dict(message="존재하는 이메일입니다."))
+        else:
+            # 사용중인 이메일
+            user_email = request.data.get('user_email')
 
-        #TODO 왜 방식이 다른가?
-        user.email = email
-        request.session['email'] = email
-        reply.update(email=email)
-        feed.update(email=email)
-        user.save()
-        return Response(status=200)
+            user = User.objects.filter(email=user_email).first()
+            reply = Reply.objects.filter(email=user_email)
+            feed = Feed.objects.filter(email=user_email)
+            # 정유진: 다른 테이블의 이메일 정보도 수정
+            like = Like.objects.filter(email=user_email)
+            bookmark = Bookmark.objects.filter(email=user_email)
+            follower = Follow.objects.filter(follower=user_email)
+            following = Follow.objects.filter(following=user_email)
+
+            #TODO 왜 방식이 다른가?
+            user.email = email
+            request.session['email'] = email
+            reply.update(email=email)
+            feed.update(email=email)
+            # 정유진: 다른 테이블의 이메일 정보도 수정
+            like.update(email=email)
+            bookmark.update(email=email)
+            follower.update(follower=email)
+            following.update(following=email)
+            user.save()
+            return Response(status=200)

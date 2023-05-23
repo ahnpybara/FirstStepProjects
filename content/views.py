@@ -94,11 +94,15 @@ class UploadFeed(APIView):
         uuid_name = uuid_name
         content = request.data.get('content')
         email = request.session.get('email', None)
+
         # 05-21 유재우 : 해시태그
         hashtags_content = request.data.get('hashtags_content')
         hashtags_content = hashtags_content.replace(" ", "");
         # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
         hashtags_list = hashtags_content.split("#")
+        # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
+        if (hashtags_content.find("#") != 0):
+            del hashtags_list[0]
 
         # 05-21 유재우 : 중복 제거
         hashtags_list = set(hashtags_list)
@@ -108,18 +112,17 @@ class UploadFeed(APIView):
         hashtags_list = list(filter(None, hashtags_list))
 
         # 05-21 유재우 : 저장 되는 feedid값을 강제하기 위해 추가
-        if(Feed.objects.count() == 0):
+        if (Feed.objects.count() == 0):
             feed_Max_id = 1
         else:
             feed_Max = Feed.objects.order_by('-id').first()
             feed_Max_id = feed_Max.id + 1
 
-
         # 전달 받은 데이터를 기반으로 Feed 테이블에 새로운 튜플 생성
-        Feed.objects.create(image=uuid_name, content=content, email=email, id= feed_Max_id)
+        Feed.objects.create(image=uuid_name, content=content, email=email, id=feed_Max_id)
 
         for hashtags_list in hashtags_list:
-            Hashtag.objects.create( content=hashtags_list, feed_id=feed_Max_id)
+            Hashtag.objects.create(content=hashtags_list, feed_id=feed_Max_id)
         # 성공적으로 전달 되었다는 응답을 보냄
         return Response(status=200)
 
@@ -151,6 +154,9 @@ class Profile(APIView):
         like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
+        # 안치윤 : 팔로우 숫자 추가
+        follower_count = Follow.objects.filter(follower=email).count()
+        following_count = Follow.objects.filter(following=email).count()
 
         # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
@@ -194,7 +200,9 @@ class Profile(APIView):
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list,
-                                                                    user_feed_count=user_feed_count))
+                                                                    user_feed_count=user_feed_count,
+                                                                    follower_count=follower_count,
+                                                                    following_count=following_count))
 
 
 # 서버로 전달된 댓글 내용과 댓글을 입력한 사용자의 이메일 받아서 각 변수에 넣고 댓글 테이블에 저장
@@ -212,7 +220,8 @@ class UploadReply(APIView):
         Reply.objects.create(feed_id=feed_id, reply_content=reply_content, email=email)
 
         # 성공적으로 전달이 되었다는 응답을 줌
-        return Response(status=200, data=dict(user_nickname=user.nickname))
+        return Response(status=200, data=dict(user_nickname=user.nickname,
+                                              user_profile_image=user.profile_image))
 
 
 # 특정 피드에 좋아요가 되면 좋아요 여부와 피드id를 받아서 변수에 넣고 간단한 조건문을 실행 후 좋아요 테이블에 저장
@@ -289,6 +298,9 @@ class ReplyProfile(APIView):
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
         bookmark_feed_list = Feed.objects.filter(id__in=bookmark_list).order_by('-id')
         is_follow = Follow.objects.filter(follower=email_session, following=email).exists()
+        # 안치윤 : 팔로우 숫자 구함
+        follower_count = Follow.objects.filter(follower=email).count()
+        following_count = Follow.objects.filter(following=email).count()
 
         # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
@@ -333,7 +345,9 @@ class ReplyProfile(APIView):
                                                                     bookmark_count_list=bookmark_count_list,
                                                                     user_session=user_session,
                                                                     user_feed_count=user_feed_count,
-                                                                    is_follow=is_follow))
+                                                                    is_follow=is_follow,
+                                                                    follower_count=follower_count,
+                                                                    following_count=following_count))
 
     # 안치윤 : 팔로우는 내 프로필 페이지가 아닌 다른 사용자의 프로필 페이지에 접속했을 때 가능한 것이므로 ReplyProfile 클래스에 post 함수로 추가
     def post(self, request):
@@ -381,7 +395,7 @@ class SearchFeed(APIView):
         # 05-20 유재우 : 해시태그 검색
         if (searchKeyword.find("#") == 0):
             text = searchKeyword.replace("#", "");
-            hashtag_search_list = Hashtag.objects.filter(content__exact=text)
+            hashtag_search_list = Hashtag.objects.filter(content__content=text)
 
             for hashtag in hashtag_search_list:
                 feed_search_list = Feed.objects.filter(id=hashtag.feed_id).order_by('-id')
@@ -454,19 +468,43 @@ class RemoveReply(APIView):
 
 
 # 05-12 유재우 : 피드 수정
+# 05-23 유재우 : 해시태그도 수정 가능하게 수정
 class UpdateFeed(APIView):
     def post(self, request):
+        hashtag_content = request.data.get('hashtag_content')
         content = request.data.get('content')
         feed_id = request.data.get('feed_id')
+        # 05-21 유재우 : 해시태그
+        hashtags = Hashtag.objects.filter(feed_id=feed_id)
+        hashtags.delete()
+
+        hashtag_content = hashtag_content.replace(" ", "");
+        # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
+        hashtags_list = hashtag_content.split("#")
+        # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
+        if (hashtag_content.find("#") != 0):
+            del hashtags_list[0]
+
+        # 05-21 유재우 : 중복 제거
+        hashtags_list = set(hashtags_list)
+        hashtags_list = list(hashtags_list)
+
+        # 05-21 유재우 : 공백 제거
+        hashtags_list = list(filter(None, hashtags_list))
+
+
+        for hashtags_list in hashtags_list:
+                Hashtag.objects.create(content=hashtags_list, feed_id=feed_id)
 
         feed = Feed.objects.filter(id=feed_id)
 
         feed.update(id=feed_id, content=content)
-        feed.save()
 
         return Response(status=200)
 
     # 05-12 유재우 : 댓글 수정
+
+
 class UpdateReply(APIView):
     def post(self, request):
         content = request.data.get('content')
@@ -533,7 +571,8 @@ class Autocomplete(APIView):
     def get(self, request):
         search_box_value = request.GET.get('search_box_value', None)
         # 정유진: 10명만 가져온다.
-        users = User.objects.filter(Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
+        users = User.objects.filter(
+            Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
 
         autocomplete_user_list = []
         # 정유진: users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
@@ -547,4 +586,87 @@ class Autocomplete(APIView):
 
         json_data = json.dumps(data)
         print(json_data)
+        return HttpResponse(json_data, content_type='application/json')
+
+
+# 팔로우한 유저들의 게시글을 보여주기 위한 뷰
+class FollowerFeed(APIView):
+    def get(self, request):
+        # 세션유저 이메일
+        email = request.session.get('email', None)
+        user_session = User.objects.filter(email=email).first()
+        is_checked = request.GET.get('is_checked', None)
+
+        if is_checked == 'checked':
+            is_checked = True
+        else:
+            is_checked = False
+
+        following_email_list = Follow.objects.filter(follower=email)
+        feed_list = []
+
+        for follow in following_email_list:
+            follwing_feed = Feed.objects.filter(email=follow.following)
+            for feed in follwing_feed:
+                user = User.objects.filter(email=feed.email).first()
+                reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                reply_list = []
+                for reply in reply_object_list:
+                    reply_user = User.objects.filter(email=reply.email).first()
+                    reply_list.append(dict(reply_content=reply.reply_content,
+                                           nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+                like_count = Like.objects.filter(feed_id=feed.id).count()
+                is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                feed_list.append(dict(id=feed.id,
+                                      image=feed.image,
+                                      content=feed.content,
+                                      like_count=like_count,
+                                      profile_image=user.profile_image,
+                                      nickname=user.nickname,
+                                      reply_list=reply_list,
+                                      is_liked=is_liked,
+                                      is_marked=is_marked,
+                                      create_at=feed.create_at
+                                      ))
+
+        return render(request, "astronaut/main.html",
+                      context=dict(feeds=feed_list, user_session=user_session, is_checked=is_checked))
+
+
+# 05-23 유재우 : 피스수정시 이미지 보이게 하는 부분
+class FeedUpdateIMG(APIView):
+    def get(self, request):
+        feed_id = int(request.GET.get('feed_id', None))
+        feed_modal = Feed.objects.filter(id=feed_id).first()
+        hashtag_content_list = Hashtag.objects.filter(feed_id=feed_id)
+        hashtag_content = []
+        for hashtag in hashtag_content_list:
+            hashtag_content.append(dict(content=hashtag.content))
+
+        hashtag_list = str(hashtag_content)
+
+        hashtag_list = hashtag_list.replace(" ", "");
+        hashtag_list = hashtag_list.replace("}", "");
+        hashtag_list = hashtag_list.replace("{", "");
+        hashtag_list = hashtag_list.replace("'", "");
+        hashtag_list = hashtag_list.replace("[", "");
+        hashtag_list = hashtag_list.replace("]", "");
+        hashtag_list = hashtag_list.replace("content", "");
+        hashtag_list = hashtag_list.replace(":", "");
+        hashtag_list = hashtag_list.split(",");
+        print(hashtag_list)
+        hashtag_content = '#'+'#'.join(hashtag_list)
+        print(hashtag_content)
+
+
+        data = {
+            'id': feed_modal.id,
+            'image': feed_modal.image,
+            'feed_content': feed_modal.content,
+            'hashtag_content': hashtag_content
+        }
+
+        json_data = json.dumps(data)
+        # ajax를 이용해서 html 추가하거나 변경할려면 이런방식을 써야한다.
         return HttpResponse(json_data, content_type='application/json')

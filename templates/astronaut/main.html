@@ -11,7 +11,7 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}?ver=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}?ver=2">
 
     <!--  Google 심볼을 사용하기 위한 선언 -->
     <link rel="stylesheet"
@@ -57,6 +57,19 @@
         </form>
         <!-- 메뉴 아이콘 들 -->
         <div class="menu_icons">
+            <!-- 안치윤 : 팔로우된 유저 게시물을 보기 위한 스위치 추가 -->
+            <div id="follow_switch_btn" class="form-check form-switch"
+                 style="display: flex; align-items: center; margin-right: 20px; padding-bottom: 5px">
+                {% if is_checked %}
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked"
+                           style="margin-left: 8px; font-weight: bold; padding-top: 4px">팔로우</label>
+                {% else %}
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+                    <label class="form-check-label" for="flexSwitchCheckChecked"
+                           style="margin-left: 8px; font-weight: bold; padding-top: 4px">팔로우</label>
+                {% endif %}
+            </div>
             <a href="/main"><span class="menu_icon material-icons"> home</span></a>
             <span id="nav_bar_add_box" class="menu_icon material-icons-outlined">add_box</span>
             <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
@@ -166,7 +179,7 @@
                 <div class="feed_writer_content">
                     <div style="display: flex">
                         <!-- 정유진: 피드 내용 길이 10글자로 제한 -->
-                        <p id="feed_content_limit_{{ feed.id }}">
+                        <p id="feed_content_limit_{{ feed.id }}" class="text_line">
                             <b class="movetoprofile feed_content_nickname" id="{{ feed.nickname }}">
                                 {{ feed.nickname }}
                             </b>
@@ -198,7 +211,7 @@
                 <div id="reply_list_{{ feed.id }}">
                     {% for reply in feed.reply_list %}
                         <div class="user_reply_list_area">
-                            <div class="user_reply">
+                            <div class="user_reply text_line">
                                 <!--댓글 닉네임 클릭시 사용자 프로필로 이동-->
                                 <b class="movetoprofile reply_nickname"
                                    id="{{ reply.nickname }}">{{ reply.nickname }}</b> {{ reply.reply_content }}
@@ -396,28 +409,45 @@
     </div>
 </div>
 
-<!-- 05-12 유재우 3번쨰 모달창 피트 수정 용 (수정 필요) TODO-->
+<!-- 05-12 유재우 3번쨰 모달창 피트 수정 용 (수정 필요) TODO -->
 <div id="third_modal" class="modal_overlay">
     <div class="modal_window">
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px 0">
+        <div class="feed_upload_modal_bar">
             <div>
-                <p style="margin-left: 30px"></p>
+                <p class="space"></p>
             </div>
             <div>
                 <b>새로운 피드 생성</b>
             </div>
             <!-- 모달창 닫기 버튼 -->
+            <div>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+            </div>
+        </div>
+        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <div class="feed_image_text_modal">
+            <div class="img_upload_space">
+
+            </div>
             <div style="border-top: solid 1px #d8d8d8; display: flex; flex-direction: row">
                 <div style="border-top: solid 1px #d8d8d8; display: flex; flex-direction: row">
                     <div id="feed_modal_image"
-                     style="width: 100%;height: 100%;display: flex;align-items: center">
+                         style="width: 100%;height: 100%;display: flex;align-items: center">
                     </div>
+
                     <div style="border-left: solid 1px #d8d8d8">
                         <!-- 게시글 작성 텍스트박스 -->
                         <div>
-                    <textarea id="input_updatefeed_content" class="form-control"
-                              style="width: 276px; height: 500px; box-shadow: none; border: none; outline: none"
-                              id="exampleFormControlTextarea2" rows="5" placeholder="글 내용 작성..."> </textarea>
+                            <div>
+                                <textarea id="input_updatefeed_content" class="form-control"
+                                          id="exampleFormControlTextarea1" rows="10"
+                                          placeholder="글 내용 작성..."></textarea>
+                            </div>
+                            <div>
+                                <textarea id="input_updatefeed_hashtag" class="form-control"
+                                          id="exampleFormControlTextarea1" rows="8"
+                                          placeholder="해시태그 내용 작성..."></textarea>
+                            </div>
                         </div>
                         <!-- 공유하기 버튼 -->
                         <button id="feed_update_button" type="button" class="btn btn-primary"
@@ -441,7 +471,7 @@
 <!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
 <div id="feed_modal" class="modal_overlay">
     <div class="modal_window"
-         style="display: flex;flex-direction: column;justify-content: space-between; width: 50%; height: 90%">
+         style="display: flex;flex-direction: column;justify-content: space-between; width: 50%; height: 83%">
         <div style="width: 100%;height: 100%;">
             <div style="width: 100%;height: 100%;display: flex;flex-direction: row">
                 <div id="feed_modal_image"
@@ -466,7 +496,7 @@
                     </div>
                     <!-- ajax로 작성자 받음 -->
                     <div class="modal_text_area" style="overflow-y: auto; height: 100%">
-                        <div style="display: flex;margin: 15px;align-items: center;flex-direction: row;">
+                        <div style="display: flex;margin: 15px;align-items: start;flex-direction: row;">
                             <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image"
                                  style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important">
                                 <!-- ajax로 받아옴 작성자 프로필 사진 -->
@@ -474,7 +504,7 @@
                             <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
                                 <!-- ajax로 받아옴 작성자 닉네임 -->
                             </div>
-                            <div id="feed_modal_feed_content" style="font-size: 14px">
+                            <div id="feed_modal_feed_content" class="text_line" style="font-size: 14px">
                                 <!-- ajax로 받아옴 게시물 내용 -->
                             </div>
                         </div>
@@ -540,6 +570,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'main.js' %}?ver=1"></script>
+<script src="{% static 'main.js' %}?ver=3"></script>
 </body>
 </html>
