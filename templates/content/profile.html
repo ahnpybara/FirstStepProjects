@@ -199,9 +199,49 @@
         .modal_text_area::-webkit-scrollbar {
             display: none; /* 크롬, 사파리, 오페라, 엣지 */
         }
+
         /* 정유진: 내용 줄바꿈*/
         .text_line {
             overflow-wrap: anywhere;
+        }
+
+        /* 자동완성의 스크롤은 동작하지만 보이지 않게 함 */
+        .auto_madal_list_area {
+            -ms-overflow-style: none; /* 인터넷 익스플로러 */
+            scrollbar-width: none; /* 파이어폭스 */
+        }
+
+        .auto_madal_list_area::-webkit-scrollbar {
+            display: none; /* 크롬, 사파리, 오페라, 엣지 */
+        }
+
+        /* 자동완성 모달 */
+        #auto_modal {
+            width: 400px;
+            height: 300px;
+            position: fixed;
+            display: none;
+            top: 50px;
+            z-index: 999;
+            background: white;
+        }
+
+        /* 자동완성 리스트 */
+        #auto_modal_list {
+            overflow-y: auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 프로필 정보 커서 변경 */
+        .movetoprofile {
+            cursor: pointer;
+        }
+
+        /* 닉네임. 자동완성에 닉네임, 이름에 사용 */
+        .feed_nickname {
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -219,7 +259,7 @@
         </a>
         <!-- 안치윤 : 검색창 -->
         <form class="bar_search" action="{% url 'content:feed_search' %}" method="GET">
-            <input type="text" name="search" placeholder="Search">
+            <input id="search_box" type="text" name="search" placeholder="Search" autocomplete="off">
         </form>
         <!-- 안치윤 : 클래스명 부여, 스타일 수정 메뉴 아이콘 들 -->
         <div class="menu_icons" style="display: flex; padding-top: 5px">
@@ -466,7 +506,7 @@
 
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
         <div class="img_upload_space"
-             style="border-top: solid 1px #d8d8d8; width: 100%; height: 100%; text-align: center">
+             style="border-top: solid 1px #d8d8d8; width: 100%; height: 521px; text-align: center">
             <div style="margin-top: 200px; color: black; font-weight: 500; font-size: 19px">
                 이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
             </div>
@@ -511,7 +551,7 @@
                 </div>
                 <!-- 공유하기 버튼 -->
                 <button id="feed_create_button" type="button" class="btn btn-primary"
-                        style="width: 100%; background-color: rgb(0, 149, 246)">
+                        style="width: 100%; background-color: rgb(0, 149, 246); margin-top: 8px">
                     공유하기
                 </button>
             </div>
@@ -521,6 +561,12 @@
     </div>
 </div>
 
+<!-- 정유진: 자동완성 모달창. 관련 id는 auto_modal로 시작 -->
+<div id="auto_modal">
+    <!-- 자동완성 리스트 -->
+    <div id="auto_modal_list" class="auto_madal_list_area">
+    </div>
+</div>
 <!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
 <div id="feed_modal" class="modal_overlay">
     <div class="modal_window"
@@ -528,7 +574,7 @@
         <div style="width: 100%;height: 100%;">
             <div style="width: 100%;height: 100%;display: flex;flex-direction: row">
                 <div id="feed_modal_image"
-                     style="width: 100%;height: 100%;display: flex;align-items: center">
+                     style="width: 100%;height: 100%; object-fit: contain; display: flex;align-items: center">
                     <!-- ajax로 이미지를 받아옴 -->
                 </div>
                 <!--안치윤 : 디자인 수정, 이미지와 글 영역 구분-->
@@ -1149,25 +1195,119 @@
         $('#input_image_upload').click();
     });
 
-    // 파일 입력 폼에서 변화 발생시 해당 함수가 실행
+    // 안치윤 : 버그 수정 유효성 검사, 파일 입력 폼에서 변화 발생시 해당 함수가 실행
     function image_upload() {
-        // 이미지 업로드시 사진업로드 모달창을 가림
-        $('#first_modal').css({
-            display: 'none'
-        });
-        // 글 내용 작성 모달창을 띄움
-        $('#second_modal').css({
-            display: 'flex'
-        });
-        // 업로드 창 배경을 업로드된 이미지로 변경
-        $('.img_upload_space').css({
-            "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
-            "outline": "none",
-            "background-repeat": "no-repeat",
-            "background-size": "contain",
-            "background-position": "center"
-        });
+        // 타입을 판별하고 이미지면 아래 로식을 실행
+        if ($('#input_image_upload')[0].files[0].type.match(/image.*/)) {
+            // 업로드 창 배경을 업로드된 이미지로 변경
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
+                "outline": "none",
+                "background-size": "100%",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            return 0;
+        }
     }
+
+    // 정유진: 모달 바깥부분을 클릭하면 안 보에게 된다.
+    let auto_modal = document.getElementById('auto_modal').getAttribute("id");
+    let search_box = document.getElementById('search_box').getAttribute("id");
+
+    window.addEventListener('mouseup', function (event) {
+        // 정유진: 모달창 사라지는 기준.
+        if ((event.target.getAttribute("id") == null)
+            || !((event.target.getAttribute("id").includes(auto_modal))
+                || (event.target.getAttribute("id").includes(search_box)))) {
+            $('#auto_modal').css({
+                display: 'none'
+            });
+        }
+    });
+
+    // 정유진: 반응형 적용
+    window.addEventListener('resize', function () {
+        let search_box = document.getElementById('search_box');
+        // 정유진: 태그 안의 요소들을 가져온다
+        let rect = search_box.getBoundingClientRect();
+        // 정유진: left 요소의 값을 가져온다
+        let left_value = rect.left;
+        // 정유진: 검색창이 없을 경우
+        if (left_value == 0) {
+            $('#auto_modal').css({
+                display: 'none'
+            });
+        } else { // 정유진: 검색창이 있을 경우
+            $('#auto_modal').css({
+                left: left_value + 'px'
+            });
+        }
+    });
+
+    // 정유진: 검색창을 클릭하면 모달창이 뜬다
+    $('#search_box').mousedown(function () {
+        let element = document.getElementById('search_box');
+        let rect = element.getBoundingClientRect();
+        let left_value = rect.left;
+        // 정유진: 모달창 위치를 정하고 보이게 한다
+        $('#auto_modal').css({
+            display: 'flex',
+            left: left_value + 'px'
+        });
+        // 정유진: 자동완성에 필요한 검색창의 값을 keyup()으로 가져온다.
+        $('#search_box').keyup(function () {
+            let search_box_value = document.getElementById('search_box').value;
+
+            if (search_box_value != "") {
+                // 정유진: 가져온 값을 서버로 보낸다.
+                $.ajax({
+                    url: "/content/autocomplete",
+                    data: {
+                        search_box_value: search_box_value
+                    },
+                    method: "GET",
+                    success: function (data) {
+                        console.log("성공");
+                        $("#auto_modal_list").html('');
+                        for (let i = 0; i < data['autocomplete_user_list'].length; i++) {
+                            // 정유진: 이미지는 경로가 따로 있어야 한다.
+                            let user_profile_image = "/media/" + data['autocomplete_user_list'][i].profile_image;
+                            let user_nickname = data['autocomplete_user_list'][i].nickname;
+                            let user_name = data['autocomplete_user_list'][i].name;
+
+                            $("#auto_modal_list").append('<div id="auto_modal_object_' + i + '" class="movetoprofile" style="width: 100%; margin: 10px; display: flex;flex-direction: row;align-items: center;"></div>');
+
+                            $("#auto_modal_object_" + i).append('<img id="' + user_nickname + '" class="profile_box box profile feed_profile_image " style="width: 35px; height: 35px" src="' + user_profile_image + '">');
+                            $("#auto_modal_object_" + i).append('<div id="auto_modal_nickname_name_' + i + '"></div>');
+
+                            $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" class="feed_nickname">' + user_nickname + '</div>');
+                            $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" class="feed_nickname" style="">' + user_name + '</div>');
+
+                            // 정유진: append에서 id 값을 user_nickname로 하면 $("#" + user_nickname).append가 되지 않아 따로 바꾼다.
+                            document.getElementById("auto_modal_object_" + i).setAttribute("id", user_nickname);
+
+                            // 화면에서 다른사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
+                            $(".movetoprofile").click(function (event) {
+                                let user_nickname = event.target.id;
+                                location.href = "/content/reprofile?user_nickname=" + user_nickname;
+                            });
+                        }
+                    },
+                    error: function (request, status, error) {
+                        console.log("에러");
+                    },
+                    complete: function () {
+                        console.log("완료");
+                    }
+                });
+            } else {
+                $("#auto_modal_list").html('');
+            }
+
+        });
+    });
 </script>
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

@@ -33,6 +33,10 @@ body {
     position: relative;
 }
 
+#search_bar {
+    margin-bottom: 0;
+}
+
 /* 검색창과 인풋태그 */
 .bar_search input {
     width: 400px;
@@ -582,6 +586,7 @@ a {
 #feed_create_button {
     width: 100%;
     background-color: rgb(0, 149, 246);
+    margin-top: 8px;
 }
 
 
@@ -633,7 +638,8 @@ html {
     height: 300px;
     position: fixed;
     display: none;
-    top: 60px;
+    top: 50px;
+    z-index: 999;
     background: white;
 }
 
@@ -666,4 +672,39 @@ html {
 /* 정유진: 내용 줄바꿈*/
 .text_line {
     overflow-wrap: anywhere;
+    margin-bottom: 0 !important;
+}
+
+/* 안치윤 : 더 보기*/
+.feed_content_more {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 7px;
+}
+
+/* 안치윤 : 댓글 모두 보기 */
+.profile_feed_mouse_over {
+    font-size: 14px;
+    color: gray;
+}
+
+/* 유재우: 해시태그 줄바꿈 */
+.feed_area_hashtag_space {
+    display: none
+}
+
+/**/
+.feed_area_hashtags {
+    display: none;
+    flex-direction: row;
+    text-align: left;
+    width: 100%;
+}
+
+/**/
+#hashtags_list {
+    color: #0037AB;
+    font-size: 14px;
+    cursor: pointer;
+    padding-right: 5px;
 }
