@@ -143,13 +143,13 @@ $(".upload_reply").click(function (event) {
                         '<hr style="display: flex;"class="dropdown-divider">' +
                     '</li>' +
                     '<li style="display: flex">' +
-                        '<div id="'+ data.user_nickname +'" reply_id="'+ data.user_nickname +'" class="update_reply dropdown-item">수정</div>' +
+                        '<div id="'+ data.user_reply_id +'" reply_id="'+ data.user_reply_id +'" class="update_reply dropdown-item">수정</div>' +
                     '</li>' +
                 '</ul>');
 
             // 댓글 수정할 때 쓰는 텍스트 박스
             $("#reply_list_" + feed_id).append('' +
-                '<div class="reply_update_textbox" id="reply_div' + data.user_nickname + '">' +
+                '<div class="reply_update_textbox" id="reply_div' + data.user_reply_id + '">' +
                     '<input id="reply_' + data.user_reply_id + '" type="text" class="input_reply_update form-control" placeholder="댓글 수정..">' +
                         '<div reply_id="' + data.user_reply_id + '" class="update_replys" id="update_reply_btn">' +
                             '수정' +
