@@ -633,7 +633,8 @@ html {
     height: 300px;
     position: fixed;
     display: none;
-    top: 60px;
+    top: 50px;
+    z-index: 999;
     background: white;
 }
 
