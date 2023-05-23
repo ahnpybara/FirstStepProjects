@@ -116,6 +116,7 @@ a {
     justify-content: center;
     align-items: center;
 }
+
 /* 설정창 박스 */
 #settings_border_outline {
     background-color: white;
@@ -166,6 +167,7 @@ a {
     padding-bottom: 5%;
 
 }
+
 /* 닉네임 수정 영역 자식 */
 #profile_text_area {
     width: 180px;
@@ -238,6 +240,7 @@ a {
     width: 100%;
     margin-right: 3px;
 }
+
 /* 여기는 이메일 입니다 */
 #email_update_text {
     width: 115px;

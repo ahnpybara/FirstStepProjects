@@ -221,7 +221,7 @@ class UpdateEmail(APIView):
             follower = Follow.objects.filter(follower=user_email)
             following = Follow.objects.filter(following=user_email)
 
-            #TODO 왜 방식이 다른가?
+            # TODO 왜 방식이 다른가?
             user.email = email
             request.session['email'] = email
             reply.update(email=email)

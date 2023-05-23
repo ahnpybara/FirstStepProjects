@@ -492,9 +492,8 @@ class UpdateFeed(APIView):
         # 05-21 유재우 : 공백 제거
         hashtags_list = list(filter(None, hashtags_list))
 
-
         for hashtags_list in hashtags_list:
-                Hashtag.objects.create(content=hashtags_list, feed_id=feed_id)
+            Hashtag.objects.create(content=hashtags_list, feed_id=feed_id)
 
         feed = Feed.objects.filter(id=feed_id)
 
@@ -656,9 +655,8 @@ class FeedUpdateIMG(APIView):
         hashtag_list = hashtag_list.replace(":", "");
         hashtag_list = hashtag_list.split(",");
         print(hashtag_list)
-        hashtag_content = '#'+'#'.join(hashtag_list)
+        hashtag_content = '#' + '#'.join(hashtag_list)
         print(hashtag_content)
-
 
         data = {
             'id': feed_modal.id,
