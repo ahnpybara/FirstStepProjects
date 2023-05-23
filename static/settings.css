@@ -373,3 +373,42 @@ a {
         right: 12px;
     }
 }
+
+/* 자동완성의 스크롤은 동작하지만 보이지 않게 함 */
+.auto_madal_list_area {
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+}
+
+.auto_madal_list_area::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+/* 자동완성 모달 */
+#auto_modal {
+    width: 400px;
+    height: 300px;
+    position: fixed;
+    display: none;
+    top: 50px;
+    z-index: 999;
+    background: white;
+}
+
+/* 자동완성 리스트 */
+#auto_modal_list {
+    overflow-y: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 프로필 정보 커서 변경 */
+.movetoprofile {
+    cursor: pointer;
+}
+
+/* 닉네임. 자동완성에 닉네임, 이름에 적용 */
+.feed_nickname {
+    margin-left: 10px;
+}

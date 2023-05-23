@@ -217,11 +217,12 @@ class UploadReply(APIView):
         user = User.objects.filter(email=email).first()
 
         # 서버로 전달된 데이터를 토대로 Reply 테이블에 새로운 튜플을 생성
-        Reply.objects.create(feed_id=feed_id, reply_content=reply_content, email=email)
+        reply_id = Reply.objects.create(feed_id=feed_id, reply_content=reply_content, email=email).id
 
         # 성공적으로 전달이 되었다는 응답을 줌
         return Response(status=200, data=dict(user_nickname=user.nickname,
-                                              user_profile_image=user.profile_image))
+                                              user_profile_image=user.profile_image,
+                                              user_reply_id=reply_id))
 
 
 # 특정 피드에 좋아요가 되면 좋아요 여부와 피드id를 받아서 변수에 넣고 간단한 조건문을 실행 후 좋아요 테이블에 저장
@@ -396,9 +397,7 @@ class SearchFeed(APIView):
         if (searchKeyword.find("#") == 0):
             text = searchKeyword.replace("#", "");
             hashtags_search_list = Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id')
-            print(hashtags_search_list)
             hashtags_search_list = str(hashtags_search_list)
-            print(hashtags_search_list)
             hashtags_search_list = hashtags_search_list.replace("<QuerySet [", "");
             hashtags_search_list = hashtags_search_list.replace(">", "");
             hashtags_search_list = hashtags_search_list.replace("]", "");
@@ -407,12 +406,9 @@ class SearchFeed(APIView):
             hashtags_search_list = hashtags_search_list.replace(")", "");
             hashtags_search_list = hashtags_search_list.split(",");
             hashtag_search_list = list(filter(None, hashtags_search_list))
-            print(hashtag_search_list)
 
             for hashtag_search_list in hashtag_search_list:
-                print("123")
                 feed_search_list = Feed.objects.filter(id=hashtag_search_list)
-
                 for feed in feed_search_list:
                     user = User.objects.filter(email=feed.email).first()
                     reply_object_list = Reply.objects.filter(feed_id=feed.id)
@@ -437,7 +433,6 @@ class SearchFeed(APIView):
                                           create_at=feed.create_at,
                                           hashtag_list=hashtag_list
                                           ))
-
         else:
             for feed in feed_search_list:
                 user = User.objects.filter(email=feed.email).first()
