@@ -187,16 +187,14 @@
                         </p>
                     </div>
                     <!--05-20 유재우 : 해시태그-->
-                    <div style="display:none;flex-direction: column"  id="hashtag_space_div_{{ feed.id }}">
+                    <div style="display:none;flex-direction: row"  id="hashtag_space_div_{{ feed.id }}">
                         <br>
                     </div>
-                    <div style="display:none; " id="hashtag_div_{{ feed.id }}">
-                        <div>
+                    <div style="display:none; flex-direction: row; text-align: left" id="hashtag_div_{{ feed.id }}">
                             {% for hashtag in feed.hashtag_list %}
                                 <div class="hashtags" style="color: blue" hashtag_content="{{ hashtag.content }}">
                                     #{{ hashtag.content }}</div>
                             {% endfor %}
-                        </div>
                     </div>
                     <p id="{{ feed.id }}" class="feed_content_more" feed_nickname="{{ feed.nickname }}"
                        feed_content="{{ feed.content }}" style="cursor: pointer">더 보기</p>
