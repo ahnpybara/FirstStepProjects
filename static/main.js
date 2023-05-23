@@ -110,7 +110,6 @@ $(".upload_reply").click(function (event) {
         data: {
             feed_id: feed_id,
             reply_content: reply_content,
-
         },
         method: "POST",
         success: function (data) {
@@ -126,35 +125,35 @@ $(".upload_reply").click(function (event) {
             $("#feed_reply_list_area_" + data.user_reply_id).append('<div><div id="reply_menu' + data.user_reply_id + '" reply_id="' + data.user_reply_id + '" class="dropdown" style="display: flex"></div></div>');
 
             // 닉네임, 댓글 내용 값
-            $("#feed_user_reply_" + data.user_reply_id).append('<b class="movetoprofile reply_nickname" id="'+ data.user_nickname +'" style="margin-right: 10px;">'+ data.user_nickname +'</b>'+ reply_content);
+            $("#feed_user_reply_" + data.user_reply_id).append('<b class="movetoprofile reply_nickname" id="' + data.user_nickname + '" style="margin-right: 10px;">' + data.user_nickname + '</b>' + reply_content);
 
             // 댓글 삭제 수정 버튼
             $("#reply_menu" + data.user_reply_id).append('' +
                 '<a href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">' +
-                    '<span class="material-icons-round">more_horiz</span>' +
+                '<span class="material-icons-round">more_horiz</span>' +
                 '</a>');
             // 댓글 삭제 수정 메뉴창
             $("#reply_menu" + data.user_reply_id).append('' +
                 '<ul id="reply_delete_update_menu" class="dropdown-menu" aria-labelledby="dropdownMenuLink">' +
-                    '<li reply_id="'+ data.user_reply_id +'" class="remove_reply dropdown-item">' +
-                        '<b class="delete_text">삭제</b>' +
-                    '</li>' +
-                    '<li>' +
-                        '<hr style="display: flex;"class="dropdown-divider">' +
-                    '</li>' +
-                    '<li style="display: flex">' +
-                        '<div id="'+ data.user_reply_id +'" reply_id="'+ data.user_reply_id +'" class="update_reply dropdown-item">수정</div>' +
-                    '</li>' +
+                '<li reply_id="' + data.user_reply_id + '" class="remove_reply dropdown-item">' +
+                '<b class="delete_text">삭제</b>' +
+                '</li>' +
+                '<li>' +
+                '<hr style="display: flex;"class="dropdown-divider">' +
+                '</li>' +
+                '<li style="display: flex">' +
+                '<div id="' + data.user_reply_id + '" reply_id="' + data.user_reply_id + '" class="update_reply dropdown-item">수정</div>' +
+                '</li>' +
                 '</ul>');
 
             // 댓글 수정할 때 쓰는 텍스트 박스
             $("#reply_list_" + feed_id).append('' +
                 '<div class="reply_update_textbox" id="reply_div' + data.user_reply_id + '">' +
-                    '<input id="reply_' + data.user_reply_id + '" type="text" class="input_reply_update form-control" placeholder="댓글 수정..">' +
-                        '<div reply_id="' + data.user_reply_id + '" class="update_replys" id="update_reply_btn">' +
-                            '수정' +
-                        '</div>' +
-                    '<span reply_id="' + data.user_reply_id + '" id="reply_close_button" class="reply_close_btn material-icons-outlined">close</span>' +
+                '<input id="reply_' + data.user_reply_id + '" type="text" class="input_reply_update form-control" placeholder="댓글 수정..">' +
+                '<div reply_id="' + data.user_reply_id + '" class="update_replys" id="update_reply_btn">' +
+                '수정' +
+                '</div>' +
+                '<span reply_id="' + data.user_reply_id + '" id="reply_close_button" class="reply_close_btn material-icons-outlined">close</span>' +
                 '</div>');
 
             // 화면에서 다른사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
@@ -271,16 +270,23 @@ $(".modal_close").click(function () {
     $('#input_feed_content').each(function () {
         $(this).val('');
     });
+    // 05-23 유재우 : 모달창 닫기와 닫았을 때 해시태그 내용을 리셋하는 부분
+    $('#input_feed_hashtag').each(function () {
+        $(this).val('');
+    });
     $('#first_modal').css({
         display: 'none'
     });
     $('#second_modal').css({
         display: 'none'
     });
+    // 05-23 유재우 : 서드 모달창 닫기
+    $('#third_modal').css({
+        display: 'none'
+    });
     $('#feed_modal').css({
         display: 'none'
     });
-
 });
 
 // 사용 범위를 위해 전역 변수 files 선언
@@ -299,10 +305,11 @@ $('#nav_bar_add_box').click(function () {
 });
 // 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
-
     let file = files[0];
     let image = files[0].name;
     let content = $('#input_feed_content').val();
+    //해시태그용 컨탠트 추가
+    let hashtags_content = $('#input_feed_hashtag').val();
 
     // 안치윤: 피드 내용의 길이가 0보다 작으면 알림창 뜸
     if (content.length <= 0) {
@@ -312,12 +319,15 @@ $('#feed_create_button').click(function () {
         alert("공유하기 눌렀다.");
     }
 
+
     // 파일을 업로드 하는 것이므로 formdata 형태로 서버에 전달해야 함, formdata 객체를 생성한 뒤 서버로 보낼 데이터를 객체에 추가해줌
     let fd = new FormData();
 
     fd.append('file', file);
     fd.append('image', image);
     fd.append('content', content);
+    fd.append('hashtags_content', hashtags_content);
+
 
     //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
     $.ajax({
@@ -399,7 +409,7 @@ function uploadFiles(e) {
         $('.img_upload_space').css({
             "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
             "outline": "none",
-            "background-size": "cover",
+            "background-size": "contain",
             "background-repeat": "no-repeat",
             "background-position": "center"
         });
@@ -415,25 +425,21 @@ $('#image_upload_btn').click(function () {
     $('#input_image_upload').click();
 });
 
-// 파일 입력 폼에서 변화 발생시 해당 함수가 실행
+// 안치윤 : 버그 수정 유효성 검사, 파일 입력 폼에서 변화 발생시 해당 함수가 실행
 function image_upload() {
-    // 이미지 업로드시 사진업로드 모달창을 가림
-    $('#first_modal').css({
-        display: 'none'
-    });
-    // 글 내용 작성 모달창을 띄움
-    $('#second_modal').css({
-        display: 'flex'
-    });
-    // 업로드 창 배경을 업로드된 이미지로 변경
-    $('.img_upload_space').css({
-        "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
-        "outline": "none",
-        "background-repeat": "no-repeat",
-        "background-size": "cover",
-        "background-position": "center"
-    });
-
+    // 타입을 판별하고 이미지면 아래 로식을 실행
+    if ($('#input_image_upload')[0].files[0].type.match(/image.*/)) {
+        // 업로드 창 배경을 업로드된 이미지로 변경
+        $('.img_upload_space').css({
+            "background-image": "url(" + window.URL.createObjectURL($('#input_image_upload')[0].files[0]) + ")",
+            "outline": "none",
+            "background-size": "contain",
+            "background-repeat": "no-repeat",
+            "background-position": "center"
+        });
+    } else {
+        return 0;
+    }
 }
 
 // 05-09유재우 : 피드 삭제
@@ -484,17 +490,48 @@ $('.remove_reply').click(function (event) {
     });
 })
 
-// 05-12 유재우 : 피드 수정하기를 눌렸을 때 모달창을 띄움 (이미지 띄우는 부분 필요) TODO
+// 05-12 유재우 : 피드 수정하기를 눌렸을 때 모달창을 띄움
 $('.update_feed').click(function (event) {
     Feeds_id = event.target.attributes.getNamedItem('feed_id').value;
     $('#third_modal').css({
         display: 'flex'
     });
+    // 05-23 유재우 : 이미지 띄우는 부분 추가
+    $.ajax({
+        url: "/content/feedupdateimg",
+        data: {
+            feed_id: Feeds_id
+        },
+        method: "GET",
+        success: function (data) {
+            console.log("성공");
+            // 정유진: 서버에서 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 변수에 따로 할당.
+            var feed_image = "/media/" + data['image'];
+            var feed_content = data['feed_content'];
+            var hashtag_content = data['hashtag_content']
+
+
+            // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
+            $("#feed_modal_image").html('<img style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px" src="' + feed_image + '">');
+            $("#input_updatefeed_content").html(feed_content);
+            $("#input_updatefeed_hashtag").html(hashtag_content);
+            // 서버로 보내기 위해서 접속할 url : "/content/bookmark"이며 보낼 데이터는 피드아이디와 북마크텍스트, 방식은 POST (Json 형태)
+
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+
+        }
+    });
 });
+
 // 05-12 유재우 : 피드 수정하기를 눌렸을 때 수정이 되도록 하는 부분
 $('#feed_update_button').click(function (event) {
     let feed_id = Feeds_id
-
+    let hashtag_content = $('#input_updatefeed_hashtag').val();
     let content = $('#input_updatefeed_content').val();
 
     //서버로 보내기 위해서 접속할 url : "/content/upload"이며 보낼 데이터는 formdata, 방식은 POST (formdata 형태)
@@ -502,7 +539,8 @@ $('#feed_update_button').click(function (event) {
         url: "/content/updatefeed",
         data: {
             feed_id: feed_id,
-            content: content
+            content: content,
+            hashtag_content: hashtag_content
         },
         method: "POST",
         success: function (data) {
@@ -606,6 +644,9 @@ window.addEventListener('resize', function () {
         });
     } else { // 정유진: 검색창이 있을 경우
         $('#auto_modal').css({
+            display: 'flex'
+        });
+        $('#auto_modal').css({
             left: left_value + 'px'
         });
     }
@@ -644,11 +685,11 @@ $('#search_box').mousedown(function () {
 
                         $("#auto_modal_list").append('<div id="auto_modal_object_' + i + '" class="movetoprofile" style="width: 100%; margin: 10px; display: flex;flex-direction: row;align-items: center;"></div>');
 
-                        $("#auto_modal_object_" + i).append('<img id="' + user_nickname + '" class="profile_box profile feed_profile_image " style="width: 35px; height: 35px" src="' + user_profile_image + '">');
+                        $("#auto_modal_object_" + i).append('<img id="' + user_nickname + '" class="profile_box profile feed_profile_image " style="width: 40px; height: 40px" src="' + user_profile_image + '">');
                         $("#auto_modal_object_" + i).append('<div id="auto_modal_nickname_name_' + i + '"></div>');
 
-                        $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" class="feed_nickname">' + user_nickname + '</div>');
-                        $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" class="feed_nickname" style="">' + user_name + '</div>');
+                        $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" style="font-weight: bold; font-size: 14px" class="feed_nickname">' + user_nickname + '</div>');
+                        $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" style="font-size: 14px; color: #737373" class="feed_nickname" style="">' + user_name + '</div>');
 
                         // 정유진: append에서 id 값을 user_nickname로 하면 $("#" + user_nickname).append가 되지 않아 따로 바꾼다.
                         document.getElementById("auto_modal_object_" + i).setAttribute("id", user_nickname);
@@ -674,6 +715,7 @@ $('#search_box').mousedown(function () {
 
     });
 });
+
 // 정유진: 피드 내용 더보기
 $('.feed_content_more').click(function (event) {
     let feed_id = event.target.id;
@@ -687,8 +729,16 @@ $('.feed_content_more').click(function (event) {
     $('#' + feed_id).css({
         display: 'none'
     })
+    // 05-21 유재우 : 더보기 클릭 시 해시태그 나타남
+    $('#hashtag_div_' + feed_id).css({
+        display: 'flex'
+    })
+    $('#hashtag_space_div_' + feed_id).css({
+        display: 'flex'
+    })
 
 });
+
 // 정유진: 클릭한 게시물의 feed_id를 모달에 넘겨 주는 이벤트 처리. 추가되는 태그의 id 값는 모두 앞에 feed_modal을 붙였다.
 $(".profile_feed_mouse_over").click(function () {
     // 정유진: 클릭한 게시물의 feed_id 값을 뽑아 낸다.
@@ -745,7 +795,7 @@ $(".profile_feed_mouse_over").click(function () {
             var feed_create_at = data['feed_create_at'];
 
             // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
-            $("#feed_modal_image").html('<img style="width: 100%; height: 100%; border-radius: 10px" src="' + feed_image + '">');
+            $("#feed_modal_image").html('<img style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px" src="' + feed_image + '">');
             $("#feed_modal_feed_content").html('<div class="text_line">' + feed_content + '</div>');
             $(".feed_modal_profile_image").html('<img  style="width: 100%; height: 100%" src="' + writer_profile_image + '">');
             $(".feed_modal_nickname").html('<div style="font-weight: bold; margin-right: 8px; font-size: 14px">' + writer_nickname + '</div>');
@@ -926,7 +976,11 @@ $(".modal_upload_reply").click(function (event) {
             document.getElementById("reply_content_upload").setAttribute("reply_id", relpy_upload_next_id);
         }
     });
-
+});
+//05-20 유재우 : 해시태그를 눌렸을 때 해시태그를 검색함
+$('.hashtags').click(function () {
+    let hashtag_content = $(this).attr('hashtag_content');
+    location.href = "/content/search/?search=%23" + hashtag_content
 });
 
 

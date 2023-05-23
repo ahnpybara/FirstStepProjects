@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark, Follow
+from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow
 from user.models import User
 import os
 
@@ -41,11 +41,17 @@ class Main(APIView):
             # 정유진: 댓글의 2개만 가져온다.
             reply_object_list = Reply.objects.filter(feed_id=feed.id)[:2]
             reply_list = []
+            hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
+            hashtag_list = []
             for reply in reply_object_list:
                 reply_user = User.objects.filter(email=reply.email).first()
                 reply_list.append(dict(reply_content=reply.reply_content,
                                        nickname=reply_user.nickname, profile_image=reply_user.profile_image,
                                        id=reply.id))
+                # 05-20 유재우 : 해시태그 추가
+            for hashtag in hashtag_object_list:
+                hashtag_feed = Feed.objects.filter(id=feed.id).first()
+                hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
             like_count = Like.objects.filter(feed_id=feed.id).count()
             is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
             is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
@@ -58,7 +64,8 @@ class Main(APIView):
                                   reply_list=reply_list,
                                   is_liked=is_liked,
                                   is_marked=is_marked,
-                                  create_at=feed.create_at
+                                  create_at=feed.create_at,
+                                  hashtag_list=hashtag_list
                                   ))
 
         # 안치윤 : 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
@@ -88,9 +95,34 @@ class UploadFeed(APIView):
         content = request.data.get('content')
         email = request.session.get('email', None)
 
-        # 전달 받은 데이터를 기반으로 Feed 테이블에 새로운 튜플 생성
-        Feed.objects.create(image=uuid_name, content=content, email=email)
+        # 05-21 유재우 : 해시태그
+        hashtags_content = request.data.get('hashtags_content')
+        hashtags_content = hashtags_content.replace(" ", "");
+        # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
+        hashtags_list = hashtags_content.split("#")
+        # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
+        if (hashtags_content.find("#") != 0):
+            del hashtags_list[0]
 
+        # 05-21 유재우 : 중복 제거
+        hashtags_list = set(hashtags_list)
+        hashtags_list = list(hashtags_list)
+
+        # 05-21 유재우 : 공백 제거
+        hashtags_list = list(filter(None, hashtags_list))
+
+        # 05-21 유재우 : 저장 되는 feedid값을 강제하기 위해 추가
+        if (Feed.objects.count() == 0):
+            feed_Max_id = 1
+        else:
+            feed_Max = Feed.objects.order_by('-id').first()
+            feed_Max_id = feed_Max.id + 1
+
+        # 전달 받은 데이터를 기반으로 Feed 테이블에 새로운 튜플 생성
+        Feed.objects.create(image=uuid_name, content=content, email=email, id=feed_Max_id)
+
+        for hashtags_list in hashtags_list:
+            Hashtag.objects.create(content=hashtags_list, feed_id=feed_Max_id)
         # 성공적으로 전달 되었다는 응답을 보냄
         return Response(status=200)
 
@@ -340,9 +372,12 @@ class RemoveFeed(APIView):
     def post(self, request):
         feed_id = request.data.get('feed_id')
         feeds = Feed.objects.filter(id=feed_id).first()
-        feeds.delete()
+
         reply = Reply.objects.filter(feed_id=feed_id)
         reply.delete()
+        hashtags = Hashtag.objects.filter(feed_id=feeds.id)
+        hashtags.delete()
+        feeds.delete()
 
         return Response(status=200)
 
@@ -358,29 +393,62 @@ class SearchFeed(APIView):
         user_object_list = User.objects.filter(nickname__contains=searchKeyword).order_by('-id')
 
         feed_list = []
+        # 05-20 유재우 : 해시태그 검색
+        if (searchKeyword.find("#") == 0):
+            text = searchKeyword.replace("#", "");
+            hashtag_search_list = Hashtag.objects.filter(content__contains=text)
 
-        for feed in feed_search_list:
-            user = User.objects.filter(email=feed.email).first()
-            reply_object_list = Reply.objects.filter(feed_id=feed.id)
-            reply_list = []
-            for reply in reply_object_list:
-                reply_user = User.objects.filter(email=reply.email).first()
-                reply_list.append(dict(reply_content=reply.reply_content,
-                                       nickname=reply_user.nickname, profile_image=reply_user.profile_image))
-            like_count = Like.objects.filter(feed_id=feed.id).count()
-            is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
-            is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
-            feed_list.append(dict(id=feed.id,
-                                  image=feed.image,
-                                  content=feed.content,
-                                  like_count=like_count,
-                                  profile_image=user.profile_image,
-                                  nickname=user.nickname,
-                                  reply_list=reply_list,
-                                  is_liked=is_liked,
-                                  is_marked=is_marked,
-                                  create_at=feed.create_at
-                                  ))
+            for hashtag in hashtag_search_list:
+                feed_search_list = Feed.objects.filter(id=hashtag.feed_id).order_by('-id')
+                for feed in feed_search_list:
+                    user = User.objects.filter(email=feed.email).first()
+                    reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                    reply_list = []
+                    for reply in reply_object_list:
+                        reply_user = User.objects.filter(email=reply.email).first()
+                        reply_list.append(dict(reply_content=reply.reply_content,
+                                               nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+                    like_count = Like.objects.filter(feed_id=feed.id).count()
+                    is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                    is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                    hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
+                    feed_list.append(dict(id=feed.id,
+                                          image=feed.image,
+                                          content=feed.content,
+                                          like_count=like_count,
+                                          profile_image=user.profile_image,
+                                          nickname=user.nickname,
+                                          reply_list=reply_list,
+                                          is_liked=is_liked,
+                                          is_marked=is_marked,
+                                          create_at=feed.create_at,
+                                          hashtag_list=hashtag_list
+                                          ))
+        else:
+            for feed in feed_search_list:
+                user = User.objects.filter(email=feed.email).first()
+                reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                reply_list = []
+                for reply in reply_object_list:
+                    reply_user = User.objects.filter(email=reply.email).first()
+                    reply_list.append(dict(reply_content=reply.reply_content,
+                                           nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+                like_count = Like.objects.filter(feed_id=feed.id).count()
+                is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
+                feed_list.append(dict(id=feed.id,
+                                      image=feed.image,
+                                      content=feed.content,
+                                      like_count=like_count,
+                                      profile_image=user.profile_image,
+                                      nickname=user.nickname,
+                                      reply_list=reply_list,
+                                      is_liked=is_liked,
+                                      is_marked=is_marked,
+                                      create_at=feed.create_at,
+                                      hashtag_list=hashtag_list
+                                      ))
 
         # 안치윤 : 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
         return render(request, "astronaut/main.html",
@@ -401,15 +469,36 @@ class RemoveReply(APIView):
 
 
 # 05-12 유재우 : 피드 수정
+# 05-23 유재우 : 해시태그도 수정 가능하게 수정
 class UpdateFeed(APIView):
     def post(self, request):
+        hashtag_content = request.data.get('hashtag_content')
         content = request.data.get('content')
         feed_id = request.data.get('feed_id')
+        # 05-21 유재우 : 해시태그
+        hashtags = Hashtag.objects.filter(feed_id=feed_id)
+        hashtags.delete()
+
+        hashtag_content = hashtag_content.replace(" ", "");
+        # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
+        hashtags_list = hashtag_content.split("#")
+        # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
+        if (hashtag_content.find("#") != 0):
+            del hashtags_list[0]
+
+        # 05-21 유재우 : 중복 제거
+        hashtags_list = set(hashtags_list)
+        hashtags_list = list(hashtags_list)
+
+        # 05-21 유재우 : 공백 제거
+        hashtags_list = list(filter(None, hashtags_list))
+
+        for hashtags_list in hashtags_list:
+            Hashtag.objects.create(content=hashtags_list, feed_id=feed_id)
 
         feed = Feed.objects.filter(id=feed_id)
 
         feed.update(id=feed_id, content=content)
-        feed.save()
 
         return Response(status=200)
 
@@ -543,3 +632,40 @@ class FollowerFeed(APIView):
 
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, is_checked=is_checked))
+
+
+# 05-23 유재우 : 피스수정시 이미지 보이게 하는 부분
+class FeedUpdateIMG(APIView):
+    def get(self, request):
+        feed_id = int(request.GET.get('feed_id', None))
+        feed_modal = Feed.objects.filter(id=feed_id).first()
+        hashtag_content_list = Hashtag.objects.filter(feed_id=feed_id)
+        hashtag_content = []
+        for hashtag in hashtag_content_list:
+            hashtag_content.append(dict(content=hashtag.content))
+
+        hashtag_list = str(hashtag_content)
+        print(hashtag_list)
+        hashtag_list = hashtag_list.replace(" ", "");
+        hashtag_list = hashtag_list.replace("}", "");
+        hashtag_list = hashtag_list.replace("{", "");
+        hashtag_list = hashtag_list.replace("'", "");
+        hashtag_list = hashtag_list.replace("[", "");
+        hashtag_list = hashtag_list.replace("]", "");
+        hashtag_list = hashtag_list.replace("content", "");
+        hashtag_list = hashtag_list.replace(":", "");
+        hashtag_list = hashtag_list.split(",");
+        hashtag_list = list(filter(None, hashtag_list))
+        # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
+        hashtag_content = '#' + '#'.join(hashtag_list)
+
+        data = {
+            'id': feed_modal.id,
+            'image': feed_modal.image,
+            'feed_content': feed_modal.content,
+            'hashtag_content': hashtag_content
+        }
+
+        json_data = json.dumps(data)
+        # ajax를 이용해서 html 추가하거나 변경할려면 이런방식을 써야한다.
+        return HttpResponse(json_data, content_type='application/json')
