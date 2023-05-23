@@ -606,9 +606,6 @@ window.addEventListener('resize', function () {
         });
     } else { // 정유진: 검색창이 있을 경우
         $('#auto_modal').css({
-            display: 'flex'
-        });
-        $('#auto_modal').css({
             left: left_value + 'px'
         });
     }
