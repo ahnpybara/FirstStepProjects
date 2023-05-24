@@ -146,13 +146,7 @@ html {
 }
 
 /* 반응형 웹을 위한 코드 */
-@media (max-width: 1000px) {
-    .follow_side_area {
-        display: none;
-    }
-}
-
-@media (max-width: 760px) {
+@media (max-width: 870px) {
     .bar_search {
         display: none;
     }
@@ -168,4 +162,14 @@ html {
         top: 8px;
         right: 12px;
     }
+}
+
+/* 자동완성의 스크롤은 동작하지만 보이지 않게 함 */
+body {
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+}
+
+body::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }

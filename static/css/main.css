@@ -402,3 +402,10 @@
 .feed_image_text_modal {
     border-top: 1px solid #e1e1e1;
 }
+
+/* 반응형 웹 */
+@media (max-width: 1000px) {
+    .follow_side_area {
+        display: none;
+    }
+}
