@@ -1,9 +1,9 @@
 /* 설정창 최상위 태그 */
 #settings_area {
-    padding-top: 5%;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 700px;
 }
 
 /* 설정창 박스 */
@@ -11,6 +11,7 @@
     background-color: white;
     border: 1px solid #e1e1e1;
     width: 540px;
+    height: 471px;
 }
 
 /* 프로필 수정 영역 */

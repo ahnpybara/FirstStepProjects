@@ -1,3 +1,25 @@
+/* 상단 메뉴바 팔로우 스위치 */
+#follow_switch_btn {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    padding-bottom: 5px;
+}
+
+/* 상단 메뉴바 팔로우 버튼 라벨 */
+#follow_btn_label {
+    margin-left: 8px;
+    font-weight: bold;
+    padding-top: 4px;
+}
+
+/* 상단 메뉴바 언팔로우 버튼 라벨 */
+#unfollow_btn_label {
+    margin-left: 8px;
+    font-weight: bold;
+    padding-top: 4px;
+}
+
 /* 피드 생성 영역과 팔로우 영역 */
 .main_container {
     display: flex;
@@ -98,28 +120,6 @@
     color: red;
 }
 
-/* 구글 심볼 아이콘이 true인 경우 */
-.uTrue {
-    cursor: pointer;
-    color: rgb(0, 0, 1);
-    font-size: 28px;
-    font-variation-settings: 'FILL' 1,
-    'wght' 500,
-    'GRAD' 0,
-    'opsz' 48
-}
-
-/* 구글 심볼 아이콘이 false인 경우 */
-.uFalse {
-    cursor: pointer;
-    color: black;
-    font-size: 28px;
-    font-variation-settings: 'FILL' 0,
-    'wght' 500,
-    'GRAD' 0,
-    'opsz' 48
-}
-
 /* 피드 좋아요 수 */
 .feed_like_count {
     margin: 4px 10px;
@@ -142,6 +142,48 @@
     margin-bottom: 7px;
     text-align: left;
     font-size: 16px
+}
+
+/* 해시태그 부모 */
+.feed_area_hashtag_space {
+    display: none
+}
+
+/* 해시태그 리스트 영역 */
+.feed_area_hashtags {
+    display: none;
+    flex-direction: row;
+    text-align: left;
+    width: 100%;
+    flex-flow: wrap;
+}
+
+/* 해시태그 */
+#hashtags_list {
+    color: #0037AB;
+    font-size: 14px;
+    cursor: pointer;
+    padding-right: 5px;
+}
+
+/* 피드 내용 더보기 영역 */
+#feed_more_show {
+    display: flex;
+}
+
+/* 글내용 더 보기*/
+.feed_content_more {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 7px;
+    cursor: pointer;
+}
+
+/* 댓글 모두 보기 */
+.profile_feed_mouse_over {
+    font-size: 14px;
+    color: gray;
+    cursor: pointer;
 }
 
 /* 댓글 영역 */
@@ -356,37 +398,7 @@
     text-align: left;
 }
 
-/* 안치윤 : 더 보기*/
-.feed_content_more {
-    font-size: 14px;
-    color: gray;
-    margin-bottom: 7px;
-}
-
-/* 안치윤 : 댓글 모두 보기 */
-.profile_feed_mouse_over {
-    font-size: 14px;
-    color: gray;
-}
-
-/* 유재우: 해시태그 부모 */
-.feed_area_hashtag_space {
-    display: none
-}
-
-/* 해시태그 리스트 영역 */
-.feed_area_hashtags {
-    display: none;
-    flex-direction: row;
-    text-align: left;
-    width: 100%;
-    flex-flow: wrap;
-}
-
-/* 해시태그 */
-#hashtags_list {
-    color: #0037AB;
-    font-size: 14px;
-    cursor: pointer;
-    padding-right: 5px;
+/* 피드 수정 모달 수정 영역 */
+.feed_image_text_modal {
+    border-top: 1px solid #e1e1e1;
 }

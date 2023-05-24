@@ -127,7 +127,6 @@
 #feed_create_button {
     width: 100%;
     background-color: rgb(0, 149, 246);
-    margin-top: 8px;
 }
 
 /* 안치윤 : 스크롤은 동작하지만 보이지 않게 함 */
@@ -144,4 +143,26 @@
 .text_line {
     overflow-wrap: anywhere;
     margin-bottom: 0 !important;
+}
+
+/* 구글 심볼 아이콘이 true인 경우 */
+.uTrue {
+    cursor: pointer;
+    color: rgb(0, 0, 1);
+    font-size: 28px;
+    font-variation-settings: 'FILL' 1,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+/* 구글 심볼 아이콘이 false인 경우 */
+.uFalse {
+    cursor: pointer;
+    color: black;
+    font-size: 28px;
+    font-variation-settings: 'FILL' 0,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 48
 }
