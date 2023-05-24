@@ -1,3 +1,7 @@
+#home_icon {
+    padding-left: 165px;
+}
+
 /* 설정창 최상위 태그 */
 #settings_area {
     display: flex;

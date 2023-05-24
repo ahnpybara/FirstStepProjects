@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}?ver=10">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}?ver=8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=5">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=4">
 
     <!-- Bootstrap CSS 사용하기 위한 선언  -->
@@ -39,7 +39,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background: white!important;">
 <!-- 맨 위 상단 메뉴바(로고 검색 기타메뉴)를 만드는 코드 -->
 <nav class="navbar navbar-expand-lg navbar-white bg-white">
     <!-- 메뉴바 -->
@@ -56,7 +56,7 @@
         </form>
         <!-- 메뉴 아이콘 들 -->
         <div class="menu_icons">
-            <a href="/main"><span class="menu_icon material-icons"> home</span></a>
+            <a href="/main"><span id="home_icon" class="menu_icon material-icons"> home</span></a>
             <span id="nav_bar_add_box" class="menu_icon material-icons-outlined">add_box</span>
             <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
             <div class="dropdown">
@@ -86,19 +86,19 @@
 </nav>
 
 <!-- 프로필 사진과 프로필 정보 텍스트 영역 -->
-<div class="profile_profile_image_info_text_area">
+<div class="profile_total_area">
     <!-- 프로필 사진 -->
-    <div class="profile_profile_image">
-        <div class="box" style="width: 160px; height: 160px">
+    <div class="profile_image_area">
+        <div class="box">
             <img class="profile"
                  src="{% get_media_prefix %}{{ user.profile_image }}" alt="text">
         </div>
     </div>
     <!-- 텍스트 설명란 -->
-    <div class="profile_information">
+    <div class="profile_imformation">
         <!-- 사용자 이름, 프로필편집 버튼, 설정창 -->
-        <div class="profile_information_area">
-            <div class="profile_information_user_name">
+        <div class="profile_text_area">
+            <div class="profile_nickname">
                 {{ user.nickname }}
             </div>
             <!-- 안치윤 : 서버로 부터 팔로우 여부를 받아옴, 팔로우 버튼 추가 -->
@@ -116,23 +116,23 @@
                 {% endif %}
             </div>
             <!-- 05-17 유재우 : 셋팅이랑 연결-->
-            <a style="{% if user_session.email != user.email %} display: none{% endif %}"
-               href="/user/profile/setting"><span class="material-symbols-outlined">manage_accounts</span></a>
+            <a class="settings_link" style="color: black; margin-top: 5px; {% if user_session.email != user.email %} display: none{% endif %}"
+               href="/user/profile/setting"><span class="settigns_icon material-symbols-outlined">manage_accounts</span></a>
 
         </div>
         <!-- 프로필 설명란(팔로워 팔로잉 사용자 이름) -->
-        <div class="profile_explanation_area">
-            <div class="feed_follow_count">
+        <div class="profile_feed_follow_area">
+            <div class="feed_text_count">
                 게시물
-                <span>{{ user_feed_count }}</span>
+                <span><b>{{ user_feed_count }}</b></span>
             </div>
-            <div class="feed_follow_count">
+            <div class="feed_text_count">
                 팔로워
-                <span style="font-weight: bold;">{{ follower_count }}</span>
+                <span><b>{{ follower_count }}</b></span>
             </div>
-            <div class="feed_follow_count">
+            <div class="feed_text_count">
                 팔로잉
-                <span style="font-weight: bold;">{{ following_count }}</span>
+                <span><b>{{ following_count }}</b></span>
             </div>
         </div>
         <div>
@@ -142,26 +142,20 @@
 </div>
 
 <!-- 안치윤 : 디자인 수정, 사용자가 좋아요 게시한 글 북마크한 게시글을 보여주기 위한 버튼 -->
-<div class="myfeed_like_bookmark_button">
-    <div>
+<div class="show_feed_root_area">
+    <div class="show_feed_list_area">
         <!-- 내가 작성한 게시글들을 보기 위한 버튼 -->
-        <!-- 초기 화면에 활성화된 버튼에 밑줄표시 -->
-        <div id="button_feed_list"
-        ><span
-                class="material-icons-outlined">grid_on</span><b class="feed_select_button">내
+        <div id="button_feed_list"><span
+                class="feed_list_icons material-icons-outlined">grid_on</span><b class="feed_select_button">내
             게시물</b>
         </div>
         <!-- 내가 좋아요한 게시글들을 보기 위한 버튼 -->
-        <!-- 초기 화면에 비활성화된 버튼에 밑줄의 두께 설정 -->
-        <div id="button_feed_like_list"
-             style=""><span
+        <div id="button_feed_like_list"><span
                 class="material-icons-outlined">favorite_border</span><b
                 class="feed_select_button">좋아요</b>
         </div>
         <!-- 내가 북마크한 게시글들을 보기 위한 버튼 -->
-        <!-- 초기 프로필 화면에 비활성화된 버튼에 밑줄의 두께 설정 -->
-        <div id="button_feed_bookmark_list"
-        ><span
+        <div id="button_feed_bookmark_list"><span
                 class="material-icons-outlined">bookmark_border</span><b
                 class="feed_select_button">북마크</b>
         </div>
@@ -169,22 +163,22 @@
 </div>
 
 <!-- 내가 작성한 게시물 목록 -->
-<div id="feed_list" class="profile_feed_list" style="display: flex;">
-    <div>
+<div id="feed_list">
+    <div class="feed_list_area">
         <!--피드 리스트를 보여주는 반복문-->
         {% for feed in feed_list %}
-            <div>
+            <div class="feed_size_root">
                 <!-- 좋아요 북마크 수 보여주기 위한 창 -->
-                <div>
+                <div class="show_count_area">
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
                     <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
-                         class="profile_feed_mouse_over feed_modal profile_feed_modal_view">
+                         class="profile_feed_mouse_over">
                         <!--좋아요 수 북마크 수를 계산하기 위한 반복문-->
                         {% for count in feed_count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
                                 <div class="feed_count">
-                                    <span class="material-icons-outlined">favorite</span>
+                                    <span class="icon_like_bookmark material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
                                 <!-- 정유진: 댓글 수를 보여준다. -->
@@ -195,8 +189,9 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="profile_feed_image">
-                        <img src="{% get_media_prefix %}{{ feed.image }}" alt="text">
+                    <div>
+                        <img class="img_feed_list"
+                             src="{% get_media_prefix %}{{ feed.image }}" alt="text">
                     </div>
                 </div>
             </div>
@@ -205,31 +200,31 @@
 </div>
 
 <!-- 내가 좋아요한 게시글 목록 -->
-<div id="like_feed_list" class="profile_feed_list">
-    <div>
+<div id="like_feed_list">
+    <div class="feed_list_area">
         {% for feed in like_feed_list %}
-            <div>
-                <div>
+            <div class="feed_size_root">
+                <div class="show_count_area">
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
-                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
-                         class="profile_feed_mouse_over feed_modal profile_feed_modal_view">
+                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}" class="profile_feed_mouse_over">
                         {% for count in like_count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
                                 <div class="feed_count">
-                                    <span class="material-icons-outlined">favorite</span>
+                                    <span class="icon_like_bookmark material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
                                 <!-- 정유진: 댓글 수를 보여준다. -->
                                 <div class="feed_count">
-                                    <span class="material-icons-outlined">comment</span>
+                                    <span class="icon_like_bookmark material-icons-outlined">comment</span>
                                     <p>{{ count.reply_count }}</p>
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="profile_feed_image">
-                        <img src="{% get_media_prefix %}{{ feed.image }}" alt="text">
+                    <div>
+                        <img class="img_feed_list"
+                             src="{% get_media_prefix %}{{ feed.image }}" alt="text">
                     </div>
                 </div>
             </div>
@@ -238,31 +233,31 @@
 </div>
 
 <!-- 내가 북마크한 게시글 목록 -->
-<div id="bookmark_feed_list" class="profile_feed_list">
-    <div>
+<div id="bookmark_feed_list">
+    <div class="feed_list_area">
         {% for feed in bookmark_feed_list %}
-            <div>
-                <div>
+            <div class="feed_size_root">
+                <div class="show_count_area">
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
-                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
-                         class="profile_feed_mouse_over feed_modal profile_feed_modal_view">
+                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}" class="profile_feed_mouse_over">
                         {% for count in bookmark_count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
                                 <div class="feed_count">
-                                    <span class="material-icons-outlined">favorite</span>
+                                    <span class="icon_like_bookmark material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
                                 <!-- 정유진: 댓글 수를 보여준다. -->
                                 <div class="feed_count">
-                                    <span class="material-icons-outlined">comment</span>
+                                    <span class="icon_like_bookmark material-icons-outlined">comment</span>
                                     <p>{{ count.reply_count }}</p>
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="profile_feed_image">
-                        <img src="{% get_media_prefix %}{{ feed.image }}" alt="text">
+                    <div>
+                        <img class="img_feed_list"
+                             src="{% get_media_prefix %}{{ feed.image }}" alt="text">
                     </div>
                 </div>
             </div>
@@ -354,38 +349,37 @@
 <!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. TODO -->
 <div id="feed_modal" class="modal_overlay">
     <div class="modal_window"
-         style="display: flex;flex-direction: column;justify-content: space-between; width: 50%; height: 83%">
+         style="display: flex;flex-direction: column;justify-content: space-between; width: 50%; height: 90%">
         <div style="width: 100%;height: 100%;">
             <div style="width: 100%;height: 100%;display: flex;flex-direction: row">
                 <div id="feed_modal_image"
-                     style="
-                     width: 100%;height: 100%;display: flex;align-items: center">
+                     style="width: 100%;height: 100%; object-fit: contain; display: flex;align-items: center">
                     <!-- ajax로 이미지를 받아옴 -->
                 </div>
                 <!--안치윤 : 디자인 수정, 이미지와 글 영역 구분-->
                 <div style="width: 70%; border-left: solid 1px #e1e1e1;display: flex;flex-direction: column;justify-content: space-between;">
                     <div style="text-align: right; height: 60px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1">
                         <div style="display: flex;margin: 15px;align-items: center;flex-direction: row">
-                            <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image"
+                            <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
                                  style="width: 32px;height: 32px;margin-right: 15px;">
                                 <!-- ajax로 받아옴 작성자 프로필 사진 -->
                             </div>
-                            <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
+                            <div id="feed_modal_writer_nickname" class="feed_nickname">
                                 <!-- ajax로 받아옴 작성자 닉네임 -->
                             </div>
                         </div>
                         <div>
-                            <span class="modal_close material-icons-outlined" style="margin-right: 10px">close</span>
+                            <span class="modal_close material-icons-outlined">close</span>
                         </div>
                     </div>
                     <!-- ajax로 작성자 받음 -->
                     <div class="modal_text_area" style="overflow-y: auto; height: 100%">
                         <div style="display: flex;margin: 15px;align-items: start;flex-direction: row;">
-                            <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image"
-                                 style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important">
+                            <div id="feed_modal_writer_profile_image" class="box profile feed_profile_image"
+                                 style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px">
                                 <!-- ajax로 받아옴 작성자 프로필 사진 -->
                             </div>
-                            <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
+                            <div id="feed_modal_writer_nickname" class="feed_nickname">
                                 <!-- ajax로 받아옴 작성자 닉네임 -->
                             </div>
                             <div id="feed_modal_feed_content" class="text_line" style="font-size: 14px">
@@ -431,7 +425,7 @@
                             <input id="reply_content_text" type="text" class="form-control"
                                    style="height: 53px; box-shadow: none; border: none; outline: none; background-color: white"
                                    placeholder="댓글 달기..">
-                            <div id="reply_content_upload" class="modal_upload_reply"
+                            <div id="reply_content_upload" class="upload_reply"
                                  style="width: 50px;color: cornflowerblue; font-weight: bold; cursor: pointer">
                                 게시
                             </div>
@@ -490,6 +484,246 @@
                 console.log("완료");
             }
         });
+    });
+
+    // 정유진: 클릭한 게시물의 feed_id를 모달에 넘겨 주는 이벤트 처리. 추가되는 태그의 id 값는 모두 앞에 feed_modal을 붙였다.
+    $(".profile_feed_mouse_over").click(function () {
+        // 정유진: 클릭한 게시물의 feed_id 값을 뽑아 낸다.
+        var feed_id = $(this).attr('feed_id');
+        // 정유진: feed_modal에 feed_id 요소 추가
+        document.getElementById("feed_modal").setAttribute("feed_id", feed_id);
+        // 정유진: feed_modal의 댓글 게시 부분에 feed_id 요소 추가
+        document.getElementById("reply_content_upload").setAttribute("feed_id", feed_id);
+
+        $(document.body).css({
+            overflow: 'hidden'
+        });
+
+        $.ajax({
+            url: "/content/feedmodal",
+            data: {
+                feed_id: feed_id
+            },
+            method: "GET",
+            success: function (data) {
+                console.log("성공");
+                // 정유진: 서버에서 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 변수에 따로 할당.
+                var feed_image = "{% get_media_prefix %}" + data['image'];
+                var feed_content = data['feed_content'];
+                var writer_profile_image = "{% get_media_prefix %}" + data['writer_profile_image'];
+                var writer_nickname = data['writer_nickname'];
+
+                // 정유진: 모달에 남았는 댓글 리스트 리셋.
+                $("#feed_modal_reply_list").html('');
+                // 정유진: 서버에서 받은 댓글 리스트 변수에 할당 후 추가.
+                for (var i = 0; i < data['reply_list'].length; i++) {
+                    var reply_profile_image = "{% get_media_prefix %}" + data['reply_list'][i].profile_image;
+                    var reply_nickname = data['reply_list'][i].nickname;
+                    var reply_content = data['reply_list'][i].reply_content;
+
+                    // 댓글 리스트
+                    $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + i + '" style="display: flex;margin-bottom: 15px;"></div>');
+
+                    // 댓글들, 프로필 이미지 -
+                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_profile_image_' + i + '" class="box profile" style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important"></div>');
+                    $("#feed_modal_reply_" + i).append('<div id="feed_modal_reply_nickname_content_' + i + '" style="display: flex;align-items: start;"></div>');
+
+                    $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_nickname_' + i + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
+                    $("#feed_modal_reply_nickname_content_" + i).append('<div id="feed_modal_reply_content_' + i + '" class="text_line" style="font-size: 14px"></div>');
+
+                    $("#feed_modal_reply_profile_image_" + i).append('<img style="width: 100%;height: 100%" src="' + reply_profile_image + '">');
+                    $("#feed_modal_reply_nickname_" + i).append('<div style="padding-top: 3px">' + reply_nickname + '</div>');
+                    $("#feed_modal_reply_content_" + i).append('<div style="padding-top: 3px">' + reply_content + '</div>');
+                }
+                // 정유진: 좋아요, 북마크, 좋아요 수, 게시물 작성시간 값 할당.
+                var is_liked = data['is_liked'];
+                var is_marked = data['is_marked'];
+                var like_count = data['like_count'];
+                var feed_create_at = data['feed_create_at'];
+
+                // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
+                $("#feed_modal_image").html('<img style="width: 100%; height: 100%; border-radius: 10px" src="' + feed_image + '">');
+                $("#feed_modal_feed_content").html('<div>' + feed_content + '</div>');
+                $(".feed_profile_image").html('<img  style="width: 100%; height: 100%" src="' + writer_profile_image + '">');
+                $(".feed_nickname").html('<div style="font-weight: bold; margin-right: 8px; font-size: 14px">' + writer_nickname + '</div>');
+                // 정유진: 좋아요, 북마크 여부 확인 후 모달에 추가
+                if (is_liked)
+                    $("#feed_modal_is_liked").html(
+                        '<span id="favorite_' + feed_id + '" feed_id="' + feed_id + '" style="color: red" class="uTrue favorite material-symbols-outlined">favorite</span>');
+                else
+                    $("#feed_modal_is_liked").html(
+                        '<span id="favorite_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse favorite material-symbols-outlined">favorite</span>');
+
+                if (is_marked)
+                    $("#feed_modal_is_marked").html(
+                        '<span id="bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uTrue bookmark material-symbols-outlined">bookmark</span>');
+                else
+                    $("#feed_modal_is_marked").html(
+                        '<span id="bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse bookmark material-symbols-outlined">bookmark</span>');
+
+                // 정유진: 좋아요 수, 게시물 작성시간 모달에 추가
+                $("#feed_modal_like_count").html('<div style="font-size: 14px">좋아요 수 ' + like_count + '</div>');
+                $("#feed_modal_feed_create_at").html(
+                    '<div style="font-size: 12px; color: gray; text-align: left; margin-bottom: 10px; margin-left: 16px">'
+                    + feed_create_at +
+                    '</div>');
+
+                // 정유진: 댓글 게시할 때 댓글리스트에서 몇 번째인지 알려준다.
+                document.getElementById("reply_content_upload").setAttribute("reply_id", data['reply_list'].length);
+
+                $("#feed_modal").css({
+                    display: 'flex'
+                });
+
+                // 정유진: main.html에서 가져왔으며 추가된 html에서도 작동되록 ajax안에 넣었다.
+                // 북마크 아이콘 클릭 이벤트 처리
+                $(".bookmark").click(function (event) {
+                    // 북마크 아이콘 태그의 feed_id 속성 값을 가져옴
+                    let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+                    // 이벤트가 발생한 태그의 id를 가져옴
+                    let bookmark_id = event.target.id;
+                    // 해당 태그의 style 속성중 color 값을 가져옴
+                    let bookmark_color = $('#' + bookmark_id).css('color');
+
+                    // 현재 북마크 상태가 아니면 북마크 상태로 표시
+                    if (bookmark_color === 'rgb(0, 0, 0)') {
+                        $(this).css({"font-variation-settings": "'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 48"});
+                        $(this).css({
+                            color: 'rgb(0, 0, 1)'
+                        });
+                    } else {
+                        $(this).css({"font-variation-settings": "'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 48"});
+                        $(this).css({
+                            color: 'black',
+                        });
+                    }
+                    // 서버로 보내기 위해서 접속할 url : "/content/bookmark"이며 보낼 데이터는 피드아이디와 북마크텍스트, 방식은 POST (Json 형태)
+                    $.ajax({
+                        url: "/content/bookmark",
+                        data: {
+                            feed_id: feed_id,
+                            bookmark_color: bookmark_color
+                        },
+                        method: "POST",
+                        success: function (data) {
+                            console.log("성공");
+                        },
+                        error: function (request, status, error) {
+                            console.log("에러");
+                        },
+                        complete: function () {
+                            console.log("완료");
+                        }
+                    });
+                });
+
+                // 안치윤 : 좋아요 심볼 클릭 이벤트
+                $(".favorite").click(function (event) {
+                    // 북마크 아이콘 태그의 feed_id 속성 값을 가져옴
+                    let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+                    // 이벤트가 발생한 태그의 id값을 가져옴
+                    let favorite_id = event.target.id;
+                    // 해당 태그의 style 속성중 color 값을 가져옴
+                    let favorite_color = $('#' + favorite_id).css('color');
+
+                    // 현재 좋아요 상태가 아니면 북마크 상태로 표시
+                    if (favorite_color === 'rgb(0, 0, 0)') {
+                        $(this).css({"font-variation-settings": "'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 48"});
+                        $(this).css({
+                            color: 'red',
+                        });
+                    } else {
+                        $(this).css({"font-variation-settings": "'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 48"});
+                        $(this).css({
+                            color: 'black',
+                        });
+                    }
+
+                    // 서버로 보내기 위해서 접속할 url : "/content/like"이며 보낼 데이터는 피드아이디와 좋아요 텍스트, 방식은 POST (Json 형태)
+                    $.ajax({
+                        url: "/content/like",
+                        data: {
+                            feed_id: feed_id,
+                            favorite_color: favorite_color
+                        },
+                        method: "POST",
+                        success: function (data) {
+                            console.log("성공");
+                        },
+                        error: function (request, status, error) {
+                            console.log("에러");
+                        },
+                        complete: function () {
+                            console.log("완료");
+
+                        }
+                    });
+                });
+
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        });
+    });
+
+
+    // 댓글 게시 버튼 이벤트 처리
+    $(".upload_reply").click(function (event) {
+        // 게시 버튼 태그의 id 속성 값을 가져옴
+        let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+        // reply_content_upload div 요소의 reply_id 값을 가져옴
+        let relpy_upload_id = document.getElementById("reply_content_upload").getAttribute("reply_id");
+        // 댓글 입력 폼 아이디를 이용해서 입력 폼의 내용을 가져옴
+        let reply_content = $('#reply_content_text').val();
+
+        // 댓글의 길이가 0보다 작으면 알림창 뜸
+        if (reply_content.length <= 0) {
+            alert("댓글을 입력하세요");
+            return 0;
+        }
+
+        //서버로 보내기 위해서 접속할 url : "/content/reply"이며 보낼 데이터는 피드아이디와 댓글 내용, 방식은 POST (Json 형태)
+        $.ajax({
+            url: "/content/reply",
+            data: {
+                feed_id: feed_id,
+                reply_content: reply_content
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                alert("댓글 성공");
+                // 비동기식 댓글 업로드를 위한 구현
+                $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + relpy_upload_id + '" style="display: flex;margin-bottom: 15px;"></div>');
+
+                $("#feed_modal_reply_" + relpy_upload_id).append('<div id="feed_modal_reply_profile_image_' + relpy_upload_id + '" class="box profile feed_profile_image" style="width: 32px;height: 32px; margin-right: 15px; min-width: 32px!important"></div>');
+                $("#feed_modal_reply_" + relpy_upload_id).append('<div id="feed_modal_reply_nickname_content_' + relpy_upload_id + '" style="display: flex; align-items: start"></div>');
+
+                $("#feed_modal_reply_nickname_content_" + relpy_upload_id).append('<div id="feed_modal_reply_nickname_' + relpy_upload_id + '" style="font-weight: bold; font-size: 14px; margin-right: 8px"></div>');
+                $("#feed_modal_reply_nickname_content_" + relpy_upload_id).append('<div id="feed_modal_reply_content_' + relpy_upload_id + '" class="text_line" style="font-size: 14px"></div>');
+
+                $("#feed_modal_reply_profile_image_" + relpy_upload_id).append('<img style="width: 100%; height: 100%" src="{% get_media_prefix %}{{ user_session.profile_image }}">');
+                $("#feed_modal_reply_nickname_" + relpy_upload_id).append('<div style="padding-top: 3px">' + data['user_nickname'] + '</div>');
+                $("#feed_modal_reply_content_" + relpy_upload_id).append('<div style="padding-top: 3px">' + reply_content + '</div>');
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+                // 댓글을 입력하고 나면 입력 폼을 비워야 함
+                $('#reply_content_text').val('');
+                // 정유진: reply_content_upload div 요소의 reply_id 속성에 reply_id 값을 할당함.
+                // + 해당 피드의 마지막 댓글의 다음 번째를 넘겨준다.
+                let relpy_upload_next_id = String(Number(relpy_upload_id) + 1);
+                document.getElementById("reply_content_upload").setAttribute("reply_id", relpy_upload_next_id);
+            }
+        });
+
     });
 
     // 내가 쓴 게시물 이벤트 처리
@@ -859,7 +1093,6 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 
-<script src="{% static 'js/main_profile_same.js' %}?ver=3"></script>
 <!-- Option 2: Separate Popper and Bootstrap JS -->
 <!--
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>

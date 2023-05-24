@@ -1,15 +1,194 @@
-/*정유진: class profile_feed_mouse_over 와 feed_count 추가 */
-/*정유진: 게시물에 마우스 커서룰 올리기 전 상태.*/
+#home_icon {
+    padding-left: 108px;
+}
+
+/* 프로필 사진과 프로필 정보 텍스트 영역*/
+.profile_total_area {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: #FAFAFA;
+}
+
+/* 프로필 사진 */
+.profile_image_area {
+    padding: 30px 100px;
+}
+
+/* 텍스트 설명란 */
+.profile_imformation {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+/* 프로필 이미지를 제외한 나머지 영역 */
+.profile_text_area {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 18px;
+    align-items: center;
+}
+
+/* 프로필 닉네임 */
+.profile_nickname {
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+.settigns_icon {
+    margin-top: 3px;
+}
+
+/* 프로필 설명란(팔로워 팔로잉 사용자 이름) */
+.profile_feed_follow_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-right: 40px;
+    font-size: 16px;
+}
+
+/* 게시물 개수 */
+.feed_text_count {
+    margin-right: 40px;
+    margin-bottom: 1px;
+}
+
+/* 피드 게시물 보여주는 영역 부모 */
+.show_feed_root_area {
+    border-top: solid 2px rgba(50, 50, 50, 0.1);
+    width: 100%;
+}
+
+/* 피드 게시물 보여주는 영역 */
+.show_feed_list_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
+
+/* 내가 작성한 게시글들을 보기 위한 버튼 */
+#button_feed_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 내가 좋아요한 게시글을 보기 위한 버튼 */
+#button_feed_like_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 내가 좋아요한 게시글을 보기 위한 버튼 */
+#button_feed_bookmark_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 피드 보여주는 아이콘들 */
+.feed_list_icons {
+    margin-right: 5px !important;
+}
+
+/* 내가 작성한 게시글 목록 root */
+#feed_list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 피드가 보여질 영역 */
+.feed_list_area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 1000px;
+    justify-content: center;
+}
+
+/*피드 한칸 최상위 태그*/
+.feed_size_root {
+    width: 30%;
+    height: 30%;
+    margin: 10px 5px 0 5px;
+}
+
+/* 좋아요 북마크 수 보여주기 위한 창 */
+.show_count_area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* 마우스가 올라오면 이벤트가 발생할 창 */
+.profile_feed_mouse_over {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 좋아요 수나 댓글 수를 보여줌 */
+.feed_count {
+    margin: 10px;
+}
+
+/* 좋아요 북마크 아이콘 */
+.icon_like_bookmark {
+    margin-right: 5px;
+}
+
+/* 실제 이미지 */
+.img_feed_list {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+/* class profile_feed_mouse_over 와 feed_count 추가 */
+/* 게시물에 마우스 커서룰 올리기 전 상태.*/
 .profile_feed_mouse_over {
     background-color: rgba(0, 0, 0, 0);
 }
 
-/*정유진: 게시물에 마우스 커서를 올리면 밝기가 낮아진다.*/
+/* 게시물에 마우스 커서를 올리면 밝기가 낮아진다.*/
 .profile_feed_mouse_over:hover {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* 정유진: 게시글 좋아요 수와 댓글을 숨긴다.*/
+/* 게시글 좋아요 수와 댓글을 숨긴다.*/
 .profile_feed_mouse_over > .feed_count {
     display: none;
 }
@@ -30,156 +209,43 @@
     margin-left: 10px;
 }
 
-/* 프로필 사진과 프로필 정보 텍스트 영역 */
-.profile_profile_image_info_text_area {
-    display: flex;
-    flex-direction: row;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    padding-top: 60px;
-    background-color: #FAFAFA;
-}
-
-/* 프로필 사진 */
-.profile_profile_image {
-    padding: 30px 100px;
-}
-
-/* 프로필 사진 -> 위치 */
-.profile_profile_image div {
-    width: 160px;
-    height: 160px;
-}
-
-/* 프로필 사진 -> 위치 -> 크기 */
-.profile_profile_image div img {
-    width: 160px;
-    height: 160px;
-}
-
-/* 텍스트 설명란 */
-.profile_information {
-    text-align: left;
-    margin-bottom: 10px
-}
-
-/* 사용자 이름, 프로필편집 버튼, 설정창 */
-.profile_information_area {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 20px;
-    align-items: center;
-}
-
-.profile_information_area a {
-    color: black;
-    margin-top: 5px;
-}
-
-/* 사용자 이름, 프로필편집 버튼, 설정창 -> 이름 */
-.profile_imformation_user_name {
-    font-size: 20px;
-    margin-right: 20px;
-}
-
-/* 프로필 설명란(팔로워 팔로잉 사용자 이름) */
-.profile_explanation_area {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-bottom: 20px;
-    margin-right: 40px;
-    font-size: 16px;
-}
-
-/* 프로필 설명란(팔로워 팔로잉 사용자 이름)*/
-.feed_follow_count {
-    margin-right: 40px;
-}
-
-.feed_follow_count > span {
-    font-weight: bold;
-}
-
-/* 사용자가 좋아요 게시한 글 북마크한 게시글을 보여주기 위한 버튼 */
-.myfeed_like_bookmark_button {
-    border-top: solid 2px rgba(50, 50, 50, 0.1);
-    width: 100%;
-}
-
-.myfeed_like_bookmark_button > div {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: start;
-}
-
-/* 활성화된 버튼에 밑줄표시 */
-.myfeed_like_bookmark_button > div div {
-    color: #737373;
-    font-size: 12px;
-    cursor: pointer;
-    height: 52px;
-    margin: 0 50px;
-    padding-top: 5px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    border-top-width: 1px;
-}
-
-.myfeed_like_bookmark_button > div > div span {
-    margin-right: 5px;
-}
-
-.profile_feed_list {
+/* 내가 좋아요한 게시글 목록 */
+#like_feed_list {
     width: 100%;
     display: none;
     align-items: center;
     justify-content: center;
 }
 
-.profile_feed_list > div {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 1000px;
-    justify-content: center;
-}
-
-.profile_feed_list > div > div {
-    width: 30%;
-    height: 30%;
-    margin: 10px 5px 0 5px;
-}
-
-.profile_feed_list > div > div > div {
-    position: relative;
+/* 내가 북마크한 게시글 목록 */
+#bookmark_feed_list {
     width: 100%;
-    height: 100%;
-    cursor: pointer;
-}
-/* 좋아요, 댓글 수 */
-.profile_feed_modal_view {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 }
 
-.profile_feed_modal_view div {
-    margin: 10px;
+.box {
+    width: 160px !important;
+    height: 160px !important;
 }
 
-.profile_feed_modal_view div span {
-    margin-right: 5px;
-}
-/* 프로필 피드 이미지 */
-.profile_feed_image > img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
+/* 반응형 웹 */
+@media (max-width: 725px) {
+    .profile_feed_follow_area {
+        display: none !important;
+    }
+
+    .settigns_icon {
+        display: none !important;
+    }
+
+    .feed_select_button {
+        display: none;
+    }
+
+    .profile_image_area {
+        padding-right: 70px !important;
+        padding-left: 50px !important;
+    }
 }
