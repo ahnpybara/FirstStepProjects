@@ -303,6 +303,7 @@ $('#nav_bar_add_box').click(function () {
         overflow: 'hidden'
     });
 });
+
 // 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
     let file = files[0];
@@ -565,7 +566,6 @@ $('.update_reply').click(function (event) {
     $('#reply_menu_' + reply_id).css({
         display: 'none'
     });
-
 });
 
 // 05-12 유재우 : 댓글 수정하기를 눌렸을 때 댓글 수정창을 띄움, 안치윤: 전역변수 제거
@@ -924,7 +924,7 @@ $(".profile_feed_mouse_over").click(function () {
 });
 
 
-// 댓글 게시 버튼 이벤트 처리
+// 피드 모달에서 댓글 게시 버튼 이벤트 처리
 $(".modal_upload_reply").click(function (event) {
     // 게시 버튼 태그의 id 속성 값을 가져옴
     let feed_id = event.target.attributes.getNamedItem('feed_id').value;
@@ -977,6 +977,7 @@ $(".modal_upload_reply").click(function (event) {
         }
     });
 });
+
 //05-20 유재우 : 해시태그를 눌렸을 때 해시태그를 검색함
 $('.hashtags').click(function () {
     let hashtag_content = $(this).attr('hashtag_content');

@@ -1,0 +1,31 @@
+/*정유진: class profile_feed_mouse_over 와 feed_count 추가 */
+/*정유진: 게시물에 마우스 커서룰 올리기 전 상태.*/
+.profile_feed_mouse_over {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/*정유진: 게시물에 마우스 커서를 올리면 밝기가 낮아진다.*/
+.profile_feed_mouse_over:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 정유진: 게시글 좋아요 수와 댓글을 숨긴다.*/
+.profile_feed_mouse_over > .feed_count {
+    display: none;
+}
+
+/*정유진: 게시물의 좋아요 수와 댓글 수를 보여준다.*/
+.profile_feed_mouse_over:hover > .feed_count {
+    color: white;
+    display: flex;
+}
+
+/* 프로필 정보 커서 변경 */
+.movetoprofile {
+    cursor: pointer;
+}
+
+/* 닉네임. 자동완성에 닉네임, 이름에 사용 */
+.feed_nickname {
+    margin-left: 10px;
+}

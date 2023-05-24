@@ -5,10 +5,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
+    <!-- css 분리 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}?ver=5">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=4">
 
     <!-- Bootstrap CSS 사용하기 위한 선언  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
     <!--  Google 심볼을 사용하기 위한 선언 -->
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
@@ -24,277 +29,61 @@
     <title>프로필</title>
 
     <style>
-        /* 안치윤 : 모달창 닫기 버튼 margin style 속성으로 안먹음*/
-        .modal_close {
-            margin-right: 10px;
-        }
-
-        /* 안치윤 : 검색창 css */
-        .bar_search {
-            position: relative;
-        }
-
-        .bar_search input {
-            width: 400px;
-            padding: 8px 16px 8px 40px;
-            background-color: #efefef;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: lighter;
-        }
-
-        .bar_search input:focus {
-            outline: none;
-        }
-
-        /* 안치윤 : 구글 심볼 */
-        .uTrue {
-            cursor: pointer;
-            color: rgb(0, 0, 1);
-            font-size: 28px;
-            font-variation-settings: 'FILL' 1,
-            'wght' 500,
-            'GRAD' 0,
-            'opsz' 48
-        }
-
-        /* 안치윤 : 구글 심볼 */
-        .uFalse {
+        /* 구글 머리티얼 아이콘은 css 분리가 안됨 */
+        .menu_icon {
+            font-size: 32px;
+            wght: 100;
+            padding-right: 20px;
             cursor: pointer;
             color: black;
-            font-size: 28px;
-            font-variation-settings: 'FILL' 0,
-            'wght' 500,
-            'GRAD' 0,
-            'opsz' 48
-        }
-
-        /* 안치윤 : 메뉴 폰트 사이즈 수정 */
-        .material_menu_icon {
-            font-size: 32px; /* Preferred icon size */
-            wght: 100;
-        }
-
-        /* 안치윤 : 반응형 웹을 위한 코드 */
-        @media (max-width: 1000px) {
-            .follow-side {
-                display: none;
-            }
-        }
-
-        @media (max-width: 760px) {
-            .bar_search {
-                display: none;
-            }
-
-            .feed_follow_count {
-                display: none;
-            }
-
-            .navbar-brand {
-                position: absolute;
-                top: 8px;
-                left: 12px;
-            }
-
-            .menu_icons {
-                position: absolute;
-                top: 8px;
-                right: 12px;
-            }
-
-            .profile_imformation {
-                margin-right: 80px;
-            }
-
-            .feed_select_button {
-                display: none;
-            }
-        }
-
-        /* 프로필 화면 박스 */
-        .box {
-            width: 150px;
-            height: 150px;
-            border-radius: 70%;
-            overflow: hidden;
-        }
-
-        /* 프로필 사진 */
-        .profile {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* 모달창의 바깥 영역 */
-        .modal_overlay {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-            left: 0;
-            top: 0;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            z-index: 10000;
-        }
-
-        /* 안치윤 : 크기 수정, 모달창의 영역 */
-        .modal_window {
-            background: white;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            width: 40%;
-            height: 600px;
-            min-width: 500px;
-        }
-
-        .follow_button {
-
-        }
-
-        /* 안치윤 : 이 웹에선 클릭시 하이라이트가 생기지 않게 함 */
-        html {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        }
-
-        /*정유진: class profile_feed_mouse_over 와 feed_count 추가 */
-        /*정유진: 게시물에 마우스 커서룰 올리기 전 상태.*/
-        .profile_feed_mouse_over {
-            background-color: rgba(0, 0, 0, 0);
-        }
-
-        /*정유진: 게시물에 마우스 커서를 올리면 밝기가 낮아진다.*/
-        .profile_feed_mouse_over:hover {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        /* 정유진: 게시글 좋아요 수와 댓글을 숨긴다.*/
-        .profile_feed_mouse_over > .feed_count {
-            display: none;
-        }
-
-        /*정유진: 게시물의 좋아요 수와 댓글 수를 보여준다.*/
-        .profile_feed_mouse_over:hover > .feed_count {
-            color: white;
-            display: flex;
-        }
-
-        /* 안치윤 : 스크롤은 동작하지만 보이지 않게 함 */
-        .modal_text_area {
-            -ms-overflow-style: none; /* 인터넷 익스플로러 */
-            scrollbar-width: none; /* 파이어폭스 */
-        }
-
-        .modal_text_area::-webkit-scrollbar {
-            display: none; /* 크롬, 사파리, 오페라, 엣지 */
-        }
-
-        /* 정유진: 내용 줄바꿈*/
-        .text_line {
-            overflow-wrap: anywhere;
-        }
-
-        /* 자동완성의 스크롤은 동작하지만 보이지 않게 함 */
-        .auto_madal_list_area {
-            -ms-overflow-style: none; /* 인터넷 익스플로러 */
-            scrollbar-width: none; /* 파이어폭스 */
-        }
-
-        .auto_madal_list_area::-webkit-scrollbar {
-            display: none; /* 크롬, 사파리, 오페라, 엣지 */
-        }
-
-        /* 자동완성 모달 */
-        #auto_modal {
-            width: 400px;
-            height: 300px;
-            position: fixed;
-            display: none;
-            top: 50px;
-            z-index: 999;
-            background: white;
-        }
-
-        /* 자동완성 리스트 */
-        #auto_modal_list {
-            overflow-y: auto;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 프로필 정보 커서 변경 */
-        .movetoprofile {
-            cursor: pointer;
-        }
-
-        /* 닉네임. 자동완성에 닉네임, 이름에 사용 */
-        .feed_nickname {
-            margin-left: 10px;
         }
     </style>
 </head>
 <body>
 <!-- 맨 위 상단 메뉴바(로고 검색 기타메뉴)를 만드는 코드 -->
-<nav class="navbar navbar-expand-lg navbar-white bg-white"
-     style="position: fixed; width: 100%; height: 61px; z-index: 999; border-bottom: 1px solid #e1e1e1">
-    <!-- 안치윤 : 메뉴바 style 수정(아이콘 크기 및 색깔) -->
-    <div class="menu_bar"
-         style="display: flex; width: 100%; flex-direction:row; justify-content: space-around; min-width: 800px">
+<nav class="navbar navbar-expand-lg navbar-white bg-white">
+    <!-- 메뉴바 -->
+    <div class="menu_bar">
         <!-- 로고 -->
-        <a class="navbar-brand" href="/main"><img style="width: 167px"
+        <a class="navbar-brand" href="/main"><img class="astro_logo"
                                                   src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png"
                                                   alt="text">
         </a>
-        <!-- 안치윤 : 검색창 -->
-        <form class="bar_search" action="{% url 'content:feed_search' %}" method="GET">
+        <!-- 검색창 -->
+        <form id="search_bar" class="bar_search" action="{% url 'content:feed_search' %}" method="GET">
+            <!-- 정유진: 자동완성에 사용될 id 추가. autocomplete 값을 off로 해서 검색 창에 예전에 입력했던 입력값 안 보이게 수정 -->
             <input id="search_box" type="text" name="search" placeholder="Search" autocomplete="off">
         </form>
-        <!-- 안치윤 : 클래스명 부여, 스타일 수정 메뉴 아이콘 들 -->
-        <div class="menu_icons" style="display: flex; padding-top: 5px">
-            <a href="/main" style="color: black"><span class="material_menu_icon material-icons"
-                                                       style="padding-right: 20px"> home</span></a>
-            <span id="nav_bar_add_box" class="material_menu_icon material-icons-outlined"
-                  style="padding-right: 20px; cursor: pointer">add_box</span>
+        <!-- 메뉴 아이콘 들 -->
+        <div class="menu_icons">
+            <a href="/main"><span class="menu_icon material-icons"> home</span></a>
+            <span id="nav_bar_add_box" class="menu_icon material-icons-outlined">add_box</span>
             <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
             <div class="dropdown">
                 <a href="#" role="button" id="dropdownMenuLink"
                    data-bs-toggle="dropdown" aria-expanded="false">
                     <!-- 주 메뉴(프로필 사진)-->
-                    <div class="box" style="width: 32px; height: 32px">
+                    <div class="profile_box">
 
                         <img class="profile"
                              src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
 
                     </div>
                 </a>
-                <!-- 안치윤 : 수정, 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
-                <ul class="dropdown-menu" style="left:-108px; text-align: center; min-width: 8rem"
-                    aria-labelledby="dropdownMenuLink">
-                    <li><a class="dropdown-item" href="/content/profile" style="font-weight: bold">프로필</a></li>
+                <!-- 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
+                <ul id="nav_dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="/content/profile"><b>프로필</b></a></li>
                     <li>
                         <!-- 구분선 -->
                         <hr class="dropdown-divider">
                     </li>
                     <!-- 로그아웃 버튼 클릭시 현재 경로에서 /user/logout으로 이동 -->
-                    <li><a class="dropdown-item" href="/user/logout" style="font-weight: bold; color: red">로그아웃</a></li>
+                    <li><a id="logout_menu" class="dropdown-item" href="/user/logout">로그아웃</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </nav>
-
 
 <!-- 프로필 사진과 프로필 정보 텍스트 영역 -->
 <div style="display: flex; flex-direction: row;text-align: center; justify-content: center; align-items: center; padding-top: 60px; background-color:#FAFAFA">
@@ -487,37 +276,34 @@
     </div>
 </div>
 
-
 <!-- 안치윤 : 디자인 수정, 사진 업로드 창 첫번째 모달 -->
 <div id="first_modal" class="modal_overlay">
-    <div class="modal_window" style="position: absolute">
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px 0">
+    <div class="modal_window">
+        <div class="feed_upload_modal_bar">
             <div>
-                <p style="margin-left: 30px"></p>
+                <p class="space"></p>
             </div>
             <div>
                 <b>새로운 피드 생성</b>
             </div>
             <!-- 모달창 닫기 버튼 -->
             <div>
-                <span class="modal_close material-icons-outlined" style="cursor: pointer">close</span>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
 
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div class="img_upload_space"
-             style="border-top: solid 1px #d8d8d8; width: 100%; height: 521px; text-align: center">
-            <div style="margin-top: 200px; color: black; font-weight: 500; font-size: 19px">
+        <div class="img_upload_space">
+            <div class="drag_here_image">
                 이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
             </div>
 
             <!--사진 찾는 파일 시스템을 여는 버튼-->
-            <button id="image_upload_btn" type="button" class="btn btn-primary"
-                    style="width: 130px; margin-top: 20px; font-weight: bold; background-color: rgb(0, 149, 246)">
+            <button id="image_upload_btn" type="button" class="btn btn-primary">
                 사진 추가
             </button>
             <!--파일 입력 폼-->
-            <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
+            <input type="file" id="input_image_upload" onchange="image_upload();"/>
         </div>
 
     </div>
@@ -525,39 +311,43 @@
 <!-- 안치윤 : 디자인 수정, 글 내용 작성 모달창 두번째 모달 -->
 <div id="second_modal" class="modal_overlay">
     <div class="modal_window">
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px 0">
+        <div class="feed_upload_modal_bar">
             <div>
-                <p style="margin-left: 30px"></p>
+                <p class="space"></p>
             </div>
             <div>
                 <b>새로운 피드 생성</b>
             </div>
             <!-- 모달창 닫기 버튼 -->
             <div>
-                <span class="modal_close material-icons-outlined" style="cursor: pointer">close</span>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div style="border-top: solid 1px #d8d8d8; display: flex; flex-direction: row">
-            <div class="img_upload_space" style="width: 500px; height: 540px;">
+        <div class="feed_image_text_modal">
+            <div class="img_upload_space">
 
             </div>
-            <div style="border-left: solid 1px #d8d8d8">
-                <!-- 게시글 작성 텍스트박스 -->
-                <div>
-                    <textarea id="input_feed_content" class="form-control"
-                              style="width: 276px; height: 500px; box-shadow: none; border: none; outline: none"
-                              id="exampleFormControlTextarea1" rows="5" placeholder="글 내용 작성..."></textarea>
+            <div class="modal_text_area">
+                <!-- 안치윤 : 해시태그 !! 게시글 작성 텍스트박스 -->
+                <div class="feed_content_input">
+                    <div>
+                        <textarea id="input_feed_content" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="글 내용 작성..."></textarea>
+                    </div>
+                    <div>
+                        <textarea id="input_feed_hashtag" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="해시태그 내용 작성..."></textarea>
+                    </div>
                 </div>
                 <!-- 공유하기 버튼 -->
-                <button id="feed_create_button" type="button" class="btn btn-primary"
-                        style="width: 100%; background-color: rgb(0, 149, 246); margin-top: 8px">
+                <button id="feed_create_button" type="button" class="btn btn-primary">
                     공유하기
                 </button>
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -567,7 +357,7 @@
     <div id="auto_modal_list" class="auto_madal_list_area">
     </div>
 </div>
-<!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
+<!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. TODO -->
 <div id="feed_modal" class="modal_overlay">
     <div class="modal_window"
          style="display: flex;flex-direction: column;justify-content: space-between; width: 50%; height: 90%">
