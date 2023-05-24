@@ -180,7 +180,7 @@
 }
 
 /* 댓글 모두 보기 */
-.profile_feed_mouse_over {
+.feed_modal {
     font-size: 14px;
     color: gray;
     cursor: pointer;
