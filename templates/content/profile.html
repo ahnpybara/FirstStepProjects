@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}?ver=5">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}?ver=10">
     <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=4">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=4">
 
@@ -86,19 +86,19 @@
 </nav>
 
 <!-- 프로필 사진과 프로필 정보 텍스트 영역 -->
-<div style="display: flex; flex-direction: row;text-align: center; justify-content: center; align-items: center; padding-top: 60px; background-color:#FAFAFA">
+<div class="profile_profile_image_info_text_area">
     <!-- 프로필 사진 -->
-    <div style="padding: 30px 100px">
+    <div class="profile_profile_image">
         <div class="box" style="width: 160px; height: 160px">
             <img class="profile"
                  src="{% get_media_prefix %}{{ user.profile_image }}" alt="text">
         </div>
     </div>
     <!-- 텍스트 설명란 -->
-    <div class="profile_imformation" style="text-align: left; margin-bottom: 10px">
+    <div class="profile_information">
         <!-- 사용자 이름, 프로필편집 버튼, 설정창 -->
-        <div style="display: flex; flex-direction: row; margin-bottom: 20px; align-items: center">
-            <div style="font-size: 20px; margin-right: 20px">
+        <div class="profile_information_area">
+            <div class="profile_information_user_name">
                 {{ user.nickname }}
             </div>
             <!-- 안치윤 : 서버로 부터 팔로우 여부를 받아옴, 팔로우 버튼 추가 -->
@@ -116,21 +116,21 @@
                 {% endif %}
             </div>
             <!-- 05-17 유재우 : 셋팅이랑 연결-->
-            <a style="color: black; margin-top: 5px; {% if user_session.email != user.email %} display: none{% endif %}"
+            <a style="{% if user_session.email != user.email %} display: none{% endif %}"
                href="/user/profile/setting"><span class="material-symbols-outlined">manage_accounts</span></a>
 
         </div>
         <!-- 프로필 설명란(팔로워 팔로잉 사용자 이름) -->
-        <div style="display: flex; flex-direction: row; justify-content: center ;margin-bottom: 20px; margin-right: 40px; font-size: 16px">
-            <div class="feed_follow_count" style="margin-right: 40px">
+        <div class="profile_explanation_area">
+            <div class="feed_follow_count">
                 게시물
-                <span style="font-weight: bold;">{{ user_feed_count }}</span>
+                <span>{{ user_feed_count }}</span>
             </div>
-            <div class="feed_follow_count" style="margin-right: 40px">
+            <div class="feed_follow_count">
                 팔로워
                 <span style="font-weight: bold;">{{ follower_count }}</span>
             </div>
-            <div class="feed_follow_count" style="margin-right: 40px">
+            <div class="feed_follow_count">
                 팔로잉
                 <span style="font-weight: bold;">{{ following_count }}</span>
             </div>
@@ -142,63 +142,61 @@
 </div>
 
 <!-- 안치윤 : 디자인 수정, 사용자가 좋아요 게시한 글 북마크한 게시글을 보여주기 위한 버튼 -->
-<div style="border-top: solid 2px rgba(50,50,50,0.1); width: 100%;">
-    <div style="display: flex; flex-direction: row; justify-content: center; align-items: start">
+<div class="myfeed_like_bookmark_button">
+    <div>
         <!-- 내가 작성한 게시글들을 보기 위한 버튼 -->
         <!-- 초기 화면에 활성화된 버튼에 밑줄표시 -->
         <div id="button_feed_list"
-             style="color: #737373;font-weight: bold; font-size: 12px; cursor: pointer; height: 52px; margin: 0 50px; padding-top: 5px; display: flex; flex-direction: row;align-items: center; border-top-width: 1px;"><span
-                class="material-icons-outlined" style="margin-right: 5px">grid_on</span><b class="feed_select_button">내
+        ><span
+                class="material-icons-outlined">grid_on</span><b class="feed_select_button">내
             게시물</b>
         </div>
         <!-- 내가 좋아요한 게시글들을 보기 위한 버튼 -->
         <!-- 초기 화면에 비활성화된 버튼에 밑줄의 두께 설정 -->
         <div id="button_feed_like_list"
-             style="color: #737373; font-size: 12px; cursor: pointer; height: 52px; margin: 0 50px; padding-top: 5px; display: flex; flex-direction: row;align-items: center; border-top-width: 1px;"><span
-                class="material-icons-outlined" style="margin-right: 5px">favorite_border</span><b
+             style=""><span
+                class="material-icons-outlined">favorite_border</span><b
                 class="feed_select_button">좋아요</b>
         </div>
         <!-- 내가 북마크한 게시글들을 보기 위한 버튼 -->
         <!-- 초기 프로필 화면에 비활성화된 버튼에 밑줄의 두께 설정 -->
         <div id="button_feed_bookmark_list"
-             style="color: #737373; font-weight: bold; font-size: 12px; cursor: pointer; height: 52px; margin: 0 50px; padding-top: 5px; display: flex; flex-direction: row;align-items: center; border-top-width: 1px;"><span
-                class="material-icons-outlined" style="margin-right: 5px">bookmark_border</span><b
+        ><span
+                class="material-icons-outlined">bookmark_border</span><b
                 class="feed_select_button">북마크</b>
         </div>
     </div>
 </div>
 
 <!-- 내가 작성한 게시물 목록 -->
-<div id="feed_list" style="width: 100%; display: flex; align-items: center;justify-content: center">
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap; width: 1000px; justify-content: center">
+<div id="feed_list" class="profile_feed_list" style="display: flex;">
+    <div>
         <!--피드 리스트를 보여주는 반복문-->
         {% for feed in feed_list %}
-            <div style="width: 30%;height: 30%; margin: 10px 5px 0 5px">
+            <div>
                 <!-- 좋아요 북마크 수 보여주기 위한 창 -->
-                <div style="position: relative; width: 100%; height: 100%; cursor: pointer">
+                <div>
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
                     <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
-                         class="profile_feed_mouse_over feed_modal"
-                         style="position: absolute; width: 100%; height: 100%; display: flex;align-items: center;justify-content: center;">
+                         class="profile_feed_mouse_over feed_modal profile_feed_modal_view">
                         <!--좋아요 수 북마크 수를 계산하기 위한 반복문-->
                         {% for count in feed_count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
-                                <div class="feed_count" style="margin: 10px;">
-                                    <span class="material-icons-outlined" style="margin-right:5px">favorite</span>
+                                <div class="feed_count">
+                                    <span class="material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
                                 <!-- 정유진: 댓글 수를 보여준다. -->
-                                <div class="feed_count" style="margin: 10px">
-                                    <span class="material-icons-outlined" style="margin-right:5px">comment</span>
+                                <div class="feed_count">
+                                    <span class="material-icons-outlined">comment</span>
                                     <p>{{ count.reply_count }}</p>
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div>
-                        <img style="width:100%;height: 300px; object-fit: cover"
-                             src="{% get_media_prefix %}{{ feed.image }}" alt="text">
+                    <div class="profile_feed_image">
+                        <img src="{% get_media_prefix %}{{ feed.image }}" alt="text">
                     </div>
                 </div>
             </div>
@@ -207,33 +205,31 @@
 </div>
 
 <!-- 내가 좋아요한 게시글 목록 -->
-<div id="like_feed_list"
-     style="width: 100%; display: none; align-items: center;justify-content: center">
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap; width: 1000px; justify-content: center">
+<div id="like_feed_list" class="profile_feed_list">
+    <div>
         {% for feed in like_feed_list %}
-            <div style="width: 30%;height: 30%; margin: 10px 5px 0 5px;">
-                <div style="position: relative; width: 100%; height: 100%; cursor: pointer">
+            <div>
+                <div>
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
-                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}" class="profile_feed_mouse_over feed_modal"
-                         style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
+                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
+                         class="profile_feed_mouse_over feed_modal profile_feed_modal_view">
                         {% for count in like_count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
-                                <div class="feed_count" style="margin: 10px;">
-                                    <span class="material-icons-outlined" style="margin-right:5px">favorite</span>
+                                <div class="feed_count">
+                                    <span class="material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
                                 <!-- 정유진: 댓글 수를 보여준다. -->
-                                <div class="feed_count" style="margin: 10px">
-                                    <span class="material-icons-outlined" style="margin-right:5px">comment</span>
+                                <div class="feed_count">
+                                    <span class="material-icons-outlined">comment</span>
                                     <p>{{ count.reply_count }}</p>
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div>
-                        <img style="width: 100%;height: 300px; object-fit: cover"
-                             src="{% get_media_prefix %}{{ feed.image }}" alt="text">
+                    <div class="profile_feed_image">
+                        <img src="{% get_media_prefix %}{{ feed.image }}" alt="text">
                     </div>
                 </div>
             </div>
@@ -242,33 +238,31 @@
 </div>
 
 <!-- 내가 북마크한 게시글 목록 -->
-<div id="bookmark_feed_list"
-     style="width: 100%; display: none; align-items: center;justify-content: center">
-    <div style="display: flex; flex-direction: row; flex-wrap: wrap; width: 1000px; justify-content: center">
+<div id="bookmark_feed_list" class="profile_feed_list">
+    <div>
         {% for feed in bookmark_feed_list %}
-            <div style="width: 30%;height: 30%; margin: 10px 5px 0 5px;">
-                <div style="position: relative; width: 100%; height: 100%; cursor: pointer">
+            <div>
+                <div>
                     <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
-                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}" class="profile_feed_mouse_over feed_modal"
-                         style="position: absolute; width: 100%;height: 100%;display: flex;align-items: center;justify-content: center;">
+                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
+                         class="profile_feed_mouse_over feed_modal profile_feed_modal_view">
                         {% for count in bookmark_count_list %}
                             {% if count.id == feed.id %}
                                 <!-- 정유진: 좋아요 수를 보여준다. -->
-                                <div class="feed_count" style="margin: 10px;">
-                                    <span class="material-icons-outlined" style="margin-right:5px">favorite</span>
+                                <div class="feed_count">
+                                    <span class="material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
                                 <!-- 정유진: 댓글 수를 보여준다. -->
-                                <div class="feed_count" style="margin: 10px">
-                                    <span class="material-icons-outlined" style="margin-right:5px">comment</span>
+                                <div class="feed_count">
+                                    <span class="material-icons-outlined">comment</span>
                                     <p>{{ count.reply_count }}</p>
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div>
-                        <img style="width:100%;height: 300px; object-fit: cover"
-                             src="{% get_media_prefix %}{{ feed.image }}" alt="text">
+                    <div class="profile_feed_image">
+                        <img src="{% get_media_prefix %}{{ feed.image }}" alt="text">
                     </div>
                 </div>
             </div>
@@ -497,7 +491,6 @@
             }
         });
     });
-
 
     // 내가 쓴 게시물 이벤트 처리
     $("#button_feed_list").click(function () {
@@ -866,7 +859,7 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 
-<script src="{% static 'js/main_profile_same.js' %}?ver=2"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=3"></script>
 <!-- Option 2: Separate Popper and Bootstrap JS -->
 <!--
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
