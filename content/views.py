@@ -98,6 +98,7 @@ class UploadFeed(APIView):
         # 05-21 유재우 : 해시태그
         hashtags_content = request.data.get('hashtags_content')
         hashtags_content = hashtags_content.replace(" ", "");
+        hashtags_search_list = hashtags_content.replace("\n", "");
         # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
         hashtags_list = hashtags_content.split("#")
         # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
@@ -108,7 +109,7 @@ class UploadFeed(APIView):
         hashtags_list = set(hashtags_list)
         hashtags_list = list(hashtags_list)
 
-        # 05-21 유재우 : 공백 제거
+        # 05-21 유재우 : #으로 구분 하였기에 #앞에 아무것도 없는데 저장 되어서 그걸 삭제 하는 부분
         hashtags_list = list(filter(None, hashtags_list))
 
         # 05-21 유재우 : 저장 되는 feedid값을 강제하기 위해 추가
@@ -150,6 +151,7 @@ class Profile(APIView):
         # 안치윤 : 작성 게시물 개수 추가
         user_feed_count = Feed.objects.filter(email=email).count()
         feed_list = Feed.objects.filter(email=email).order_by('-id')
+        #!!!
         like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
         like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
@@ -396,14 +398,13 @@ class SearchFeed(APIView):
         # 05-20 유재우 : 해시태그 검색
         if (searchKeyword.find("#") == 0):
             text = searchKeyword.replace("#", "");
-            hashtags_search_list = Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id')
-            hashtags_search_list = str(hashtags_search_list)
-            hashtags_search_list = hashtags_search_list.replace("<QuerySet [", "");
-            hashtags_search_list = hashtags_search_list.replace(">", "");
-            hashtags_search_list = hashtags_search_list.replace("]", "");
+
+            hashtag_content_lists = list(Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
+            hashtags_search_list = str(hashtag_content_lists)
             hashtags_search_list = hashtags_search_list.replace(" ", "");
-            hashtags_search_list = hashtags_search_list.replace("(", "");
-            hashtags_search_list = hashtags_search_list.replace(")", "");
+            hashtags_search_list = hashtags_search_list.replace("'", "");
+            hashtags_search_list = hashtags_search_list.replace("[", "");
+            hashtags_search_list = hashtags_search_list.replace("]", "");
             hashtags_search_list = hashtags_search_list.split(",");
             hashtag_search_list = list(filter(None, hashtags_search_list))
 
@@ -468,7 +469,6 @@ class SearchFeed(APIView):
 class RemoveReply(APIView):
     def post(self, request):
         reply_id = request.data.get('reply_id')
-        print(reply_id)
 
         replys = Reply.objects.filter(id=reply_id)
 
@@ -487,9 +487,9 @@ class UpdateFeed(APIView):
         # 05-21 유재우 : 해시태그
         hashtags = Hashtag.objects.filter(feed_id=feed_id)
         hashtags.delete()
-
         hashtag_content = hashtag_content.replace(" ", "");
-        # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
+        hashtag_content = hashtag_content.replace("\n", "");
+        # 05-21 유재우 : 해시태그를 #으로 구분
         hashtags_list = hashtag_content.split("#")
         # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
         if (hashtag_content.find("#") != 0):
@@ -647,21 +647,12 @@ class FeedUpdateIMG(APIView):
     def get(self, request):
         feed_id = int(request.GET.get('feed_id', None))
         feed_modal = Feed.objects.filter(id=feed_id).first()
-        hashtag_content_list = Hashtag.objects.filter(feed_id=feed_id)
-        hashtag_content = []
-        for hashtag in hashtag_content_list:
-            hashtag_content.append(dict(content=hashtag.content))
-
-        hashtag_list = str(hashtag_content)
-        print(hashtag_list)
+        hashtag_content_lists = list(Hashtag.objects.filter(feed_id=feed_id).values_list('content', flat=True))
+        hashtag_list = str(hashtag_content_lists)
         hashtag_list = hashtag_list.replace(" ", "");
-        hashtag_list = hashtag_list.replace("}", "");
-        hashtag_list = hashtag_list.replace("{", "");
         hashtag_list = hashtag_list.replace("'", "");
         hashtag_list = hashtag_list.replace("[", "");
         hashtag_list = hashtag_list.replace("]", "");
-        hashtag_list = hashtag_list.replace("content", "");
-        hashtag_list = hashtag_list.replace(":", "");
         hashtag_list = hashtag_list.split(",");
         hashtag_list = list(filter(None, hashtag_list))
         # 05-21 유재우 : 해시태그를 띄여쓰기로 구분

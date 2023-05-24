@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'join.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/join.css' %}?ver=4">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/join_login_same.css' %}?ver=4">
+
 
     <!-- 부트스트랩을 사용하기 위한 선언 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -18,19 +20,19 @@
     <title>회원 가입</title>
 </head>
 <body>
-<div id="join_root_div">
+<div id="root_div">
     <!-- 회원가입시 사용자 정보를 적을 외부 테두리 박스1 -->
-    <div class="join_border_outline">
+    <div class="border_outline">
         <!-- 로고 -->
-        <div id="join_logo"><img
+        <div id="logo"><img
                 src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png"
                 alt="text">
         </div>
         <!-- 설명란 -->
-        <div id="join_explain_text"> 친구들의 소식을 보려면 가입하세요.</div>
+        <div id="explain_text"> 친구들의 소식을 보려면 가입하세요.</div>
         <!-- 이메일 입력란 -->
         <div>
-            <div id="join_email_box" class="form-floating mb-3">
+            <div id="email_box" class="form-floating mb-3">
                 <input type="email" class="form-control" id="input_email" placeholder="name@example.com">
                 <!-- 정유진: id email_error 추가. 이메일 양식에서 벗어나면 이메일 양식에 맞지 않다고 빨간 글로 바뀐다. -->
                 <label id="email_error" for="input_email">이메일
@@ -56,7 +58,7 @@
         </div>
         <!-- 비밀번호 -->
         <div>
-            <div id="join_password_box" class="form-floating mb-3">
+            <div id="password_box" class="form-floating mb-3">
                 <input type="password" class="form-control" id="input_password"
                        placeholder="name@example.com">
                 <!-- 정유진: id password_error 추가. 비밀번호 양식에서 벗어나면 빨간 글로 바뀐다 -->
@@ -64,10 +66,10 @@
             </div>
         </div>
         <!-- 가입 버튼 -->
-        <button id="join_button" class="btn btn-primary"> 가입</button>
+        <button id="access_button" class="btn btn-primary"> 가입</button>
     </div>
     <!-- 로그인으로 넘어가기 위한 내용의 외부 테두리 박스2 -->
-    <div class="page_move_login_box">
+    <div class="page_move_box">
         <div> 계정이 있으신가요? <a href="login">로그인</a></div>
     </div>
 </div>
@@ -82,6 +84,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'join.js' %}"></script>
+<script src="{% static 'js/join.js' %}"></script>
 </body>
 </html>

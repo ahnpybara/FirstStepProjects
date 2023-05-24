@@ -158,6 +158,8 @@ class RemoveProfile(APIView):
         following = Follow.objects.filter(following=email)
         following.delete()
 
+        feeds = Feed.objects.filter(email=email)
+
         feeds.delete()
         user.delete()
         return render(request, "user/join.html")
