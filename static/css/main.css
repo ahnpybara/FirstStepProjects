@@ -400,20 +400,12 @@
 
 /* 피드 수정 모달 수정 영역 */
 .feed_image_text_modal {
-    border-top: solid 1px #d8d8d8;
-    display: flex;
-    flex-direction: row;
+    border-top: 1px solid #e1e1e1;
 }
 
-/* 피드 수정 모달*/
-.feed_modal_image {
-    border-top: solid 1px #d8d8d8;
-    width: 500px;
-    height: 521px;
-    text-align: center;
-}
-
-#feed_update_button {
-    width: 100%;
-    background-color: rgb(0, 149, 246);
+/* 반응형 웹 */
+@media (max-width: 1000px) {
+    .follow_side_area {
+        display: none;
+    }
 }
