@@ -1,5 +1,5 @@
 // 정유진: 가입 버튼 비활성화
-document.getElementById("join_button").disabled = true;
+document.getElementById("access_button").disabled = true;
 // 정유진: W3C에 나와있는 정규식은 /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 // 정유진: 이메일 정규식 확인. {,}는 최소 수와 최대 수를 나타낸다.
 let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -39,9 +39,9 @@ $('#input_email').keyup(function () {
     // 정유진: 버튼 활성화 조건 확인. 이메일, 이름, 닉네임, 비닐번호.
     for (let i = 0; i < check.length; i++) {
         if (check[i]) {
-            document.getElementById("join_button").disabled = false;
+            document.getElementById("access_button").disabled = false;
         } else {
-            document.getElementById("join_button").disabled = true;
+            document.getElementById("access_button").disabled = true;
             return false;
         }
     }
@@ -64,9 +64,9 @@ $('#input_name').keyup(function () {
     // 정유진: 버튼 활성화 조건 확인. 이메일, 이름, 닉네임, 비닐번호.
     for (let i = 0; i < check.length; i++) {
         if (check[i]) {
-            document.getElementById("join_button").disabled = false;
+            document.getElementById("access_button").disabled = false;
         } else {
-            document.getElementById("join_button").disabled = true;
+            document.getElementById("access_button").disabled = true;
             return false;
         }
     }
@@ -101,9 +101,9 @@ $('#input_nickname').keyup(function () {
     // 정유진: 버튼 활성화 조건 확인. 이메일, 이름, 닉네임, 비닐번호.
     for (let i = 0; i < check.length; i++) {
         if (check[i]) {
-            document.getElementById("join_button").disabled = false;
+            document.getElementById("access_button").disabled = false;
         } else {
-            document.getElementById("join_button").disabled = true;
+            document.getElementById("access_button").disabled = true;
             return false;
         }
     }
@@ -132,9 +132,9 @@ $('#input_password').keyup(function () {
     // 정유진: 버튼 활성화 조건 확인. 이메일, 이름, 닉네임, 비닐번호.
     for (let i = 0; i < check.length; i++) {
         if (check[i]) {
-            document.getElementById("join_button").disabled = false;
+            document.getElementById("access_button").disabled = false;
         } else {
-            document.getElementById("join_button").disabled = true;
+            document.getElementById("access_button").disabled = true;
             return false;
         }
     }
@@ -143,7 +143,7 @@ $('#input_password').keyup(function () {
 
 // 가입 버튼 클릭시 이벤트 처리
 // + 입력칸들의 유효성을 확인 후 버튼 활성화
-$('#join_button').click(function () {
+$('#access_button').click(function () {
     // 각각의 입력 폼에 입력된 내용을 가지고 와서 각각의 변수에 저장
     let email = $('#input_email').val();
     let name = $('#input_name').val();

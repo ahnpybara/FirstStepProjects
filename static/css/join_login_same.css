@@ -2,43 +2,44 @@ body {
     background: #FAFAFA !important;
 }
 
-#join_root_div {
+/* 로그인 영역 */
+#root_div {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     width: 100% !important;
 }
 
-/* 회원가입 창 */
-.join_border_outline {
+/* 로그인 창 */
+.border_outline {
     padding: 20px;
     text-align: center;
     border: solid 1px rgba(219, 219, 219, 1);
     width: 350px;
-    height: 445px;
+    height: 335px;
     margin-top: 90px !important;
     background: white;
 }
 
 /* 로고(부모) */
-#join_logo {
+#logo {
     padding: 20px 0;
 }
 
 /* 로고 */
-#join_logo > img {
+#logo > img {
     width: 180px;
 }
 
 /* 설명란 */
-#join_explain_text {
+#explain_text {
     font-weight: bold;
     color: gray;
     padding-bottom: 20px;
 }
 
 /* 이메일 입력 박스 */
-#join_email_box {
+#email_box {
     display: flex;
     justify-content: center;
 }
@@ -62,58 +63,8 @@ body {
     color: gray;
 }
 
-/* 이름 입력 박스 */
-#join_name_box {
-    display: flex;
-    justify-content: center;
-}
-
-/* 이름 입력란 */
-#input_name {
-    font-size: 14px;
-    width: 90%;
-    height: 40px;
-    background: #FAFAFA;
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-/* 이름 플로팅라벨 */
-#name_error {
-    font-size: 12px;
-    width: 100%;
-    padding: 8px 25px;
-    text-align: left;
-    color: gray;
-}
-
-/* 닉네임 입력 박스 */
-#join_nickname_box {
-    display: flex;
-    justify-content: center;
-}
-
-/* 닉네임 입력란 */
-#input_nickname {
-    font-size: 14px;
-    width: 90%;
-    height: 40px;
-    background: #FAFAFA;
-    box-shadow: none !important;
-    outline: none !important;
-}
-
-/* 닉네임 플로팅라벨 */
-#nickname_error {
-    font-size: 12px;
-    width: 100%;
-    padding: 8px 25px;
-    text-align: left;
-    color: gray;
-}
-
 /* 비밀번호 입력 박스 */
-#join_password_box {
+#password_box {
     display: flex;
     justify-content: center;
 }
@@ -137,15 +88,15 @@ body {
     color: gray;
 }
 
-/* 가입 버튼 */
-#join_button {
+/* 로그인 버튼 */
+#access_button {
     width: 90%;
     font-weight: bold;
     margin-bottom: 20px;
 }
 
-/* 로그인 페이지로 이동하기 위한 박스 */
-.page_move_login_box {
+/* 회원가입 페이지로 이동하기 위한 박스 */
+.page_move_box {
     padding: 20px;
     border: solid 1px rgba(219, 219, 219, 1);
     width: 350px;
@@ -157,6 +108,7 @@ body {
     align-items: center;
 }
 
+/* a태그 스타일 변경 */
 a {
     text-decoration: none !important;
     font-weight: bold;
