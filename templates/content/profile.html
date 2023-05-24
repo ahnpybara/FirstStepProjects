@@ -276,37 +276,34 @@
     </div>
 </div>
 
-
 <!-- 안치윤 : 디자인 수정, 사진 업로드 창 첫번째 모달 -->
 <div id="first_modal" class="modal_overlay">
-    <div class="modal_window" style="position: absolute">
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px 0">
+    <div class="modal_window">
+        <div class="feed_upload_modal_bar">
             <div>
-                <p style="margin-left: 30px"></p>
+                <p class="space"></p>
             </div>
             <div>
                 <b>새로운 피드 생성</b>
             </div>
             <!-- 모달창 닫기 버튼 -->
             <div>
-                <span class="modal_close material-icons-outlined" style="cursor: pointer">close</span>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
 
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div class="img_upload_space"
-             style="border-top: solid 1px #d8d8d8; width: 100%; height: 521px; text-align: center">
-            <div style="margin-top: 200px; color: black; font-weight: 500; font-size: 19px">
+        <div class="img_upload_space">
+            <div class="drag_here_image">
                 이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
             </div>
 
             <!--사진 찾는 파일 시스템을 여는 버튼-->
-            <button id="image_upload_btn" type="button" class="btn btn-primary"
-                    style="width: 130px; margin-top: 20px; font-weight: bold; background-color: rgb(0, 149, 246)">
+            <button id="image_upload_btn" type="button" class="btn btn-primary">
                 사진 추가
             </button>
             <!--파일 입력 폼-->
-            <input type="file" id="input_image_upload" onchange="image_upload();" style="display: none"/>
+            <input type="file" id="input_image_upload" onchange="image_upload();"/>
         </div>
 
     </div>
@@ -314,39 +311,43 @@
 <!-- 안치윤 : 디자인 수정, 글 내용 작성 모달창 두번째 모달 -->
 <div id="second_modal" class="modal_overlay">
     <div class="modal_window">
-        <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin: 10px 0">
+        <div class="feed_upload_modal_bar">
             <div>
-                <p style="margin-left: 30px"></p>
+                <p class="space"></p>
             </div>
             <div>
                 <b>새로운 피드 생성</b>
             </div>
             <!-- 모달창 닫기 버튼 -->
             <div>
-                <span class="modal_close material-icons-outlined" style="cursor: pointer">close</span>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
-        <div style="border-top: solid 1px #d8d8d8; display: flex; flex-direction: row">
-            <div class="img_upload_space" style="width: 500px; height: 540px;">
+        <div class="feed_image_text_modal">
+            <div class="img_upload_space">
 
             </div>
-            <div style="border-left: solid 1px #d8d8d8">
-                <!-- 게시글 작성 텍스트박스 -->
-                <div>
-                    <textarea id="input_feed_content" class="form-control"
-                              style="width: 276px; height: 500px; box-shadow: none; border: none; outline: none"
-                              id="exampleFormControlTextarea1" rows="5" placeholder="글 내용 작성..."></textarea>
+            <div class="modal_text_area">
+                <!-- 안치윤 : 해시태그 !! 게시글 작성 텍스트박스 -->
+                <div class="feed_content_input">
+                    <div>
+                        <textarea id="input_feed_content" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="글 내용 작성..."></textarea>
+                    </div>
+                    <div>
+                        <textarea id="input_feed_hashtag" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="해시태그 내용 작성..."></textarea>
+                    </div>
                 </div>
                 <!-- 공유하기 버튼 -->
-                <button id="feed_create_button" type="button" class="btn btn-primary"
-                        style="width: 100%; background-color: rgb(0, 149, 246); margin-top: 8px">
+                <button id="feed_create_button" type="button" class="btn btn-primary">
                     공유하기
                 </button>
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -356,7 +357,7 @@
     <div id="auto_modal_list" class="auto_madal_list_area">
     </div>
 </div>
-<!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
+<!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. TODO -->
 <div id="feed_modal" class="modal_overlay">
     <div class="modal_window"
          style="display: flex;flex-direction: column;justify-content: space-between; width: 50%; height: 90%">
