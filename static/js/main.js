@@ -307,6 +307,7 @@ $('#nav_bar_add_box').click(function () {
         overflow: 'hidden'
     });
 });
+
 // 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
     let file = files[0];
@@ -499,7 +500,8 @@ $('.update_feed').click(function (event) {
 
     Feeds_id = event.target.attributes.getNamedItem('feed_id').value;
     $('#third_modal').css({
-        display: 'flex'
+        display: 'flex',
+
     });
     // 05-23 유재우 : 이미지 띄우는 부분 추가
     $.ajax({
@@ -515,9 +517,8 @@ $('.update_feed').click(function (event) {
             var feed_content = data['feed_content'];
             var hashtag_content = data['hashtag_content']
 
-
             // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
-            $("#feed_modal_image").html('<img style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px" src="' + feed_image + '">');
+            $("#feed_modal_image").html('<img style="width: 500px;height: 521px; outline: none; background-size: contain; background-repeat: no-repeat;background-position: center; object-fit: contain; border-radius: 10px" src="' + feed_image + '">');
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
             // 서버로 보내기 위해서 접속할 url : "/content/bookmark"이며 보낼 데이터는 피드아이디와 북마크텍스트, 방식은 POST (Json 형태)
@@ -570,7 +571,6 @@ $('.update_reply').click(function (event) {
     $('#reply_menu_' + reply_id).css({
         display: 'none'
     });
-
 });
 
 // 05-12 유재우 : 댓글 수정하기를 눌렸을 때 댓글 수정창을 띄움, 안치윤: 전역변수 제거
@@ -929,7 +929,7 @@ $(".profile_feed_mouse_over").click(function () {
 });
 
 
-// 댓글 게시 버튼 이벤트 처리
+// 피드 모달에서 댓글 게시 버튼 이벤트 처리
 $(".modal_upload_reply").click(function (event) {
     // 게시 버튼 태그의 id 속성 값을 가져옴
     let feed_id = event.target.attributes.getNamedItem('feed_id').value;
