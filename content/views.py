@@ -98,19 +98,25 @@ class UploadFeed(APIView):
         # 05-21 유재우 : 해시태그
         hashtags_content = request.data.get('hashtags_content')
         hashtags_content = hashtags_content.replace(" ", "");
-        hashtags_search_list = hashtags_content.replace("\n", "");
+        hashtags_content = hashtags_content.replace("\n", "");
+        print(hashtags_content)
         # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
         hashtags_list = hashtags_content.split("#")
+        print(hashtags_list)
         # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
         if (hashtags_content.find("#") != 0):
             del hashtags_list[0]
 
+        hashtags_lists = []
+
         # 05-21 유재우 : 중복 제거
-        hashtags_list = set(hashtags_list)
-        hashtags_list = list(hashtags_list)
+        # 05-25 유재우 : set-list로하면 랜덤 배정이 되어 for문으로 바꿈
+        for value in hashtags_list:
+            if value not in hashtags_lists:
+                hashtags_lists.append(value)
 
         # 05-21 유재우 : #으로 구분 하였기에 #앞에 아무것도 없는데 저장 되어서 그걸 삭제 하는 부분
-        hashtags_list = list(filter(None, hashtags_list))
+        hashtags_list = list(filter(None, hashtags_lists))
 
         # 05-21 유재우 : 저장 되는 feedid값을 강제하기 위해 추가
         if (Feed.objects.count() == 0):
@@ -151,7 +157,7 @@ class Profile(APIView):
         # 안치윤 : 작성 게시물 개수 추가
         user_feed_count = Feed.objects.filter(email=email).count()
         feed_list = Feed.objects.filter(email=email).order_by('-id')
-        #!!!
+        # !!!
         like_list = list(Like.objects.filter(email=email).values_list('feed_id', flat=True))
         like_feed_list = Feed.objects.filter(id__in=like_list).order_by('-id')
         bookmark_list = list(Bookmark.objects.filter(email=email).values_list('feed_id', flat=True))
@@ -399,14 +405,19 @@ class SearchFeed(APIView):
         if (searchKeyword.find("#") == 0):
             text = searchKeyword.replace("#", "");
 
-            hashtag_content_lists = list(Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
+            hashtag_content_lists = list(
+                Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
             hashtags_search_list = str(hashtag_content_lists)
             hashtags_search_list = hashtags_search_list.replace(" ", "");
             hashtags_search_list = hashtags_search_list.replace("'", "");
             hashtags_search_list = hashtags_search_list.replace("[", "");
             hashtags_search_list = hashtags_search_list.replace("]", "");
             hashtags_search_list = hashtags_search_list.split(",");
+            # 05-25 유재우 : 받은 리스트를 문자열에서 정수로 변경(나중에 배열할때 문자열일땐 제대로 제배치 안되는 점 때문)
+            hashtags_search_list = list(map(int, hashtags_search_list))
             hashtag_search_list = list(filter(None, hashtags_search_list))
+            # 05-25 유재우 : 리스를 숫자가 큰순으로 재정렬(최근에 만든 피드 순
+            hashtag_search_list.sort(reverse=True)
 
             for hashtag_search_list in hashtag_search_list:
                 feed_search_list = Feed.objects.filter(id=hashtag_search_list)
