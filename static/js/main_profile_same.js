@@ -243,8 +243,42 @@ $(".modal_upload_reply").click(function (event) {
             document.getElementById("reply_content_upload").setAttribute("reply_id", relpy_upload_next_id);
         }
     });
-});
 
+});
+// 모달창 닫기 버튼 이벤트 처리
+$(".modal_close").click(function () {
+    // 모달창 닫았을 때 본문 스크롤 가능
+    $(document.body).css({
+        overflow: 'visible'
+    });
+    // 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
+    $('.img_upload_space').css({
+        "background-color": "White",
+        "background-image": ""
+    });
+
+    // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
+    $('#input_feed_content').each(function () {
+        $(this).val('');
+    });
+    // 05-23 유재우 : 모달창 닫기와 닫았을 때 해시태그 내용을 리셋하는 부분
+    $('#input_feed_hashtag').each(function () {
+        $(this).val('');
+    });
+    $('#first_modal').css({
+        display: 'none'
+    });
+    $('#second_modal').css({
+        display: 'none'
+    });
+    // 05-23 유재우 : 서드 모달창 닫기
+    $('#third_modal').css({
+        display: 'none'
+    });
+    $('#feed_modal').css({
+        display: 'none'
+    });
+});
 
 // 사용 범위를 위해 전역 변수 files 선언
 let files;
@@ -369,14 +403,12 @@ function uploadFiles(e) {
             "outline": "none",
             "background-size": "contain",
             "background-repeat": "no-repeat",
-            "background-position": "center",
-            "margin-right": "1px"
+            "background-position": "center"
         });
     } else {
         alert('이미지가 아닙니다.');
         return 0;
     }
-
 }
 
 // 모달창의 사진 추가 버튼 클릭했을 시
@@ -394,14 +426,12 @@ function image_upload() {
             "outline": "none",
             "background-size": "contain",
             "background-repeat": "no-repeat",
-            "background-position": "center",
-            "margin-right": "1px"
+            "background-position": "center"
         });
     } else {
         return 0;
     }
 }
-
 // 모달창 닫기 버튼 이벤트 처리
 $(".modal_close").click(function () {
     // 모달창 닫았을 때 본문 스크롤 가능
