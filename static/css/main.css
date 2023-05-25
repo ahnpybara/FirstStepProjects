@@ -403,6 +403,38 @@
     border-top: 1px solid #e1e1e1;
 }
 
+/* 세번째 피드 모달창 */
+#update_feed_modal_image {
+    border-top: none;
+    width: 500px;
+    height: 521px;
+}
+
+/* 글 내용 입력 창 */
+#input_updatefeed_content {
+    width: 276px;
+    height: 303px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+
+/* 해시태그 입력 창 */
+#input_updatefeed_hashtag {
+    width: 276px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    border-top: 1px solid #e1e1e1;
+}
+
+/* 피드 수정버튼 */
+#feed_update_button {
+    width: 100%;
+    background-color: rgb(0, 149, 246);
+}
+
+
 /* 반응형 웹 */
 @media (max-width: 1000px) {
     .follow_side_area {

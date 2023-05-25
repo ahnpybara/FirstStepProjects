@@ -225,9 +225,9 @@
     justify-content: center;
 }
 
-.box {
-    width: 160px !important;
-    height: 160px !important;
+.profile_image_area > .box {
+    width: 160px!important;
+    height: 160px!important;
 }
 
 /* 반응형 웹 */

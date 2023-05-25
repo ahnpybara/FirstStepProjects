@@ -289,7 +289,6 @@ $(".modal_close").click(function () {
     });
 });
 
-
 // 05-09유재우 : 피드 삭제
 $('.remove_feed').click(function (event) {
     var feed_id = $(this).attr('feed_id');
@@ -358,13 +357,19 @@ $('.update_feed').click(function (event) {
             var feed_content = data['feed_content'];
             var hashtag_content = data['hashtag_content']
 
-
+            // 업로드 창 배경을 업로드된 이미지로 변경
+            $('#update_feed_modal_image').css({
+                "background-image": "url(" + feed_image + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center",
+                "margin-right": "1px"
+            });
             // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
-            $("#updatefeed_modal_image").html('<img style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px" src="' + feed_image + '">');
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
             // 서버로 보내기 위해서 접속할 url : "/content/bookmark"이며 보낼 데이터는 피드아이디와 북마크텍스트, 방식은 POST (Json 형태)
-
         },
         error: function (request, status, error) {
             console.log("에러");
