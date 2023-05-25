@@ -398,11 +398,6 @@
     text-align: left;
 }
 
-/* 피드 수정 모달 수정 영역 */
-.feed_image_text_modal {
-    border-top: 1px solid #e1e1e1;
-}
-
 /* 반응형 웹 */
 @media (max-width: 1000px) {
     .follow_side_area {

@@ -518,7 +518,7 @@ $('.update_feed').click(function (event) {
             var hashtag_content = data['hashtag_content']
 
             // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
-            $("#feed_modal_image").html('<img style="width: 500px;height: 521px; outline: none; background-size: contain; background-repeat: no-repeat;background-position: center; object-fit: contain; border-radius: 10px" src="' + feed_image + '">');
+            $("#feedupdate_modal_image").html('<img style="width: 100%;height: 100%; outline: none; background-size: contain; background-repeat: no-repeat;background-position: center; object-fit: contain; border-radius: 10px" src="' + feed_image + '">');
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
             // 서버로 보내기 위해서 접속할 url : "/content/bookmark"이며 보낼 데이터는 피드아이디와 북마크텍스트, 방식은 POST (Json 형태)
@@ -800,7 +800,7 @@ $(".profile_feed_mouse_over").click(function () {
             var feed_create_at = data['feed_create_at'];
 
             // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
-            $("#feed_modal_image").html('<img style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px" src="' + feed_image + '">');
+            $("#feed_modal_image").html('<img style="width: 100%; height: 100%;  object-fit: contain; border-radius: 10px; margin: 1px" src="' + feed_image + '">');
             $("#feed_modal_feed_content").html('<div class="text_line">' + feed_content + '</div>');
             $(".feed_modal_profile_image").html('<img  style="width: 100%; height: 100%" src="' + writer_profile_image + '">');
             $(".feed_modal_nickname").html('<div style="font-weight: bold; margin-right: 8px; font-size: 14px">' + writer_nickname + '</div>');
