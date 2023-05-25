@@ -94,3 +94,37 @@ $('#search_box').mousedown(function () {
 
     });
 });
+
+// 정유진: 모달 바깥부분을 클릭하면 안 보에게 된다.
+let auto_modal = document.getElementById('auto_modal').getAttribute("id");
+let search_box = document.getElementById('search_box').getAttribute("id");
+
+window.addEventListener('mouseup', function (event) {
+    // 정유진: 모달창 사라지는 기준.
+    if ((event.target.getAttribute("id") == null)
+        || !((event.target.getAttribute("id").includes(auto_modal))
+            || (event.target.getAttribute("id").includes(search_box)))) {
+        $('#auto_modal').css({
+            display: 'none'
+        });
+    }
+});
+
+// 정유진: 반응형 적용
+window.addEventListener('resize', function () {
+    let search_box = document.getElementById('search_box');
+    // 정유진: 태그 안의 요소들을 가져온다
+    let rect = search_box.getBoundingClientRect();
+    // 정유진: left 요소의 값을 가져온다
+    let left_value = rect.left;
+    // 정유진: 검색창이 없을 경우
+    if (left_value == 0) {
+        $('#auto_modal').css({
+            display: 'none'
+        });
+    } else { // 정유진: 검색창이 있을 경우
+        $('#auto_modal').css({
+            left: left_value + 'px'
+        });
+    }
+});
