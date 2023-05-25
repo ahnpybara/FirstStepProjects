@@ -1,3 +1,37 @@
+// 정유진: 모달 바깥부분을 클릭하면 안 보에게 된다.
+let auto_modal = document.getElementById('auto_modal').getAttribute("id");
+let search_box = document.getElementById('search_box').getAttribute("id");
+
+window.addEventListener('mouseup', function (event) {
+    // 정유진: 모달창 사라지는 기준.
+    if ((event.target.getAttribute("id") == null)
+        || !((event.target.getAttribute("id").includes(auto_modal))
+            || (event.target.getAttribute("id").includes(search_box)))) {
+        $('#auto_modal').css({
+            display: 'none'
+        });
+    }
+});
+
+// 정유진: 반응형 적용
+window.addEventListener('resize', function () {
+    let search_box = document.getElementById('search_box');
+    // 정유진: 태그 안의 요소들을 가져온다
+    let rect = search_box.getBoundingClientRect();
+    // 정유진: left 요소의 값을 가져온다
+    let left_value = rect.left;
+    // 정유진: 검색창이 없을 경우
+    if (left_value == 0) {
+        $('#auto_modal').css({
+            display: 'none'
+        });
+    } else { // 정유진: 검색창이 있을 경우
+        $('#auto_modal').css({
+            left: left_value + 'px'
+        });
+    }
+});
+
 // 정유진: 검색창을 클릭하면 모달창이 뜬다
 $('#search_box').mousedown(function () {
     let element = document.getElementById('search_box');
@@ -31,11 +65,11 @@ $('#search_box').mousedown(function () {
 
                         $("#auto_modal_list").append('<div id="auto_modal_object_' + i + '" class="movetoprofile" style="width: 100%; margin: 10px; display: flex;flex-direction: row;align-items: center;"></div>');
 
-                        $("#auto_modal_object_" + i).append('<img id="' + user_nickname + '" class="profile_box profile feed_profile_image " style="width: 40px; height: 40px" src="' + user_profile_image + '">');
+                        $("#auto_modal_object_" + i).append('<img id="' + user_nickname + '" class="profile_box box profile feed_profile_image " style="width: 35px; height: 35px" src="' + user_profile_image + '">');
                         $("#auto_modal_object_" + i).append('<div id="auto_modal_nickname_name_' + i + '"></div>');
 
-                        $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" style="font-weight: bold; font-size: 14px" class="feed_nickname">' + user_nickname + '</div>');
-                        $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" style="font-size: 14px; color: #737373" class="feed_nickname" style="">' + user_name + '</div>');
+                        $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" class="feed_nickname">' + user_nickname + '</div>');
+                        $("#auto_modal_nickname_name_" + i).append('<div id="' + user_nickname + '" class="feed_nickname" style="">' + user_name + '</div>');
 
                         // 정유진: append에서 id 값을 user_nickname로 하면 $("#" + user_nickname).append가 되지 않아 따로 바꾼다.
                         document.getElementById("auto_modal_object_" + i).setAttribute("id", user_nickname);
@@ -45,7 +79,6 @@ $('#search_box').mousedown(function () {
                             let user_nickname = event.target.id;
                             location.href = "/content/reprofile?user_nickname=" + user_nickname;
                         });
-
                     }
                 },
                 error: function (request, status, error) {
@@ -60,41 +93,4 @@ $('#search_box').mousedown(function () {
         }
 
     });
-});
-
-// 정유진: 모달 바깥부분을 클릭하면 안 보에게 된다.
-let auto_modal = document.getElementById('auto_modal').getAttribute("id");
-let search_box = document.getElementById('search_box').getAttribute("id");
-
-window.addEventListener('mouseup', function (event) {
-    // 정유진: 모달창 사라지는 기준.
-    if ((event.target.getAttribute("id") == null)
-        || !((event.target.getAttribute("id").includes(auto_modal))
-            || (event.target.getAttribute("id").includes(search_box)))) {
-        $('#auto_modal').css({
-            display: 'none'
-        });
-    }
-});
-
-// 정유진: 반응형 적용
-window.addEventListener('resize', function () {
-    let search_box = document.getElementById('search_box');
-    // 정유진: 태그 안의 요소들을 가져온다
-    let rect = search_box.getBoundingClientRect();
-    // 정유진: left 요소의 값을 가져온다
-    let left_value = rect.left;
-    // 정유진: 검색창이 없을 경우
-    if (left_value == 0) {
-        $('#auto_modal').css({
-            display: 'none'
-        });
-    } else { // 정유진: 검색창이 있을 경우
-        $('#auto_modal').css({
-            display: 'flex'
-        });
-        $('#auto_modal').css({
-            left: left_value + 'px'
-        });
-    }
 });

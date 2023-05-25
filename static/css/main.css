@@ -180,7 +180,7 @@
 }
 
 /* 댓글 모두 보기 */
-.profile_feed_mouse_over {
+.feed_modal {
     font-size: 14px;
     color: gray;
     cursor: pointer;
@@ -433,7 +433,6 @@
     width: 100%;
     background-color: rgb(0, 149, 246);
 }
-
 
 /* 반응형 웹 */
 @media (max-width: 1000px) {
