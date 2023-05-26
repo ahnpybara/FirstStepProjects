@@ -393,3 +393,7 @@
     cursor: pointer;
     padding-right: 5px;
 }
+
+.feed_modal_hashtags {
+    padding: 0 15px;
+}

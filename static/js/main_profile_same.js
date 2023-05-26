@@ -60,13 +60,12 @@ $(".feed_modal").click(function () {
             $(".feed_modal_nickname").html('<div id="' + writer_nickname + '" class="movetoprofile">' + writer_nickname + '</div>');
 
             // 정유진: 해시태그 추가
+            $(".feed_modal_contents_writer_hashtags").html('');
             if (data['hashtag_list'].length > 0) {
-                $("#feed_modal_feed_content").append('<div class="feed_area_hashtag_space" id="feed_modal_hashtag_space_div_' + feed_id + '" style="display: flex"><br></div>');
-                $("#feed_modal_feed_content").append('<div class="feed_area_hashtags" id="feed_modal_hashtag_div_' + feed_id + '" style="display: flex"></div>');
+                $(".feed_modal_contents_writer_hashtags").append('<div class="feed_area_hashtags feed_modal_hashtags text_line" id="feed_modal_hashtag_div_' + feed_id + '" style="display: flex"></div>');
 
                 for (var i = 0; i < data['hashtag_list'].length; i++) {
                     var reply_hashtag = data['hashtag_list'][i];
-                    console.log(reply_hashtag)
                     $("#feed_modal_hashtag_div_" + feed_id).append('<div id="feed_modal_hashtags_list" class="hashtags" hashtag_content="' + reply_hashtag + '">#' + reply_hashtag + '</div>');
                 }
             }
