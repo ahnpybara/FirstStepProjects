@@ -383,6 +383,11 @@ class RemoveFeed(APIView):
         reply.delete()
         hashtags = Hashtag.objects.filter(feed_id=feeds.id)
         hashtags.delete()
+        # 정유진: 좋아요, 북마크 테이블에서 삭제
+        like = Like.objects.filter(feed_id=feeds.id)
+        like.delete()
+        bookmark = Bookmark.objects.filter(feed_id=feeds.id)
+        bookmark.delete()
         feeds.delete()
 
         return Response(status=200)
