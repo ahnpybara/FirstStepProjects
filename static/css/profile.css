@@ -227,6 +227,11 @@
     height: 160px!important;
 }
 
+/* 프로필 화면 프로필 이미지 */
+#profile_user_image {
+    cursor: default!important;
+}
+
 /* 반응형 웹 */
 @media (max-width: 725px) {
     .profile_feed_follow_area {
