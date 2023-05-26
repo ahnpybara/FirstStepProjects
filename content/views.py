@@ -99,10 +99,8 @@ class UploadFeed(APIView):
         hashtags_content = request.data.get('hashtags_content')
         hashtags_content = hashtags_content.replace(" ", "");
         hashtags_content = hashtags_content.replace("\n", "");
-        print(hashtags_content)
         # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
         hashtags_list = hashtags_content.split("#")
-        print(hashtags_list)
         # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
         if (hashtags_content.find("#") != 0):
             del hashtags_list[0]
@@ -561,7 +559,6 @@ class FeedModal(APIView):
         like_count = Like.objects.filter(feed_id=feed_modal.id).count()
         is_liked = Like.objects.filter(feed_id=feed_modal.id, email=email).exists()
         is_marked = Bookmark.objects.filter(feed_id=feed_modal.id, email=email).exists()
-        print(feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'))
         data = {
             'id': feed_modal.id,
             'image': feed_modal.image,
@@ -604,7 +601,6 @@ class Autocomplete(APIView):
         }
 
         json_data = json.dumps(data)
-        print(json_data)
         return HttpResponse(json_data, content_type='application/json')
 
 
