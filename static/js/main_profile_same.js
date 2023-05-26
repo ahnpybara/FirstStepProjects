@@ -73,17 +73,17 @@ $(".feed_modal").click(function () {
             // 정유진: 좋아요, 북마크 여부 확인 후 모달에 추가
             if (is_liked)
                 $("#feed_modal_is_liked").html(
-                    '<span id="favorite_' + feed_id + '" feed_id="' + feed_id + '" style="color: red" class="uTrue favorite material-symbols-outlined">favorite</span>');
+                    '<span id="feed_modla_favorite_' + feed_id + '" feed_id="' + feed_id + '" style="color: red" class="uTrue favorite material-symbols-outlined">favorite</span>');
             else
                 $("#feed_modal_is_liked").html(
-                    '<span id="favorite_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse favorite material-symbols-outlined">favorite</span>');
+                    '<span id="feed_modla_favorite_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse favorite material-symbols-outlined">favorite</span>');
 
             if (is_marked)
                 $("#feed_modal_is_marked").html(
-                    '<span id="bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uTrue bookmark material-symbols-outlined">bookmark</span>');
+                    '<span id="feed_modla_bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uTrue bookmark material-symbols-outlined">bookmark</span>');
             else
                 $("#feed_modal_is_marked").html(
-                    '<span id="bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse bookmark material-symbols-outlined">bookmark</span>');
+                    '<span id="feed_modla_bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse bookmark material-symbols-outlined">bookmark</span>');
 
             // 정유진: 좋아요 수, 게시물 작성시간 모달에 추가
             $("#feed_modal_like_count").html('<div class="feed_modal_like_count">좋아요 수 ' + like_count + '</div>');

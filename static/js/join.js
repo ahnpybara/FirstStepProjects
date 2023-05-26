@@ -56,9 +56,17 @@ $('#input_name').keyup(function () {
         nameError.show().text("이름을 넣어주세요");
         check[1] = 0;
     } else {
-        nameError.show().text("이름");
-        nameError.css("color", "#000000");
-        check[1] = 1;
+        // 정유진: 이메일 주소 길이 확인.
+        if (name.length > 24) {
+            nameError.css("color", "#ff0000");
+            nameError.show().text("이름이 너무 깁니다.")
+            check[1] = 0;
+        } else {
+            nameError.show().text("이름");
+            nameError.css("color", "#000000");
+            check[1] = 1;
+        }
+
     }
 
     // 정유진: 버튼 활성화 조건 확인. 이메일, 이름, 닉네임, 비닐번호.
