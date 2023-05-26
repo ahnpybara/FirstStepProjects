@@ -247,3 +247,140 @@
     margin-bottom: 10px;
     margin-left: 16px;
 }
+
+/* html 피드모달 css 분리 영역 */
+#root_feed_modal_window {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    height: 83%;
+}
+
+/* 피드모달 영역 부모 */
+.feed_modal_area_parents {
+    width: 100%;
+    height: 100%;
+}
+
+/* 피드모달 영역 자식 */
+.feed_modal_area_son {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+/* 피드모달 게시글 이미지 */
+#feed_modal_image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* 피드모달 글 영역 부모 */
+.feed_modal_text_area_parents {
+    width: 70%;
+    border-left: solid 1px #e1e1e1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 피드모달 글 영역 */
+.feed_modal_text_area {
+    text-align: right;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+/* 피드 모달 상단 메뉴바 영역 */
+.feed_modal_menu_bar_area {
+    display: flex;
+    margin: 15px;
+    align-items: center;
+    flex-direction: row;
+}
+
+/* 피드모달 작성자 프로필 이미지 */
+.feed_modal_profile_image {
+    width: 32px;
+    height: 32px;
+    margin-right: 15px;
+    min-width: 32px !important;
+}
+
+/* 피드 모달 작성글내용 및 댓글리스트 영역 */
+.feed_modal_contents_area {
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* 피드 모달 작성자와 글내용 영역 */
+.feed_modal_contents_writer {
+    display: flex;
+    margin: 15px;
+    align-items: start;
+    flex-direction: row;
+}
+
+/* 피드 모달 글내용 */
+#feed_modal_feed_content {
+    font-size: 14px;
+}
+
+/* 피드 모달 댓글 리스트 */
+#feed_modal_reply_list {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+    align-items: flex-start;
+}
+
+/* 피드 모달 좋아요 북마크 영역 */
+.feed_modal_like_bookmark_area {
+    border-top: 1px solid #e1e1e1;
+}
+
+/* 피드 모달 좋아요 북마크 */
+.feed_modal_like_bookmark {
+    display: flex;
+    margin: 15px;
+    justify-content: space-between;
+}
+
+/* 피드 모달 좋아요 수 */
+#feed_modal_like_count {
+    margin: 15px;
+}
+
+/* 피드 모달 댓글 입력 영역 */
+.feed_modal_reply_upload_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top: solid 1px #e1e1e1;
+    margin-top: 10px;
+}
+
+/* 피드 모달 댓글 작성란 */
+#reply_content_text {
+    height: 53px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    background-color: white;
+}
+
+/* 피드 모달 댓글 게시 버튼 */
+#reply_content_upload {
+    width: 50px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
+}

@@ -11,7 +11,7 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=2">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=1">
     <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=1">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=1">
 
@@ -61,10 +61,10 @@
             <!-- 안치윤 : 팔로우된 유저 게시물을 보기 위한 스위치 추가 -->
             <div id="follow_switch_btn" class="form-check form-switch">
                 {% if is_checked %}
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                    <input class="follow_switch_button form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
                     <label id="follow_btn_label" class="form-check-label" for="flexSwitchCheckChecked">팔로우</label>
                 {% else %}
-                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+                    <input class="unfollow_switch_button form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
                     <label id="unfollow_btn_label" class="form-check-label" for="flexSwitchCheckChecked">팔로우</label>
                 {% endif %}
             </div>
@@ -458,21 +458,17 @@
 </div>
 <!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. TODO -->
 <div id="feed_modal" class="modal_overlay">
-    <div class="modal_window"
-         style="display: flex;flex-direction: column;justify-content: space-between; width: 50%; height: 83%">
-        <div style="width: 100%;height: 100%;">
-            <div style="width: 100%;height: 100%;display: flex;flex-direction: row">
-                <div id="feed_modal_image"
-                     style="
-                     width: 100%;height: 100%;display: flex;align-items: center">
+    <div id="root_feed_modal_window" class="modal_window">
+        <div class="feed_modal_area_parents">
+            <div class="feed_modal_area_son">
+                <div id="feed_modal_image">
                     <!-- ajax로 이미지를 받아옴 -->
                 </div>
                 <!--안치윤 : 디자인 수정, 이미지와 글 영역 구분-->
-                <div style="width: 70%; border-left: solid 1px #e1e1e1;display: flex;flex-direction: column;justify-content: space-between;">
-                    <div style="text-align: right; height: 60px; display: flex; flex-direction: row; justify-content: space-between; align-items: center; border-bottom: 1px solid #e1e1e1">
-                        <div style="display: flex;margin: 15px;align-items: center;flex-direction: row">
-                            <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image"
-                                 style="width: 32px;height: 32px;margin-right: 15px;">
+                <div class="feed_modal_text_area_parents">
+                    <div class="feed_modal_text_area">
+                        <div class="feed_modal_menu_bar_area">
+                            <div id="feed_modal_menu_writer_profile_image" class="box profile feed_modal_profile_image">
                                 <!-- ajax로 받아옴 작성자 프로필 사진 -->
                             </div>
                             <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
@@ -480,26 +476,24 @@
                             </div>
                         </div>
                         <div>
-                            <span class="modal_close material-icons-outlined" style="margin-right: 10px">close</span>
+                            <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
                         </div>
                     </div>
                     <!-- ajax로 작성자 받음 -->
-                    <div class="modal_text_area" style="overflow-y: auto; height: 100%">
-                        <div style="display: flex;margin: 15px;align-items: start;flex-direction: row;">
-                            <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image"
-                                 style="width: 32px;height: 32px;margin-right: 15px; min-width: 32px!important">
+                    <div class="feed_modal_contents_area">
+                        <div class="feed_modal_contents_writer">
+                            <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image">
                                 <!-- ajax로 받아옴 작성자 프로필 사진 -->
                             </div>
                             <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
                                 <!-- ajax로 받아옴 작성자 닉네임 -->
                             </div>
-                            <div id="feed_modal_feed_content" class="text_line" style="font-size: 14px">
+                            <div id="feed_modal_feed_content" class="text_line">
                                 <!-- ajax로 받아옴 게시물 내용 -->
                             </div>
                         </div>
                         <!-- 댓글 리스트 -->
-                        <div id="feed_modal_reply_list"
-                             style="display: flex;flex-direction: column;margin: 15px;align-items: flex-start;">
+                        <div id="feed_modal_reply_list">
                             {#                            <div id="feed_modal_reply_profile_image_">#}
                             {#                                <!-- 댓글 작성자 프로필 사진 -->#}
                             {#                            </div>#}
@@ -515,8 +509,8 @@
                     </div>
                     <div>
                         <!-- 게시물의 좋아요, 북마크, 좋아요수 -->
-                        <div style="border-top: 1px solid #e1e1e1">
-                            <div style="display: flex;margin: 15px;justify-content: space-between;">
+                        <div class="feed_modal_like_bookmark_area">
+                            <div class="feed_modal_like_bookmark">
                                 <div id="feed_modal_is_liked">
                                     <!-- ajax로 받아옴 좋아요 -->
                                 </div>
@@ -524,7 +518,7 @@
                                     <!-- ajax로 받아옴 북마크 -->
                                 </div>
                             </div>
-                            <div id="feed_modal_like_count" style="margin: 15px">
+                            <div id="feed_modal_like_count">
                                 <!-- ajax로 받아옴 좋아요 수 -->
                             </div>
                         </div>
@@ -532,12 +526,10 @@
                             <!-- ajax로 받아옴 게시물 업로드 시간-->
                         </div>
                         <!-- 댓글 작성 -->
-                        <div style="display:flex;flex-direction: row;align-items: center; border-top: solid 1px #e1e1e1; margin-top: 10px">
+                        <div class="feed_modal_reply_upload_area">
                             <input id="reply_content_text" type="text" class="form-control"
-                                   style="height: 53px; box-shadow: none; border: none; outline: none; background-color: white"
                                    placeholder="댓글 달기..">
-                            <div id="reply_content_upload" class="modal_upload_reply"
-                                 style="width: 50px;color: cornflowerblue; font-weight: bold; cursor: pointer">
+                            <div id="reply_content_upload" class="modal_upload_reply">
                                 게시
                             </div>
                         </div>
