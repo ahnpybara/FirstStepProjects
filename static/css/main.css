@@ -168,14 +168,6 @@
     flex-flow: wrap;
 }
 
-/* 해시태그 */
-#hashtags_list {
-    color: #0037AB;
-    font-size: 14px;
-    cursor: pointer;
-    padding-right: 5px;
-}
-
 /* 피드 내용 더보기 영역 */
 #feed_more_show {
     display: flex;
