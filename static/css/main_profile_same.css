@@ -385,7 +385,8 @@
     font-weight: bold;
     cursor: pointer;
 }
-/* 정유진: 해시태그 */
+
+/* 해시태그 */
 .hashtags {
     color: #0037AB;
     font-size: 14px;
