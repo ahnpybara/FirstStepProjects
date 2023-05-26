@@ -254,41 +254,6 @@ $(".upload_reply").click(function (event) {
 
 });
 
-// 모달창 닫기 버튼 이벤트 처리
-$(".modal_close").click(function () {
-    // 모달창 닫았을 때 본문 스크롤 가능
-    $(document.body).css({
-        overflow: 'visible'
-    });
-    // 모달창 닫았을 때 백그리운드 색 및 이미지 리셋
-    $('.img_upload_space').css({
-        "background-color": "White",
-        "background-image": ""
-    });
-
-    // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
-    $('#input_feed_content').each(function () {
-        $(this).val('');
-    });
-    // 05-23 유재우 : 모달창 닫기와 닫았을 때 해시태그 내용을 리셋하는 부분
-    $('#input_feed_hashtag').each(function () {
-        $(this).val('');
-    });
-    $('#first_modal').css({
-        display: 'none'
-    });
-    $('#second_modal').css({
-        display: 'none'
-    });
-    // 05-23 유재우 : 서드 모달창 닫기
-    $('#third_modal').css({
-        display: 'none'
-    });
-    $('#feed_modal').css({
-        display: 'none'
-    });
-});
-
 // 05-09유재우 : 피드 삭제
 $('.remove_feed').click(function (event) {
     var feed_id = $(this).attr('feed_id');
@@ -357,6 +322,8 @@ $('.update_feed').click(function (event) {
             var feed_content = data['feed_content'];
             var hashtag_content = data['hashtag_content']
 
+
+            // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
             // 업로드 창 배경을 업로드된 이미지로 변경
             $('#update_feed_modal_image').css({
                 "background-image": "url(" + feed_image + ")",
@@ -366,10 +333,10 @@ $('.update_feed').click(function (event) {
                 "background-position": "center",
                 "margin-right": "1px"
             });
-            // 정유진: 할당 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 모달에 추가
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
             // 서버로 보내기 위해서 접속할 url : "/content/bookmark"이며 보낼 데이터는 피드아이디와 북마크텍스트, 방식은 POST (Json 형태)
+
         },
         error: function (request, status, error) {
             console.log("에러");
@@ -420,7 +387,7 @@ $('.update_reply').click(function (event) {
     });
 });
 
-// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 댓글 수정창을 띄움, 안치윤: 전역변수 제거
+// 05-12 유재우 : 댓글 수정하기 취소 버튼
 $('.reply_close_btn').click(function (event) {
     let reply_id = $(this).attr('reply_id');
     console.log(reply_id);
@@ -431,7 +398,6 @@ $('.reply_close_btn').click(function (event) {
         display: 'flex'
     });
 });
-
 
 // 05-12 유재우 : 댓글 수정하기를 눌렸을 때 수정이 되도록 하는 부분, 안치윤 : 댓글 내용없으면 알림
 $('.update_replys').click(function (event) {

@@ -1,3 +1,4 @@
+/* 메뉴 홈 아이콘에 패딩을 줘서 로고와 검색창 간격을 조절 */
 #home_icon {
     padding-left: 108px;
 }
@@ -99,7 +100,7 @@
     border-top-width: 1px;
 }
 
-/* 내가 좋아요한 게시글을 보기 위한 버튼 */
+/* 내가 북마크한 게시글을 보기 위한 버튼 */
 #button_feed_bookmark_list {
     color: #737373;
     font-size: 12px;
@@ -199,11 +200,6 @@
     display: flex;
 }
 
-/* 프로필 정보 커서 변경 */
-.movetoprofile {
-    cursor: pointer;
-}
-
 /* 닉네임. 자동완성에 닉네임, 이름에 사용 */
 .feed_nickname {
     margin-left: 10px;
@@ -225,6 +221,7 @@
     justify-content: center;
 }
 
+/* 프로필 화면에서 프로필 사진 */
 .profile_image_area > .box {
     width: 160px!important;
     height: 160px!important;

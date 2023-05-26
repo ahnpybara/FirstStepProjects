@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from uuid import uuid4
 
 from django.db.models import Q
@@ -76,6 +77,8 @@ class Login(APIView):
         if user.check_password(password):
             # 세션 정보에 이메일이란 이름으로 이메일 값을 저장해놓는다.
             request.session['email'] = email
+            user.last_login = datetime.now()
+            user.save()
             return Response(status=200)
         else:
             return Response(status=200, data=dict(message="회원정보가 잘못되었습니다."))
