@@ -20,6 +20,16 @@
     padding-top: 4px;
 }
 
+/* 팔로우 스위치 버튼 */
+.follow_switch_button {
+    cursor: pointer;
+}
+
+/* 팔로우 스위치 버튼 */
+.unfollow_switch_button {
+    cursor: pointer;
+}
+
 /* 피드 생성 영역과 팔로우 영역 */
 .main_container {
     display: flex;
