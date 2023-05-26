@@ -120,7 +120,7 @@
                     </div>
                     <!-- 피드 삭제 및 수정 드롭 메뉴-->
                     <div id="feed_dropdown"
-                         style="color:gray {% if feed.nickname != user_session.nickname %} display: none {% endif %}">
+                         style="color:gray; {% if feed.nickname != user_session.nickname %} display: none; {% endif %}">
                         <a href="#" role="button" id="dropdownMenuLink"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="material-icons-round">more_horiz</span>
@@ -214,12 +214,12 @@
                             </div>
                             <div>
                                 <div id="reply_menu_{{ reply.id }}" reply_id="{{ reply.id }}" class="dropdown"
-                                     style="display: none; {% if reply.nickname == user_session.nickname %} display: flex; {% elif feed.nickname == user_session.nickname %} display: flex  {% endif %}">
+                                     style="display: none; {% if reply.nickname == user_session.nickname %} display: flex; {% elif feed.nickname == user_session.nickname %} display: flex;  {% endif %}">
                                     <!-- 05-12유재우 : 댓글 삭제 및 수정버튼 추가 -->
                                     <a href="#" role="button" id="dropdownMenuLink"
                                        data-bs-toggle="dropdown" aria-expanded="false"
-                                       style="color: gray
-                                               {% if feed.nickname != user_session.nickname or reply.nickname != user_session.nickname %} display: none {% endif %}}">
+                                       style="color: gray;
+                                               {% if feed.nickname != user_session.nickname or reply.nickname != user_session.nickname %} display: none; {% endif %}}">
                                         <span class="material-icons-round">more_horiz</span>
                                     </a>
                                     <ul id="reply_delete_update_menu" class="dropdown-menu"
@@ -229,10 +229,10 @@
                                         </li>
                                         <li>
                                             <!-- 구분선 -->
-                                            <hr style="display: none;{% if reply.nickname == user_session.nickname %} display: flex {% endif %}"
+                                            <hr style="display: none;{% if reply.nickname == user_session.nickname %} display: flex; {% endif %}"
                                                 class="dropdown-divider">
                                         </li>
-                                        <li style="display: none;{% if reply.nickname == user_session.nickname %} display: flex {% endif %}">
+                                        <li style="display: none;{% if reply.nickname == user_session.nickname %} display: flex; {% endif %}">
                                             <div id="{{ reply.id }}" reply_id="{{ reply.id }}"
                                                  class="update_reply dropdown-item">
                                                 수정
