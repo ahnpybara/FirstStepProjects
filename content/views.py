@@ -547,6 +547,12 @@ class FeedModal(APIView):
         # 정유진: 게시물 작성자 정보. 이메일. 닉네임. 프로필 이미지.
         feed_modal_writer = User.objects.filter(email=feed_modal.email).first()
 
+        # 정유진 : 해시테그
+        feed_modal_hashtag_object_list = Hashtag.objects.filter(feed_id=feed_id)
+        hashtag_list = []
+        for hashtag in feed_modal_hashtag_object_list:
+            hashtag_list.append(hashtag.content)
+
         # 정유진: 게시물 댓글 리스트 정보. 이메일. 프로필 이미지
         feed_modal_reply_object_list = Reply.objects.filter(feed_id=feed_id)
 
@@ -563,6 +569,7 @@ class FeedModal(APIView):
             'id': feed_modal.id,
             'image': feed_modal.image,
             'feed_content': feed_modal.content,
+            'hashtag_list': hashtag_list,
 
             # 데이터를 JSON 형식으로 변환
             'feed_create_at': feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'),

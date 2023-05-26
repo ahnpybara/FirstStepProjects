@@ -385,3 +385,11 @@
     font-weight: bold;
     cursor: pointer;
 }
+
+/* 해시태그 */
+.hashtags {
+    color: #0037AB;
+    font-size: 14px;
+    cursor: pointer;
+    padding-right: 5px;
+}
