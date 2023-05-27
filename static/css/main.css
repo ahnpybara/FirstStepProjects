@@ -20,6 +20,16 @@
     padding-top: 4px;
 }
 
+/* 팔로우 스위치 버튼 */
+.follow_switch_button {
+    cursor: pointer;
+}
+
+/* 팔로우 스위치 버튼 */
+.unfollow_switch_button {
+    cursor: pointer;
+}
+
 /* 피드 생성 영역과 팔로우 영역 */
 .main_container {
     display: flex;
@@ -156,14 +166,6 @@
     text-align: left;
     width: 100%;
     flex-flow: wrap;
-}
-
-/* 해시태그 */
-#hashtags_list {
-    color: #0037AB;
-    font-size: 14px;
-    cursor: pointer;
-    padding-right: 5px;
 }
 
 /* 피드 내용 더보기 영역 */

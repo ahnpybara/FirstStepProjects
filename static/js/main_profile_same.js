@@ -58,20 +58,32 @@ $(".feed_modal").click(function () {
             $("#feed_modal_feed_content").html('<div>' + feed_content + '</div>');
             $(".feed_modal_profile_image").html('<img id="' + writer_nickname + '" class="movetoprofile" src="' + writer_profile_image + '">');
             $(".feed_modal_nickname").html('<div id="' + writer_nickname + '" class="movetoprofile">' + writer_nickname + '</div>');
+
+            // 정유진: 해시태그 추가
+            $(".feed_modal_contents_writer_hashtags").html('');
+            if (data['hashtag_list'].length > 0) {
+                $(".feed_modal_contents_writer_hashtags").append('<div class="feed_area_hashtags feed_modal_hashtags text_line" id="feed_modal_hashtag_div_' + feed_id + '" style="display: flex"></div>');
+
+                for (var i = 0; i < data['hashtag_list'].length; i++) {
+                    var reply_hashtag = data['hashtag_list'][i];
+                    $("#feed_modal_hashtag_div_" + feed_id).append('<div id="feed_modal_hashtags_list" class="hashtags" hashtag_content="' + reply_hashtag + '">#' + reply_hashtag + '</div>');
+                }
+            }
+
             // 정유진: 좋아요, 북마크 여부 확인 후 모달에 추가
             if (is_liked)
                 $("#feed_modal_is_liked").html(
-                    '<span id="favorite_' + feed_id + '" feed_id="' + feed_id + '" style="color: red" class="uTrue favorite material-symbols-outlined">favorite</span>');
+                    '<span id="feed_modla_favorite_' + feed_id + '" feed_id="' + feed_id + '" style="color: red" class="uTrue favorite material-symbols-outlined">favorite</span>');
             else
                 $("#feed_modal_is_liked").html(
-                    '<span id="favorite_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse favorite material-symbols-outlined">favorite</span>');
+                    '<span id="feed_modla_favorite_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse favorite material-symbols-outlined">favorite</span>');
 
             if (is_marked)
                 $("#feed_modal_is_marked").html(
-                    '<span id="bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uTrue bookmark material-symbols-outlined">bookmark</span>');
+                    '<span id="feed_modla_bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uTrue bookmark material-symbols-outlined">bookmark</span>');
             else
                 $("#feed_modal_is_marked").html(
-                    '<span id="bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse bookmark material-symbols-outlined">bookmark</span>');
+                    '<span id="feed_modla_bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse bookmark material-symbols-outlined">bookmark</span>');
 
             // 정유진: 좋아요 수, 게시물 작성시간 모달에 추가
             $("#feed_modal_like_count").html('<div class="feed_modal_like_count">좋아요 수 ' + like_count + '</div>');
@@ -175,6 +187,11 @@ $(".feed_modal").click(function () {
                 location.href = "/content/reprofile?user_nickname=" + user_nickname;
             });
 
+            // //05-20 유재우 : 해시태그를 눌렸을 때 해시태그를 검색함
+            $('.hashtags').click(function () {
+                let hashtag_content = $(this).attr('hashtag_content');
+                location.href = "/content/search/?search=%23" + hashtag_content
+            });
         },
         error: function (request, status, error) {
             console.log("에러");

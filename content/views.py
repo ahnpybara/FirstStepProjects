@@ -99,10 +99,8 @@ class UploadFeed(APIView):
         hashtags_content = request.data.get('hashtags_content')
         hashtags_content = hashtags_content.replace(" ", "");
         hashtags_content = hashtags_content.replace("\n", "");
-        print(hashtags_content)
         # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
         hashtags_list = hashtags_content.split("#")
-        print(hashtags_list)
         # 만일 첫번째 글자에 #이 안들어 갔을 경우 값을 지움
         if (hashtags_content.find("#") != 0):
             del hashtags_list[0]
@@ -385,6 +383,11 @@ class RemoveFeed(APIView):
         reply.delete()
         hashtags = Hashtag.objects.filter(feed_id=feeds.id)
         hashtags.delete()
+        # 정유진: 좋아요, 북마크 테이블에서 삭제
+        like = Like.objects.filter(feed_id=feeds.id)
+        like.delete()
+        bookmark = Bookmark.objects.filter(feed_id=feeds.id)
+        bookmark.delete()
         feeds.delete()
 
         return Response(status=200)
@@ -549,6 +552,12 @@ class FeedModal(APIView):
         # 정유진: 게시물 작성자 정보. 이메일. 닉네임. 프로필 이미지.
         feed_modal_writer = User.objects.filter(email=feed_modal.email).first()
 
+        # 정유진 : 해시테그
+        feed_modal_hashtag_object_list = Hashtag.objects.filter(feed_id=feed_id)
+        hashtag_list = []
+        for hashtag in feed_modal_hashtag_object_list:
+            hashtag_list.append(hashtag.content)
+
         # 정유진: 게시물 댓글 리스트 정보. 이메일. 프로필 이미지
         feed_modal_reply_object_list = Reply.objects.filter(feed_id=feed_id)
 
@@ -561,11 +570,11 @@ class FeedModal(APIView):
         like_count = Like.objects.filter(feed_id=feed_modal.id).count()
         is_liked = Like.objects.filter(feed_id=feed_modal.id, email=email).exists()
         is_marked = Bookmark.objects.filter(feed_id=feed_modal.id, email=email).exists()
-        print(feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'))
         data = {
             'id': feed_modal.id,
             'image': feed_modal.image,
             'feed_content': feed_modal.content,
+            'hashtag_list': hashtag_list,
 
             # 데이터를 JSON 형식으로 변환
             'feed_create_at': feed_modal.create_at.strftime('%b %d, %Y, %I:%M %p'),
@@ -604,7 +613,6 @@ class Autocomplete(APIView):
         }
 
         json_data = json.dumps(data)
-        print(json_data)
         return HttpResponse(json_data, content_type='application/json')
 
 

@@ -191,12 +191,15 @@ class UpdatePassword(APIView):
         user_email = request.data.get('email')
         user_password = request.data.get('password')
         user = User.objects.filter(email=user_email).first()
-        user.password = make_password(user_password)
-        user.save()
 
-        request.session.flush()
-        return Response(status=200)
+        if user.check_password(user_password):
+            return Response(status=200, data=dict(message="동일한 비밀번호입니다"))
+        else:
+            user.password = make_password(user_password)
+            user.save()
 
+            request.session.flush()
+            return Response(status=200)
 
 # 05-09 유재우 : 세팅
 class Settings(APIView):
