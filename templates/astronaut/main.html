@@ -104,6 +104,13 @@
     <!--피드들이 생성되는 영역 -->
     <div class="feed_area">
         <!--05-28 유재우-->
+        <select id="sort-select" onchange="location = this.value;">
+            <option class="sort-date" value="?sort=newest">최신 순</option>
+            <option class="sort-likes" value="?sort=likes">좋아요 순</option>
+            <option class="sort-raply" value="?sort=raply">댓글 순</option>
+        </select>
+
+
         <!-- 반복문을 통한 피드를 생성하는 파이썬 코드 -->
         {% for feed in feeds %}
             <div class="feed_box">
