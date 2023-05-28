@@ -61,10 +61,12 @@
             <!-- 안치윤 : 팔로우된 유저 게시물을 보기 위한 스위치 추가 -->
             <div id="follow_switch_btn" class="form-check form-switch">
                 {% if is_checked %}
-                    <input class="follow_switch_button form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                    <input class="follow_switch_button form-check-input" type="checkbox" role="switch"
+                           id="flexSwitchCheckChecked" checked>
                     <label id="follow_btn_label" class="form-check-label" for="flexSwitchCheckChecked">팔로우</label>
                 {% else %}
-                    <input class="unfollow_switch_button form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked">
+                    <input class="unfollow_switch_button form-check-input" type="checkbox" role="switch"
+                           id="flexSwitchCheckChecked">
                     <label id="unfollow_btn_label" class="form-check-label" for="flexSwitchCheckChecked">팔로우</label>
                 {% endif %}
             </div>
@@ -101,6 +103,7 @@
 <div class="main_container">
     <!--피드들이 생성되는 영역 -->
     <div class="feed_area">
+        <!--05-28 유재우-->
         <!-- 반복문을 통한 피드를 생성하는 파이썬 코드 -->
         {% for feed in feeds %}
             <div class="feed_box">
@@ -431,13 +434,13 @@
                 <div class="feed_content_input">
                     <div>
                         <textarea id="input_updatefeed_content" class="form-control"
-                                          id="exampleFormControlTextarea1" rows="5"
-                                          placeholder="글 내용 작성..."></textarea>
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="글 내용 작성..."></textarea>
                     </div>
                     <div>
                         <textarea id="input_updatefeed_hashtag" class="form-control"
-                                          id="exampleFormControlTextarea1" rows="5"
-                                          placeholder="해시태그 내용 작성..."></textarea>
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="해시태그 내용 작성..."></textarea>
                     </div>
                 </div>
                 <!-- 공유하기 버튼 -->

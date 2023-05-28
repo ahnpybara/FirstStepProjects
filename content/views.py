@@ -410,20 +410,9 @@ class SearchFeed(APIView):
 
             hashtag_content_lists = list(
                 Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
-            hashtags_search_list = str(hashtag_content_lists)
-            hashtags_search_list = hashtags_search_list.replace(" ", "");
-            hashtags_search_list = hashtags_search_list.replace("'", "");
-            hashtags_search_list = hashtags_search_list.replace("[", "");
-            hashtags_search_list = hashtags_search_list.replace("]", "");
-            hashtags_search_list = hashtags_search_list.split(",");
-            # 05-25 유재우 : 받은 리스트를 문자열에서 정수로 변경(나중에 배열할때 문자열일땐 제대로 제배치 안되는 점 때문)
-            hashtags_search_list = list(map(int, hashtags_search_list))
-            hashtag_search_list = list(filter(None, hashtags_search_list))
-            # 05-25 유재우 : 리스를 숫자가 큰순으로 재정렬(최근에 만든 피드 순
-            hashtag_search_list.sort(reverse=True)
 
-            for hashtag_search_list in hashtag_search_list:
-                feed_search_list = Feed.objects.filter(id=hashtag_search_list)
+            for hashtag_content_lists in hashtag_content_lists:
+                feed_search_list = Feed.objects.filter(id=hashtag_content_lists)
                 for feed in feed_search_list:
                     user = User.objects.filter(email=feed.email).first()
                     reply_object_list = Reply.objects.filter(feed_id=feed.id)
@@ -667,15 +656,9 @@ class FeedUpdateIMG(APIView):
         feed_id = int(request.GET.get('feed_id', None))
         feed_modal = Feed.objects.filter(id=feed_id).first()
         hashtag_content_lists = list(Hashtag.objects.filter(feed_id=feed_id).values_list('content', flat=True))
-        hashtag_list = str(hashtag_content_lists)
-        hashtag_list = hashtag_list.replace(" ", "");
-        hashtag_list = hashtag_list.replace("'", "");
-        hashtag_list = hashtag_list.replace("[", "");
-        hashtag_list = hashtag_list.replace("]", "");
-        hashtag_list = hashtag_list.split(",");
-        hashtag_list = list(filter(None, hashtag_list))
+        hashtag_content_lists = list(filter(None, hashtag_content_lists))
         # 05-21 유재우 : 해시태그를 띄여쓰기로 구분
-        hashtag_content = '#' + '#'.join(hashtag_list)
+        hashtag_content = '#' + '#'.join(hashtag_content_lists)
 
         data = {
             'id': feed_modal.id,
