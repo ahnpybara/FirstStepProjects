@@ -45,7 +45,7 @@ $('#search_box').mousedown(function () {
     // 정유진: 자동완성에 필요한 검색창의 값을 keyup()으로 가져온다.
     $('#search_box').keyup(function () {
         let search_box_value = document.getElementById('search_box').value;
-
+        // 정유진: 해시태그 검색 시 #만 있을 경우 검색이 안 된다.
         if (search_box_value != "" & search_box_value !='#') {
             // 정유진: 가져온 값을 서버로 보낸다.
             $.ajax({
@@ -58,6 +58,7 @@ $('#search_box').mousedown(function () {
                     console.log("성공");
                     $("#auto_modal_list").html('');
                     for (let i = 0; i < data['prioritize_list'].length; i++) {
+                        // 정유진: 사용자 검색 시
                         if (data['prioritize_list'][i]['content'] == undefined) {
                             // 정유진: 이미지는 경로가 따로 있어야 한다.
                             let user_profile_image = "/media/" + data['prioritize_list'][i].profile_image;
@@ -80,7 +81,9 @@ $('#search_box').mousedown(function () {
                                 let user_nickname = event.target.id;
                                 location.href = "/content/reprofile?user_nickname=" + user_nickname;
                             });
-                        } else {
+                        }
+                        // 정유진: 해시태그 검색 시
+                        else {
                             let hashtag_content = data['prioritize_list'][i].content;
                             let hashtag_count = data['prioritize_list'][i].hashtag_count;
                             $("#auto_modal_list").append('<div id="auto_modal_object_' + i + '" class="hashtags auto_modal_object" hashtag_content="' + hashtag_content + '"></div>');
