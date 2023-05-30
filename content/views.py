@@ -589,20 +589,20 @@ class Autocomplete(APIView):
         search_box_value = request.GET.get('search_box_value', None)
 
         autocomplete_user_list = []
-
         autocomplete_hashtag_list = []
-
         prioritize_list = []
 
         if '#' in search_box_value:
             search_box_value = search_box_value.replace("#", "")
-            hashtag_content_lists = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list('content', flat=True)
+            hashtag_content_lists = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list('content', flat=True)[:10]
 
             for hashtag in hashtag_content_lists:
+                # 정유진: 해당 해시태그가 포함된 게시글 수. 같은 게시물에 같은 해시태그는 미포함.
                 hashtag_count = Hashtag.objects.filter(content=hashtag).distinct().values_list('feed_id', flat=True).count()
                 autocomplete_hashtag_list.append(dict(content=hashtag,
                                                       hashtag_count=hashtag_count))
 
+            # 정유진: 게시물 수로 정렬.
             autocomplete_hashtag_list = sorted(autocomplete_hashtag_list, key=lambda x: x['hashtag_count'], reverse=True)
         else:
             users = User.objects.filter(
