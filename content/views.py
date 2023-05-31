@@ -587,18 +587,36 @@ class FeedModal(APIView):
 class Autocomplete(APIView):
     def get(self, request):
         search_box_value = request.GET.get('search_box_value', None)
-        # 정유진: 10명만 가져온다.
-        users = User.objects.filter(
-            Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
 
         autocomplete_user_list = []
-        # 정유진: users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
-        for user in users:
-            autocomplete_user_list.append(dict(profile_image=user.profile_image,
-                                               nickname=user.nickname,
-                                               name=user.name))
+        autocomplete_hashtag_list = []
+        prioritize_list = []
+
+        if '#' in search_box_value:
+            search_box_value = search_box_value.replace("#", "")
+            hashtag_content_lists = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list('content', flat=True)[:10]
+
+            for hashtag in hashtag_content_lists:
+                # 정유진: 해당 해시태그가 포함된 게시글 수. 같은 게시물에 같은 해시태그는 미포함.
+                hashtag_count = Hashtag.objects.filter(content=hashtag).distinct().values_list('feed_id', flat=True).count()
+                autocomplete_hashtag_list.append(dict(content=hashtag,
+                                                      hashtag_count=hashtag_count))
+
+            # 정유진: 게시물 수로 정렬.
+            autocomplete_hashtag_list = sorted(autocomplete_hashtag_list, key=lambda x: x['hashtag_count'], reverse=True)
+        else:
+            users = User.objects.filter(
+                Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
+            # 정유진: users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
+            for user in users:
+                autocomplete_user_list.append(dict(profile_image=user.profile_image,
+                                                   nickname=user.nickname,
+                                                   name=user.name))
+
+        prioritize_list = autocomplete_user_list + autocomplete_hashtag_list
+
         data = {
-            'autocomplete_user_list': autocomplete_user_list
+            'prioritize_list': prioritize_list
         }
 
         json_data = json.dumps(data)
