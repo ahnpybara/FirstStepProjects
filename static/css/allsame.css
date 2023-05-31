@@ -4,7 +4,7 @@ body {
 
 /* 네비바 */
 .navbar {
-    position: fixed;
+    position: fixed!important;
     width: 100%;
     height: 61px;
     z-index: 999;

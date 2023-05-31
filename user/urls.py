@@ -12,7 +12,6 @@ urlpatterns = [
     # 05-07 유재우 : 프로파일 이미지 리셋,제거, 계정정보 변경,삭제 추가
     path('profile/reset', ResetProfile.as_view()),
     path('profile/remove', RemoveProfile.as_view()),
-    #TODO 왜 비밀번호는 profile경로로 안가는가?
     path('updatepassword', UpdatePassword.as_view()),
     path('profile/setting', Settings.as_view()),
     path('profile/updateemail', UpdateEmail.as_view()),
