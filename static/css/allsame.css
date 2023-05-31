@@ -179,6 +179,7 @@ body::-webkit-scrollbar {
 .auto_modal_object {
     width: 100%;
     margin: 10px;
+    margin-left: 18px;
     display: flex;
     flex-direction: row;
     align-items: center;
