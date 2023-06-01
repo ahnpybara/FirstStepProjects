@@ -402,7 +402,7 @@ $('.reply_close_btn').click(function (event) {
     });
 });
 
-// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 수정이 되도록 하는 부분, 안치윤 : 댓글 내용없으면 알림
+// 05-12 유재우 : 댓글 수정하기를 눌렸을 때 수정이 되도록 하는 부분, 안치윤 : 댓글 내용 없으면 알림
 $('.update_replys').click(function (event) {
     let reply_id = $(this).attr('reply_id');
 

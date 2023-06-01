@@ -454,7 +454,7 @@ class SearchFeed(APIView):
                 for reply in reply_object_list:
                     reply_user = User.objects.filter(email=reply.email).first()
                     reply_list.append(dict(reply_content=reply.reply_content,
-                                           nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+                                           nickname=reply_user.nickname, profile_image=reply_user.profile_image, id=reply.id))
                 like_count = Like.objects.filter(feed_id=feed.id).count()
                 is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
                 is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
