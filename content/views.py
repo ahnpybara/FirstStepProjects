@@ -249,7 +249,16 @@ class ToggleLike(APIView):
         else:
             Like.objects.create(feed_id=feed_id, email=email)
 
-        return Response(status=200)
+        # 비동기 좋아요 수
+        async_like_count = Like.objects.filter(feed_id=feed_id).count()
+        print(async_like_count)
+
+        data = {
+            'async_like_count': async_like_count
+        }
+
+        json_data = json.dumps(data)
+        return HttpResponse(json_data, content_type='application/json')
 
 
 # 특정 피드가 북마크 되면 북마크 여부와 피드id를 받아서 변수에 넣고 간단한 조건문을 실행 후 북마크 테이블에 저장

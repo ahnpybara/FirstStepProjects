@@ -4,7 +4,7 @@ body {
 
 /* 네비바 */
 .navbar {
-    position: fixed!important;
+    position: fixed !important;
     width: 100%;
     height: 61px;
     z-index: 999;
@@ -101,6 +101,7 @@ a {
     border-radius: 70%;
     overflow: hidden;
 }
+
 /* 프로필 사진 */
 .profile {
     width: 100%;
@@ -196,15 +197,21 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
 }
+
 .auto_modal_image {
     width: 32px;
     height: 32px;
 }
+
 /* 닉네임. 자동완성에 닉네임, 이름에 사용 */
 .auto_modal_text_object1 {
     margin-left: 10px;
+    font-size: 14px;
+    font-weight: bold;
 }
+
 .auto_modal_text_object2 {
     margin-left: 10px;
     color: gray;
+    font-size: 14px;
 }

@@ -77,6 +77,9 @@ $(".favorite").click(function (event) {
         method: "POST",
         success: function (data) {
             console.log("성공");
+            // 좋아요 수 비동기
+            var async_like_count = data['async_like_count'];
+            $("#async_like_count_" + feed_id).html(async_like_count+ '명');
         },
         error: function (request, status, error) {
             console.log("에러");
