@@ -21,7 +21,6 @@ class Main(APIView):
     def get(self, request):
         # 05-29 유재우 : 필터링을 위해 추가
         sort = request.GET.get('sort', '')
-        print(sort)
         # 세션 정보에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장
         email = request.session.get('email', None)
         # 세션에 이메일 정보가 없는경우 -> 로그인을 하지 않고 메인페이지에 접속했다는 뜻 -> 로그인 페이지로 이동시킴
@@ -43,14 +42,11 @@ class Main(APIView):
             like_count_list = []
             for feed in feed_object_list:
                 like_count = Like.objects.filter(feed_id=feed.id).count()
-                print(like_count)
                 like_count_list.append([feed.id, like_count])
             like_count_list.sort(key=lambda x: (-x[1], x[0]))
             like_count_list = [i[0] for i in like_count_list]
-            print(like_count_list)
 
             for like_count_list in like_count_list:
-                print()
                 feed_search_list = Feed.objects.filter(id=like_count_list)
                 for feed in feed_search_list:
                     user = User.objects.filter(email=feed.email).first()
@@ -76,6 +72,7 @@ class Main(APIView):
                                           create_at=feed.create_at,
                                           hashtag_list=hashtag_list
                                           ))
+        # 05-29 유재우 : 필터링 댓글 순
         elif sort == 'raply':
             user_object_list = User.objects.all()
             raply_count_list = []
@@ -477,6 +474,7 @@ class RemoveFeed(APIView):
 class SearchFeed(APIView):
     def get(self, request):
         searchKeyword = request.GET.get("search", "")
+        print(searchKeyword)
         email = request.session.get('email', None)
         user_session = User.objects.filter(email=email).first()
 
@@ -484,15 +482,168 @@ class SearchFeed(APIView):
         user_object_list = User.objects.filter(nickname__contains=searchKeyword).order_by('-id')
 
         feed_list = []
-        # 05-20 유재우 : 해시태그 검색
-        if (searchKeyword.find("#") == 0):
-            text = searchKeyword.replace("#", "");
+        # 05-29 유재우 : 좋아요 순
+        if ("?sort=likes" in searchKeyword):
+            searchKeyword = searchKeyword.replace("?sort=likes", "")
+            if (searchKeyword.find("#") == 0):
+                text = searchKeyword.replace("#", "");
 
-            hashtag_content_lists = list(
-                Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
+                hashtag_content_lists = list(
+                    Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
 
-            for hashtag_content_lists in hashtag_content_lists:
-                feed_search_list = Feed.objects.filter(id=hashtag_content_lists)
+                like_count_list = []
+                for hashtag_content_lists in hashtag_content_lists:
+                    like_count = Like.objects.filter(feed_id=hashtag_content_lists).count()
+                    like_count_list.append([hashtag_content_lists, like_count])
+                like_count_list.sort(key=lambda x: (-x[1], x[0]))
+                like_count_list = [i[0] for i in like_count_list]
+
+                for like_count_list in like_count_list:
+                    feed_search_list = Feed.objects.filter(id=like_count_list)
+                    for feed in feed_search_list:
+                        user = User.objects.filter(email=feed.email).first()
+                        reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                        reply_list = []
+                        for reply in reply_object_list:
+                            reply_user = User.objects.filter(email=reply.email).first()
+                            reply_list.append(dict(reply_content=reply.reply_content,
+                                                   nickname=reply_user.nickname,
+                                                   profile_image=reply_user.profile_image))
+                        like_count = Like.objects.filter(feed_id=feed.id).count()
+                        is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                        is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                        hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
+                        feed_list.append(dict(id=feed.id,
+                                              image=feed.image,
+                                              content=feed.content,
+                                              like_count=like_count,
+                                              profile_image=user.profile_image,
+                                              nickname=user.nickname,
+                                              reply_list=reply_list,
+                                              is_liked=is_liked,
+                                              is_marked=is_marked,
+                                              create_at=feed.create_at,
+                                              hashtag_list=hashtag_list
+                                              ))
+
+                    # 05-29 유재우 : 댓글 수 순
+        elif ("?sort=raply" in searchKeyword):
+            searchKeyword = searchKeyword.replace("?sort=raply", "")
+            if (searchKeyword.find("#") == 0):
+                text = searchKeyword.replace("#", "");
+
+                hashtag_content_lists = list(
+                    Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
+
+                raply_count_list = []
+                for hashtag_content_lists in hashtag_content_lists:
+                    raply_count = Reply.objects.filter(feed_id=hashtag_content_lists).count()
+                    raply_count_list.append([hashtag_content_lists, raply_count])
+                raply_count_list.sort(key=lambda x: (-x[1], x[0]))
+                raply_count_list = [i[0] for i in raply_count_list]
+
+                for raply_count_list in raply_count_list:
+                    feed_search_list = Feed.objects.filter(id=raply_count_list)
+                    for feed in feed_search_list:
+                        user = User.objects.filter(email=feed.email).first()
+                        reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                        reply_list = []
+                        for reply in reply_object_list:
+                            reply_user = User.objects.filter(email=reply.email).first()
+                            reply_list.append(dict(reply_content=reply.reply_content,
+                                                   nickname=reply_user.nickname,
+                                                   profile_image=reply_user.profile_image))
+                        like_count = Like.objects.filter(feed_id=feed.id).count()
+                        is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                        is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                        hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
+                        feed_list.append(dict(id=feed.id,
+                                              image=feed.image,
+                                              content=feed.content,
+                                              like_count=like_count,
+                                              profile_image=user.profile_image,
+                                              nickname=user.nickname,
+                                              reply_list=reply_list,
+                                              is_liked=is_liked,
+                                              is_marked=is_marked,
+                                              create_at=feed.create_at,
+                                              hashtag_list=hashtag_list
+                                              ))
+            else:
+                print("123")
+                raply_count_list = []
+                for feed in feed_search_list:
+                    print(feed.id)
+                    raply_count = Reply.objects.filter(feed_id=feed.id).count()
+                    raply_count_list.append([feed.id, raply_count])
+                raply_count_list.sort(key=lambda x: (-x[1], x[0]))
+                raply_count_list = [i[0] for i in raply_count_list]
+
+            for feed in raply_count_list:
+                    user = User.objects.filter(email=feed.email).first()
+                    print(user.nickname)
+                    reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                    reply_list = []
+                    for reply in reply_object_list:
+                        reply_user = User.objects.filter(email=reply.email).first()
+                        reply_list.append(dict(reply_content=reply.reply_content,
+                                               nickname=reply_user.nickname,
+                                               profile_image=reply_user.profile_image))
+                    like_count = Like.objects.filter(feed_id=feed.id).count()
+                    is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                    is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                    hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
+                    feed_list.append(dict(id=feed.id,
+                                          image=feed.image,
+                                          content=feed.content,
+                                          like_count=like_count,
+                                          profile_image=user.profile_image,
+                                          nickname=user.nickname,
+                                          reply_list=reply_list,
+                                          is_liked=is_liked,
+                                          is_marked=is_marked,
+                                          create_at=feed.create_at,
+                                          hashtag_list=hashtag_list
+                                          ))
+
+        # 05-29 유재우 : 최근 순
+        elif ("?sort=newest" in searchKeyword):
+            searchKeyword = searchKeyword.replace("?sort=newest", "")
+            # 05-20 유재우 : 해시태그 검색
+            if (searchKeyword.find("#") == 0):
+                text = searchKeyword.replace("#", "");
+
+                hashtag_content_lists = list(
+                    Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
+
+                for hashtag_content_lists in hashtag_content_lists:
+                    feed_search_list = Feed.objects.filter(id=hashtag_content_lists)
+                    for feed in feed_search_list:
+                        user = User.objects.filter(email=feed.email).first()
+                        reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                        reply_list = []
+                        for reply in reply_object_list:
+                            reply_user = User.objects.filter(email=reply.email).first()
+                            reply_list.append(dict(reply_content=reply.reply_content,
+                                                   nickname=reply_user.nickname,
+                                                   profile_image=reply_user.profile_image))
+                        like_count = Like.objects.filter(feed_id=feed.id).count()
+                        is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                        is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                        hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
+                        feed_list.append(dict(id=feed.id,
+                                              image=feed.image,
+                                              content=feed.content,
+                                              like_count=like_count,
+                                              profile_image=user.profile_image,
+                                              nickname=user.nickname,
+                                              reply_list=reply_list,
+                                              is_liked=is_liked,
+                                              is_marked=is_marked,
+                                              create_at=feed.create_at,
+                                              hashtag_list=hashtag_list
+                                              ))
+            else:
                 for feed in feed_search_list:
                     user = User.objects.filter(email=feed.email).first()
                     reply_object_list = Reply.objects.filter(feed_id=feed.id)
@@ -517,33 +668,70 @@ class SearchFeed(APIView):
                                           create_at=feed.create_at,
                                           hashtag_list=hashtag_list
                                           ))
-        else:
-            for feed in feed_search_list:
-                user = User.objects.filter(email=feed.email).first()
-                reply_object_list = Reply.objects.filter(feed_id=feed.id)
-                reply_list = []
-                for reply in reply_object_list:
-                    reply_user = User.objects.filter(email=reply.email).first()
-                    reply_list.append(dict(reply_content=reply.reply_content,
-                                           nickname=reply_user.nickname, profile_image=reply_user.profile_image))
-                like_count = Like.objects.filter(feed_id=feed.id).count()
-                is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
-                is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
-                hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
-                feed_list.append(dict(id=feed.id,
-                                      image=feed.image,
-                                      content=feed.content,
-                                      like_count=like_count,
-                                      profile_image=user.profile_image,
-                                      nickname=user.nickname,
-                                      reply_list=reply_list,
-                                      is_liked=is_liked,
-                                      is_marked=is_marked,
-                                      create_at=feed.create_at,
-                                      hashtag_list=hashtag_list
-                                      ))
 
-        # 안치윤 : 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
+
+        else:
+            # 05-20 유재우 : 해시태그 검색
+            if (searchKeyword.find("#") == 0):
+                text = searchKeyword.replace("#", "");
+
+                hashtag_content_lists = list(
+                    Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
+
+                for hashtag_content_lists in hashtag_content_lists:
+                    feed_search_list = Feed.objects.filter(id=hashtag_content_lists)
+                    for feed in feed_search_list:
+                        user = User.objects.filter(email=feed.email).first()
+                        reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                        reply_list = []
+                        for reply in reply_object_list:
+                            reply_user = User.objects.filter(email=reply.email).first()
+                            reply_list.append(dict(reply_content=reply.reply_content,
+                                                   nickname=reply_user.nickname,
+                                                   profile_image=reply_user.profile_image))
+                        like_count = Like.objects.filter(feed_id=feed.id).count()
+                        is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                        is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                        hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
+                        feed_list.append(dict(id=feed.id,
+                                              image=feed.image,
+                                              content=feed.content,
+                                              like_count=like_count,
+                                              profile_image=user.profile_image,
+                                              nickname=user.nickname,
+                                              reply_list=reply_list,
+                                              is_liked=is_liked,
+                                              is_marked=is_marked,
+                                              create_at=feed.create_at,
+                                              hashtag_list=hashtag_list
+                                              ))
+            else:
+                for feed in feed_search_list:
+                    user = User.objects.filter(email=feed.email).first()
+                    reply_object_list = Reply.objects.filter(feed_id=feed.id)
+                    reply_list = []
+                    for reply in reply_object_list:
+                        reply_user = User.objects.filter(email=reply.email).first()
+                        reply_list.append(dict(reply_content=reply.reply_content,
+                                               nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+                    like_count = Like.objects.filter(feed_id=feed.id).count()
+                    is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
+                    is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+                    hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
+                    feed_list.append(dict(id=feed.id,
+                                          image=feed.image,
+                                          content=feed.content,
+                                          like_count=like_count,
+                                          profile_image=user.profile_image,
+                                          nickname=user.nickname,
+                                          reply_list=reply_list,
+                                          is_liked=is_liked,
+                                          is_marked=is_marked,
+                                          create_at=feed.create_at,
+                                          hashtag_list=hashtag_list
+                                          ))
+
+                    # 안치윤 : 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list))
 

@@ -490,19 +490,75 @@ var getUrlParameter = function getUrlParameter(sParam) {
     for (i = 0; i < sURLVariables.length; i++) {
         sParameterName = sURLVariables[i].split('=');
 
+
         if (sParameterName[0] === sParam) {
             return sParameterName[1] === undefined ? true : sParameterName[1];
+        } else {
+            continue
         }
     }
 };
-// 정렬방식 셀렉트 박스 유지
-$(document).ready(function(){
-  var sort = getUrlParameter('sort');
-  if(sort == 'likes'){
-    $('.sort-likes').prop('selected', 'selected')
-  }else if(sort == 'raply'){
-    $('.sort-raply').prop('selected', 'selected')
-  }else{
-    $('.sort-date').prop('selected', 'selected')
-  }
+
+// 05-29 유재우 : 필터링 셀렉트 박스 유지
+$(document).ready(function () {
+    var sort = getUrlParameter('sort');
+    if (sort == 'likes') {
+        $('.sort-likes').prop('selected', 'selected')
+
+    } else if (sort == 'raply') {
+        $('.sort-raply').prop('selected', 'selected')
+    } else {
+        $('.sort-date').prop('selected', 'selected')
+    }
 });
+
+$(document).ready(function () {
+    $('#sort-select').change(function () {
+            var link = document.location.href;
+            var sort = $("#sort-select option:selected").val()
+            if (sort == "?sort=newest") {
+                if (link.startsWith('http://127.0.0.1:8000/main/') == true) {
+                    location.href = "/main/" + sort
+                }
+                if (link.startsWith('http://127.0.0.1:8000/content/search/?search=') == true) {
+                    var result3 = String(link)
+                    result3 = result3.slice(45)
+                    result3=result3.replace("?sort=likes","")
+                    result3=result3.replace("?sort=raply","")
+                    result3=result3.replace("?sort=newest","")
+                    $('#sort-select').val('.sort-date').attr('selected', 'selected')
+                    location.href = "/content/search/?search=" + result3 + sort
+
+                }
+            } else if (sort == "?sort=likes") {
+                if (link.startsWith('http://127.0.0.1:8000/main/') == true) {
+                    location.href = "/main/" + sort
+                }
+                if (link.startsWith('http://127.0.0.1:8000/content/search/?search=') == true) {
+                    var result3 = String(link)
+                    result3 = result3.slice(45)
+                    result3=result3.replace("?sort=likes","")
+                    result3=result3.replace("?sort=raply","")
+                    result3=result3.replace("?sort=newest","")
+                    $('#sort-select').val('.sort-likes').attr('selected', 'selected')
+                    location.href = "/content/search/?search=" + result3 + sort
+
+                }
+            } else if (sort == "?sort=raply") {
+                if (link.startsWith('http://127.0.0.1:8000/main/') == true) {
+                    location.href = "/main/" + sort
+                }
+                if (link.startsWith('http://127.0.0.1:8000/content/search/?search=') == true) {
+                    var result3 = String(link)
+                    result3 = result3.slice(45)
+                    result3=result3.replace("?sort=likes","")
+                    result3=result3.replace("?sort=raply","")
+                    result3=result3.replace("?sort=newest","")
+                    $('#sort-select').val('.sort-raply').attr('selected', 'selected')
+                    location.href = "/content/search/?search=" + result3 + sort
+
+                }
+            }
+        }
+    )
+})

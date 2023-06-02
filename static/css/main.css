@@ -444,5 +444,6 @@
 }
 
 .filteringbar_area{
-
+    width: 100%;
+    align-items: end;
 }
