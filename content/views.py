@@ -408,73 +408,64 @@ class SearchFeed(APIView):
         searchKeyword = request.GET.get("search", "")
         email = request.session.get('email', None)
         user_session = User.objects.filter(email=email).first()
-
-        feed_search_list = Feed.objects.filter(content__contains=searchKeyword).order_by('-id')
         user_object_list = User.objects.filter(nickname__contains=searchKeyword).order_by('-id')
 
-        feed_list = []
-        # 05-20 유재우 : 해시태그 검색
+        # 해시태그 검색
         if (searchKeyword.find("#") == 0):
             text = searchKeyword.replace("#", "");
 
             hashtag_content_lists = list(
-                Hashtag.objects.filter(content__contains=text).distinct().values_list('feed_id', flat=True))
+                Hashtag.objects.filter(content=text).values_list('feed_id', flat=True))
 
-            for hashtag_content_lists in hashtag_content_lists:
-                feed_search_list = Feed.objects.filter(id=hashtag_content_lists)
-                for feed in feed_search_list:
-                    user = User.objects.filter(email=feed.email).first()
-                    reply_object_list = Reply.objects.filter(feed_id=feed.id)
-                    reply_list = []
-                    for reply in reply_object_list:
-                        reply_user = User.objects.filter(email=reply.email).first()
-                        reply_list.append(dict(reply_content=reply.reply_content,
-                                               nickname=reply_user.nickname, profile_image=reply_user.profile_image))
+
+            feed_all_count = Hashtag.objects.filter(content=text).count()
+
+            is_exist_feed = Hashtag.objects.filter(content=text).exists()
+
+            #todo 검새결과가 없을경우 일단 메인 페이지로 이동시킴 나중에 페이지를 만들어서 제공할 예정
+            if not is_exist_feed:
+                return render(request, 'astronaut/main.html')
+
+
+            feed_main_image = 1
+            feed_search_list = []
+            feed_count_list = []
+            for hashtag_feed_id in hashtag_content_lists:
+                feed_hashtag_list = Feed.objects.filter(id=hashtag_feed_id)
+                # TODO 불필요한 반복문이 발생 하지만 방법이 생각이 안남... 아래 한줄
+                feed_main_image = Feed.objects.filter(id=hashtag_feed_id).first()
+                for feed in feed_hashtag_list:
+                    feed_search_list.append(dict(id=feed.id, image=feed.image))
                     like_count = Like.objects.filter(feed_id=feed.id).count()
-                    is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
-                    is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
-                    hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
-                    feed_list.append(dict(id=feed.id,
-                                          image=feed.image,
-                                          content=feed.content,
-                                          like_count=like_count,
-                                          profile_image=user.profile_image,
-                                          nickname=user.nickname,
-                                          reply_list=reply_list,
-                                          is_liked=is_liked,
-                                          is_marked=is_marked,
-                                          create_at=feed.create_at,
-                                          hashtag_list=hashtag_list
-                                          ))
+
+                    # 댓글 수 확인.
+                    reply_count = Reply.objects.filter(feed_id=feed.id).count()
+                    feed_count_list.append(dict(id=feed.id,
+                                                like_count=like_count,
+                                                reply_count=reply_count))
         else:
+            feed_search_list = Feed.objects.filter(content__contains=searchKeyword).order_by('-id')
+            feed_main_image = Feed.objects.filter(content__contains=searchKeyword).first()
+
+            feed_all_count = Feed.objects.filter(content__contains=searchKeyword).count()
+
+            # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+            feed_count_list = []
             for feed in feed_search_list:
-                user = User.objects.filter(email=feed.email).first()
-                reply_object_list = Reply.objects.filter(feed_id=feed.id)
-                reply_list = []
-                for reply in reply_object_list:
-                    reply_user = User.objects.filter(email=reply.email).first()
-                    reply_list.append(dict(reply_content=reply.reply_content,
-                                           nickname=reply_user.nickname, profile_image=reply_user.profile_image, id=reply.id))
+                # 좋아요 수 확인.
                 like_count = Like.objects.filter(feed_id=feed.id).count()
-                is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
-                is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
-                hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
-                feed_list.append(dict(id=feed.id,
-                                      image=feed.image,
-                                      content=feed.content,
-                                      like_count=like_count,
-                                      profile_image=user.profile_image,
-                                      nickname=user.nickname,
-                                      reply_list=reply_list,
-                                      is_liked=is_liked,
-                                      is_marked=is_marked,
-                                      create_at=feed.create_at,
-                                      hashtag_list=hashtag_list
-                                      ))
+                # 댓글 수 확인.
+                reply_count = Reply.objects.filter(feed_id=feed.id).count()
+                feed_count_list.append(dict(id=feed.id,
+                                            like_count=like_count,
+                                            reply_count=reply_count))
 
         # 안치윤 : 필터링을 거쳐서 나온 세션의 유저 정보가 담긴 user_session와 피드 리스트가 담긴 feed_list를 사전 형태로 클라이언트에게 보냄
-        return render(request, "astronaut/main.html",
-                      context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list))
+        return render(request, "astronaut/search.html",
+                      context=dict(feed_count_list=feed_count_list, user_session=user_session,
+                                   user_object_list=user_object_list, feed_search_list=feed_search_list,
+                                   searchKeyword=searchKeyword, feed_main_image=feed_main_image,
+                                   feed_all_count=feed_all_count))
 
 
 # 05-12 유재우 : 댓글 지우기
@@ -603,16 +594,19 @@ class Autocomplete(APIView):
 
         if '#' in search_box_value:
             search_box_value = search_box_value.replace("#", "")
-            hashtag_content_lists = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list('content', flat=True)[:10]
+            hashtag_content_lists = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list(
+                'content', flat=True)[:10]
 
             for hashtag in hashtag_content_lists:
                 # 정유진: 해당 해시태그가 포함된 게시글 수. 같은 게시물에 같은 해시태그는 미포함.
-                hashtag_count = Hashtag.objects.filter(content=hashtag).distinct().values_list('feed_id', flat=True).count()
+                hashtag_count = Hashtag.objects.filter(content=hashtag).distinct().values_list('feed_id',
+                                                                                               flat=True).count()
                 autocomplete_hashtag_list.append(dict(content=hashtag,
                                                       hashtag_count=hashtag_count))
 
             # 정유진: 게시물 수로 정렬.
-            autocomplete_hashtag_list = sorted(autocomplete_hashtag_list, key=lambda x: x['hashtag_count'], reverse=True)
+            autocomplete_hashtag_list = sorted(autocomplete_hashtag_list, key=lambda x: x['hashtag_count'],
+                                               reverse=True)
         else:
             users = User.objects.filter(
                 Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
