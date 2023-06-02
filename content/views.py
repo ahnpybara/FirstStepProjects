@@ -449,6 +449,12 @@ class SearchFeed(APIView):
 
             feed_all_count = Feed.objects.filter(content__contains=searchKeyword).count()
 
+            is_exist_feed = Feed.objects.filter(content__contains=searchKeyword).exists()
+
+            #todo 검새결과가 없을경우 일단 메인 페이지로 이동시킴 나중에 페이지를 만들어서 제공할 예정
+            if not is_exist_feed:
+                return render(request, 'astronaut/main.html')
+
             # 내 게시물의 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
             feed_count_list = []
             for feed in feed_search_list:
