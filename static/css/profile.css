@@ -10,6 +10,7 @@
     text-align: center;
     justify-content: center;
     align-items: center;
+    padding-top: 60px;
     background-color: #FAFAFA;
 }
 
@@ -198,11 +199,6 @@
 .profile_feed_mouse_over:hover > .feed_count {
     color: white;
     display: flex;
-}
-
-/* 닉네임. 자동완성에 닉네임, 이름에 사용 */
-.feed_nickname {
-    margin-left: 10px;
 }
 
 /* 내가 좋아요한 게시글 목록 */

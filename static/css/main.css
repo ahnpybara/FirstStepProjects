@@ -81,6 +81,8 @@
 /* 피드 작성자 닉네임 */
 .feed_nickname {
     margin-left: 10px;
+    font-weight: bold;
+    font-size: 14px;
 }
 
 /* 작성자의 피드 이미지 */
@@ -151,7 +153,7 @@
     margin-left: 10px;
     margin-bottom: 7px;
     text-align: left;
-    font-size: 16px
+    font-size: 14px
 }
 
 /* 해시태그 부모 */

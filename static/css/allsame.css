@@ -4,7 +4,7 @@ body {
 
 /* 네비바 */
 .navbar {
-    position: fixed;
+    position: fixed !important;
     width: 100%;
     height: 61px;
     z-index: 999;
@@ -101,6 +101,7 @@ a {
     border-radius: 70%;
     overflow: hidden;
 }
+
 /* 프로필 사진 */
 .profile {
     width: 100%;
@@ -120,12 +121,13 @@ a {
 /* 자동완성 모달 */
 #auto_modal {
     width: 400px;
-    height: 300px;
+    max-height: 300px;
     position: fixed;
     display: none;
     top: 50px;
     z-index: 999;
     background: white;
+    border-radius: 5px
 }
 
 /* 자동완성의 스크롤은 동작하지만 보이지 않게 함 */
@@ -172,4 +174,44 @@ body {
 
 body::-webkit-scrollbar {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+/* 자동완성. */
+.auto_modal_object {
+    width: 100%;
+    margin: 10px;
+    margin-left: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: black !important;
+}
+
+/* 자동완성. 해시태그 아이콘 */
+.auto_modal_hashtag_icon {
+    border-radius: 50%;
+    border: 1px solid #e1e1e1;
+    width: 32px;
+    height: 32px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.auto_modal_image {
+    width: 32px;
+    height: 32px;
+}
+
+/* 닉네임. 자동완성에 닉네임, 이름에 사용 */
+.auto_modal_text_object1 {
+    margin-left: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.auto_modal_text_object2 {
+    margin-left: 10px;
+    color: gray;
+    font-size: 14px;
 }

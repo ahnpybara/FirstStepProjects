@@ -86,8 +86,8 @@ $(".feed_modal").click(function () {
                     '<span id="feed_modla_bookmark_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse bookmark material-symbols-outlined">bookmark</span>');
 
             // 정유진: 좋아요 수, 게시물 작성시간 모달에 추가
-            $("#feed_modal_like_count").html('<div class="feed_modal_like_count">좋아요 수 ' + like_count + '</div>');
-            $("#feed_modal_feed_create_at").html('<div class="feed_modal_feed_create_at">'+ feed_create_at +'</div>');
+            $("#feed_modal_like_count").html('<div class="feed_modal_like_count">좋아요 수 ' + '<b class="async_like_count_' + feed_id + '">' + like_count + '명' + '</b>' + '</div>');
+            $("#feed_modal_feed_create_at").html('<div class="feed_modal_feed_create_at">' + feed_create_at + '</div>');
 
             // 정유진: 댓글 게시할 때 댓글리스트에서 몇 번째인지 알려준다.
             document.getElementById("reply_content_upload").setAttribute("reply_id", data['reply_list'].length);
@@ -170,6 +170,10 @@ $(".feed_modal").click(function () {
                     method: "POST",
                     success: function (data) {
                         console.log("성공");
+                        // 좋아요 수 비동기
+                        var async_like_count = data['async_like_count'];
+                        console.log(async_like_count);
+                        $(".async_like_count_" + feed_id).html(async_like_count + '명');
                     },
                     error: function (request, status, error) {
                         console.log("에러");
@@ -449,6 +453,7 @@ function image_upload() {
         return 0;
     }
 }
+
 // 모달창 닫기 버튼 이벤트 처리
 $(".modal_close").click(function () {
     // 모달창 닫았을 때 본문 스크롤 가능
