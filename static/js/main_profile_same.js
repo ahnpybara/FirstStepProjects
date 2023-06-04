@@ -318,8 +318,14 @@ $('#nav_bar_add_box').click(function () {
 
 // 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
-    let file = files[0];
-    let image = files[0].name;
+    let file = []
+    let image = []
+    for (i = 0 ; i<=files.length; i++) {
+        alert(files[i].name)
+        file[i] = files[i];
+        image[i] =files[i].name;
+    }
+    alert(files.length);
     let content = $('#input_feed_content').val();
     //해시태그용 컨탠트 추가
     let hashtags_content = $('#input_feed_hashtag').val();
@@ -406,7 +412,12 @@ function uploadFiles(e) {
         // 타입을 판별하고 이미지면 아래 로식을 실행
         if (files[i].type.match(/image.*/)) {
 
-            // 이미지 업로드시 사진업로드 모달창을 가림
+
+        } else {
+            alert('이미지가 아닙니다.');
+            return 0;
+        }
+        // 이미지 업로드시 사진업로드 모달창을 가림
             $('#first_modal').css({
                 display: 'none'
             });
@@ -418,16 +429,12 @@ function uploadFiles(e) {
 
             // 업로드 창 배경을 업로드된 이미지로 변경
             $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[i]) + ")",
+                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
                 "outline": "none",
                 "background-size": "contain",
                 "background-repeat": "no-repeat",
                 "background-position": "center"
             });
-        } else {
-            alert('이미지가 아닙니다.');
-            return 0;
-        }
     }
 }
 
