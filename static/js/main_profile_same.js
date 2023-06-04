@@ -318,14 +318,19 @@ $('#nav_bar_add_box').click(function () {
 
 // 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
+    alert(files.length)
+
+    // 파일을 업로드 하는 것이므로 formdata 형태로 서버에 전달해야 함, formdata 객체를 생성한 뒤 서버로 보낼 데이터를 객체에 추가해줌
+    let fd = new FormData();
+
     let file = []
     let image = []
-    for (i = 0 ; i<=files.length; i++) {
-        alert(files[i].name)
-        file[i] = files[i];
-        image[i] =files[i].name;
+    for (i = 0; i < files.length; i++) {
+        file = files[i];
+        image = files[i].name;
+        fd.append('file'[i], file);
+        fd.append('image'[i], image);
     }
-    alert(files.length);
     let content = $('#input_feed_content').val();
     //해시태그용 컨탠트 추가
     let hashtags_content = $('#input_feed_hashtag').val();
@@ -339,11 +344,6 @@ $('#feed_create_button').click(function () {
     }
 
 
-    // 파일을 업로드 하는 것이므로 formdata 형태로 서버에 전달해야 함, formdata 객체를 생성한 뒤 서버로 보낼 데이터를 객체에 추가해줌
-    let fd = new FormData();
-
-    fd.append('file', file);
-    fd.append('image', image);
     fd.append('content', content);
     fd.append('hashtags_content', hashtags_content);
 
@@ -406,18 +406,9 @@ function uploadFiles(e) {
     files = e.target.files || e.dataTransfer.files;
 
 
-
-    for(var i=0; i< files.length;files++) {
-        alert(files.length)
+    for (var i = 0; i < files.length; i++) {
         // 타입을 판별하고 이미지면 아래 로식을 실행
         if (files[i].type.match(/image.*/)) {
-
-
-        } else {
-            alert('이미지가 아닙니다.');
-            return 0;
-        }
-        // 이미지 업로드시 사진업로드 모달창을 가림
             $('#first_modal').css({
                 display: 'none'
             });
@@ -435,7 +426,15 @@ function uploadFiles(e) {
                 "background-repeat": "no-repeat",
                 "background-position": "center"
             });
+
+        } else {
+            alert('이미지가 아닙니다.');
+            return 0;
+        }
     }
+    // 이미지 업로드시 사진업로드 모달창을 가림
+
+
 }
 
 // 모달창의 사진 추가 버튼 클릭했을 시

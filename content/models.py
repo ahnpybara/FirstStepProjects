@@ -1,22 +1,17 @@
 from django.db import models
 
-<<<<<<< HEAD
 
-# class TimesModel(models.Model):
-#     create_at = models.DateTimeField(auto_now_add=True)     # 작성시간
-#
-#     class Meta:
-#         abstract = True
-
-
-=======
->>>>>>> 6c8ee5968309e07c88062ca3415ebf585ff96174
 # 피드 테이블
 class Feed(models.Model):
     content = models.TextField()  # 글내용
     image = models.TextField()  # 피드에 업로드되는 이미지
     email = models.EmailField(default='')  # 이메일
     create_at = models.DateTimeField(auto_now_add=True)
+
+#이미지 테이블
+class Image(models.Model):
+    feed_id = models.IntegerField()  # Feed id
+    image = models.TextField()  # 피드에 업로드되는 이미지
 
 
 # 좋아요 테이블
@@ -40,11 +35,11 @@ class Bookmark(models.Model):
 
 # 팔로우 테이블
 class Follow(models.Model):
-    follower = models.EmailField(default='')                 # 팔로우 하는 유저 이메일
-    following = models.EmailField(default='')                # 팔로우 당하는 유저 이메일
+    follower = models.EmailField(default='')  # 팔로우 하는 유저 이메일
+    following = models.EmailField(default='')  # 팔로우 당하는 유저 이메일
 
 
 # 해시태그 테이블
 class Hashtag(models.Model):
-    feed_id = models.IntegerField(default=0)                   # Feed id
-    content = models.TextField()                               # 해시태그 내용
+    feed_id = models.IntegerField(default=0)  # Feed id
+    content = models.TextField()  # 해시태그 내용

@@ -23,13 +23,8 @@ class Main(APIView):
         # 세션에 이메일 정보가 없는경우 -> 로그인을 하지 않고 메인페이지에 접속했다는 뜻 -> 로그인 페이지로 이동시킴
         if email is None:
             return render(request, "user/login.html")
-<<<<<<< HEAD
-        feed_list = []
-        # 세션정보가 저장된 이메일을 필터링 조건으로 대입해서 유저테이블을 필터링을 진행 -> 결과를 user_session 변수에 저장
-=======
 
         # 현재 세션 정보의 이메일로 현재 세션 유저의 객체를 뽑아냄 , user_session 과 user와 겹치지 않기 위해서 세션 정보는 user_session에 저장
->>>>>>> 6c8ee5968309e07c88062ca3415ebf585ff96174
         user_session = User.objects.filter(email=email).first()
         # 세션에 이메일 정보가 있는데 그 이메일 주소가 우리 회원이 아닌 경우 -> 로그인 페이지로 이동시킴
         if user_session is None:
@@ -37,117 +32,6 @@ class Main(APIView):
 
         # feed_list에 담을 정보를 위해서 Feed 테이블에 있는 모든 객체를 가져와서 필터링을 진행할 예정
         feed_object_list = Feed.objects.all().order_by('-id')
-<<<<<<< HEAD
-
-        # 05-29 유재우 : 필터링을 위해 추가(좋아요 순)
-        if sort == 'likes':
-            user_object_list = User.objects.all()
-            like_count_list = []
-            for feed in feed_object_list:
-                like_count = Like.objects.filter(feed_id=feed.id).count()
-                like_count_list.append([feed.id, like_count])
-            like_count_list.sort(key=lambda x: (-x[1], x[0]))
-            like_count_list = [i[0] for i in like_count_list]
-
-            for like_count_list in like_count_list:
-                feed_search_list = Feed.objects.filter(id=like_count_list)
-                for feed in feed_search_list:
-                    user = User.objects.filter(email=feed.email).first()
-                    reply_object_list = Reply.objects.filter(feed_id=feed.id)
-                    reply_list = []
-                    for reply in reply_object_list:
-                        reply_user = User.objects.filter(email=reply.email).first()
-                        reply_list.append(dict(reply_content=reply.reply_content,
-                                               nickname=reply_user.nickname, profile_image=reply_user.profile_image))
-                    like_count = Like.objects.filter(feed_id=feed.id).count()
-                    is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
-                    is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
-                    hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
-                    feed_list.append(dict(id=feed.id,
-                                          image=feed.image,
-                                          content=feed.content,
-                                          like_count=like_count,
-                                          profile_image=user.profile_image,
-                                          nickname=user.nickname,
-                                          reply_list=reply_list,
-                                          is_liked=is_liked,
-                                          is_marked=is_marked,
-                                          create_at=feed.create_at,
-                                          hashtag_list=hashtag_list
-                                          ))
-        # 05-29 유재우 : 필터링 댓글 순
-        elif sort == 'raply':
-            user_object_list = User.objects.all()
-            raply_count_list = []
-            for feed in feed_object_list:
-                raply_count = Reply.objects.filter(feed_id=feed.id).count()
-                raply_count_list.append([feed.id, raply_count])
-            raply_count_list.sort(key=lambda x: (-x[1], x[0]))
-            raply_count_list = [i[0] for i in raply_count_list]
-
-            for raply_count_list in raply_count_list:
-                feed_search_list = Feed.objects.filter(id=raply_count_list)
-                for feed in feed_search_list:
-                    user = User.objects.filter(email=feed.email).first()
-                    reply_object_list = Reply.objects.filter(feed_id=feed.id)
-                    reply_list = []
-                    for reply in reply_object_list:
-                        reply_user = User.objects.filter(email=reply.email).first()
-                        reply_list.append(dict(reply_content=reply.reply_content,
-                                               nickname=reply_user.nickname, profile_image=reply_user.profile_image))
-                    like_count = Like.objects.filter(feed_id=feed.id).count()
-                    is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
-                    is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
-                    hashtag_list = Hashtag.objects.filter(feed_id=feed.id)
-                    feed_list.append(dict(id=feed.id,
-                                          image=feed.image,
-                                          content=feed.content,
-                                          like_count=like_count,
-                                          profile_image=user.profile_image,
-                                          nickname=user.nickname,
-                                          reply_list=reply_list,
-                                          is_liked=is_liked,
-                                          is_marked=is_marked,
-                                          create_at=feed.create_at,
-                                          hashtag_list=hashtag_list
-                                          ))
-
-
-        else:
-            user_object_list = User.objects.all()
-
-            for feed in feed_object_list:
-                user = User.objects.filter(email=feed.email).first()
-                # 정유진: 댓글의 2개만 가져온다.
-                reply_object_list = Reply.objects.filter(feed_id=feed.id)[:2]
-                reply_list = []
-                hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
-                hashtag_list = []
-                for reply in reply_object_list:
-                    reply_user = User.objects.filter(email=reply.email).first()
-                    reply_list.append(dict(reply_content=reply.reply_content,
-                                           nickname=reply_user.nickname, profile_image=reply_user.profile_image,
-                                           id=reply.id))
-                    # 05-20 유재우 : 해시태그 추가
-                for hashtag in hashtag_object_list:
-                    hashtag_feed = Feed.objects.filter(id=feed.id).first()
-                    hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
-                like_count = Like.objects.filter(feed_id=feed.id).count()
-                is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
-                is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
-                feed_list.append(dict(id=feed.id,
-                                      image=feed.image,
-                                      content=feed.content,
-                                      like_count=like_count,
-                                      profile_image=user.profile_image,
-                                      nickname=user.nickname,
-                                      reply_list=reply_list,
-                                      is_liked=is_liked,
-                                      is_marked=is_marked,
-                                      create_at=feed.create_at,
-                                      hashtag_list=hashtag_list
-                                      ))
-=======
         feed_list = []
 
         # 유저를 검색하기 위해서 유저 정보를 모두 가져옴
@@ -189,7 +73,6 @@ class Main(APIView):
                                   create_at=feed.create_at,
                                   hashtag_list=hashtag_list
                                   ))
->>>>>>> 6c8ee5968309e07c88062ca3415ebf585ff96174
 
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
@@ -202,7 +85,9 @@ class UploadFeed(APIView):
     # noinspection PyMethodMayBeStatic
     def post(self, request):
         # 서버로 전달된 폼 데이터 객체에서 파일을 꺼냄
+        file = []
         file = request.FILES['file']
+        print(file)
         # uuid 값 생성
         uuid_name = uuid4().hex
         # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
@@ -544,12 +429,8 @@ class SearchFeed(APIView):
     def get(self, request):
         # 서버로 전달된 데이터를 받아서 처리(검색 키워드)
         searchKeyword = request.GET.get("search", "")
-<<<<<<< HEAD
-        print(searchKeyword)
-=======
 
         # 세션에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장 -> 이메일로 세션 유저 객체를 구함
->>>>>>> 6c8ee5968309e07c88062ca3415ebf585ff96174
         email = request.session.get('email', None)
         # 현재 세션 정보의 이메일로 현재 세션 유저의 객체를 뽑아냄 , user
         user_session = User.objects.filter(email=email).first()
@@ -563,15 +444,12 @@ class SearchFeed(APIView):
             hashtag_content_lists = list(
                 Hashtag.objects.filter(content=text).values_list('feed_id', flat=True))
 
-<<<<<<< HEAD
-=======
             # 검색결과중 대표 이미지를 뽑아내기 위한 작업 (랜덤으로 뽑아서 보여줌)
             random_feed_id = random.choice(hashtag_content_lists)
             # 메인 대표 이미지를 하나 뽑음 ( 하나만 뽑더라도 first는 필수입니다. )
             feed_main_image = Feed.objects.filter(id=random_feed_id).first()
 
             # 검색키워드가 포함된 전체 피드 수
->>>>>>> 6c8ee5968309e07c88062ca3415ebf585ff96174
             feed_all_count = Hashtag.objects.filter(content=text).count()
             # 검색결과 여부를 판정할 객체 선언
             is_exist_feed = Hashtag.objects.filter(content=text).exists()
@@ -580,11 +458,7 @@ class SearchFeed(APIView):
             if not is_exist_feed:
                 return render(request, 'astronaut/main.html')
 
-<<<<<<< HEAD
-            feed_main_image = 1
-=======
             # 피드 리스트와 해당 피드에 좋아요와 댓글수를 저장할 리스트 선언
->>>>>>> 6c8ee5968309e07c88062ca3415ebf585ff96174
             feed_search_list = []
             feed_count_list = []
             # feed_id를 토대로 피드 테이블의 객체를 뽑아냄 (반복문을 쓰는이유 특정id 피드에 여러 해시태그가 달렸기 때문)

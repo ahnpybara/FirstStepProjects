@@ -220,6 +220,7 @@ class UpdatePassword(APIView):
             request.session.flush()
             return Response(status=200)
 
+
 # 설정 클래스
 class Settings(APIView):
     def get(self, request):
@@ -256,12 +257,7 @@ class UpdateEmail(APIView):
             bookmark = Bookmark.objects.filter(email=user_email)
             follower = Follow.objects.filter(follower=user_email)
             following = Follow.objects.filter(following=user_email)
-
-<<<<<<< HEAD
-            # TODO 왜 방식이 다른가?
-=======
             # 각 객체의 이메일을 수정할 이메일로 변경
->>>>>>> 6c8ee5968309e07c88062ca3415ebf585ff96174
             user.email = email
             request.session['email'] = email
             reply.update(email=email)
