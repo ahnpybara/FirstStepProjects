@@ -2,9 +2,9 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 
-# custom user model 사용 시 UserManager 클래스와 create_user, create_superuser 함수가 정의되어 있어야 함
+# 커스텀 유저 모델을 위한 헬퍼 클래스를 선언
 class UserManager(BaseUserManager):
-    # 필수로 필요한 데이터를 선언
+    # 일반 유저의 필수로 필요한 데이터를 선언
     def create_user(self, email, name, nickname, password):
         if not name:
             raise ValueError('Users must have an username')
@@ -31,16 +31,19 @@ class UserManager(BaseUserManager):
         return user
 
 
-# Create your models here.
+# 유저 테이블
 class User(AbstractBaseUser):
     """
-        유저 프로파일 사진
-        유저 닉네임     -> 화면에 표기되는 이름
-        유저 이름       -> 실제 사용자 이름
-        유저 이메일주소 -> 회원가입할때 사용하는 아이디
-        유저 비밀번호 -> 디폴트 쓰자
+        profile_image  ->  프로필 이미지
+        nickname       ->  닉네임
+        name           ->  실제 사용자 이름
+        email          ->  회원가입할때 사용하는 아이디
+        유저 비밀번호    ->  암호화를 위해 view에서 처리
+        last_login     ->  마지막으로 로그인한 시간
+        is_active      ->  유저의 활성화 여부
+        is_admin       ->  유저가 슈퍼유저인지 여부
     """
-    profile_image = models.TextField()  # 프로필 이미지
+    profile_image = models.TextField()
     nickname = models.CharField(max_length=24, unique=True)
     name = models.CharField(max_length=24)
     email = models.EmailField(unique=True)
@@ -48,11 +51,12 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
-    # 실제로 유저를 선택하면 그 유저의 이름을 어떤 필드로 쓸거냐? -> 닉네임으로 설정
+    # 실제로 사용자를 식별하기 위한 필드를 설정
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
 
+    # 사용자 생성 시 반드시 입력되어야 하는 필드들을 설정
     REQUIRED_FIELDS = ['nickname', 'name']
 
     # 어드민 페이지에서 데이터를 제목을 어떻게 붙여줄 것인지 지정
@@ -72,6 +76,7 @@ class User(AbstractBaseUser):
         return True
 
     # admin 권한 설정
+    # 유저의 admin 사이트 접근 허용 여부를 판단하기 위함 기본값 default
     @property
     def is_staff(self):
         return self.is_admin
