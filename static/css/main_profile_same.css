@@ -78,7 +78,7 @@
     display: none;
 }
 
-/* 피드 업로드 후 텍스트 모달창 */
+/* 피드 업로드 후 두 번째 텍스트 모달창 */
 .feed_image_text_modal {
     border-top: solid 1px #d8d8d8;
     display: flex;
@@ -92,12 +92,12 @@
     height: 521px;
 }
 
-/* 두 번째 모달창 글 내용 공간(부모) */
+/* 두 번째 모달창 글 영역 */
 .modal_text_area {
     height: 475px;
 }
 
-/* 두 번째 모달창 글 내용 공간(자식) */
+/* 두 번째 모달창 글 영역(글내용,해시태그) */
 .feed_content_input {
     display: flex;
     flex-direction: column;
@@ -138,7 +138,7 @@
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
 
-/* 피드 모달 내용 줄바꿈*/
+/* 피드 내용 줄바꿈*/
 .text_line {
     overflow-wrap: anywhere;
     margin-bottom: 0 !important;
@@ -166,90 +166,7 @@
     'opsz' 48
 }
 
-/* 정유진: 피드모달 댓글들 */
-.feed_modal_reply_area {
-    display: flex;
-    margin-bottom: 15px;
-}
-
-/* 정유진: 피드모달 댓글 프로필 이미지 공간  */
-.feed_modal_reply_profile_image_area {
-    width: 32px;
-    height: 32px;
-    margin-right: 15px;
-    min-width: 32px;
-}
-
-/* 정유진: 피드모달 댓글 닉네임, 내용 공간 */
-.feed_modal_reply_nickname_content_area {
-    display: flex;
-    align-items: start;
-}
-
-/* 정유진: 피드모달 댓글 닉네임 공간 */
-.feed_modal_reply_nickname_area {
-    font-weight: bold;
-    font-size: 14px;
-    margin-right: 8px;
-}
-
-/* 정유진: 피드모달 댓글 내용 공간 */
-.feed_modal_reply_content_area {
-    font-size: 14px;
-}
-
-/* 정유진: 피드모달 댓글 프로필 이미지 */
-.feed_modal_reply_profile_image {
-    width: 100%;
-    height: 100%;
-}
-
-/* 정유진: 피드모달 댓글 닉네임 */
-.feed_modal_reply_nickname {
-    padding-top: 3px;
-}
-
-/* 정유진: 피드모달 댓글 내용 */
-.feed_modal_reply_content {
-    padding-top: 3px;
-}
-
-/* 정유진: 피드모달 게시물 이미지 */
-#feed_modal_image > img {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    object-fit: contain;
-}
-
-/*  정유진: 피드모달 게시자 프로필 이미지 */
-.feed_modal_profile_image > img {
-    width: 100%;
-    height: 100%;
-}
-
-/* 정유진: 피드모달 게시자 닉네임 */
-.feed_modal_nickname > div {
-    font-weight: bold;
-    margin-right: 8px;
-    font-size: 14px;
-}
-
-/* 정유진: 피드모달 좋아요수 */
-.feed_modal_like_count {
-    font-size: 14px;
-}
-
-/* 정유진: 피드모달 피드 공유 시간 */
-.feed_modal_feed_create_at {
-    font-size: 12px;
-    color: gray;
-    text-align: left;
-    margin-bottom: 10px;
-    margin-left: 16px;
-}
-
-/* html 피드모달 css 분리 영역 */
+/* 최상위 피드모달 창 */
 #root_feed_modal_window {
     display: flex;
     flex-direction: column;
@@ -280,7 +197,7 @@
     align-items: center;
 }
 
-/* 피드모달 글 영역 부모 */
+/* 피드모달 글 영역 */
 .feed_modal_text_area_parents {
     width: 70%;
     border-left: solid 1px #e1e1e1;
@@ -289,7 +206,7 @@
     justify-content: space-between;
 }
 
-/* 피드모달 글 영역 */
+/* 피드모달 글 영역 상단바 */
 .feed_modal_text_area {
     text-align: right;
     height: 60px;
@@ -300,7 +217,7 @@
     border-bottom: 1px solid #e1e1e1;
 }
 
-/* 피드 모달 상단 메뉴바 영역 */
+/* 피드 모달 상단 메뉴바 작성자 정보 영역 */
 .feed_modal_menu_bar_area {
     display: flex;
     margin: 15px;
@@ -308,7 +225,7 @@
     flex-direction: row;
 }
 
-/* 피드모달 작성자 프로필 이미지 */
+/* 피드 모달 작성자 프로필 이미지 */
 .feed_modal_profile_image {
     width: 32px;
     height: 32px;
@@ -316,13 +233,13 @@
     min-width: 32px !important;
 }
 
-/* 피드 모달 작성글내용 및 댓글리스트 영역 */
+/* 피드 모달 작성 글내용 및 해시태그, 댓글 리스트 영역 */
 .feed_modal_contents_area {
     overflow-y: auto;
     height: 100%;
 }
 
-/* 피드 모달 작성자와 글내용 영역 */
+/* 피드 모달 작성자 정보와 글내용 영역 */
 .feed_modal_contents_writer {
     display: flex;
     margin: 15px;
@@ -343,7 +260,7 @@
     align-items: flex-start;
 }
 
-/* 피드 모달 좋아요 북마크 영역 */
+/* 피드 모달 좋아요 북마크, 좋아요 수 영역 */
 .feed_modal_like_bookmark_area {
     border-top: 1px solid #e1e1e1;
 }
@@ -394,6 +311,91 @@
     padding-right: 5px;
 }
 
+/* js로 생서되는 css 영역 */
+/********************************/
 .feed_modal_hashtags {
     padding: 0 15px;
+}
+
+/* 피드모달 댓글들 */
+.feed_modal_reply_area {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+/* 피드모달 댓글 프로필 이미지 공간  */
+.feed_modal_reply_profile_image_area {
+    width: 32px;
+    height: 32px;
+    margin-right: 15px;
+    min-width: 32px;
+}
+
+/* 피드모달 댓글 닉네임, 내용 공간 */
+.feed_modal_reply_nickname_content_area {
+    display: flex;
+    align-items: start;
+}
+
+/* 피드모달 댓글 닉네임 공간 */
+.feed_modal_reply_nickname_area {
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+/* 피드모달 댓글 내용 공간 */
+.feed_modal_reply_content_area {
+    font-size: 14px;
+}
+
+/* 피드모달 댓글 프로필 이미지 */
+.feed_modal_reply_profile_image {
+    width: 100%;
+    height: 100%;
+}
+
+/* 피드모달 댓글 닉네임 */
+.feed_modal_reply_nickname {
+    padding-top: 3px;
+}
+
+/* 피드모달 댓글 내용 */
+.feed_modal_reply_content {
+    padding-top: 3px;
+}
+
+/* 피드모달 게시물 이미지 */
+#feed_modal_image > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+/* 피드모달 게시자 프로필 이미지 */
+.feed_modal_profile_image > img {
+    width: 100%;
+    height: 100%;
+}
+
+/* 피드모달 게시자 닉네임 */
+.feed_modal_nickname > div {
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* 피드모달 좋아요 수 */
+.feed_modal_like_count {
+    font-size: 14px;
+}
+
+/* 피드모달 피드 공유 시간 */
+.feed_modal_feed_create_at {
+    font-size: 12px;
+    color: gray;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-left: 16px;
 }

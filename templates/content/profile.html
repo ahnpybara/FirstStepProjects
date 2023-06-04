@@ -87,21 +87,23 @@
 
 <!-- 프로필 사진과 프로필 정보 텍스트 영역 -->
 <div class="profile_total_area">
-    <!-- 프로필 사진 -->
+    <!-- 프로필 사진 영역 -->
     <div class="profile_image_area">
         <div class="box">
+            <!-- 프로필 사진 -->
             <img id="profile_user_image" class="profile"
                  src="{% get_media_prefix %}{{ user.profile_image }}" alt="text">
         </div>
     </div>
-    <!-- 텍스트 설명란 -->
+    <!-- 텍스트 정보 영역 -->
     <div class="profile_imformation">
-        <!-- 사용자 이름, 프로필편집 버튼, 설정창 -->
+        <!-- 사용자 이름, 설정창, 팔로우버튼 영역 -->
         <div class="profile_text_area">
+            <!-- 사용자 닉네임 -->
             <div class="profile_nickname">
                 {{ user.nickname }}
             </div>
-            <!-- 안치윤 : 서버로 부터 팔로우 여부를 받아옴, 팔로우 버튼 추가 -->
+            <!-- 팔로우 버튼 -->
             <div class="follow_area">
                 {% if is_follow %}
                     <button id="user_follow_btn" user_session_email="{{ user_session.email }}"
@@ -117,12 +119,12 @@
                     </button>
                 {% endif %}
             </div>
-            <!-- 05-17 유재우 : 셋팅이랑 연결-->
+            <!-- 설정 -->
             <a class="settings_link"
                style="color: black; margin-top: 5px; {% if user_session.email != user.email %} display: none {% endif %}"
                href="/user/profile/setting"><span class="settigns_icon material-symbols-outlined">manage_accounts</span></a>
         </div>
-        <!-- 프로필 설명란(팔로워 팔로잉 사용자 이름) -->
+        <!-- 프로필 설명란(게시물 수, 팔로워 수, 팔로잉 수, 사용자 이름) -->
         <div class="profile_feed_follow_area">
             <div class="feed_text_count">
                 게시물
@@ -143,8 +145,9 @@
     </div>
 </div>
 
-<!-- 안치윤 : 디자인 수정, 사용자가 좋아요 게시한 글 북마크한 게시글을 보여주기 위한 버튼 -->
+<!-- 사용자가 게시, 좋아요, 북마크한 게시글을 보여주기 위한 영역 -->
 <div class="show_feed_root_area">
+    <!-- 내가 게시, 좋아요, 북마크한 게시글을 보여주기 위한 버튼 영역 -->
     <div class="show_feed_list_area">
         <!-- 내가 작성한 게시글들을 보기 위한 버튼 -->
         <div id="button_feed_list"><span
@@ -164,26 +167,29 @@
     </div>
 </div>
 
-<!-- 내가 작성한 게시물 목록 -->
+<!-- 내가 작성한 게시물 목록 부모 -->
 <div id="feed_list">
+    <!-- 내가 작성한 게시물 영역 -->
     <div class="feed_list_area">
-        <!--피드 리스트를 보여주는 반복문-->
+        <!-- 피드 리스트를 보여 주기 위한 반복문 -->
         {% for feed in feed_list %}
+            <!-- 보여질 하나의 피드의 크기 -->
             <div class="feed_size_root">
-                <!-- 좋아요 북마크 수 보여주기 위한 창 -->
+                <!-- div를 겹치기 위한 부모 창 -->
                 <div class="show_count_area">
-                    <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
+                    <!-- mouse over시 좋아요 북마크 수 보여주기 위한 창  -->
                     <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
                          class="profile_feed_mouse_over feed_modal">
                         <!--좋아요 수 북마크 수를 계산하기 위한 반복문-->
                         {% for count in feed_count_list %}
+                            <!-- 피드id와 좋아요 수와 북마크 수를 계산한 피드의 id가 같을 경우에만 표시 -->
                             {% if count.id == feed.id %}
-                                <!-- 정유진: 좋아요 수를 보여준다. -->
+                                <!-- 좋아요 수 -->
                                 <div class="feed_count">
                                     <span class="icon_like_bookmark material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
-                                <!-- 정유진: 댓글 수를 보여준다. -->
+                                <!-- 댓글 수 -->
                                 <div class="feed_count">
                                     <span class="material-icons-outlined">comment</span>
                                     <p>{{ count.reply_count }}</p>
@@ -191,6 +197,7 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+                    <!-- 실제 피드 이미지 -->
                     <div>
                         <img class="img_feed_list"
                              src="{% get_media_prefix %}{{ feed.image }}" alt="text">
@@ -201,23 +208,29 @@
     </div>
 </div>
 
-<!-- 내가 좋아요한 게시글 목록 -->
+<!-- 내가 좋아요한 게시글 목록 부모 -->
 <div id="like_feed_list">
+    <!-- 내가 좋아요한 게시물 영역 -->
     <div class="feed_list_area">
+        <!-- 피드 리스트를 보여 주기 위한 반복문 -->
         {% for feed in like_feed_list %}
+            <!-- 보여질 하나의 피드의 크기 -->
             <div class="feed_size_root">
+                <!-- div를 겹치기 위한 부모 창 -->
                 <div class="show_count_area">
-                    <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
+                    <!-- mouse over시 좋아요 북마크 수 보여주기 위한 창  -->
                     <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
                          class="profile_feed_mouse_over feed_modal">
+                        <!--좋아요 수 북마크 수를 계산하기 위한 반복문-->
                         {% for count in like_count_list %}
+                            <!-- 피드id와 좋아요 수와 북마크 수를 계산한 피드의 id가 같을 경우에만 표시 -->
                             {% if count.id == feed.id %}
-                                <!-- 정유진: 좋아요 수를 보여준다. -->
+                                <!-- 좋아요 수 -->
                                 <div class="feed_count">
                                     <span class="icon_like_bookmark material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
-                                <!-- 정유진: 댓글 수를 보여준다. -->
+                                <!-- 댓글 수 -->
                                 <div class="feed_count">
                                     <span class="icon_like_bookmark material-icons-outlined">comment</span>
                                     <p>{{ count.reply_count }}</p>
@@ -225,6 +238,7 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+                    <!-- 실제 피드 이미지 -->
                     <div>
                         <img class="img_feed_list"
                              src="{% get_media_prefix %}{{ feed.image }}" alt="text">
@@ -237,21 +251,27 @@
 
 <!-- 내가 북마크한 게시글 목록 -->
 <div id="bookmark_feed_list">
+    <!-- 내가 북마크한 게시물 영역 -->
     <div class="feed_list_area">
+        <!-- 피드 리스트를 보여 주기 위한 반복문 -->
         {% for feed in bookmark_feed_list %}
+            <!-- 보여질 하나의 피드의 크기 -->
             <div class="feed_size_root">
+                <!-- div를 겹치기 위한 부모 창 -->
                 <div class="show_count_area">
-                    <!-- 정유진: 이미지 앞에 만든 div의 class인 profile_feed_mouse_over는 마우스 오버될 때 밝기를 조절-->
+                    <!-- mouse over시 좋아요 북마크 수 보여주기 위한 창  -->
                     <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
                          class="profile_feed_mouse_over feed_modal">
+                        <!--좋아요 수 북마크 수를 계산하기 위한 반복문-->
                         {% for count in bookmark_count_list %}
+                            <!-- 피드id와 좋아요 수와 북마크 수를 계산한 피드의 id가 같을 경우에만 표시 -->
                             {% if count.id == feed.id %}
-                                <!-- 정유진: 좋아요 수를 보여준다. -->
+                                <!-- 좋아요 수 -->
                                 <div class="feed_count">
                                     <span class="icon_like_bookmark material-icons-outlined">favorite</span>
                                     <p>{{ count.like_count }}</p>
                                 </div>
-                                <!-- 정유진: 댓글 수를 보여준다. -->
+                                <!-- 댓글 수 -->
                                 <div class="feed_count">
                                     <span class="icon_like_bookmark material-icons-outlined">comment</span>
                                     <p>{{ count.reply_count }}</p>
@@ -259,6 +279,7 @@
                             {% endif %}
                         {% endfor %}
                     </div>
+                    <!-- 실제 피드 이미지 -->
                     <div>
                         <img class="img_feed_list"
                              src="{% get_media_prefix %}{{ feed.image }}" alt="text">
@@ -269,13 +290,17 @@
     </div>
 </div>
 
-<!-- 안치윤 : 디자인 수정, 사진 업로드 창 첫번째 모달 -->
+<!-- 사진 업로드 창 첫번째 모달 -->
 <div id="first_modal" class="modal_overlay">
+    <!-- 모달창 -->
     <div class="modal_window">
+        <!-- 모달창 상단바 -->
         <div class="feed_upload_modal_bar">
+            <!-- 공백 -->
             <div>
                 <p class="space"></p>
             </div>
+            <!-- 설명란 -->
             <div>
                 <b>새로운 피드 생성</b>
             </div>
@@ -287,6 +312,7 @@
 
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
         <div class="img_upload_space">
+            <!--설명란-->
             <div class="drag_here_image">
                 이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
             </div>
@@ -298,16 +324,20 @@
             <!--파일 입력 폼-->
             <input type="file" id="input_image_upload" onchange="image_upload();"/>
         </div>
-
     </div>
 </div>
-<!-- 안치윤 : 디자인 수정, 글 내용 작성 모달창 두번째 모달 -->
+
+<!-- 글 내용 작성 모달창 두번째 모달 -->
 <div id="second_modal" class="modal_overlay">
+    <!-- 모달창 -->
     <div class="modal_window">
+        <!-- 모달창 상단바 -->
         <div class="feed_upload_modal_bar">
+            <!-- 공백 -->
             <div>
                 <p class="space"></p>
             </div>
+            <!-- 설명란 -->
             <div>
                 <b>새로운 피드 생성</b>
             </div>
@@ -316,19 +346,22 @@
                 <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
-        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <!-- 이미지 영역과 글 영역 -->
         <div class="feed_image_text_modal">
+            <!-- 이미지 영역 -->
             <div class="img_upload_space">
-
             </div>
+            <!-- 글 영역 -->
             <div class="modal_text_area">
-                <!-- 안치윤 : 해시태그 !! 게시글 작성 텍스트박스 -->
+                <!-- 게시글 작성 (글내용과 해시태그) 영역 -->
                 <div class="feed_content_input">
+                    <!-- 글내용 영역 -->
                     <div>
                         <textarea id="input_feed_content" class="form-control"
                                   id="exampleFormControlTextarea1" rows="5"
                                   placeholder="글 내용 작성..."></textarea>
                     </div>
+                    <!-- 해시태그 영역 -->
                     <div>
                         <textarea id="input_feed_hashtag" class="form-control"
                                   id="exampleFormControlTextarea1" rows="5"
@@ -344,23 +377,30 @@
     </div>
 </div>
 
-<!-- 정유진: 자동완성 모달창. 관련 id는 auto_modal로 시작 -->
+<!-- 자동완성 모달창 -->
 <div id="auto_modal">
     <!-- 자동완성 리스트 -->
     <div id="auto_modal_list" class="auto_madal_list_area">
     </div>
 </div>
-<!-- 정유진: 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. TODO -->
+
+<!-- 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
 <div id="feed_modal" class="modal_overlay">
+    <!-- 최상위 모달창 -->
     <div id="root_feed_modal_window" class="modal_window">
+        <!-- 부모 모달창 -->
         <div class="feed_modal_area_parents">
+            <!-- 모달창 -->
             <div class="feed_modal_area_son">
+                <!-- 이미지 영역 -->
                 <div id="feed_modal_image">
                     <!-- ajax로 이미지를 받아옴 -->
                 </div>
-                <!--안치윤 : 디자인 수정, 이미지와 글 영역 구분-->
+                <!-- 글 영역 -->
                 <div class="feed_modal_text_area_parents">
+                    <!-- 글 영역 상단바 -->
                     <div class="feed_modal_text_area">
+                        <!-- 작성자 프로필 사진과 닉네임 영역 -->
                         <div class="feed_modal_menu_bar_area">
                             <div id="feed_modal_menu_writer_profile_image" class="box profile feed_modal_profile_image">
                                 <!-- ajax로 받아옴 작성자 프로필 사진 -->
@@ -369,13 +409,16 @@
                                 <!-- ajax로 받아옴 작성자 닉네임 -->
                             </div>
                         </div>
+                        <!-- 닫기 버튼 -->
                         <div>
-                            <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+                            <span id="modal_close_button"
+                                  class="feed_mdoal_close_like_count modal_close material-icons-outlined">close</span>
                         </div>
                     </div>
-                    <!-- ajax로 작성자 받음 -->
+                    <!-- 글내용과 댓글 리스트, 해시태그 영역 -->
                     <div class="feed_modal_contents_area">
                         <div>
+                            <!-- 작성자 정보 영역 -->
                             <div class="feed_modal_contents_writer">
                                 <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image">
                                     <!-- ajax로 받아옴 작성자 프로필 사진 -->
@@ -387,6 +430,7 @@
                                     <!-- ajax로 받아옴 게시물 내용 -->
                                 </div>
                             </div>
+                            <!-- 해시태그 -->
                             <div class="feed_modal_contents_writer_hashtags">
                                 <!-- ajax로 받아옴 해시태그 내용 -->
                             </div>
@@ -407,7 +451,7 @@
                         </div>
                     </div>
                     <div>
-                        <!-- 게시물의 좋아요, 북마크, 좋아요수 -->
+                        <!-- 게시물의 좋아요, 북마크, 좋아요 수 -->
                         <div class="feed_modal_like_bookmark_area">
                             <div class="feed_modal_like_bookmark">
                                 <div id="feed_modal_is_liked">
@@ -421,13 +465,16 @@
                                 <!-- ajax로 받아옴 좋아요 수 -->
                             </div>
                         </div>
+                        <!-- 작성 시간 -->
                         <div id="feed_modal_feed_create_at">
                             <!-- ajax로 받아옴 게시물 업로드 시간-->
                         </div>
-                        <!-- 댓글 작성 -->
+                        <!-- 댓글 작성 영역 -->
                         <div class="feed_modal_reply_upload_area">
+                            <!-- 댓글 입력 텍스트 박스 -->
                             <input id="reply_content_text" type="text" class="form-control"
                                    placeholder="댓글 달기..">
+                            <!-- 댓글 게시 버튼 -->
                             <div id="reply_content_upload" class="modal_upload_reply">
                                 게시
                             </div>
@@ -438,7 +485,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

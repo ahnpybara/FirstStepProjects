@@ -156,7 +156,7 @@
     font-size: 14px
 }
 
-/* 해시태그 부모 */
+/* 해시태그와 글내용 사이 간격 */
 .feed_area_hashtag_space {
     display: none
 }
@@ -170,7 +170,7 @@
     flex-flow: wrap;
 }
 
-/* 피드 내용 더보기 영역 */
+/* 피드 내용 영역 */
 #feed_more_show {
     display: flex;
 }
@@ -190,7 +190,7 @@
     cursor: pointer;
 }
 
-/* 댓글 영역 */
+/* 댓글 한 줄 영역 */
 .user_reply_list_area {
     margin: 0 10px;
     text-align: left;
@@ -200,19 +200,19 @@
     justify-content: space-between;
 }
 
-/* 댓글 내용이 길어지면 줄바꿈 */
+/* 댓글 작성자 닉네임과 댓글 내용 크기 만큼의 영역 */
 .user_reply {
     overflow-wrap: break-word;
 }
 
-/* 댓글 드롭 다운 주메뉴 */
+/* 댓글 설정 주메뉴 */
 #reply_delete_update_menu {
     text-align: center;
     min-width: 6rem;
     border-radius: 9%;
 }
 
-/* 댓글 드롭다운 하위메뉴 삭제 */
+/* 댓글 드롭 다운 하위 메뉴 삭제 */
 .remove_reply {
     cursor: pointer;
 }
@@ -224,7 +224,7 @@
     align-items: center;
 }
 
-/* 댓글 수정하기 버튼 */
+/* 댓글 드롭 다운 수정 하기 버튼 */
 #update_reply_btn {
     width: 50px;
     color: cornflowerblue;
@@ -302,7 +302,7 @@
     height: 70px;
 }
 
-/* 팔로우 영역 닉네임 이름 */
+/* 팔로우 영역 닉네임 이름영역 */
 .my_profile_nickname_name {
     margin-left: 20px;
     text-align: left
