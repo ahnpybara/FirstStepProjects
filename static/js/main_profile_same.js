@@ -399,36 +399,35 @@ function uploadFiles(e) {
     e.dataTransfer = e.originalEvent.dataTransfer;
     files = e.target.files || e.dataTransfer.files;
 
-    // 여러개의 파일을 한번에 올릴려고 하면 리턴
-    if (files.length > 1) {
-        alert('하나만 올려라.');
-        return;
-    }
 
-    // 타입을 판별하고 이미지면 아래 로식을 실행
-    if (files[0].type.match(/image.*/)) {
 
-        // 이미지 업로드시 사진업로드 모달창을 가림
-        $('#first_modal').css({
-            display: 'none'
-        });
+    for(var i=0; i< files.length;files++) {
+        alert(files.length)
+        // 타입을 판별하고 이미지면 아래 로식을 실행
+        if (files[i].type.match(/image.*/)) {
 
-        // 글 내용 작성 모달창을 띄움
-        $('#second_modal').css({
-            display: 'flex'
-        });
+            // 이미지 업로드시 사진업로드 모달창을 가림
+            $('#first_modal').css({
+                display: 'none'
+            });
 
-        // 업로드 창 배경을 업로드된 이미지로 변경
-        $('.img_upload_space').css({
-            "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-            "outline": "none",
-            "background-size": "contain",
-            "background-repeat": "no-repeat",
-            "background-position": "center"
-        });
-    } else {
-        alert('이미지가 아닙니다.');
-        return 0;
+            // 글 내용 작성 모달창을 띄움
+            $('#second_modal').css({
+                display: 'flex'
+            });
+
+            // 업로드 창 배경을 업로드된 이미지로 변경
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[i]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            alert('이미지가 아닙니다.');
+            return 0;
+        }
     }
 }
 
