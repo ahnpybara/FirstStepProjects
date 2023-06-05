@@ -454,8 +454,7 @@ $('.feed_content_more').click(function (event) {
     // 해당 feed_id 값을 가진 피드의 글 내용 속성을 가져옴
     let feed_content_more = document.getElementById(feed_id).getAttribute("feed_content");
 
-    // 피드 글 내용 태그의 본문에 피드의 글내용을 일부분에서 모두 보기로 변경 ( 원래는 10글자만 보여준 상태 -> 다 보여줌 ) TODO
-    $('#feed_content_limit_' + feed_id).text(feed_content_more);
+    // 피드 글 내용 태그의 본문에 피드의 글내용을 일부분에서 모두 보기로 변경 ( 원래는 10글자만 보여준 상태 -> 다 보여줌 )
     // 피드 글 내용 태그의 본문에 피드 작성자 닉네임과 글내용으로 채움
     $('#feed_content_limit_' + feed_id).html('<b class="movetoprofile feed_content_nickname" style="margin-right: 6px" id="' + feed_nickname + '">' + feed_nickname + '</b>' + feed_content_more)
 
