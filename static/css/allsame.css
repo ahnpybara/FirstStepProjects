@@ -158,7 +158,7 @@ html {
     }
 }
 
-/* 자동완성의 스크롤은 동작하지만 보이지 않게 함 */
+/* 스크롤은 동작하지만 보이지 않게 함 */
 body {
     -ms-overflow-style: none; /* 인터넷 익스플로러 */
     scrollbar-width: none; /* 파이어폭스 */
@@ -190,18 +190,20 @@ body::-webkit-scrollbar {
     justify-content: center;
 }
 
+/* 유저 자동완성 프로필 사진 */
 .auto_modal_image {
     width: 32px;
     height: 32px;
 }
 
-/* 닉네임. 자동완성에 닉네임, 이름에 사용 */
+/* 유저 자동완성 닉네임 */
 .auto_modal_text_object1 {
     margin-left: 10px;
     font-size: 14px;
     font-weight: bold;
 }
 
+/* 유저 자동완성 이름 */
 .auto_modal_text_object2 {
     margin-left: 10px;
     color: gray;

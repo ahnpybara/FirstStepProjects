@@ -76,8 +76,8 @@
         </div>
     </div>
 </nav>
-<!--설정창 영역-->
 
+<!--설정창 영역-->
 <div id="settings_area">
     <!--설정창 박스-->
     <div id="settings_border_outline">
@@ -85,8 +85,9 @@
         <div id="profile_settings_area">
             <!-- 프로필 사진과 닉네임 영역 -->
             <div id="profile_image_settings_area">
-                <!--프로필 사진 영역-->
+                <!--프로필 사진 설정 영역-->
                 <div id="profile_image_settings">
+                    <!-- 프로필 사진 -->
                     <div class="settings_profile_box">
                         <img id="button_profile_upload" class="profile"
                              src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
@@ -95,7 +96,7 @@
                                style="display: none"/>
                     </div>
                 </div>
-                <!-- 단순 닉네임 표시 영역-->
+                <!-- 닉네임 표시-->
                 <div class="show_settings_nickname">
                     {{ user_session.nickname }}
                 </div>
@@ -104,18 +105,18 @@
             <div id="profile_text_settings_area">
                 <!--프로필 닉네임 수정 영역 자식 -->
                 <div id="profile_text_area">
-                    <!--변경할 닉네임 입력란 -->
+                    <!-- 변경할 닉네임 입력란 영역 -->
                     <div id="join_nickname_box" class="form-floating mb-3">
                         <input type="text" class="form-control" id="input_nickname"
                                placeholder="name@example.com">
                         <label id="nickname_error" for="input_nickname">{{ user_session.nickname }}</label>
                     </div>
-                    <!--프로필 삭제 버튼-->
+                    <!--프로필 삭제 버튼 -->
                     <button id="button_profile_reset" user_session_email="{{ user_session.email }}" type="button"
                             class="btn btn-primary">프로필 사진 삭제
                     </button>
                 </div>
-                <!--프로필 닉네임 수정 버튼-->
+                <!--프로필 닉네임 수정 버튼 영역 -->
                 <div id="update_nickname_btn_area">
                     <button id="update_nikname_btn" user_session_email="{{ user_session.email }}" type="button"
                             class="btn btn-primary"><b>수정</b></button>
@@ -123,12 +124,12 @@
             </div>
         </div>
 
-        <!-- 프로필 로그인 정보 수정 -->
+        <!-- 프로필 로그인 정보 수정 영역 -->
         <div id="Login_profile_area">
             <!--프로필 이메일 변경 영역-->
             <div id="Login_profile_email">
                 <c id="email_update_text">이메일 변경</c>
-                <!--변경할 이메일 입력란 -->
+                <!--변경할 이메일 입력란 영역 -->
                 <div id="join_email_box" class="form-floating mb-3">
                     <input type="email" class="form-control" id="input_email" placeholder="name@example.com">
                     <label id="email_error" for="input_email">{{ user_session.email }}</label>
@@ -139,8 +140,8 @@
             </div>
             <!--프로필 비밀번호 변경 영역-->
             <div id="Login_profile_passwrod">
-                <a id="password_update_text">비밀번호 변경</a>
-                <!--변경할 비밀번호 입력란 -->
+                <c id="password_update_text">비밀번호 변경</c>
+                <!--변경할 비밀번호 입력란 영역 -->
                 <div id="join_password_box" class="form-floating mb-3">
                     <input type="password" class="form-control" id="input_password"
                            placeholder="name@example.com">
@@ -149,18 +150,18 @@
                 <!-- 프로필 비밀번호 변경 버튼 -->
                 <button id="update_password_btn" user_session_email="{{ user_session.email }}" type="button"
                         class="btn btn-primary"><b>수정</b></button>
-
             </div>
         </div>
 
-        <!-- 회원 탈퇴-->
+        <!-- 회원 탈퇴 영역-->
         <div id="user_delete_area">
             <button id="profile_dele_btn" user_session_email="{{ user_session.email }}" type="button"
                     class="btn btn-primary"><b>회원 탈퇴</b></button>
         </div>
     </div>
 </div>
-<!-- 정유진: 자동완성 모달창. 관련 id는 auto_modal로 시작 -->
+
+<!-- 자동완성 모달창 -->
 <div id="auto_modal">
     <!-- 자동완성 리스트 -->
     <div id="auto_modal_list" class="auto_madal_list_area">
