@@ -465,10 +465,10 @@ class SearchFeed(APIView):
             # 피드 리스트와 해당 피드에 좋아요와 댓글수를 저장할 리스트 선언
             feed_search_list = []
             feed_count_list = []
-            # feed_id를 토대로 피드 테이블의 객체를 뽑아냄 (반복문을 쓰는이유 특정id 피드에 여러 해시태그가 달렸기 때문)
+            # 일반순!! feed_id를 토대로 피드 테이블의 객체를 뽑아냄 ( 특정 해시태그가 달린 피드는 여러개가 될 수 있음 -> 반복문 )
             for hashtag_feed_id in hashtag_content_lists:
-                feed_hashtag_list = Feed.objects.filter(id=hashtag_feed_id)
-                # 피드 id로 뽑은 피드는 여러개(테이블 정규화x) 이므로 또한 반복문이 필요함
+                feed_hashtag_list = Feed.objects.filter(id=hashtag_feed_id).order_by('-id')
+                # 피드 id로 뽑은 피드의 객체들에게서 피드 이미지, 피드수, 댓글 수, 좋아요 수를 뽑아냄
                 for feed in feed_hashtag_list:
                     feed_search_list.append(dict(id=feed.id, image=feed.image))
                     # 좋아요 수
