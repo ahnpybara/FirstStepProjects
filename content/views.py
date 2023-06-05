@@ -86,8 +86,12 @@ class UploadFeed(APIView):
     def post(self, request):
         # 서버로 전달된 폼 데이터 객체에서 파일을 꺼냄
         file = []
-        file = request.FILES['file']
-        print(file)
+        file_length = request.data['file_length']
+        for i in file_length:
+            file[i] = request.FILES['file'[i]]
+            print(file[i])
+
+
         # uuid 값 생성
         uuid_name = uuid4().hex
         # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)

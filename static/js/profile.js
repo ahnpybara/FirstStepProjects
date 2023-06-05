@@ -1,13 +1,15 @@
-// 안치윤 : 팔로우 버튼 및 기능 구현
+// 팔로우 버튼 및 기능 구현
 $('#user_follow_btn').click(function (event) {
-    // 팔로우를 하는 사람의 이메일
+    // 팔로우를 하는 사람의 이메일 -> 팔로우 하는 사람은 자기 자신이므로 세션 정보를 가져와야 함
     let session_user_email = document.getElementById("user_follow_btn").getAttribute("user_session_email");
     // 팔로우 당하는 사람의 이메일
     let user_email = document.getElementById("user_follow_btn").getAttribute("user_email");
+    // 이벤트가 발생한 태그의 id를 가져옴
     let follow_id = event.target.id;
-    // 글 내용으로 팔로우 여부를 따짐
+    // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
     let is_followed = $.trim($('#' + follow_id).html());
 
+    // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
     if (is_followed == '팔로우') {
         $('#' + follow_id).html('언팔로우');
         $(this).css({
@@ -15,7 +17,7 @@ $('#user_follow_btn').click(function (event) {
             background: 'gray',
             border: 'none',
         })
-    } else {
+    } else { // 만약 팔로우 버튼의 글 내용이 언팔로우일 경우 -> css토글
         $('#' + follow_id).html('팔로우');
         $(this).css({
             width: '74px',
@@ -24,7 +26,7 @@ $('#user_follow_btn').click(function (event) {
         })
 
     }
-    // 팔로우를 위한 데이터를 서버에 전달
+    // 서버로 보낼 데이터 (json)
     $.ajax({
         url: "/content/follow",
         data: {
@@ -44,9 +46,9 @@ $('#user_follow_btn').click(function (event) {
     });
 });
 
-// 내가 쓴 게시물 이벤트 처리
+// 내가 쓴 게시물 보기 버튼 이벤트 처리
 $("#button_feed_list").click(function () {
-    // 프로필 화면의 내 게시물 버튼 활성화 표시
+    // 프로필 화면의 내 게시물 버튼 활성화 밑줄 표시
     $('#button_feed_list').css({
         borderTopStyle: "solid",
         color: "black"
@@ -82,7 +84,7 @@ $("#button_feed_like_list").click(function () {
         borderTopStyle: "none",
         color: "#737373"
     });
-    // 프로필 화면의 좋아요 버튼 활성화 표시
+    // 프로필 화면의 좋아요 버튼 활성화 밑줄 표시
     $('#button_feed_like_list').css({
         borderTopStyle: "solid",
         color: "black"
@@ -119,7 +121,7 @@ $("#button_feed_bookmark_list").click(function () {
         borderTopStyle: "none",
         color: "#737373"
     });
-    // 프로필 화면의 북마크 버튼 활성화 표시
+    // 프로필 화면의 북마크 버튼 활성화 밑줄 표시
     $('#button_feed_bookmark_list').css({
         borderTopStyle: "solid",
         color: "black"
