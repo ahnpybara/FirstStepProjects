@@ -302,6 +302,10 @@ $(".modal_close").click(function () {
         "background-image": ""
     });
 
+    // 파일 업로드 인풋태그 초기화
+    var input = document.getElementById('input_image_upload');
+    input.value = null;
+
     // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
     $('#input_feed_content').each(function () {
         $(this).val('');
@@ -454,6 +458,11 @@ function uploadFiles(e) {
         // 글 내용 작성 모달창(두 번째 모달창)을 띄움
         $('#second_modal').css({
             display: 'flex'
+        });
+
+        // 이미지 남은 영역 검색으로 처리
+        $('.img_upload_space').css({
+            background: '#e9e9e9'
         });
 
         // 업로드 창 배경을 업로드된 이미지로 변경

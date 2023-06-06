@@ -314,6 +314,10 @@ $('.update_feed').click(function (event) {
     $('#third_modal').css({
         display: 'flex'
     });
+    // 이미지 남은 영역 검은색으로 처리
+    $('#update_feed_modal_image').css({
+        background: '#e9e9e9'
+    });
 
     //서버로 보낼 데이터 (json 형태)
     $.ajax({
@@ -344,7 +348,7 @@ $('.update_feed').click(function (event) {
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
             // 정유진: 모달창 띄울 때 현재 적용된 카테고리 종류가 나오도록 한다
-            $("#category_"+category).attr('selected',true);
+            $("#category_" + category).attr('selected', true);
         },
         error: function (request, status, error) {
             console.log("에러");
@@ -474,6 +478,10 @@ $('.feed_content_more').click(function (event) {
     })
     // 더보기 클릭시 해시태그와 글 내용 사이 공백을 나타냄
     $('#hashtag_space_div_' + feed_id).css({
+        display: 'flex'
+    })
+    // 더보기 클릭시 해시태그와 글 내용 사이 공백을 나타냄
+    $('#feed_category_' + feed_id).css({
         display: 'flex'
     })
 });

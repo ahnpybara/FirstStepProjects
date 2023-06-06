@@ -313,6 +313,8 @@
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
         <div class="img_upload_space">
             <!--설명란-->
+            <img style="width: 100px; height: 100px"
+                 src="https://postfiles.pstatic.net/MjAyMzA2MDdfMTQ5/MDAxNjg2MDcyNjc2MTk5.kQ06b73EUSfcUf1MYitpo1G_ROPvHbLujMhgqfvbws4g.cGAAR3fMuv49g1R6afB1rBxxZyBbRcbQRksW_nT3yUUg.PNG.roedeer0807/imageuplod-removebg-preview.png?type=w966">
             <div class="drag_here_image">
                 이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
             </div>
@@ -356,16 +358,27 @@
                 <!-- 게시글 작성 (글내용과 해시태그) 영역 -->
                 <div class="feed_content_input">
                     <!-- 글내용 영역 -->
-                    <div>
+                    <div class="feed_text_area">
                         <textarea id="input_feed_content" class="form-control"
                                   id="exampleFormControlTextarea1" rows="5"
                                   placeholder="글 내용 작성..."></textarea>
                     </div>
                     <!-- 해시태그 영역 -->
-                    <div>
+                    <div class="feed_hashtag_area">
                         <textarea id="input_feed_hashtag" class="form-control"
                                   id="exampleFormControlTextarea1" rows="5"
                                   placeholder="해시태그 내용 작성..."></textarea>
+                    </div>
+                    <!-- 정유진: 카테고리 선택 영역 -->
+                    <div class="second_third_modal_category">
+                        <span class="feed_category_explain">카테고리</span>
+                        <select id="input_feed_category" class="form-control" style="box-shadow: none">
+                            <option value="">선택</option>
+                            <option value="travel">여행</option>
+                            <option value="food">음식</option>
+                            <option value="movie">영화</option>
+                            <option value="book">책</option>
+                        </select>
                     </div>
                 </div>
                 <!-- 공유하기 버튼 -->
@@ -497,7 +510,7 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 <script src="{% static 'js/profile.js' %}?ver=2"></script>
-<script src="{% static 'js/main_profile_same.js' %}?ver=3"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=1"></script>
 <script src="{% static 'js/allsame.js' %}?ver=2"></script>
 <!-- Option 2: Separate Popper and Bootstrap JS -->
 <!--
