@@ -399,3 +399,16 @@
     margin-bottom: 10px;
     margin-left: 16px;
 }
+
+/* 정유진: 카테고리 */
+.feed_modal_category {
+    font-size: 14px;
+    color: gray;
+    text-align: right;
+    margin: 0 15px;
+}
+
+/* 정유진: 피드업로드 및 피드수정 모달 카테고리 */
+.second_third_modal_category {
+    margin: 0 5px;
+}

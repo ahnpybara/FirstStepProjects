@@ -328,6 +328,8 @@ $('.update_feed').click(function (event) {
             var feed_image = "/media/" + data['image'];
             var feed_content = data['feed_content'];
             var hashtag_content = data['hashtag_content']
+            // 정유진: 카테고리 추가
+            var category = data['category']
 
             // 업로드 창 이미지 부분 배경을 업로드된 이미지로 변경
             $('#update_feed_modal_image').css({
@@ -341,6 +343,8 @@ $('.update_feed').click(function (event) {
             // 할당 받은 게시물 내용, 해시태그들을 모달창에 추가
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
+            // 정유진: 모달창 띄울 때 현재 적용된 카테고리 종류가 나오도록 한다
+            $("#category_"+category).attr('selected',true);
         },
         error: function (request, status, error) {
             console.log("에러");
@@ -358,6 +362,7 @@ $('#feed_update_button').click(function (event) {
     let feed_id = Feeds_id
     let hashtag_content = $('#input_updatefeed_hashtag').val();
     let content = $('#input_updatefeed_content').val();
+    let category = $('#input_updatefeed_category').val();
 
     // 서버로 보낼 (json 형태)
     $.ajax({
@@ -365,7 +370,8 @@ $('#feed_update_button').click(function (event) {
         data: {
             feed_id: feed_id,
             content: content,
-            hashtag_content: hashtag_content
+            hashtag_content: hashtag_content,
+            category: category
         },
         method: "POST",
         success: function (data) {

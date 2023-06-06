@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow
+from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, Category
 from user.models import User
 import os
 import json
@@ -58,6 +58,16 @@ class Main(APIView):
             like_count = Like.objects.filter(feed_id=feed.id).count()
             is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
             is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
+            # 정유진: 카테고리 정보
+            category = Category.objects.filter(feed_id=feed.id).first()
+            if category.category == 'travel':
+                category_kr = '여행'
+            elif category.category == 'food':
+                category_kr = '음식'
+            elif category.category == 'movie':
+                category_kr = '영화'
+            elif category.category == 'book':
+                category_kr = '책'
             # 각종 데이터를 feed_list에 담음
             feed_list.append(dict(id=feed.id,
                                   image=feed.image,
@@ -69,7 +79,9 @@ class Main(APIView):
                                   is_liked=is_liked,
                                   is_marked=is_marked,
                                   create_at=feed.create_at,
-                                  hashtag_list=hashtag_list
+                                  hashtag_list=hashtag_list,
+                                  category=category.category,
+                                  category_kr=category_kr
                                   ))
 
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
@@ -97,6 +109,8 @@ class UploadFeed(APIView):
         image = uuid_name
         content = request.data.get('content')
         email = request.session.get('email', None)
+        # 정유진: 카테고리 추가
+        category = request.data.get('category')
 
         # 서버로 전달된 해시태그 내용을 받고 해당 해시태그의 공백와 줄바꿈을 제거
         hashtags_content = request.data.get('hashtags_content')
@@ -121,6 +135,9 @@ class UploadFeed(APIView):
 
         # 피드 테이블에 튜플을 만들고 그 튜플을 feed_id 객체로 저장
         feed_id = Feed.objects.create(image=uuid_name, content=content, email=email)
+
+        # 정유진: 카테고리 추가
+        test = Category.objects.create(feed_id=feed_id.id, category=category)
 
         # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
         for hashtags_list in hashtags_list:
@@ -415,6 +432,9 @@ class RemoveFeed(APIView):
         like.delete()
         bookmark = Bookmark.objects.filter(feed_id=feeds.id)
         bookmark.delete()
+        # 정유진: 카테고리 삭제
+        category = Category.objects.filter(feed_id=feeds.id)
+        category.delete()
         feeds.delete()
 
         return Response(status=200)
@@ -727,6 +747,8 @@ class UpdateFeed(APIView):
         hashtag_content = request.data.get('hashtag_content')
         content = request.data.get('content')
         feed_id = request.data.get('feed_id')
+        # 정유진: 카테고리 추가
+        category_data = request.data.get('category')
         # 피드id를 통한 피드에 달린 기존 해시태그들 삭제
         hashtags = Hashtag.objects.filter(feed_id=feed_id)
         hashtags.delete()
@@ -759,6 +781,9 @@ class UpdateFeed(APIView):
         # 피드 수정
         feed.update(id=feed_id, content=content)
 
+        # 정유진 수정할 카테고리 객체를 뽑음. update()는 querysets에만 가능한데 category.id를 뽑으려면 first()로 category를 뽑아야 작동한다.
+        category = Category.objects.filter(feed_id=feed_id).first()
+        Category.objects.filter(feed_id=feed_id).update(id=category.id, category=category_data)
         return Response(status=200)
 
 
@@ -789,6 +814,17 @@ class FeedModal(APIView):
 
         # 게시물을 쓴 유저의 객체를 뽑아냄
         feed_modal_writer = User.objects.filter(email=feed_modal.email).first()
+
+        # 정유진: 카테고리 추가
+        category = Category.objects.filter(feed_id=feed_modal.id).first()
+        if category.category == 'travel':
+            category_kr = '여행'
+        elif category.category == 'food':
+            category_kr = '음식'
+        elif category.category == 'movie':
+            category_kr = '영화'
+        elif category.category == 'book':
+            category_kr = '책'
 
         # 게시물에 달린 해시태그들을 뽑아냄
         feed_modal_hashtag_object_list = Hashtag.objects.filter(feed_id=feed_id)
@@ -824,6 +860,9 @@ class FeedModal(APIView):
 
             'writer_profile_image': feed_modal_writer.profile_image,
             'writer_nickname': feed_modal_writer.nickname,
+
+            'category': category.category,
+            'category_kr': category_kr,
 
             'reply_list': reply_list,
 
@@ -970,12 +1009,16 @@ class FeedUpdateIMG(APIView):
         # 해시태그를 띄여쓰기로 구분
         hashtag_content = '#' + '#'.join(hashtag_content_lists)
 
+        # 정유진: 카테고리
+        category = Category.objects.filter(feed_id=feed_id).first()
+
         # 사용자로 보낼 데이터
         data = {
             'id': feed.id,
             'image': feed.image,
             'feed_content': feed.content,
-            'hashtag_content': hashtag_content
+            'hashtag_content': hashtag_content,
+            'category': category.category
         }
 
         json_data = json.dumps(data)

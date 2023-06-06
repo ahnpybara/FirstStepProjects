@@ -37,3 +37,8 @@ class Follow(models.Model):
 class Hashtag(models.Model):
     feed_id = models.IntegerField(default=0)                   # Feed id
     content = models.TextField()                               # 해시태그 내용
+
+# 정유진 : 카테고리 테이블
+class Category(models.Model):
+    feed_id = models.IntegerField(default=0)  # Feed id
+    category = models.CharField(max_length=20)  # 카테고리 이름
