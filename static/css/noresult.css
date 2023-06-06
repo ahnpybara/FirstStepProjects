@@ -11,9 +11,10 @@
 
 /* 경고 이미지 */
 .warning_icon {
-    width: 11%;
-    height: 22%;
+    width: 150px;
+    height: 140px;
     color: gray;
+    min-width: 150px;
 }
 
 /* 경고 설명1 */
