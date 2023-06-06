@@ -199,6 +199,11 @@
     display: flex;
 }
 
+/* 지금 보고있는 검색결과 방식을 표시  */
+.ableTrue {
+    border-top: 1px black solid;
+}
+
 /* 반응형 웹 */
 @media (max-width: 725px) {
     .profile_feed_follow_area {

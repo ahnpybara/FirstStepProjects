@@ -1,0 +1,41 @@
+/* 검색 결과가 없다는 것을 알리기 위한 영역 */
+.Noresult_root_area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    flex-direction: column;
+}
+
+/* 경고 이미지 */
+.warning_icon {
+    width: 11%;
+    height: 22%;
+    color: gray;
+}
+
+/* 경고 설명1 */
+.warning_explain1 {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 22px;
+    color: gray;
+}
+
+/* 경고 설명2 */
+.warning_explain2 {
+    color: gray;
+    margin-bottom: 20px;
+}
+
+/* 메인 이동 버튼 */
+#move_to_main {
+    width: 180px;
+    font-weight: bold;
+    background-color: #FAFAFA;
+    border: 1px solid black;
+    color: gray;
+}
