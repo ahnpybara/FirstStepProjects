@@ -4,7 +4,6 @@ from django.db import models
 # 피드 테이블
 class Feed(models.Model):
     content = models.TextField()  # 글내용
-    image = models.TextField()  # 피드에 업로드되는 이미지
     email = models.EmailField(default='')  # 이메일
     create_at = models.DateTimeField(auto_now_add=True)
 

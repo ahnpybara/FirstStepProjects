@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow
+from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, Image
 from user.models import User
 import os
 import json
@@ -46,6 +46,8 @@ class Main(APIView):
             # 해당 feed_id에 존재하는 해시태그들을 가져옴 ,해시태그 리스트 생성
             hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
             hashtag_list = []
+            images_object_list = Image.objects.filter(feed_id=feed.id)
+            images_list = []
             # 댓글 리스트에 채울 데이터를 여러 테이블의 필터링을 통해서 채움
             for reply in reply_object_list:
                 reply_user = User.objects.filter(email=reply.email).first()
@@ -56,13 +58,16 @@ class Main(APIView):
             for hashtag in hashtag_object_list:
                 hashtag_feed = Feed.objects.filter(id=feed.id).first()
                 hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
+            for image in images_object_list:
+                images_feed = Feed.objects.filter(id=feed.id).first()
+                images_list.append(dict(feed_id=images_feed, image=image.image))
             # 좋아요 수, 좋아요 여부, 북마크 여부
             like_count = Like.objects.filter(feed_id=feed.id).count()
             is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
             is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
             # 각종 데이터를 feed_list에 담음
             feed_list.append(dict(id=feed.id,
-                                  image=feed.image,
+                                  images_list=images_list,
                                   content=feed.content,
                                   like_count=like_count,
                                   profile_image=user.profile_image,
@@ -85,26 +90,10 @@ class UploadFeed(APIView):
     # noinspection PyMethodMayBeStatic
     def post(self, request):
         # 서버로 전달된 폼 데이터 객체에서 파일을 꺼냄
-        file = []
-        file_length = request.data['file_length']
-        for i in file_length:
-            file[i] = request.FILES['file'[i]]
-            print(file[i])
-
-
-        # uuid 값 생성
-        uuid_name = uuid4().hex
-        # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
-        save_path = os.path.join(MEDIA_ROOT, uuid_name)
-        # media 폴더에 파일이 저장됨
-        with open(save_path, 'wb+') as destination:
-            for chunk in file.chunks():
-                destination.write(chunk)
-
-        # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
-        image = uuid_name
+        file_length = int(request.data['file_length'])
         content = request.data.get('content')
         email = request.session.get('email', None)
+        file = []
 
         # 서버로 전달된 해시태그 내용을 받고 해당 해시태그의 공백와 줄바꿈을 제거
         hashtags_content = request.data.get('hashtags_content')
@@ -123,12 +112,30 @@ class UploadFeed(APIView):
         for value in hashtags_list:
             if value not in hashtags_lists:
                 hashtags_lists.append(value)
-
         # #으로 구분 했을때 #앞에 아무것 없는 공백이 저장 되는 부분을 삭제
         hashtags_list = list(filter(None, hashtags_lists))
-
+        image = []
         # 피드 테이블에 튜플을 만들고 그 튜플을 feed_id 객체로 저장
-        feed_id = Feed.objects.create(image=uuid_name, content=content, email=email)
+        feed_id = Feed.objects.create(content=content, email=email)
+        # 이미지는 여러개라 반복문으로 튜플 생성
+        for i in range(file_length):
+            if i<4:
+                print(i)
+                file = request.FILES['file'[i]]
+            else:
+                print(i)
+                file = request.FILES['file1'[i]]
+            # uuid 값 생성
+            uuid_name = uuid4().hex
+            # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
+            save_path = os.path.join(MEDIA_ROOT, uuid_name)
+            # media 폴더에 파일이 저장됨
+            with open(save_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
+            image =uuid_name
+            Image.objects.create(image=uuid_name, feed_id=feed_id.id)
 
         # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
         for hashtags_list in hashtags_list:
@@ -412,6 +419,9 @@ class RemoveFeed(APIView):
         # 전달된 피드id를 통해서 삭제할 피드 객체를 뽑음
         feeds = Feed.objects.filter(id=feed_id).first()
 
+        # 전달된 피드id를 통해서 작제할 이미지들을 뽑음
+        images = Image.objects.filter(feed_id=feed_id)
+        images.delete()
         # 전달된 피드id를 통해서 삭제할 댓글 객체를 뽑음
         reply = Reply.objects.filter(feed_id=feed_id)
         reply.delete()

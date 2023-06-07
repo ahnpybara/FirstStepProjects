@@ -324,7 +324,7 @@ $(".modal_close").click(function () {
 });
 
 // 사용 범위를 위해 전역 변수 files 선언
-let files;
+let files = [];
 // 게시글 추가 버튼 이벤트 처리
 $('#nav_bar_add_box').click(function () {
     // +버튼을 누르면 업로드 창(첫 번째 모달창)이뜨게 함
@@ -340,18 +340,24 @@ $('#nav_bar_add_box').click(function () {
 
 // 피드 공유하기 버튼 클릭시 이벤트 처리
 $('#feed_create_button').click(function () {
-    alert(files.length)
-
     // 파일을 업로드 하는 것이므로 formdata 형태로 서버에 전달해야 함, formdata 객체를 생성한 뒤 서버로 보낼 데이터를 객체에 추가해줌
     let fd = new FormData();
-    fd.append('file_length',files.length)
-    let file = []
-    let image = []
+
+    fd.append('file_length', files.length)
     for (i = 0; i < files.length; i++) {
-        file = files[i];
-        image = files[i].name;
-        fd.append('file'[i], file);
-        fd.append('image'[i], image);
+        if (i<=3) {
+            let file = files[i];
+            let image = files[i].name;
+            fd.append('file'[i], file); // 여러 개의 파일을 전송하기 위해 'file[]'을 사용하여 파일을 추가합니다.
+            fd.append('image'[i], image); // 여러 개의 파일 이름을 전송하기 위해 'image[]'을 사용하여 파일 이름을 추가합니다.
+        }
+        else{
+            let file = files[i];
+            let image = files[i].name;
+            alert(file)
+            fd.append('file1'[i], file); // 여러 개의 파일을 전송하기 위해 'file[]'을 사용하여 파일을 추가합니다.
+            fd.append('image1'[i], image); // 여러 개의 파일 이름을 전송하기 위해 'image[]'을 사용하여 파일 이름을 추가합니다.
+        }
     }
     let content = $('#input_feed_content').val();
     // 해시태그 입력란에서 해시태그 내용을 가져옴
@@ -423,6 +429,11 @@ function uploadFiles(e) {
     // 실질적으로 파일을 업로드 하는 부분
     e.dataTransfer = e.originalEvent.dataTransfer;
     files = e.target.files || e.dataTransfer.files;
+
+    if (files.length>5){
+        alert("파일의 갯수는 5장을 넘을 수 없습니다.")
+        return 0;
+    }
 
 
     for (var i = 0; i < files.length; i++) {

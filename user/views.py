@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark
+from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark, Image
 from .models import User
 from django.contrib.auth.hashers import make_password
 
@@ -156,6 +156,9 @@ class RemoveProfile(APIView):
             likes.delete()
             bookmark = Bookmark.objects.filter(feed_id=feeds.id)
             bookmark.delete()
+            # 이미지 삭제 추가
+            images = Image.objects.filter(feed_id=feeds.id)
+            images.delete()
 
         # 해당 유저가 다른 피드에 좋아요, 북마크한 정보를 삭제
         likes = Like.objects.filter(email=email)
