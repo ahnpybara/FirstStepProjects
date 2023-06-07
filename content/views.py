@@ -727,6 +727,118 @@ class ReplySearchFeed(APIView):
                                    feed_all_count=feed_all_count, reply_sort=reply_sort))
 
 
+# 날짜로 필터링 검색 클래스
+class DateSearch(APIView):
+    def get(self, request):
+        # 서버로 전달된 데이터를 받아서 처리(검색 키워드)
+        searchKeyword = request.GET.get("searh_keyword_date", "")
+        start_date = request.GET.get('start_date', '')
+        end_date = request.GET.get('end_date', '')
+        print(start_date)
+        print(end_date)
+        print(searchKeyword)
+
+        # 세션에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장 -> 이메일로 세션 유저 객체를 구함
+        email = request.session.get('email', None)
+        # 현재 세션 정보의 이메일로 현재 세션 유저의 객체를 뽑아냄 , user
+        user_session = User.objects.filter(email=email).first()
+        # 만약 검색 키워드가 유저 닉네임중 포함되는 닉네임이 있다면 뽑아냄
+        user_object_list = User.objects.filter(nickname__contains=searchKeyword).order_by('-id')
+
+        # 해시태그 검색
+        if (searchKeyword.find("#") == 0):
+            # 해시태그의 #을 제거
+            text = searchKeyword.replace("#", "");
+            # 해시태그 테이블에서 검색키워드 텍스트랑 같은게 있다면 해당 객체에서 feed_id만 리스트형태로 반환
+            hashtag_content_lists = list(
+                Hashtag.objects.filter(content=text).values_list('feed_id', flat=True))
+
+            # 검색결과 여부를 판정할 객체 선언
+            is_exist_hashtag = Hashtag.objects.filter(content=text).exists()
+
+            # 검색결과가 없을경우 해당 페이지를 보여줌
+            if not is_exist_hashtag:
+                return render(request, 'astronaut/noresult.html', context=dict(user_session=user_session))
+
+            # 검색결과중 대표 이미지를 뽑아내기 위한 작업 (랜덤으로 뽑아서 보여줌)
+            random_feed_id = random.choice(hashtag_content_lists)
+
+            # 메인 대표 이미지를 하나 뽑음 ( 하나만 뽑더라도 first는 필수입니다. )
+            feed_main_image = Feed.objects.filter(id=random_feed_id, create_at__range=[start_date, end_date]).first()
+
+            # 해당 날짜 범위의 피드가 있는지?
+            is_exist_feed = Feed.objects.filter(id=random_feed_id, create_at__range=[start_date, end_date]).exists()
+
+            # 없을경우 해당 페이지를 보여줌
+            if not is_exist_feed:
+                return render(request, 'astronaut/noresult.html', context=dict(user_session=user_session))
+
+            # 피드 리스트와 해당 피드에 좋아요와 댓글수를 저장할 리스트 선언
+            feed_search_list = []
+            feed_count_list = []
+            # feed_id를 토대로 피드 테이블의 객체를 뽑아냄 ( 특정 해시태그가 달린 피드는 여러개가 될 수 있음 -> 반복문 )
+            for hashtag_feed_id in hashtag_content_lists:
+                feed_hashtag_list = Feed.objects.filter(id=hashtag_feed_id, create_at__range=[start_date, end_date]).order_by('-id')
+                print(feed_hashtag_list)
+                # 피드 id로 뽑은 피드의 객체들에게서 피드 이미지, 피드수, 댓글 수, 좋아요 수를 뽑아냄
+                for feed in feed_hashtag_list:
+                    # 좋아요 수
+                    like_count = Like.objects.filter(feed_id=feed.id).count()
+                    # 댓글 수
+                    reply_count = Reply.objects.filter(feed_id=feed.id).count()
+                    # 피드 객체들을 좋아요 순으로 정렬하기 위해서 좋아요 수를 리스트에 추가
+                    feed_search_list.append(dict(id=feed.id, image=feed.image, reply_count=reply_count))
+                    feed_count_list.append(dict(id=feed.id,
+                                                like_count=like_count,
+                                                reply_count=reply_count))
+            # 좋아요가 많은 게시물 순으로 정렬 람다식 이용
+            feed_search_list = sorted(feed_search_list, key=lambda x: x['reply_count'],
+                                      reverse=True)
+
+            # 검색키워드가 포함된 전체 피드 수 TODO
+            feed_all_count = feed_search_list.count('id')
+            print(feed_all_count)
+
+        # 일반 키워드 검색
+        else:
+            # 키워드가 포함된 피드 객체를 뽑아냄
+            feed_search_object_list = Feed.objects.filter(content__contains=searchKeyword, create_at__range=[start_date, end_date]).order_by('-id')
+            # 대표 이미지를 뽑음
+            feed_main_image = Feed.objects.filter(content__contains=searchKeyword, create_at__range=[start_date, end_date]).first()
+            # 검색 키워드가 포함된 피드 개수
+            feed_all_count = Feed.objects.filter(content__contains=searchKeyword, create_at__range=[start_date, end_date]).count()
+            # 검색 키워드가 포함된 피드가 있는지?
+            is_exist_feed = Feed.objects.filter(content__contains=searchKeyword, create_at__range=[start_date, end_date]).exists()
+
+            # 검색결과가 없을경우 해당 페이지를 보여줌
+            if not is_exist_feed:
+                return render(request, 'astronaut/noresult.html', context=dict(user_session=user_session))
+
+            # 검색키워드가 포함된 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 데이터를 구하는 과정
+            feed_count_list = []
+            feed_search_list = []
+            for feed in feed_search_object_list:
+                # 좋아요 수 확인.
+                like_count = Like.objects.filter(feed_id=feed.id).count()
+                # 댓글 수 확인.
+                reply_count = Reply.objects.filter(feed_id=feed.id).count()
+                # 피드 객체들을 좋아요 순으로 정렬하기 위해서 좋아요 수를 리스트에 추가
+                feed_search_list.append(dict(id=feed.id, image=feed.image, reply_count=reply_count))
+                feed_count_list.append(dict(id=feed.id,
+                                            like_count=like_count,
+                                            reply_count=reply_count))
+            # 좋아요가 많은 게시물 순으로 정렬 람다식 이용
+            feed_search_list = sorted(feed_search_list, key=lambda x: x['reply_count'],
+                                      reverse=True)
+
+        # 검색결과를 검색결과 페이지랑 데이터를 사용자에게 반환
+        return render(request, "astronaut/search.html",
+                      context=dict(feed_count_list=feed_count_list, user_session=user_session,
+                                   user_object_list=user_object_list, feed_search_list=feed_search_list,
+                                   searchKeyword=searchKeyword, feed_main_image=feed_main_image,
+                                   feed_all_count=feed_all_count, start_date=start_date, end_date=end_date))
+
+
 # 댓글 삭제 클래스
 class RemoveReply(APIView):
     def post(self, request):

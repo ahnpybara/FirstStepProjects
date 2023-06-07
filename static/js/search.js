@@ -63,6 +63,7 @@ $("#button_feed_list").click(function (event) {
         borderTopStyle: "none",
         color: "#737373"
     });
+
     // 검색 키워드를 가져와서 전달 (최신 순으로 검색)
     let search = $.trim($('.search_keyword').html());
     // 해시태그 검색인지 일반 검색어 검색인지 구분하기 위해서 #의 위치를 구함
@@ -94,18 +95,7 @@ $("#button_feed_like_list").click(function () {
         borderTopStyle: "none",
         color: "#737373"
     });
-    //내 게시물의 게시물 숨기기
-    $('#feed_list').css({
-        display: 'none'
-    });
-    //좋아요의 게시물 보기
-    $('#like_feed_list').css({
-        display: 'flex'
-    });
-    //북마크의 게시물 숨기기
-    $('#bookmark_feed_list').css({
-        display: 'none'
-    });
+
     // 검색 키워드를 가져와서 전달 (좋아요 순으로 검색)
     let search = $.trim($('.search_keyword').html());
     // 해시태그 검색인지 일반 검색어 검색인지 구분하기 위해서 #의 위치를 구함
@@ -126,7 +116,6 @@ $("#button_feed_bookmark_list").click(function () {
     $('#button_feed_list').css({
         borderTopStyle: "none",
         color: "#737373"
-
     });
     //프로필 화면의 좋아요 버튼 비활성화 표시
     $('#button_feed_like_list').css({
@@ -138,19 +127,8 @@ $("#button_feed_bookmark_list").click(function () {
         borderTopStyle: "solid",
         color: "black"
     });
-    //내 게시물의 게시물 숨기기
-    $('#feed_list').css({
-        display: 'none'
-    });
-    //좋아요의 게시물 숨기기
-    $('#like_feed_list').css({
-        display: 'none'
-    });
-    //북마크의 게시물 보기
-    $('#bookmark_feed_list').css({
-        display: 'flex'
-    });
-    // 검색 키워드를 가져와서 전달 (댓글 순으로 검색)
+
+    // 검색 키워드를 가져와서 전달 (댓글 순으로 검색
     let search = $.trim($('.search_keyword').html());
     // 해시태그 검색인지 일반 검색어 검색인지 구분하기 위해서 #의 위치를 구함
     is_hashtag = search.indexOf('#');
@@ -163,3 +141,27 @@ $("#button_feed_bookmark_list").click(function () {
         location.href = "/content/replysearch/?search=%23" + search
     }
 });
+
+//
+// 날짜순 필터링 게시물 이벤트 처리
+$("#date_search_btn").click(function () {
+    //프로필 화면의 내 게시물 버튼 비활성화 표시
+    $('#button_feed_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+    });
+    //프로필 화면의 좋아요 버튼 비활성화 표시
+    $('#button_feed_like_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+    });
+    // 프로필 화면의 북마크 버튼 활성화 밑줄 표시
+    $('#button_feed_bookmark_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+    });
+});
+
+// 날짜 끝을 현재 날짜로 기준을 잡음
+document.getElementById('end').max = new Date().toISOString().substring(0, 10);;
+document.getElementById('end').value = new Date().toISOString().substring(0, 10);;

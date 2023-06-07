@@ -204,7 +204,34 @@
     border-top: 1px black solid;
 }
 
+/* 고급필터링 */
+#more_filter_option {
+    background-color: white;
+    border: none;
+    box-shadow: none;
+    position: absolute;
+    left: 50vh;
+    margin-top: 10px;
+    color: #737373;
+
+}
+
+/* 고급 필터링 주메뉴 */
+#filter_option_area {
+    width: 19rem;
+    text-align: center;
+}
+
 /* 반응형 웹 */
+@media (max-width: 1450px) {
+    #more_filter_option {
+        display: none;
+    }
+    #filter_option_area {
+        display: none;
+    }
+}
+
 @media (max-width: 725px) {
     .profile_feed_follow_area {
         display: none !important;
