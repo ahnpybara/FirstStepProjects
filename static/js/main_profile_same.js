@@ -25,6 +25,8 @@ $(".feed_modal").click(function () {
             var feed_content = data['feed_content'];
             var writer_profile_image = "/media/" + data['writer_profile_image'];
             var writer_nickname = data['writer_nickname'];
+            var category = data['category'];
+            var category_kr = data['category_kr'];
 
             // 피드 모달창을 열 때 댓글리스트를 불러오는데 모달창을 닫아도 계속 댓글 리스트가 남아있음 때문에 모달창을 여는 시점으로 해서 댓글리스트를 리셋해줘야 함
             $("#feed_modal_reply_list").html('');
@@ -65,6 +67,9 @@ $(".feed_modal").click(function () {
             $("#feed_modal_feed_content").html('<div>' + feed_content + '</div>');
             $(".feed_modal_profile_image").html('<img id="' + writer_nickname + '" class="movetoprofile" src="' + writer_profile_image + '">');
             $(".feed_modal_nickname").html('<div id="' + writer_nickname + '" class="movetoprofile">' + writer_nickname + '</div>');
+
+            // 정유진: 카테고리 추가
+            $("#feed_modal_category").html(category_kr)
 
             // 피드 모달창을 열 때 해시태그 리스트 를 불러오는데 모달창을 닫아도 계속 해시태그 리스트가 남아있음 때문에 모달창을 여는 시점으로 해서 해시태그 리스트를 리셋해줘야 함
             $(".feed_modal_contents_writer_hashtags").html('');
@@ -297,6 +302,10 @@ $(".modal_close").click(function () {
         "background-image": ""
     });
 
+    // 파일 업로드 인풋태그 초기화
+    var input = document.getElementById('input_image_upload');
+    input.value = null;
+
     // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
     $('#input_feed_content').each(function () {
         $(this).val('');
@@ -362,17 +371,26 @@ $('#feed_create_button').click(function () {
     let content = $('#input_feed_content').val();
     // 해시태그 입력란에서 해시태그 내용을 가져옴
     let hashtags_content = $('#input_feed_hashtag').val();
+    //정유진: 카테고리 정보 추가
+    let category = $('#input_feed_category').val();
 
     // 피드 내용의 길이가 0보다 작으면 알림창 뜸
     if (content.length <= 0) {
         alert("피드 내용을 입력하세요");
         return 0;
     } else {
-        alert("공유하기 눌렀다.");
+        // 정유진: 카테고리를 선택하지 않았을 때 알림창 뜸
+        if (category == "") {
+            alert("카테고리를 선택하세요");
+            return 0;
+        } else {
+            alert("공유하기 눌렀다.");
+        }
     }
     fd.append('content', content);
     fd.append('hashtags_content', hashtags_content);
-
+    // 정유진: 카테고리 추가
+    fd.append('category', category);
 
     //서버로 보낼 데이터 (formdata 형태)
     $.ajax({
@@ -476,6 +494,11 @@ function uploadFiles(e) {
         // 글 내용 작성 모달창(두 번째 모달창)을 띄움
         $('#second_modal').css({
             display: 'flex'
+        });
+
+        // 이미지 남은 영역 검색으로 처리
+        $('.img_upload_space').css({
+            background: '#e9e9e9'
         });
 
         // 업로드 창 배경을 업로드된 이미지로 변경

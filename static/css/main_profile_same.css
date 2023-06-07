@@ -21,8 +21,7 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    width: 40%;
+    width: 45%;
     height: 575px;
     min-width: 500px;
 }
@@ -43,18 +42,17 @@
 
 /* 이미지를 여기로 드래그 하세요 */
 .drag_here_image {
-    margin-top: 200px;
-    margin-left: 15px;
-    margin-right: 15px;
     color: black;
     font-weight: 500;
-    font-size: 19px;
+    font-size: 22px;
+    margin: 5px 0;
 }
 
 /* 피드 업로드 모달창 이미지 업로드 버튼 */
 #image_upload_btn {
     width: 130px;
     margin-top: 20px;
+    margin-bottom: 60px;
     font-weight: bold;
     background-color: rgb(0, 149, 246);
 }
@@ -67,10 +65,16 @@
 
 /* 피드 업로드 모달창 이미지 영역 */
 .img_upload_space {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     border-top: solid 1px #d8d8d8;
     width: 100%;
-    height: 521px;
+    height: 91.5%;
     text-align: center;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 /* 파일 시스템 */
@@ -83,50 +87,71 @@
     border-top: solid 1px #d8d8d8;
     display: flex;
     flex-direction: row;
+    width: 100%;
+    height: 91.5%;
+
 }
 
 /* 두 번째 모달창 이미지 공간 */
 .feed_image_text_modal > .img_upload_space {
-    border-top: none;
-    width: 500px;
-    height: 521px;
+    border: none;
+    width: 100%;
+    height: 100%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 0;
 }
 
-/* 두 번째 모달창 글 영역 */
+/* 두 번째 모달창 텍스트 및 카테고리 영역 */
 .modal_text_area {
-    width: 275px;
-    height: 475px;
+    height: 99.9%;
+    border-left: 1px #d8d8d8 solid;
+}
+
+/* 두 번째 글 내용 영역 */
+.feed_text_area {
+    border-bottom: solid 1px #d8d8d8;
+}
+
+/* 두 번째 모달창  해시태그 내용 영역 */
+.feed_hashtag_area {
+    border-bottom: solid 1px #d8d8d8;
 }
 
 /* 두 번째 모달창 글 영역(글내용,해시태그) */
 .feed_content_input {
     display: flex;
     flex-direction: column;
-    border-left: solid 1px #d8d8d8;
     height: 484px;
 }
 
 /* 두 번째 모달창 글 내용 입력 창 */
 #input_feed_content {
     width: 276px;
-    height: 303px;
+    height: 255px;
     box-shadow: none;
     border: none;
     outline: none;
+    resize: none;
 }
 
 /* 두 번째 모달창 해시태그 내용 입력 창 */
 #input_feed_hashtag {
     width: 276px;
+    height: 160px;
     box-shadow: none;
     border: none;
     outline: none;
+    resize: none;
 }
 
 /* 두 번째 모달창 피드 생성버튼 */
 #feed_create_button {
-    width: 100%;
+    width: 277px;
     background-color: rgb(0, 149, 246);
+    padding-top: 9.3px;
+    border-radius: 0;
+    border-bottom-right-radius: 10px;
+    margin-left: 0.5px;
 }
 
 /* 피드 모달 스크롤은 동작하지만 보이지 않게 함 */
@@ -399,4 +424,39 @@
     text-align: left;
     margin-bottom: 10px;
     margin-left: 16px;
+}
+
+/* 정유진: 카테고리 */
+.feed_modal_category {
+    font-size: 14px;
+    font-weight: bold;
+    color: darkgray;
+    text-align: left;
+    margin: 2px 15px;
+}
+
+/* 정유진: 피드업로드 및 피드수정 모달 카테고리 */
+.second_third_modal_category {
+    display: flex;
+    flex-direction: row;
+    margin-top: 18px;
+    align-items: center;
+    margin-left: 10px;
+}
+
+/* 피드 업로드시 카테고리 설명란 */
+.feed_category_explain {
+    margin-right: 10px;
+    color: gray;
+    font-size: 15px;
+
+}
+
+/* 피드 업로드시 카테고리 메뉴 */
+#input_feed_category {
+    width: 70px;
+    text-align: center;
+    text-align-last: center;
+    padding: 0;
+    color: gray;
 }

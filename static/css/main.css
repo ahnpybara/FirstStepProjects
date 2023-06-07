@@ -410,32 +410,55 @@
 /* 세번째 피드 모달창 */
 #update_feed_modal_image {
     border-top: none;
-    width: 500px;
-    height: 521px;
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+    border-bottom-left-radius: 10px;
 }
 
 /* 글 내용 입력 창 */
 #input_updatefeed_content {
     width: 276px;
-    height: 303px;
+    height: 255px;
     box-shadow: none;
     border: none;
     outline: none;
+    resize: none;
 }
 
 /* 해시태그 입력 창 */
 #input_updatefeed_hashtag {
     width: 276px;
+    height: 160px;
     box-shadow: none;
     border: none;
     outline: none;
-    border-top: 1px solid #e1e1e1;
+    resize: none;
 }
 
 /* 피드 수정버튼 */
 #feed_update_button {
-    width: 100%;
+    width: 277px;
     background-color: rgb(0, 149, 246);
+    padding-top: 9.3px;
+    border-radius: 0;
+    border-bottom-right-radius: 10px;
+    margin-left: 0.5px;
+}
+
+/* 메인피드 카테고리 숨김 */
+.feed_category {
+    display: none;
+    margin: 2px 0 !important;
+}
+
+/* 피드 수정하기 카테고리 메뉴 */
+#input_updatefeed_category {
+    width: 70px;
+    text-align: center;
+    text-align-last: center;
+    padding: 0;
+    color: gray;
 }
 
 /* 반응형 웹 */
