@@ -514,7 +514,7 @@ class DateSearch(APIView):
             # 피드 리스트와 해당 피드에 좋아요와 댓글수를 저장할 리스트 선언
             feed_search_list = []
             feed_count_list = []
-            # 피드 ID를 기반으로 피드 테이블의 객체들을 가져옴
+            # 피드 ID와 날짜 범위 기반으로 피드 테이블의 객체들을 가져옴
             feed_hashtag_list = Feed.objects.filter(id__in=hashtag_content_lists,
                                                     create_at__range=[start_date, end_date])
             # 피드 객체들을 순회하며 필요한 정보를 추출
@@ -547,7 +547,7 @@ class DateSearch(APIView):
 
         # 일반 키워드 검색
         else:
-            # 키워드가 포함된 피드 객체를 뽑아냄
+            # 키워드랑 날짜 범위가 포함된 피드 객체를 뽑아냄
             feed_search_object_list = Feed.objects.filter(content__contains=searchKeyword,
                                                           create_at__range=[start_date, end_date])
             # 대표 이미지를 위한 객체 하나를 뽑음
@@ -629,21 +629,21 @@ class CategorySearch(APIView):
             hashtag_content_lists = list(
                 Hashtag.objects.filter(content=text).values_list('feed_id', flat=True))
 
-            # 검색결과 여부를 판정할 객체 선언
+            # 검색결과 여부를 판정할 변수 리스트에 값이 없으면 불린값을 반환
             is_exist_feed = bool(hashtag_content_lists)
 
             # 검색결과가 없을경우 해당 페이지를 보여줌
             if not is_exist_feed:
                 return render(request, 'astronaut/noresult.html', context=dict(user_session=user_session))
 
-            # 메인 대표 이미지를 하나 뽑음 ( 하나만 뽑더라도 first는 필수입니다. )
+            # 메인 대표 이미지를 위한 객체를 하나 뽑음 ( 하나만 뽑더라도 first는 필수입니다. )
             feed_main_image = Feed.objects.filter(id__in=hashtag_content_lists,
                                                   category__in=[category_option1, category_option2]).first()
 
-            # 해당 카테고리를 포함한 피드가 있는지?
+            # 해당 카테고리를 포함한 피드 객체가 있는지?
             is_exist_feed = feed_main_image is not None
 
-            # 없을경우 해당 페이지를 보여줌
+            # 없을 경우 해당 페이지를 보여줌
             if not is_exist_feed:
                 return render(request, 'astronaut/noresult.html', context=dict(user_session=user_session))
 
@@ -651,7 +651,7 @@ class CategorySearch(APIView):
             feed_search_list = []
             feed_count_list = []
 
-            # feed_id를 토대로 피드 테이블의 객체를 가져옴
+            # feed_id와 카테고리를 토대로 피드 테이블의 객체들을 가져옴
             feed_hashtag_list = Feed.objects.filter(id__in=hashtag_content_lists,
                                                     category__in=[category_option1, category_option2])
             # 피드 객체들을 순회하며 필요한 정보를 추출
@@ -660,6 +660,7 @@ class CategorySearch(APIView):
                 like_count = Like.objects.filter(feed_id=feed.id).count()
                 # 댓글 수
                 reply_count = Reply.objects.filter(feed_id=feed.id).count()
+                # 리스트에 해당 데이터들을 추가함
                 feed_search_list.append(
                     dict(id=feed.id, image=feed.image, like_count=like_count, reply_count=reply_count))
                 feed_count_list.append(dict(id=feed.id, like_count=like_count, reply_count=reply_count))
@@ -687,7 +688,7 @@ class CategorySearch(APIView):
             feed_search_object_list = Feed.objects.filter(
                 Q(content__contains=searchKeyword) & (Q(category=category_option1) | Q(category=category_option2)))
 
-            # 대표 이미지를 뽑음
+            # 대표 이미지를 위한 피드 객체를 하나 뽑음
             feed_main_image = feed_search_object_list.first()
 
             # 검색 키워드가 포함된 피드 개수
@@ -708,7 +709,7 @@ class CategorySearch(APIView):
                 like_count = Like.objects.filter(feed_id=feed.id).count()
                 # 댓글 수 확인.
                 reply_count = Reply.objects.filter(feed_id=feed.id).count()
-                # 피드 객체들을 좋아요 순으로 정렬하기 위해서 좋아요 수를 리스트에 추가
+                # 피드의 정보를 리스트에 추가
                 feed_search_list.append(
                     dict(id=feed.id, image=feed.image, reply_count=reply_count, like_count=like_count))
                 feed_count_list.append(dict(id=feed.id,
