@@ -28,7 +28,7 @@ $('#user_follow_btn').click(function (event) {
     }
     // 서버로 보낼 데이터 (json)
     $.ajax({
-        url: "/content/follow",
+        url: "/user/follow",
         data: {
             session_user_email: session_user_email,
             user_email: user_email,

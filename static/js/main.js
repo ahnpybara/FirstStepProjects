@@ -3,7 +3,7 @@ $(".movetoprofile").click(function (event) {
     // 이벤트가 발생한 태그의 id를 가져옴 id는 user_nickname 형태
     let user_nickname = event.target.id;
     // 해당 url로 요청하게 되면 매핑된 view도 실행되고 url뒤에 데이터를 붙여서 전송이 가능하다.
-    location.href = "/content/reprofile?user_nickname=" + user_nickname;
+    location.href = "/user/reprofile?user_nickname=" + user_nickname;
 });
 
 // 북마크 아이콘 클릭 이벤트 처리
@@ -149,7 +149,7 @@ $(".upload_reply").click(function (event) {
             // 비동기 화면에서 다른 사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
             $(".movetoprofile").click(function (event) {
                 let user_nickname = event.target.id;
-                location.href = "/content/reprofile?user_nickname=" + user_nickname;
+                location.href = "/user/reprofile?user_nickname=" + user_nickname;
             });
 
             // 비동기 댓글 삭제 이벤트 처리

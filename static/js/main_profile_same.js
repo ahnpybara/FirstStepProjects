@@ -207,7 +207,7 @@ $(".feed_modal").click(function () {
             // 화면에서 다른사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
             $(".movetoprofile").click(function (event) {
                 let user_nickname = event.target.id;
-                location.href = "/content/reprofile?user_nickname=" + user_nickname;
+                location.href = "/user/reprofile?user_nickname=" + user_nickname;
             });
 
             // 해시태그를 눌렸을 때 해시태그를 검색함
@@ -271,7 +271,7 @@ $(".modal_upload_reply").click(function (event) {
             // 화면에서 다른사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
             $(".movetoprofile").click(function (event) {
                 let user_nickname = event.target.id;
-                location.href = "/content/reprofile?user_nickname=" + user_nickname;
+                location.href = "/user/reprofile?user_nickname=" + user_nickname;
             });
         },
         error: function (request, status, error) {

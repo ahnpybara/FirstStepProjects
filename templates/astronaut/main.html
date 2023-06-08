@@ -85,7 +85,7 @@
                 <!-- 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
                 <ul id="nav_dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <!-- 프로필 -->
-                    <li><a class="dropdown-item" href="/content/profile"><b>프로필</b></a></li>
+                    <li><a class="dropdown-item" href="/user/profile"><b>프로필</b></a></li>
                     <li>
                         <!-- 구분선 -->
                         <hr class="dropdown-divider">
@@ -298,7 +298,7 @@
             <!-- 프로필 이미지 영역 -->
             <div id="my_profile_image" class="profile_box">
                 <!-- 내 프로필 사진-->
-                <a href="/content/profile"> <img class="profile"
+                <a href="/user/profile"> <img class="profile"
                                                  src="{% get_media_prefix %}{{ user_session.profile_image }}"
                                                  alt="text"></a>
             </div>
@@ -306,7 +306,7 @@
             <div class="my_profile_nickname_name">
                 <!-- 내 프로필 닉네임-->
                 <div>
-                    <b><a id="my_profile_nickname" href="/content/profile">{{ user_session.nickname }}</a></b>
+                    <b><a id="my_profile_nickname" href="/user/profile">{{ user_session.nickname }}</a></b>
                 </div>
                 <!--내 프로필 이름-->
                 <div class="my_profile_name">
