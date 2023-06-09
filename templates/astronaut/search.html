@@ -247,22 +247,16 @@
                     <!-- mouse over시 좋아요 북마크 수 보여주기 위한 창  -->
                     <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
                          class="profile_feed_mouse_over feed_modal">
-                        <!--좋아요 수 북마크 수를 계산하기 위한 반복문-->
-                        {% for count in feed_count_list %}
-                            <!-- 피드id와 좋아요 수와 북마크 수를 계산한 피드의 id가 같을 경우에만 표시 -->
-                            {% if count.id == feed.id %}
-                                <!-- 좋아요 수 -->
-                                <div class="feed_count">
-                                    <span class="icon_like_bookmark material-icons-outlined">favorite</span>
-                                    <p>{{ count.like_count }}</p>
-                                </div>
-                                <!-- 댓글 수 -->
-                                <div class="feed_count">
-                                    <span class="material-icons-outlined">comment</span>
-                                    <p>{{ count.reply_count }}</p>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
+                        <!-- 좋아요 수 -->
+                        <div class="feed_count">
+                            <span class="icon_like_bookmark material-icons-outlined">favorite</span>
+                            <p>{{ feed.like_count }}</p>
+                        </div>
+                        <!-- 댓글 수 -->
+                        <div class="feed_count">
+                            <span class="material-icons-outlined">comment</span>
+                            <p>{{ feed.reply_count }}</p>
+                        </div>
                     </div>
                     <!-- 실제 피드 이미지 -->
                     <div>

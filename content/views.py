@@ -288,7 +288,6 @@ class SearchFeed(APIView):
 
             # 피드 리스트와 해당 피드에 좋아요와 댓글수를 저장할 리스트 선언
             feed_search_list = []
-            feed_count_list = []
 
             # feed_id를 토대로 피드 테이블의 객체들을 뽑아냄
             feed_hashtag_list = Feed.objects.filter(id__in=hashtag_content_lists)
@@ -302,7 +301,6 @@ class SearchFeed(APIView):
                 # 리스트에 해당 데에터들을 넣음
                 feed_search_list.append(
                     dict(id=feed.id, image=feed.image, like_count=like_count, reply_count=reply_count))
-                feed_count_list.append(dict(id=feed.id, like_count=like_count, reply_count=reply_count))
 
             # 최근에 추가된 게시물 순으로 정렬 람다식 이용
             feed_search_list = sorted(feed_search_list, key=lambda x: x['id'], reverse=True)
@@ -323,7 +321,6 @@ class SearchFeed(APIView):
                 return render(request, 'astronaut/noresult.html', context=dict(user_session=user_session))
 
             # 검색키워드가 포함된 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 데이터를 구하는 과정
-            feed_count_list = []
             feed_search_list = []
             for feed in feed_search_object_list:
                 # 좋아요 수 확인.
@@ -333,13 +330,10 @@ class SearchFeed(APIView):
                 # 해당 데이터들을 리스트에 넣음
                 feed_search_list.append(
                     dict(id=feed.id, image=feed.image, like_count=like_count, reply_count=reply_count))
-                feed_count_list.append(dict(id=feed.id,
-                                            like_count=like_count,
-                                            reply_count=reply_count))
 
         # 검색결과를 검색결과 페이지랑 데이터를 사용자에게 반환
         return render(request, "astronaut/search.html",
-                      context=dict(feed_count_list=feed_count_list, user_session=user_session,
+                      context=dict(user_session=user_session,
                                    user_object_list=user_object_list, feed_search_list=feed_search_list,
                                    searchKeyword=searchKeyword, feed_main_image=feed_main_image,
                                    feed_all_count=feed_all_count, show_method_recent=show_method_recent))
