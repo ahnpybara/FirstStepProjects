@@ -133,7 +133,7 @@ class UploadFeed(APIView):
         feed_id = Feed.objects.create(content=content, email=email)
         # 이미지는 여러개라 반복문으로 튜플 생성
         for i in range(file_length):
-            if i<4:
+            if i < 4:
                 print(i)
                 file = request.FILES['file'[i]]
             else:
@@ -148,7 +148,7 @@ class UploadFeed(APIView):
                 for chunk in file.chunks():
                     destination.write(chunk)
             # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
-            image =uuid_name
+            image = uuid_name
             Image.objects.create(image=uuid_name, feed_id=feed_id.id)
 
         # 정유진: 카테고리 테이블에 튜플을 만듦
@@ -490,10 +490,13 @@ class SearchFeed(APIView):
             # 검색결과중 대표 이미지를 뽑아내기 위한 작업 (랜덤으로 뽑아서 보여줌)
             random_feed_id = random.choice(hashtag_content_lists)
             # 메인 대표 이미지를 하나 뽑음 ( 하나만 뽑더라도 first는 필수입니다. )
-            feed_main_image = Feed.objects.filter(id=random_feed_id).first()
+            feed_main_image = Image.objects.filter(feed_id=random_feed_id).first()
 
             # 검색키워드가 포함된 전체 피드 수
             feed_all_count = Hashtag.objects.filter(content=text).count()
+
+            # 이미지 리스트
+            image_list = []
 
             # 피드 리스트와 해당 피드에 좋아요와 댓글수를 저장할 리스트 선언
             feed_search_list = []
@@ -503,7 +506,14 @@ class SearchFeed(APIView):
                 feed_hashtag_list = Feed.objects.filter(id=hashtag_feed_id).order_by('-id')
                 # 피드 id로 뽑은 피드의 객체들에게서 피드 이미지, 피드수, 댓글 수, 좋아요 수를 뽑아냄
                 for feed in feed_hashtag_list:
-                    feed_search_list.append(dict(id=feed.id, image=feed.image))
+                    feed_search_list.append(dict(id=feed.id))
+                    # 피드 이미지
+                    images_list = []
+                    images_object_list = Image.objects.filter(feed_id=feed.id)
+                    for image in images_object_list:
+                        images_feed = Feed.objects.filter(id=feed.id).first()
+                        images_list.append(dict(feed_id=images_feed, image=image.image))
+                        print(image.image)
                     # 좋아요 수
                     like_count = Like.objects.filter(feed_id=feed.id).count()
                     # 댓글 수
@@ -543,7 +553,7 @@ class SearchFeed(APIView):
                       context=dict(feed_count_list=feed_count_list, user_session=user_session,
                                    user_object_list=user_object_list, feed_search_list=feed_search_list,
                                    searchKeyword=searchKeyword, feed_main_image=feed_main_image,
-                                   feed_all_count=feed_all_count, recent=recent))
+                                   feed_all_count=feed_all_count, recent=recent, image_list=image_list))
 
 
 # 좋아요 순 검색 클래스
@@ -1026,13 +1036,15 @@ class FeedUpdateIMG(APIView):
         # 해시태그를 띄여쓰기로 구분
         hashtag_content = '#' + '#'.join(hashtag_content_lists)
 
+        images = Image.objects.filter(feed_id=feed.id).first()
+
         # 정유진: 피드 아이디를 통해 해당 피드의 카테고리를 뽑음
         category = Category.objects.filter(feed_id=feed_id).first()
 
         # 사용자로 보낼 데이터
         data = {
             'id': feed.id,
-            'image': feed.image,
+            'image': images.image,
             'feed_content': feed.content,
             'hashtag_content': hashtag_content,
             'category': category.category
