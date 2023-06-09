@@ -220,6 +220,89 @@
 #filter_option_area {
     width: 19rem;
     text-align: center;
+    background-color: #FAFAFA;
+}
+
+/* 날짜 필터링 */
+#all_start_date, #all_end_date {
+    color: gray;
+    border: 1px solid lightgray;
+}
+
+/* 날짜 필터링 전송 버튼 */
+#date_search_btn {
+    background-color: lightsteelblue;
+    border: none;
+    font-size: 14px;
+    color: white;
+}
+
+/* 카테고리 영역 */
+#category_select {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 카테고리 설명란 */
+.feed_category_explain_filter {
+    margin-right: 10px;
+    font-size: 15px;
+    color: gray;
+}
+
+/* 카테고리 1*/
+#feed_category_search1 {
+    width: 70px;
+    text-align: center;
+    margin-right: 10px;
+    text-align-last: center;
+    padding: 0;
+}
+
+/* 카테고리 2 */
+#feed_category_search2 {
+    width: 70px;
+    text-align: center;
+    margin-left: 10px;
+    text-align-last: center;
+    padding: 0;
+}
+
+/* 카테고리 필터링 버튼 */
+#category_select_btn {
+    background-color: lightsteelblue;
+    border: none;
+    font-size: 14px;
+    color: white;
+    margin-left: 8px;
+}
+
+/* 일괄 필터링 버튼 영역 */
+#filter_btn_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+/* 일괄 필터링 버튼 */
+#all_submit {
+    background-color: lightsteelblue;
+    border: none;
+    font-size: 14px;
+    color: white;
+}
+
+/* 필터링 설정 초기화 버튼 */
+#all_filter_rest {
+    background-color: lightcoral;
+    border: none;
+    font-size: 14px;
+    color: white;
+    margin-left: 8px;
 }
 
 /* 반응형 웹 */
@@ -227,6 +310,7 @@
     #more_filter_option {
         display: none;
     }
+
     #filter_option_area {
         display: none;
     }
