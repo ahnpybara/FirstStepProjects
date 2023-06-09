@@ -3,7 +3,7 @@ let auto_modal = document.getElementById('auto_modal').getAttribute("id");
 let search_box = document.getElementById('search_box').getAttribute("id");
 
 // 모달 바깥부분을 클릭하면 안 보에게 된다.
-window.addEventListener('mousedown', function (event) {
+window.addEventListener('mouseup', function (event) {
     // 클릭한 곳의 id 값이 널이거나 auto_modal이 포함되어 있지 않거나 search_box이 포함되어 있지 않으면 창을 안 보이게 설정
     if ((event.target.getAttribute("id") == null) || !((event.target.getAttribute("id").includes(auto_modal)) || (event.target.getAttribute("id").includes(search_box)))) {
         $('#auto_modal').css({
