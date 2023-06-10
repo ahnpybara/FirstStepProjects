@@ -6,8 +6,10 @@ class Feed(models.Model):
     content = models.TextField()  # 글내용
     email = models.EmailField(default='')  # 이메일
     create_at = models.DateTimeField(auto_now_add=True)
+    category = models.CharField(max_length=20, default='')  # 카테고리 이름
 
-#이미지 테이블
+
+# 이미지 테이블
 class Image(models.Model):
     feed_id = models.IntegerField()  # Feed id
     image = models.TextField()  # 피드에 업로드되는 이미지
@@ -42,9 +44,3 @@ class Follow(models.Model):
 class Hashtag(models.Model):
     feed_id = models.IntegerField(default=0)  # Feed id
     content = models.TextField()  # 해시태그 내용
-
-
-# 정유진 : 카테고리 테이블
-class Category(models.Model):
-    feed_id = models.IntegerField(default=0)  # Feed id
-    category = models.CharField(max_length=20)  # 카테고리 이름o

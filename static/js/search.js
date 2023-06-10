@@ -28,7 +28,7 @@ $('#user_follow_btn').click(function (event) {
     }
     // 서버로 보낼 데이터 (json)
     $.ajax({
-        url: "/content/follow",
+        url: "/user/follow",
         data: {
             session_user_email: session_user_email,
             user_email: user_email,
@@ -63,17 +63,20 @@ $("#button_feed_list").click(function (event) {
         borderTopStyle: "none",
         color: "#737373"
     });
+
     // 검색 키워드를 가져와서 전달 (최신 순으로 검색)
     let search = $.trim($('.search_keyword').html());
+    let show_method = document.getElementById('button_feed_list').getAttribute("show_method_recent");
+    console.log(show_method);
     // 해시태그 검색인지 일반 검색어 검색인지 구분하기 위해서 #의 위치를 구함
-    is_hashtag = search.indexOf('#');
+    let is_hashtag = search.indexOf('#');
     // #을 제거함 검색어를 서버로 보내기 위한 절차 그냥 보내면 오류
     search = search.replace('#', '');
     // 만약 -1 이면 #이 없다는 뜻 -> 일반 검색
     if (is_hashtag == -1) {
-        location.href = "/content/search/?search=" + search
+        location.href = "/content/search/?search=" + search + "&show_recent=" + show_method
     } else {
-        location.href = "/content/search/?search=%23" + search
+        location.href = "/content/search/?search=%23" + search + "&show_recent=" + show_method
     }
 });
 
@@ -94,29 +97,20 @@ $("#button_feed_like_list").click(function () {
         borderTopStyle: "none",
         color: "#737373"
     });
-    //내 게시물의 게시물 숨기기
-    $('#feed_list').css({
-        display: 'none'
-    });
-    //좋아요의 게시물 보기
-    $('#like_feed_list').css({
-        display: 'flex'
-    });
-    //북마크의 게시물 숨기기
-    $('#bookmark_feed_list').css({
-        display: 'none'
-    });
+
     // 검색 키워드를 가져와서 전달 (좋아요 순으로 검색)
     let search = $.trim($('.search_keyword').html());
+    let show_method = document.getElementById('button_feed_like_list').getAttribute("show_method_like");
+    console.log(show_method);
     // 해시태그 검색인지 일반 검색어 검색인지 구분하기 위해서 #의 위치를 구함
-    is_hashtag = search.indexOf('#');
+    let is_hashtag = search.indexOf('#');
     // #을 제거함 검색어를 서버로 보내기 위한 절차 그냥 보내면 오류
     search = search.replace('#', '');
     // 만약 -1 이면 #이 없다는 뜻 -> 일반 검색
     if (is_hashtag == -1) {
-        location.href = "/content/likesearch/?search=" + search
+        location.href = "/content/search/?search=" + search + "&show_like=" + show_method
     } else {
-        location.href = "/content/likesearch/?search=%23" + search
+        location.href = "/content/search/?search=%23" + search + "&show_like=" + show_method
     }
 });
 
@@ -126,7 +120,6 @@ $("#button_feed_bookmark_list").click(function () {
     $('#button_feed_list').css({
         borderTopStyle: "none",
         color: "#737373"
-
     });
     //프로필 화면의 좋아요 버튼 비활성화 표시
     $('#button_feed_like_list').css({
@@ -138,28 +131,97 @@ $("#button_feed_bookmark_list").click(function () {
         borderTopStyle: "solid",
         color: "black"
     });
-    //내 게시물의 게시물 숨기기
-    $('#feed_list').css({
-        display: 'none'
-    });
-    //좋아요의 게시물 숨기기
-    $('#like_feed_list').css({
-        display: 'none'
-    });
-    //북마크의 게시물 보기
-    $('#bookmark_feed_list').css({
-        display: 'flex'
-    });
-    // 검색 키워드를 가져와서 전달 (댓글 순으로 검색)
+
+    // 검색 키워드를 가져와서 전달 (댓글 순으로 검색
     let search = $.trim($('.search_keyword').html());
     // 해시태그 검색인지 일반 검색어 검색인지 구분하기 위해서 #의 위치를 구함
-    is_hashtag = search.indexOf('#');
+    let show_method = document.getElementById('button_feed_bookmark_list').getAttribute("show_method_reply");
+    console.log(show_method);
+    let is_hashtag = search.indexOf('#');
     // #을 제거함 검색어를 서버로 보내기 위한 절차 그냥 보내면 오류
     search = search.replace('#', '');
     // 만약 -1 이면 #이 없다는 뜻 -> 일반 검색
     if (is_hashtag == -1) {
-        location.href = "/content/replysearch/?search=" + search
+        location.href = "/content/search/?search=" + search + "&show_reply=" + show_method
     } else {
-        location.href = "/content/replysearch/?search=%23" + search
+        location.href = "/content/search/?search=%23" + search + "&show_reply=" + show_method
+    }
+});
+
+document.getElementById('all_end_date').max = new Date().toISOString().substring(0, 10);
+document.getElementById('all_end_date').value = new Date().toISOString().substring(0, 10);
+
+
+// 날짜 카테고리 동시 필터링 이벤트 처리
+$("#all_submit").click(function (event) {
+    // 이벤트 확산 방지
+    event.stopPropagation();
+    // input태그에서 값을 다 가져옴
+    var show_method_recent = document.getElementById("recent_sort").value;
+    var show_method_like = document.getElementById("like_sort").value;
+    var show_method_reply = document.getElementById("reply_sort").value;
+    var search = document.getElementById("all_search_keyword").value;
+    var start_date = document.getElementById("all_start_date").value;
+    var end_date = document.getElementById("all_end_date").value;
+    var category_option1 = document.getElementById("feed_category_search1").value;
+    var category_option2 = document.getElementById("feed_category_search2").value;
+
+    // 날짜 선택이 하나라도 안되어있는 경우 예외처리
+    if (start_date == '' || end_date == '') {
+        alert("날짜를 선택하세요");
+        return 0;
+    }
+    // 카테고리가 둘 다 비어있는 경우 예외처리
+    if (category_option1 === '' && category_option2 === '') {
+        alert("카테고리를 선택하세요")
+        return 0;
+    }
+
+    // 해시태그 검색인지 일반 검색어 검색인지 구분하기 위해서 #의 위치를 구함
+    let is_hashtag = search.indexOf('#');
+    // #을 제거함 검색어를 서버로 보내기 위한 절차 그냥 보내면 오류
+    search = search.replace('#', '');
+    // 만약 -1 이면 #이 없다는 뜻 -> 일반 검색
+    if (is_hashtag == -1) {
+        location.href = "/content/search/?search=" + search + "&show_recent=" + show_method_recent + "&show_like=" +
+            show_method_like + "&show_reply=" + show_method_reply + "&start_date=" + start_date + "&end_date=" + end_date +
+            "&category_option1=" + category_option1 + "&category_option2=" + category_option2;
+    } else {
+        location.href = "/content/search/?search=%23" + search + "&show_recent=" + show_method_recent + "&show_like=" +
+            show_method_like + "&show_reply=" + show_method_reply + "&start_date=" + start_date + "&end_date=" + end_date +
+            "&category_option1=" + category_option1 + "&category_option2=" + category_option2;
+    }
+});
+
+// 필터링 설정 일괄 초기화 버튼 이벤트 처리
+$("#all_filter_rest").click(function (event) {
+    event.stopPropagation();
+    document.getElementById('feed_category_search2').selectedIndex = 0;
+    document.getElementById('feed_category_search1').selectedIndex = 0;
+    document.getElementById('all_start_date').value = ''
+    document.getElementById('all_end_date').value = ''
+});
+
+// 카테고리 필터링 버튼 이벤트 처리
+$("#category_select_btn").click(function (event) {
+    var category_option1 = document.getElementById("feed_category_search1").value;
+    var category_option2 = document.getElementById("feed_category_search2").value;
+
+    // 카테고리가 둘 다 비어있는 경우 예외처리
+    if (category_option1 === '' && category_option2 === '') {
+        alert("카테고리를 선택하세요");
+        event.preventDefault(); // 폼 전송 기본 동작 중지
+    }
+});
+
+// 카테고리 필터링 폼 전송 이벤트 처리
+$("#data_select").submit(function (event) {
+    var start_date = document.getElementById("all_start_date").value;
+    var end_date = document.getElementById("all_end_date").value;
+
+    // 날짜 선택이 하나라도 안되어있는 경우 예외처리
+    if (start_date === '' || end_date === '') {
+        alert("날짜를 선택하세요");
+        event.preventDefault(); // 폼 전송 기본 동작 중지
     }
 });
