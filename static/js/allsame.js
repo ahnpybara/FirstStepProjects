@@ -101,15 +101,16 @@ $('#search_box').mousedown(function () {
                                 // 자동완성 모달창에 자동완성 목록을 만드는 과정
                                 // 정유진: 가장 앞에 만들기 위해서.
                                 if (i == 0) {
-                                    $("#auto_modal_list").append('<div id="auto_modal_object_bundle" class="hashtags auto_modal_object" hashtag_content="' + search_box_value + '"></div>');
-                                    $("#auto_modal_object_bundle").append('<span class="auto_modal_hashtag_icon material-symbols-outlined" hashtag_content="' + search_box_value + '">tag</span>');
+                                    search_box_value = search_box_value.replace('#', '')
+                                    $("#auto_modal_list").append('<div id="auto_modal_object_bundle" class="hashtags auto_modal_object" hashtag_content="' + search_box_value + '모음보기"></div>');
+                                    $("#auto_modal_object_bundle").append('<span class="auto_modal_hashtag_icon material-symbols-outlined" hashtag_content="' + search_box_value + '모음보기">tag</span>');
                                     $("#auto_modal_object_bundle").append('<div id="auto_modal_hashtag_bundle"></div>');
 
-                                    $("#auto_modal_hashtag_bundle").append('<div class="auto_modal_text_object1" hashtag_content="' + search_box_value + '">' + search_box_value + ' 모음보기</div>');
+                                    $("#auto_modal_hashtag_bundle").append('<div class="auto_modal_text_object1" hashtag_content="' + search_box_value + '모음보기">' + search_box_value + ' 모음보기</div>');
                                 }
                                 // 정유진: hashtag_bundle_count는 가장 마지막에 측정되서 마지막 루프 때.
                                 if (i == data['prioritize_list'].length - 1) {
-                                    $("#auto_modal_hashtag_bundle").append('<div class="auto_modal_text_object2" hashtag_content="' + search_box_value + '">게시물 ' + hashtag_bundle_count + '</div>');
+                                    $("#auto_modal_hashtag_bundle").append('<div class="auto_modal_text_object2" hashtag_content="' + search_box_value + '모음보기">게시물 ' + hashtag_bundle_count + '</div>');
                                 }
 
                                 $("#auto_modal_list").append('<div id="auto_modal_object_' + i + '" class="hashtags auto_modal_object" hashtag_content="' + hashtag_content + '"></div>');
