@@ -286,8 +286,14 @@ class SearchFeed(APIView):
             # 해시태그의 #을 제거
             text = searchKeyword.replace("#", "");
             # 해시태그 테이블에서 검색키워드 텍스트랑 같은게 있다면 해당 객체에서 feed_id만 리스트형태로 반환
-            hashtag_content_lists = list(
-                Hashtag.objects.filter(content=text).values_list('feed_id', flat=True))
+            if '모음보기' in text:
+                text = text.replace("모음보기", "")
+                print(text)
+                hashtag_content_lists = list(
+                    Hashtag.objects.filter(content__contains=text).values_list('feed_id', flat=True))
+            else:
+                hashtag_content_lists = list(
+                    Hashtag.objects.filter(content=text).values_list('feed_id', flat=True))
 
             # 검색결과 여부를 판정할 변수 리스트에 값이 없다면 불린 값을 반환
             is_exist_feed = bool(hashtag_content_lists)
