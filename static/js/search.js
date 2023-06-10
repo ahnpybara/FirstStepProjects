@@ -195,6 +195,7 @@ $("#all_submit").click(function (event) {
 
 // 필터링 설정 일괄 초기화 버튼 이벤트 처리
 $("#all_filter_rest").click(function (event) {
+    // 이벤트 전파 차단
     event.stopPropagation();
     document.getElementById('feed_category_search2').selectedIndex = 0;
     document.getElementById('feed_category_search1').selectedIndex = 0;
