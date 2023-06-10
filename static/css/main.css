@@ -468,7 +468,48 @@
     }
 }
 
-.filteringbar_area{
-    width: 100%;
-    align-items: end;
+body, ul, li {
+    margin:0;
+    padding:0;
+    list-style:none;
+}
+
+.slider-2 {
+    height:400px;
+    position:relative;
+}
+
+.slider-2 .slides > div {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-position:center;
+    /* 이미지를 최대한 안짤리게 한다. */
+    background-size:cover;
+    /* 배경 반복 금지 */
+    background-repeat:no-repeat;
+    opacity:0;
+    transition: opacity 0.5s;
+}
+
+.slider-2 .slides > div.active {
+    opacity:1;
+}
+
+@media ( max-width:700px ) {
+    .slider-2 {
+        height:300px;
+    }
+}
+
+.feed_modal_feed_image_before{
+    left: 0;
+}
+
+.feed_modal_feed_image_next{
+}
+.feed_modal_area_images_btn{
+    vertical-align: center;
 }

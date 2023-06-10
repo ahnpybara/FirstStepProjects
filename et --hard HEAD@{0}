@@ -1,0 +1,41 @@
+[33m1f16823[m[33m ([m[1;36mHEAD -> [m[1;32mGrinmaru[m[33m)[m HEAD@{0}: commit: commit for pull
+[33mcf70049[m HEAD@{1}: commit (merge): images upload
+[33m029e30b[m HEAD@{2}: commit: commit for pull
+[33mb1e331d[m HEAD@{3}: pull origin master: Merge made by the 'ort' strategy.
+[33m8d2aafa[m HEAD@{4}: commit (merge): commit for pull
+[33m75e20be[m HEAD@{5}: commit (merge): commit for pull
+[33m3691fb4[m HEAD@{6}: commit: commit for pull
+[33m28c2c6e[m HEAD@{7}: commit (merge): commit for pull
+[33mffc09bd[m HEAD@{8}: commit (merge): commit for pull
+[33mc3a9f28[m HEAD@{9}: commit (merge): commit for pull
+[33m2b9c015[m HEAD@{10}: commit: commit for pull
+[33md883e93[m[33m ([m[1;31morigin/Grinmaru[m[33m)[m HEAD@{11}: commit: filtering in main
+[33mcd274aa[m HEAD@{12}: pull origin master: Merge made by the 'ort' strategy.
+[33mbe62b12[m HEAD@{13}: commit: hashtag bug fix
+[33mec6eafd[m HEAD@{14}: pull origin master: Merge made by the 'ort' strategy.
+[33m4a7c52f[m HEAD@{15}: commit: commit for pull
+[33m72d4edf[m HEAD@{16}: pull origin master: Merge made by the 'ort' strategy.
+[33md0a799f[m HEAD@{17}: commit: test
+[33m32bc6c6[m HEAD@{18}: commit (merge): hashtag randombug fix and hashtag search fix
+[33ma2e47a2[m HEAD@{19}: commit: test
+[33m1e5adff[m HEAD@{20}: pull origin master: updating HEAD
+[33m1e5adff[m HEAD@{21}: commit (merge): third_modal Fix
+[33m0429f35[m HEAD@{22}: commit (merge): third_modal fix
+[33mf90c065[m HEAD@{23}: commit (merge): bug Fiㄴx
+[33mc913ee4[m HEAD@{24}: commit: test
+[33mdbc4db8[m HEAD@{25}: pull origin master: updating HEAD
+[33mdbc4db8[m HEAD@{26}: pull origin master: updating HEAD
+[33mdbc4db8[m HEAD@{27}: commit (merge): Hashtag duplicate search bug fix
+[33m0045a1d[m HEAD@{28}: commit: Hashtag duplicate search bug fix
+[33m6d40525[m HEAD@{29}: commit: hashtag fix and css
+[33mc37692e[m HEAD@{30}: commit: hashtag fix
+[33m2e8ff6e[m HEAD@{31}: commit: Y15-2
+[33m0835f59[m HEAD@{32}: commit: Y15-1
+[33mfd8d489[m HEAD@{33}: commit: Y15-Error-fix
+[33mf4ac0fd[m HEAD@{34}: commit: Y15-ì에ëErrorë-fix
+[33m3687484[m HEAD@{35}: commit (merge): Y15
+[33ma4bf677[m HEAD@{36}: commit: test
+[33md775275[m HEAD@{37}: commit: Y14
+[33m0d8ec60[m HEAD@{38}: commit: Y14
+[33m1ab4990[m HEAD@{39}: commit (merge): Y12
+[33m7c6c975[m HEAD@{40}: commit (initial): Y13

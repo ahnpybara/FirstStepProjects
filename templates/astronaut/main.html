@@ -362,9 +362,8 @@
     <div class="modal_window">
         <!-- 모달창 상단바 -->
         <div class="feed_upload_modal_bar">
-            <!-- 공백 -->
             <div>
-                <p class="space"></p>
+                <div id="modal_next_button">다음</div>
             </div>
             <!-- 설명란 -->
             <div>
@@ -392,9 +391,6 @@
             </button>
             <!--파일 입력 폼-->
             <input multiple="multiple" type="file" id="input_image_upload" onchange="image_upload();"/>
-            <div>
-                <button id="modal_next_button" >next</button>
-            </div>
         </div>
     </div>
 </div>
@@ -405,14 +401,15 @@
     <div class="modal_window">
         <!-- 모달창 상단바 -->
         <div class="feed_upload_modal_bar">
-            <!-- 공백 -->
-            <div>
-                <p class="space"></p>
+
+            <div id="modal_before_button">
+                <p>이전</p>
             </div>
             <!-- 설명란 -->
             <div>
                 <b>새로운 피드 생성</b>
             </div>
+
             <!-- 모달창 닫기 버튼 -->
             <div>
                 <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
@@ -422,6 +419,14 @@
         <div class="feed_image_text_modal">
             <!-- 이미지 영역 -->
             <div class="img_upload_space">
+                <div class="feed_modal_area_images_btn">
+                    <div id="feed_modal_feed_image_before_btn" class="feed_modal_feed_image_before">
+                        이전
+                    </div>
+                    <div id="feed_modal_feed_image_next_btn" class="feed_modal_feed_image_next">
+                        다음
+                    </div>
+                </div>
             </div>
             <!-- 글 영역 -->
             <div class="modal_text_area">
@@ -647,8 +652,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'js/main.js' %}?ver=6"></script>
-<script src="{% static 'js/main_profile_same.js' %}?ver=6"></script>
-<script src="{% static 'js/allsame.js' %}?ver=6"></script>
+<script src="{% static 'js/main.js' %}?ver=9"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=9"></script>
+<script src="{% static 'js/allsame.js' %}?ver=9"></script>
 </body>
 </html>
