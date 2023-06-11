@@ -519,7 +519,7 @@
                     <!-- 정유진: 공유카테고리 선택 영역 -->
                     <div>
                         {% for user in shared_shared_nickname_list %}
-                            <input id="upload_shared_user_nickname_{{ user.nickname }}" type="checkbox" name="update_shared_category_nickname_list" value="{{ user.nickname }}">{{ user.nickname }}</input>
+                            <input id="update_shared_user_nickname_{{ user.nickname }}" type="checkbox" name="update_shared_category_nickname_list" value="{{ user.nickname }}">{{ user.nickname }}</input>
                         {% endfor %}
                     </div>
                 </div>

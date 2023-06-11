@@ -354,7 +354,7 @@ $('.update_feed').click(function (event) {
             console.log(shared_category)
             for (var i = 0; i < shared_category.length; i++) {
                 console.log(shared_category[i])
-                $("#upload_shared_user_nickname_" + shared_category[i]).prop('checked', true);
+                $("#update_shared_user_nickname_" + shared_category[i]).prop('checked', true);
             }
         },
         error: function (request, status, error) {
