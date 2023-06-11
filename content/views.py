@@ -155,10 +155,7 @@ class UploadFeed(APIView):
         feed_id = Feed.objects.create(content=content, email=email, category=category)
         # 이미지는 여러개라 반복문으로 튜플 생성
         for i in range(file_length):
-            if i < 4:
-                file = request.FILES['file'[i]]
-            else:
-                file = request.FILES['file1'[i]]
+            file = request.FILES.get('file[' + str(i) + ']')
             # uuid 값 생성
             uuid_name = uuid4().hex
             # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)

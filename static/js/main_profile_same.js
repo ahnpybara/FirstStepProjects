@@ -357,18 +357,10 @@ $('#feed_create_button').click(function () {
 
     fd.append('file_length', files.length)
     for (i = 0; i < files.length; i++) {
-
-        if (i <= 3) {
             let file = files[i];
             let image = files[i].name;
-            fd.append('file'[i], file); // 여러 개의 파일을 전송하기 위해 'file[]'을 사용하여 파일을 추가합니다.
-            fd.append('image'[i], image); // 여러 개의 파일 이름을 전송하기 위해 'image[]'을 사용하여 파일 이름을 추가합니다.
-        } else {
-            let file = files[i];
-            let image = files[i].name;
-            fd.append('file1'[i], file); // 여러 개의 파일을 전송하기 위해 'file[]'을 사용하여 파일을 추가합니다.
-            fd.append('image1'[i], image); // 여러 개의 파일 이름을 전송하기 위해 'image[]'을 사용하여 파일 이름을 추가합니다.
-        }
+            fd.append('file[' + i + ']', file);
+            fd.append('image[' + i + ']', image);
     }
     let content = $('#input_feed_content').val();
     // 해시태그 입력란에서 해시태그 내용을 가져옴
