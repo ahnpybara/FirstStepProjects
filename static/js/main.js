@@ -522,40 +522,52 @@ $('.prev_image_button').click(function (event){
         $('#'+feeds_id +now_img_id+'_next_button').css({
             display:'none'
         })
-        $('#'+feeds_id +now_img_id+'_prev_button').css({
-            display:'none'
-        })
         $('#'+feeds_id +last_img_id+'_next_button').css({
             display:'flex'
         })
+        $('#'+feeds_id +now_img_id+'_prev_button').css({
+            display:'none'
+        })
         $('#'+feeds_id +last_img_id+'_prev_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +last_img_id+'_img').css({
             display:'flex'
         })
         $('#'+feeds_id +now_img_id+'_img').css({
             display:'none'
         })
-        $('#'+feeds_id +last_img_id+'_img').css({
+        $('#'+feeds_id +last_img_id+'_now_count').css({
             display:'flex'
+        })
+        $('#'+feeds_id +now_img_id+'_now_count').css({
+            display:'none'
         })
     }
     else {
         $('#'+feeds_id +now_img_id+'_next_button').css({
             display:'none'
         })
-        $('#'+feeds_id +now_img_id+'_prev_button').css({
-            display:'none'
-        })
         $('#'+feeds_id +(now_img_id-1)+'_next_button').css({
             display:'flex'
         })
+        $('#'+feeds_id +now_img_id+'_prev_button').css({
+            display:'none'
+        })
         $('#'+feeds_id +(now_img_id-1)+'_prev_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +(now_img_id-1)+'_img').css({
             display:'flex'
         })
         $('#'+feeds_id +now_img_id+'_img').css({
             display:'none'
         })
-        $('#'+feeds_id +(now_img_id-1)+'_img').css({
+        $('#'+feeds_id +(now_img_id-1)+'_now_count').css({
             display:'flex'
+        })
+        $('#'+feeds_id +now_img_id+'_now_count').css({
+            display:'none'
         })
     }
 })
@@ -573,17 +585,23 @@ $('.next_image_button').click(function (event){
         $('#'+feeds_id +now_img_id+'_prev_button').css({
             display:'none'
         })
-        $('#'+feeds_id +0+'_next_button').css({
+        $('#'+feeds_id + 0 +'_next_button').css({
             display:'flex'
         })
-        $('#'+feeds_id +0+'_prev_button').css({
+        $('#'+feeds_id + 0 +'_prev_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +0+'_img').css({
             display:'flex'
         })
         $('#'+feeds_id +now_img_id+'_img').css({
             display:'none'
         })
-        $('#'+feeds_id +0+'_img').css({
+        $('#'+feeds_id +0+'_now_count').css({
             display:'flex'
+        })
+        $('#'+feeds_id +now_img_id+'_now_count').css({
+            display:'none'
         })
     }
     else {
@@ -599,11 +617,17 @@ $('.next_image_button').click(function (event){
         $('#'+feeds_id +(now_img_id+1)+'_prev_button').css({
             display:'flex'
         })
+        $('#'+feeds_id +(now_img_id+1)+'_img').css({
+            display:'flex'
+        })
         $('#'+feeds_id +now_img_id+'_img').css({
             display:'none'
         })
-        $('#'+feeds_id +(now_img_id+1)+'_img').css({
+        $('#'+feeds_id +(now_img_id+1)+'_now_count').css({
             display:'flex'
+        })
+        $('#'+feeds_id +now_img_id+'_now_count').css({
+            display:'none'
         })
     }
 })

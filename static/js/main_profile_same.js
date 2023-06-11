@@ -357,10 +357,10 @@ $('#feed_create_button').click(function () {
 
     fd.append('file_length', files.length)
     for (i = 0; i < files.length; i++) {
-            let file = files[i];
-            let image = files[i].name;
-            fd.append('file[' + i + ']', file);
-            fd.append('image[' + i + ']', image);
+        let file = files[i];
+        let image = files[i].name;
+        fd.append('file[' + i + ']', file);
+        fd.append('image[' + i + ']', image);
     }
     let content = $('#input_feed_content').val();
     // 해시태그 입력란에서 해시태그 내용을 가져옴
@@ -434,28 +434,42 @@ function dragOver(e) {
 
 // 파일을 드래그 한 상태에서 마우스가 드랍이 되었을 때
 function uploadFiles(e) {
-    // 이벤트 전파 차단
     e.stopPropagation();
     e.preventDefault();
 
-    // 실질적으로 파일을 업로드 하는 부분
     e.dataTransfer = e.originalEvent.dataTransfer;
-    files = e.target.files || e.dataTransfer.files;
+    let newFiles = e.target.files || e.dataTransfer.files; // 새로 추가된 파일들을 가져옴
 
-    if (files.length > 5) {
-        alert("파일의 갯수는 5장을 넘을 수 없습니다.")
-        return 0;
+    if (files.length + newFiles.length > 6) {
+        alert("파일의 개수는 6장을 넘을 수 없습니다.");
+        return;
     }
 
-
-    for (var i = 0; i < files.length; i++) {
-        // 타입을 판별하고 이미지면 아래 로식을 실행
-        if (files[i].type.match(/image.*/)) {
-
+    for (var i = 0; i < newFiles.length; i++) {
+        if (newFiles[i].type.match(/image.*/)) {
+            files.push(newFiles[i]); // 새로운 파일을 기존 파일 배열에 추가
         } else {
             alert('이미지가 아닙니다.');
-            return 0;
+            return;
         }
+    }
+
+    // 파일 추가를 위해 필요한 로직을 실행 (예: 파일 목록 표시, 업로드 버튼 활성화 등)
+    displayFiles(); // 파일 목록을 표시하는 함수 호출
+}
+
+//  파일 목록을 표시하는 함수
+function displayFiles() {
+    // 파일 목록을 표시하는 로직을 구현
+    // 예시: 파일 목록을 ul 태그에 추가하여 표시
+    let fileList = document.getElementById('fileList');
+    fileList.innerHTML = ''; // 기존 파일 목록 초기화
+
+    for (var i = 0; i < files.length; i++) {
+        let file = files[i];
+        let listItem = document.createElement('li');
+        listItem.textContent = file.name;
+        fileList.appendChild(listItem);
     }
 }
 
@@ -467,14 +481,13 @@ $('#image_upload_btn').click(function () {
 // 파일 입력 폼에서 변화 발생시 해당 함수가 실행(
 function image_upload() {
     // 타입을 판별하고 이미지면 아래 로식을 실행
-    if ($('#input_image_upload').files.length > 5) {
-        alert("파일의 갯수는 5장을 넘을 수 없습니다.")
+    if ($('#input_image_upload').files.length > 6) {
+        alert("파일의 갯수는 6장을 넘을 수 없습니다.")
         return 0;
     } else {
-        for (i = 0; i <= files.length; i++)
-            if ($('#input_image_upload')[i].files[i].type.match(/image.*/) == false) {
-                return 0;
-
+            if (files.length + newFiles.length > 6) {
+                alert("파일의 개수는 5장을 넘을 수 없습니다.");
+                return;
             } else { // 파일이 이미지가 아닐 경우
                 alert('이미지가 아닙니다.');
                 return 0;
@@ -484,7 +497,7 @@ function image_upload() {
 
 // 유재우 : 모달창 넥스트 버튼 및 피드 이미지 앞뒤로 버튼 이밴트
 $('#modal_next_button').click(function () {
-    if (files.length > 0 && files.length < 6) {
+    if (files.length > 0 && files.length < 7) {
         // 이미지 업로드시 사진업로드 모달창 (첫 번째 모달창)을 가림
         $('#first_modal').css({
             display: 'none'

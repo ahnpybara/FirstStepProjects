@@ -38,7 +38,6 @@ class Main(APIView):
         # 세션에 유저가 팔로잉하고 있는 사람들
         user_following = Follow.objects.filter(follower=email)[:6]
         for user_following in user_following:
-            print("123")
             # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들(대표로 2명만 뽑음)
             user_follower = Follow.objects.filter(follower=user_following.following).order_by('-id')[:2]
             for user_follower in user_follower:
@@ -48,7 +47,8 @@ class Main(APIView):
                     Recommend_Followers_count.append(Recommend_Followers.email)
                     Recommend_Followers_list.append(
                         dict(id=Recommend_Followers.id, nicname=Recommend_Followers.nickname,
-                             Recommend_nicname=Recommend_Following.nickname, email=Recommend_Followers.email,profile_image=Recommend_Followers.profile_image))
+                             Recommend_nicname=Recommend_Following.nickname, email=Recommend_Followers.email,
+                             profile_image=Recommend_Followers.profile_image))
                     print(user_follower.follower)
                     print(Recommend_Followers_count)
 
@@ -79,7 +79,7 @@ class Main(APIView):
                 hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
             for image in images_object_list:
                 images_feed = Feed.objects.filter(id=feed.id).first()
-                images_list.append(dict(feed_id=images_feed, image=image.image, count=count))
+                images_list.append(dict(feed_id=images_feed, image=image.image, count=count, now_count = count+1))
                 count = count + 1
             # 좋아요 수, 좋아요 여부, 북마크 여부
             like_count = Like.objects.filter(feed_id=feed.id).count()
@@ -95,7 +95,6 @@ class Main(APIView):
             elif feed.category == 'book':
                 category_kr = '책'
             # 각종 데이터를 feed_list에 담음
-            print(count)
             feed_list.append(dict(id=feed.id,
                                   images_list=images_list,
                                   content=feed.content,
@@ -111,7 +110,6 @@ class Main(APIView):
                                   category_kr=category_kr,
                                   image_count=count
                                   ))
-
 
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",

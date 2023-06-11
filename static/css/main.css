@@ -467,3 +467,54 @@
         display: none;
     }
 }
+
+
+.now_img_count{
+    position: center;
+}
+
+.image-slider-container {
+  position: relative;
+}
+
+.feed_image_area_btns {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+.prev_image_button,
+.next_image_button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.prev_image_button {
+    left: 5px;
+    border-radius: 25px;
+    color: rgba(0,0,0,0.6);
+    background-color:rgba(255, 255, 255, 0.1);/*까만색(0,0,0) 80% 불투명도*/
+    height: 25px;
+    width: 25px;
+}
+.prev_image_button:hover{
+    background-color:rgba(255, 255, 255, 0.6);/ 80% 불투명도*/
+    color: rgba(0,0,0,1);
+}
+
+.next_image_button {
+    background-color:rgba(255, 255, 255, 0.1);/*까만색(0,0,0) 80% 불투명도*/
+    color: rgba(0,0,0,0.6);
+    background-position-x: 100px;
+    right: 0;
+    border-radius: 25px;
+    height: 25px;
+    width: 25px;
+}
+.next_image_button:hover{
+    background-color:rgba(255, 255, 255, 0.6);/*까만색(0,0,0) 80% 불투명도*/
+    color: rgba(0,0,0,1);
+}

@@ -461,12 +461,42 @@
     color: gray;
 }
 
-.feed_modal_feed_image_before{
-    left: 0;
+/*피드 업로드 좌우 버튼*/
+.feed_modal_area_images_btn {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
 }
 
+.feed_modal_feed_image_before,
+.feed_modal_feed_image_next {
+    width: 25px;
+    text-align: center;
+    background-color:rgba(0, 0, 0, 0.1);/*까만색(0,0,0) 80% 불투명도*/
+    border-radius: 25px;
+}
+
+.feed_modal_feed_image_before {
+    order: 0;
+}
 .feed_modal_feed_image_next{
+    order: 1;
 }
-.feed_modal_area_images_btn{
-    text-align-all: center;
+
+.feed_modal_feed_image_before:hover,
+.feed_modal_feed_image_next:hover {
+    background-color: aqua;
+    font-variation-settings: 'wght' 700;
+    background-color:rgba(0, 0, 0, 0.8);/*까만색(0,0,0) 80% 불투명도*/
 }
+
+.now_img_count {
+    position: absolute;
+    bottom: 10px; /* 원하는 위치로 조정 */
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d8d8d8;
+    border: black;
+    background-color:rgba(0, 0, 0, 0.2);/*까만색(0,0,0) 80% 불투명도*/
+}
+
