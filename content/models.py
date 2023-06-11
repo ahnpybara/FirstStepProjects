@@ -6,7 +6,7 @@ class Feed(models.Model):
     image = models.TextField()                              # 피드에 업로드되는 이미지
     email = models.EmailField(default='')                   # 이메일
     create_at = models.DateTimeField(auto_now_add=True)
-    category = models.CharField(max_length=20, default='')              # 카테고리 이름
+    category = models.CharField(max_length=20, default='')  # 카테고리 이름
 
 # 좋아요 테이블
 class Like(models.Model):
@@ -38,3 +38,8 @@ class Hashtag(models.Model):
     feed_id = models.IntegerField(default=0)                   # Feed id
     content = models.TextField()                               # 해시태그 내용
 
+
+# 정유진: 공유 카테고리
+class ShareCategory(models.Model):
+    feed_id = models.IntegerField(default=0)                # Feed id
+    email = models.EmailField(default='')                   # 이메일

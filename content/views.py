@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow
+from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, ShareCategory
 from user.models import User
 import os
 import json
@@ -67,6 +67,10 @@ class Main(APIView):
                 category_kr = '영화'
             elif feed.category == 'book':
                 category_kr = '책'
+
+            # 정유진: 피드의 공유 유무.
+            is_shared_user = ShareCategory.objects.filter(feed_id=feed.id, email=email).exists()
+
             # 각종 데이터를 feed_list에 담음
             feed_list.append(dict(id=feed.id,
                                   image=feed.image,
@@ -80,13 +84,19 @@ class Main(APIView):
                                   create_at=feed.create_at,
                                   hashtag_list=hashtag_list,
                                   category=feed.category,
-                                  category_kr=category_kr
+                                  category_kr=category_kr,
+                                  is_shared_user=is_shared_user
                                   ))
+        # 정유진: 피드 업로드 시 맞팔되어 있는 유저 리스트
+        follower_user_email_list = list(Follow.objects.filter(follower=user_session.email).values_list('following', flat=True))
+        following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=user_session.email).values_list('follower', flat=True))
+
+        shared_user_nickname_list = User.objects.filter(email__in=following_user_email_list)
 
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
-                      context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list
-                                   ))
+                      context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list,
+                                   shared_user_nickname_list=shared_user_nickname_list))
 
 
 # 피드 업로드 클래스
@@ -110,6 +120,8 @@ class UploadFeed(APIView):
         email = request.session.get('email', None)
         # 정유진: 카테고리 추가
         category = request.data.get('category')
+        # 정유진: 공유카테고리 추가
+        shared_category_list = request.data.getlist('shared_category_list[]')
 
         # 서버로 전달된 해시태그 내용을 받고 해당 해시태그의 공백와 줄바꿈을 제거
         hashtags_content = request.data.get('hashtags_content')
@@ -138,6 +150,15 @@ class UploadFeed(APIView):
         # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
         for hashtags_list in hashtags_list:
             Hashtag.objects.create(content=hashtags_list, feed_id=feed_id.id)
+
+        # 정유진: 공유카테고리. 작성자 추가.
+        if shared_category_list :
+            ShareCategory.objects.create(feed_id=feed_id.id, email=email)
+        # 정유진: 공유카테고리는 여러개라 반복문으로 테이블 튜플을 생성.
+        for shared_category in shared_category_list:
+            # 정유진: 닉네임으로 email 찾기
+            shared_category_email = User.objects.filter(nickname=shared_category).first()
+            ShareCategory.objects.create(feed_id=feed_id.id, email=shared_category_email.email)
 
         return Response(status=200)
 
@@ -240,6 +261,9 @@ class RemoveFeed(APIView):
         like.delete()
         bookmark = Bookmark.objects.filter(feed_id=feeds.id)
         bookmark.delete()
+        # 정유진: 전달된 피드id를 통해서 삭제할 공유카테로기 객체를 뽑음
+        shared_category = ShareCategory.objects.filter(feed_id=feeds.id)
+        shared_category.delete()
         feeds.delete()
 
         return Response(status=200)
@@ -551,12 +575,8 @@ class FeedModal(APIView):
         # 게시물에 달린 해시태그들을 뽑아냄
         feed_modal_hashtag_object_list = Hashtag.objects.filter(feed_id=feed_id)
         # 해시태그 내용을 전달하기 위해서 리스트를 선언한 뒤 반복문을 통해 해시태그를 채움
-        hashtag_list = []
-        for hashtag in feed_modal_hashtag_object_list:
-            hashtag_list.append(hashtag.content)
-
         # 해시태그 내용을 리스트로 추출 TODO
-        # hashtag_list = list(feed_modal_hashtag_object_list.values_list('content', flat=True))
+        hashtag_list = list(feed_modal_hashtag_object_list.values_list('content', flat=True))
 
         # 게시물에 달린 댓글 정보
         feed_modal_reply_object_list = Reply.objects.filter(feed_id=feed_id)
@@ -733,13 +753,17 @@ class FeedUpdateIMG(APIView):
         # 해시태그를 띄여쓰기로 구분
         hashtag_content = '#' + '#'.join(hashtag_content_lists)
 
+        # 정유진: 기존 공유카테고리
+        shared_category_email = list(ShareCategory.objects.filter(feed_id=feed_id).values_list('email', flat=True))
+        shared_category_nickname = list(User.objects.filter(email__in=shared_category_email).values_list('nickname', flat=True))
         # 사용자로 보낼 데이터
         data = {
             'id': feed.id,
             'image': feed.image,
             'feed_content': feed.content,
             'hashtag_content': hashtag_content,
-            'category': feed.category
+            'category': feed.category,
+            'shared_category': shared_category_nickname
         }
 
         json_data = json.dumps(data)

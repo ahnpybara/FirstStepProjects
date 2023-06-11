@@ -314,6 +314,17 @@ $(".modal_close").click(function () {
     $('#input_feed_hashtag').each(function () {
         $(this).val('');
     });
+    // 정유진: 모달창 닫기와 닫았을 때 카테고리 내용을 리셋하는 부분
+    $('#input_feed_category').prop("selectedIndex", 0);
+    // 정유진: 모달창 닫기와 닫았을 때 공유카테고리 선택을 리셋하는 부분
+    var checkboxes = document.querySelectorAll('input[name="shared_user_nickname_list"]:checked');
+    for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = false;
+    }
+    var selectboxes = document.querySelectorAll('input[name="upload_shared_user_nickname_list"]:checked');
+    for (var i = 0; i < selectboxes.length; i++) {
+        selectboxes[i].checked = false;
+    }
     // 첫 번째 모달창 숨김
     $('#first_modal').css({
         display: 'none'
@@ -359,6 +370,13 @@ $('#feed_create_button').click(function () {
     let hashtags_content = $('#input_feed_hashtag').val();
     //정유진: 카테고리 정보 추가
     let category = $('#input_feed_category').val();
+    //정유진: 공유카테고리 정보 추가
+    let shared_category_checkboxes = document.querySelectorAll('input[name="shared_user_nickname_list"]:checked');
+    var shared_category_list = [];
+
+    shared_category_checkboxes.forEach(function (checkbox) {
+        shared_category_list.push(checkbox.value);
+    });
 
     // 피드 내용의 길이가 0보다 작으면 알림창 뜸
     if (content.length <= 0) {
@@ -384,7 +402,11 @@ $('#feed_create_button').click(function () {
     fd.append('hashtags_content', hashtags_content);
     // 정유진: 카테고리 추가
     fd.append('category', category);
-
+    // 정유진: 공유카테고리 추가
+    shared_category_list.forEach(function (value) {
+        fd.append('shared_category_list[]', value);
+    });
+    console.log(fd.getAll('shared_category_list[]'));
     //서버로 보낼 데이터 (formdata 형태)
     $.ajax({
         url: "/content/upload",

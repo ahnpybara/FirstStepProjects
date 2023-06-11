@@ -142,7 +142,7 @@ $(".upload_reply").click(function (event) {
 
             // <부모 : 댓글 리스트> append <자식 : 댓글 수정할 텍스트 박스 입력창, 수정창 닫기, 수정 버튼>
             $("#reply_list_" + feed_id).append('' +
-                '<div class="reply_update_textbox" id="reply_div' + data.user_reply_id + '">' + '<input id="reply_' + data.user_reply_id + '" type="text" class="input_reply_update form-control" placeholder="댓글 수정..">' +
+                '<div class="reply_update_textbox" id="reply_div' + data.user_reply_id + '">' + '<input id="reply_update_' + data.user_reply_id + '" type="text" class="input_reply_update form-control" placeholder="댓글 수정..">' +
                 '<div reply_id="' + data.user_reply_id + '" class="update_replys" id="update_reply_btn">' + '수정' +
                 '</div>' + '<span reply_id="' + data.user_reply_id + '" id="reply_close_button" class="reply_close_btn material-icons-outlined">close</span>' + '</div>');
 
@@ -212,8 +212,7 @@ $(".upload_reply").click(function (event) {
                 // 수정할 댓글의 id를 가져옴
                 let reply_id = $(this).attr('reply_id');
                 // 댓글 수정 입력박스에 입력된 내용을 가져옴
-                let content = $('#reply_' + reply_id).val();
-
+                let content = $('#reply_update_' + reply_id).val();
 
                 // 댓글의 길이가 0보다 작으면 알림창 뜸
                 if (content.length <= 0) {
@@ -334,6 +333,8 @@ $('.update_feed').click(function (event) {
             var hashtag_content = data['hashtag_content']
             // 정유진: 카테고리 추가
             var category = data['category']
+            // 정유진: 공유카테고리 추가
+            var shared_category = data['shared_category']
 
             // 업로드 창 이미지 부분 배경을 업로드된 이미지로 변경
             $('#update_feed_modal_image').css({
@@ -349,6 +350,12 @@ $('.update_feed').click(function (event) {
             $("#input_updatefeed_hashtag").html(hashtag_content);
             // 정유진: 모달창 띄울 때 현재 적용된 카테고리 종류가 나오도록 한다
             $("#category_" + category).attr('selected', true);
+            // 정유진: 모달창 띄울 때 현재 선택된 유저가 나오도록 한다
+            console.log(shared_category)
+            for (var i = 0; i < shared_category.length; i++) {
+                console.log(shared_category[i])
+                $("#upload_shared_user_nickname_" + shared_category[i]).prop('checked', true);
+            }
         },
         error: function (request, status, error) {
             console.log("에러");
@@ -424,7 +431,7 @@ $('.update_replys').click(function (event) {
     // 수정할 댓글의 id를 가져옴
     let reply_id = $(this).attr('reply_id');
     // 댓글 수정 입력박스에 입력된 내용을 가져옴
-    let content = $('#reply_' + reply_id).val();
+    let content = $('#reply_update_' + reply_id).val();
 
 
     // 댓글의 길이가 0보다 작으면 알림창 뜸
