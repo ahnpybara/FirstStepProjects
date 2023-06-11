@@ -91,12 +91,12 @@ class Main(APIView):
         follower_user_email_list = list(Follow.objects.filter(follower=user_session.email).values_list('following', flat=True))
         following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=user_session.email).values_list('follower', flat=True))
 
-        shared_user_nickname_list = User.objects.filter(email__in=following_user_email_list)
+        shared_category_nickname_list = User.objects.filter(email__in=following_user_email_list)
 
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list,
-                                   shared_user_nickname_list=shared_user_nickname_list))
+                                   shared_category_nickname_list=shared_category_nickname_list))
 
 
 # 피드 업로드 클래스
@@ -500,6 +500,8 @@ class UpdateFeed(APIView):
         feed_id = request.data.get('feed_id')
         # 정유진: 수정을 위한 서버로 전달된 데이터 (카테고리)
         category = request.data.get('category')
+        # 정유진: 수정을 위한 서버로 전달된 데이터 (공유카테고리)
+        category = request.data.get('shared_category')
         # 피드id를 통한 피드에 달린 기존 해시태그들 삭제
         hashtags = Hashtag.objects.filter(feed_id=feed_id)
         hashtags.delete()
@@ -531,6 +533,8 @@ class UpdateFeed(APIView):
         feed = Feed.objects.filter(id=feed_id)
         # 피드 수정
         feed.update(id=feed_id, content=content, category=category)
+
+        # 정유진: 공유카테고리
 
         return Response(status=200)
 

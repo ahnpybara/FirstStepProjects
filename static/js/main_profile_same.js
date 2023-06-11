@@ -317,11 +317,11 @@ $(".modal_close").click(function () {
     // 정유진: 모달창 닫기와 닫았을 때 카테고리 내용을 리셋하는 부분
     $('#input_feed_category').prop("selectedIndex", 0);
     // 정유진: 모달창 닫기와 닫았을 때 공유카테고리 선택을 리셋하는 부분
-    var checkboxes = document.querySelectorAll('input[name="shared_user_nickname_list"]:checked');
+    var checkboxes = document.querySelectorAll('input[name="shared_category_nickname_list"]:checked');
     for (var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
     }
-    var selectboxes = document.querySelectorAll('input[name="upload_shared_user_nickname_list"]:checked');
+    var selectboxes = document.querySelectorAll('input[name="update_shared_category_nickname_list"]:checked');
     for (var i = 0; i < selectboxes.length; i++) {
         selectboxes[i].checked = false;
     }
