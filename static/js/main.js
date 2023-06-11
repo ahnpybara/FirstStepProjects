@@ -509,3 +509,109 @@ $('#flexSwitchCheckChecked').click(function (event) {
         location.href = "/main";
     }
 });
+
+
+// 유재우: 이미지 슬라이드를 우해 추가한 이밴트들
+$('.prev_image_button').click(function (event){
+    let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+    feeds_id = parseInt(feed_id/100)
+    now_img_id = parseInt((feed_id%100)/10)
+    last_img_id =parseInt(feed_id%10) -1
+
+    if (now_img_id == 0){
+        $('#'+feeds_id +now_img_id+'_next_button').css({
+            display:'none'
+        })
+        $('#'+feeds_id +now_img_id+'_prev_button').css({
+            display:'none'
+        })
+        $('#'+feeds_id +last_img_id+'_next_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +last_img_id+'_prev_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +now_img_id+'_img').css({
+            display:'none'
+        })
+        $('#'+feeds_id +last_img_id+'_img').css({
+            display:'flex'
+        })
+    }
+    else {
+        $('#'+feeds_id +now_img_id+'_next_button').css({
+            display:'none'
+        })
+        $('#'+feeds_id +now_img_id+'_prev_button').css({
+            display:'none'
+        })
+        $('#'+feeds_id +(now_img_id-1)+'_next_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +(now_img_id-1)+'_prev_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +now_img_id+'_img').css({
+            display:'none'
+        })
+        $('#'+feeds_id +(now_img_id-1)+'_img').css({
+            display:'flex'
+        })
+    }
+})
+
+$('.next_image_button').click(function (event){
+    let feed_id = event.target.attributes.getNamedItem('feed_id').value;
+    feeds_id = parseInt(feed_id/100)
+    now_img_id = parseInt((feed_id%100)/10)
+    last_img_id =parseInt(feed_id%10) -1
+
+    if (now_img_id == last_img_id){
+        $('#'+feeds_id +now_img_id+'_next_button').css({
+            display:'none'
+        })
+        $('#'+feeds_id +now_img_id+'_prev_button').css({
+            display:'none'
+        })
+        $('#'+feeds_id +0+'_next_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +0+'_prev_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +now_img_id+'_img').css({
+            display:'none'
+        })
+        $('#'+feeds_id +0+'_img').css({
+            display:'flex'
+        })
+    }
+    else {
+        $('#'+feeds_id +now_img_id+'_next_button').css({
+            display:'none'
+        })
+        $('#'+feeds_id +now_img_id+'_prev_button').css({
+            display:'none'
+        })
+        $('#'+feeds_id +(now_img_id+1)+'_next_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +(now_img_id+1)+'_prev_button').css({
+            display:'flex'
+        })
+        $('#'+feeds_id +now_img_id+'_img').css({
+            display:'none'
+        })
+        $('#'+feeds_id +(now_img_id+1)+'_img').css({
+            display:'flex'
+        })
+    }
+})
+
+$('.follow_button').click(function (event){
+    alert("123")
+    let following_id = event.target.attributes.getNamedItem('following_id').value;
+    alert(following_id)
+    let user_email = document.getElementById("user_follow_btn").getAttribute("user_email");
+    alert(user_email)
+})

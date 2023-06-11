@@ -461,4 +461,12 @@
     color: gray;
 }
 
+.feed_modal_feed_image_before{
+    left: 0;
+}
 
+.feed_modal_feed_image_next{
+}
+.feed_modal_area_images_btn{
+    text-align-all: center;
+}

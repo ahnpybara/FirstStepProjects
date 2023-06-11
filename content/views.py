@@ -34,12 +34,12 @@ class Main(APIView):
         feed_list = []
         # 유재우 : 팔로우 추천을 위해 추가
         Recommend_Followers_list = []
-        Recommend_Followers_count =[]
+        Recommend_Followers_count = []
         # 세션에 유저가 팔로잉하고 있는 사람들
         user_following = Follow.objects.filter(follower=email)[:6]
         for user_following in user_following:
             print("123")
-            #팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들(대표로 2명만 뽑음)
+            # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들(대표로 2명만 뽑음)
             user_follower = Follow.objects.filter(follower=user_following.following).order_by('-id')[:2]
             for user_follower in user_follower:
                 if user_follower.follower != email:
@@ -47,7 +47,8 @@ class Main(APIView):
                     Recommend_Following = User.objects.filter(email=user_follower.following).first()
                     Recommend_Followers_count.append(Recommend_Followers.email)
                     Recommend_Followers_list.append(
-                        dict(id=Recommend_Followers.id, nicname=Recommend_Followers.nickname,Recommend_nicname= Recommend_Following.nickname,email=Recommend_Followers.email))
+                        dict(id=Recommend_Followers.id, nicname=Recommend_Followers.nickname,
+                             Recommend_nicname=Recommend_Following.nickname, email=Recommend_Followers.email,profile_image=Recommend_Followers.profile_image))
                     print(user_follower.follower)
                     print(Recommend_Followers_count)
 
@@ -56,6 +57,7 @@ class Main(APIView):
 
         # 아래 반복문은 메인 페이지에 전달할 정보를 각종 여러 테이블의 필터링을 통해서 구하는 과정
         for feed in feed_object_list:
+            count = 0
             user = User.objects.filter(email=feed.email).first()
             # 댓글의 2개만 가져온다. -> 나머지 댓글은 더보기로 보여줄 예정, 댓글리스트 생성
             reply_object_list = Reply.objects.filter(feed_id=feed.id)[:2]
@@ -77,7 +79,8 @@ class Main(APIView):
                 hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
             for image in images_object_list:
                 images_feed = Feed.objects.filter(id=feed.id).first()
-                images_list.append(dict(feed_id=images_feed, image=image.image))
+                images_list.append(dict(feed_id=images_feed, image=image.image, count=count))
+                count = count + 1
             # 좋아요 수, 좋아요 여부, 북마크 여부
             like_count = Like.objects.filter(feed_id=feed.id).count()
             is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
@@ -92,6 +95,7 @@ class Main(APIView):
             elif feed.category == 'book':
                 category_kr = '책'
             # 각종 데이터를 feed_list에 담음
+            print(count)
             feed_list.append(dict(id=feed.id,
                                   images_list=images_list,
                                   content=feed.content,
@@ -104,8 +108,10 @@ class Main(APIView):
                                   create_at=feed.create_at,
                                   hashtag_list=hashtag_list,
                                   category=feed.category,
-                                  category_kr=category_kr
+                                  category_kr=category_kr,
+                                  image_count=count
                                   ))
+
 
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
