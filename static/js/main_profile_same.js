@@ -371,7 +371,7 @@ $('#feed_create_button').click(function () {
     //정유진: 카테고리 정보 추가
     let category = $('#input_feed_category').val();
     //정유진: 공유카테고리 정보 추가
-    let shared_category_checkboxes = document.querySelectorAll('input[name="shared_user_nickname_list"]:checked');
+    let shared_category_checkboxes = document.querySelectorAll('input[name="shared_category_nickname_list"]:checked');
     var shared_category_list = [];
 
     shared_category_checkboxes.forEach(function (checkbox) {
