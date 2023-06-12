@@ -130,26 +130,28 @@
                                 공유 피드
                             </div>
                         {% endif %}
-                        <!-- 파드 설정 아이콘 -->
-                        <a href="#" role="button" id="dropdownMenuLink"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="material-icons-round">more_horiz</span>
-                        </a>
-                        <ul class="dropdown-menu"
-                            aria-labelledby="dropdownMenuLink">
-                            <!-- 피드 삭제 -->
-                            <li feed_id="{{ feed.id }}" class="remove_feed dropdown-item">
-                                <b class="delete_text">삭제</b>
-                            </li>
-                            <li>
-                                <!-- 구분선 -->
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <!-- 피드 수정 -->
-                                <div feed_id="{{ feed.id }}" class="update_feed dropdown-item" href="#"> 수정</div>
-                            </li>
-                        </ul>
+                        {% if feed.nickname == user_session.nickname or feed.is_shared_category_user %}
+                            <!-- 파드 설정 아이콘 -->
+                            <a href="#" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="material-icons-round">more_horiz</span>
+                            </a>
+                            <ul class="dropdown-menu"
+                                aria-labelledby="dropdownMenuLink">
+                                <!-- 피드 삭제 -->
+                                <li feed_id="{{ feed.id }}" class="remove_feed dropdown-item">
+                                    <b class="delete_text">삭제</b>
+                                </li>
+                                <li>
+                                    <!-- 구분선 -->
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <!-- 피드 수정 -->
+                                    <div feed_id="{{ feed.id }}" class="update_feed dropdown-item" href="#"> 수정</div>
+                                </li>
+                            </ul>
+                        {% endif %}
                     </div>
                 </div>
                 <!--게시글 이미지-->
