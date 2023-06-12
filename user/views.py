@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark
+from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark, ShareCategory
 from .models import User
 from django.contrib.auth.hashers import make_password
 
@@ -336,15 +336,32 @@ class Profile(APIView):
                                             like_count=like_count,
                                             reply_count=reply_count))
 
+        # 정유진: 공유카테고리 피드들의 id 리스트
+        shared_category_list = list(ShareCategory.objects.filter(email=email).values_list('feed_id', flat=True))
+        # 정유진: 공유카테고리 피드 리스트
+        shared_category_feed_list = Feed.objects.filter(id__in=shared_category_list).order_by('-id')
+        # 정유진: 공유 중인 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
+        shared_category_count_list = []
+        for feed in shared_category_feed_list:
+            # 좋아요 수
+            like_count = Like.objects.filter(feed_id=feed.id).count()
+            # 댓글 수
+            reply_count = Reply.objects.filter(feed_id=feed.id).count()
+            shared_category_count_list.append(dict(id=feed.id,
+                                                   like_count=like_count,
+                                                   reply_count=reply_count))
+
         # 프로필 화면을 요청한 사용자에게 프로필화면과 해당 데이터를 전달
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
                                                                     bookmark_feed_list=bookmark_feed_list,
+                                                                    shared_category_feed_list=shared_category_feed_list,
                                                                     user_session=user,
                                                                     user=user,
                                                                     feed_count_list=feed_count_list,
                                                                     like_count_list=like_count_list,
                                                                     bookmark_count_list=bookmark_count_list,
+                                                                    shared_category_count_list=shared_category_count_list,
                                                                     user_feed_count=user_feed_count,
                                                                     follower_count=follower_count,
                                                                     following_count=following_count))

@@ -63,6 +63,11 @@ $("#button_feed_list").click(function () {
         borderTopStyle: "none",
         color: "#737373"
     });
+    // 정유진: 프로필 화면의 공유카테고리 버튼 비활성화 표시
+    $('#button_feed_shared_category_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+    });
     //내 게시물의 게시물 보기
     $('#feed_list').css({
         display: 'flex'
@@ -73,6 +78,10 @@ $("#button_feed_list").click(function () {
     });
     //북마크의 게시물 숨기기
     $('#bookmark_feed_list').css({
+        display: 'none'
+    });
+    // 정유진: 공유카테고리의 게시물 숨기기
+    $('#shared_category_list').css({
         display: 'none'
     });
 });
@@ -94,6 +103,11 @@ $("#button_feed_like_list").click(function () {
         borderTopStyle: "none",
         color: "#737373"
     });
+    // 정유진: 프로필 화면의 공유카테고리 버튼 비활성화 표시
+    $('#button_feed_shared_category_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+    });
     //내 게시물의 게시물 숨기기
     $('#feed_list').css({
         display: 'none'
@@ -104,6 +118,10 @@ $("#button_feed_like_list").click(function () {
     });
     //북마크의 게시물 숨기기
     $('#bookmark_feed_list').css({
+        display: 'none'
+    });
+    // 정유진: 공유카테고리의 게시물 숨기기
+    $('#shared_category_list').css({
         display: 'none'
     });
 });
@@ -126,6 +144,11 @@ $("#button_feed_bookmark_list").click(function () {
         borderTopStyle: "solid",
         color: "black"
     });
+    // 정유진: 프로필 화면의 공유카테고리 버튼 비활성화 표시
+    $('#button_feed_shared_category_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+    });
     //내 게시물의 게시물 숨기기
     $('#feed_list').css({
         display: 'none'
@@ -136,6 +159,51 @@ $("#button_feed_bookmark_list").click(function () {
     });
     //북마크의 게시물 보기
     $('#bookmark_feed_list').css({
+        display: 'flex'
+    });
+    // 정유진: 공유카테고리의 게시물 숨기기
+    $('#shared_category_list').css({
+        display: 'none'
+    });
+});
+
+// 정유진: 공유카테고리된 게시물 이벤트 처리
+$("#button_feed_shared_category_list").click(function () {
+    //프로필 화면의 내 게시물 버튼 비활성화 표시
+    $('#button_feed_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+
+    });
+    //프로필 화면의 좋아요 버튼 비활성화 표시
+    $('#button_feed_like_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+    });
+    // 프로필 화면의 북마크 버튼 비활성화 밑줄 표시
+    $('#button_feed_bookmark_list').css({
+        borderTopStyle: "none",
+        color: "#737373"
+    });
+    // 정유진: 프로필 화면의  공유카테고리 버튼 활성화 표시
+    $('#button_feed_shared_category_list').css({
+        borderTopStyle: "solid",
+        color: "#black"
+    });
+    //내 게시물의 게시물 숨기기
+    $('#feed_list').css({
+        display: 'none'
+    });
+    //좋아요의 게시물 숨기기
+    $('#like_feed_list').css({
+        display: 'none'
+    });
+    //북마크의 게시물 보기
+    $('#bookmark_feed_list').css({
+        display: 'none'
+    });
+    // 정유진: 공유카테고리의 게시물 보기
+    $('#shared_category_list').css({
         display: 'flex'
     });
 });

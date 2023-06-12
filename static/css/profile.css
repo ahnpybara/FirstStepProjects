@@ -116,6 +116,20 @@
     border-top-width: 1px;
 }
 
+/* 정유진: 공유카테고리 게시글을 보기 위한 버튼 */
+#button_feed_shared_category_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
 /* 상황에 맞는 피드 보여주는 아이콘들 */
 .feed_list_icons {
     margin-right: 5px !important;
@@ -211,6 +225,14 @@
 
 /* 내가 북마크한 게시글 목록 */
 #bookmark_feed_list {
+    width: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 정유진: 공유카테고리 게시글 목록 */
+#shared_category_list {
     width: 100%;
     display: none;
     align-items: center;

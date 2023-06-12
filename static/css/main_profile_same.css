@@ -460,3 +460,17 @@
     padding: 0;
     color: gray;
 }
+
+/* 정유진: 공유카테고리 */
+#feed_modal_shared_category {
+    font-size: 14px;
+    font-weight: bold;
+    color: darkgray;
+    text-align: right;
+    margin: 2px 15px;
+}
+
+.feed_modal_category_area {
+    display: flex;
+    justify-content: space-between;
+}
