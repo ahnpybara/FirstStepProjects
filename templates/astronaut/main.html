@@ -11,9 +11,9 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=2">
     <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=4">
 
     <!--  Google 심볼을 사용하기 위한 선언 -->
     <link rel="stylesheet"
@@ -124,9 +124,9 @@
                     </div>
                     <!-- 피드 삭제 및 수정 드롭 메뉴-->
                     <div id="feed_dropdown"
-                         style="color:gray; {% if feed.is_shared_user or feed.nickname == user_session.nickname %} display: flex {% else %} display: none {% endif %}">
-                        {% if feed.is_shared_user %}
-                            <div>
+                         style="color:gray; {% if feed.is_shared_category or feed.nickname == user_session.nickname %} display: flex {% else %} display: none {% endif %}">
+                        {% if feed.is_shared_category %}
+                            <div class="feed_is_shared_category">
                                 공유 피드
                             </div>
                         {% endif %}
@@ -517,7 +517,7 @@
                         </select>
                     </div>
                     <!-- 정유진: 공유카테고리 선택 영역 -->
-                    <div>
+                    <div style="margin: 5px 10px">
                         {% for user in shared_category_nickname_list %}
                             <input id="update_shared_user_nickname_{{ user.nickname }}" type="checkbox" name="update_shared_category_nickname_list" value="{{ user.nickname }}">{{ user.nickname }}</input>
                         {% endfor %}
@@ -586,10 +586,13 @@
                                     <!-- ajax로 받아옴 게시물 내용 -->
                                 </div>
                             </div>
-                            <!-- 정유진: 피드모달 카테고리 추가 -->
-                            <div>
+                            <!-- 정유진: 피드모달 카테고리 영역 추가 -->
+                            <div class="feed_modal_category_area">
                                 <div id="feed_modal_category" class="feed_modal_category">
                                     <!-- ajax로 받아옴 카테고리 -->
+                                </div>
+                                <div id="feed_modal_shared_category">
+                                    <!-- ajax로 받아옴 공유카테고리 -->
                                 </div>
                             </div>
                             <!-- 해시태그 -->

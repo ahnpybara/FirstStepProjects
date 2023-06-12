@@ -69,7 +69,7 @@ class Main(APIView):
                 category_kr = '책'
 
             # 정유진: 피드의 공유 유무.
-            is_shared_user = ShareCategory.objects.filter(feed_id=feed.id, email=email).exists()
+            is_shared_category = ShareCategory.objects.filter(feed_id=feed.id, email=email).exists()
 
             # 각종 데이터를 feed_list에 담음
             feed_list.append(dict(id=feed.id,
@@ -85,7 +85,7 @@ class Main(APIView):
                                   hashtag_list=hashtag_list,
                                   category=feed.category,
                                   category_kr=category_kr,
-                                  is_shared_user=is_shared_user
+                                  is_shared_category=is_shared_category
                                   ))
         # 정유진: 피드 업로드 시 맞팔되어 있는 유저 리스트
         follower_user_email_list = list(Follow.objects.filter(follower=user_session.email).values_list('following', flat=True))
@@ -608,6 +608,9 @@ class FeedModal(APIView):
         is_liked = Like.objects.filter(feed_id=feed_modal.id, email=email).exists()
         # 피드의 북마크 여부
         is_marked = Bookmark.objects.filter(feed_id=feed_modal.id, email=email).exists()
+        # 정유진: 피드의 공유 유무.
+        is_shared_category = ShareCategory.objects.filter(feed_id=feed_modal.id, email=email).exists()
+
         # 사용자로 보낼 json 형식의 데이터
         data = {
             'id': feed_modal.id,
@@ -628,7 +631,9 @@ class FeedModal(APIView):
 
             'is_liked': is_liked,
             'is_marked': is_marked,
-            'like_count': like_count
+            'like_count': like_count,
+
+            'is_shared_category': is_shared_category
         }
 
         json_data = json.dumps(data)

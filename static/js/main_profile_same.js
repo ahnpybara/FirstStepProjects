@@ -25,6 +25,7 @@ $(".feed_modal").click(function () {
             var feed_content = data['feed_content'];
             var writer_profile_image = "/media/" + data['writer_profile_image'];
             var writer_nickname = data['writer_nickname'];
+            var is_shared_category = data['is_shared_category'];
             var category = data['category'];
             var category_kr = data['category_kr'];
 
@@ -70,6 +71,10 @@ $(".feed_modal").click(function () {
 
             // 정유진: 카테고리 추가
             $("#feed_modal_category").html(category_kr)
+            console.log(is_shared_category)
+            if (is_shared_category) {
+                $("#feed_modal_shared_category").html('공유 피드')
+            }
 
             // 피드 모달창을 열 때 해시태그 리스트 를 불러오는데 모달창을 닫아도 계속 해시태그 리스트가 남아있음 때문에 모달창을 여는 시점으로 해서 해시태그 리스트를 리셋해줘야 함
             $(".feed_modal_contents_writer_hashtags").html('');
@@ -314,17 +319,21 @@ $(".modal_close").click(function () {
     $('#input_feed_hashtag').each(function () {
         $(this).val('');
     });
-    // 정유진: 모달창 닫기와 닫았을 때 카테고리 내용을 리셋하는 부분
+    // 정유진: 피드업로드모달창 닫기와 닫았을 때 카테고리 내용을 리셋하는 부분
     $('#input_feed_category').prop("selectedIndex", 0);
-    // 정유진: 모달창 닫기와 닫았을 때 공유카테고리 선택을 리셋하는 부분
+    // 정유진: 피드업로드모달창 닫기와 닫았을 때 공유카테고리 선택을 리셋하는 부분
     var checkboxes = document.querySelectorAll('input[name="shared_category_nickname_list"]:checked');
     for (var i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
     }
+    // 정유진: 피드수정모달창 닫기와 닫았을 때 카테고리 내용을 리셋하는 부분
     var selectboxes = document.querySelectorAll('input[name="update_shared_category_nickname_list"]:checked');
     for (var i = 0; i < selectboxes.length; i++) {
         selectboxes[i].checked = false;
     }
+    // 정유진: 공유카테고리 유무 리셋
+    $("#feed_modal_shared_category").html('')
+
     // 첫 번째 모달창 숨김
     $('#first_modal').css({
         display: 'none'

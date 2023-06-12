@@ -467,3 +467,8 @@
         display: none;
     }
 }
+/* 정유진: 피드 공유카테고리  */
+.feed_is_shared_category {
+    margin-right: 10px;
+
+}

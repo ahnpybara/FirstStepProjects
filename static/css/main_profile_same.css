@@ -470,6 +470,7 @@
     margin: 2px 15px;
 }
 
+/* 정유진: 피드 공유카테고리  */
 .feed_modal_category_area {
     display: flex;
     justify-content: space-between;
