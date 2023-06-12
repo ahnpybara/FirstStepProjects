@@ -351,9 +351,7 @@ $('.update_feed').click(function (event) {
             // 정유진: 모달창 띄울 때 현재 적용된 카테고리 종류가 나오도록 한다
             $("#category_" + category).attr('selected', true);
             // 정유진: 모달창 띄울 때 현재 선택된 유저가 나오도록 한다
-            console.log(shared_category)
             for (var i = 0; i < shared_category.length; i++) {
-                console.log(shared_category[i])
                 $("#update_shared_user_nickname_" + shared_category[i]).prop('checked', true);
             }
         },
@@ -374,7 +372,13 @@ $('#feed_update_button').click(function (event) {
     let hashtag_content = $('#input_updatefeed_hashtag').val();
     let content = $('#input_updatefeed_content').val();
     let category = $('#input_updatefeed_category').val();
+    var shared_categories = document.querySelectorAll("input[name='update_shared_category_nickname_list']:checked");
+    let shared_category_list = []
+    for (var i = 0; i < shared_categories.length; i++) {
+        shared_category_list.push(shared_categories[i].value)
+    }
 
+    console.log(typeof(shared_category_list))
     // 서버로 보낼 (json 형태)
     $.ajax({
         url: "/content/updatefeed",
@@ -382,7 +386,8 @@ $('#feed_update_button').click(function (event) {
             feed_id: feed_id,
             content: content,
             hashtag_content: hashtag_content,
-            category: category
+            category: category,
+            shared_category_list: shared_category_list
         },
         method: "POST",
         success: function (data) {

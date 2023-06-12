@@ -501,7 +501,7 @@ class UpdateFeed(APIView):
         # 정유진: 수정을 위한 서버로 전달된 데이터 (카테고리)
         category = request.data.get('category')
         # 정유진: 수정을 위한 서버로 전달된 데이터 (공유카테고리)
-        category = request.data.get('shared_category')
+        shared_category_list = request.data.getlist('shared_category_list[]')
         # 피드id를 통한 피드에 달린 기존 해시태그들 삭제
         hashtags = Hashtag.objects.filter(feed_id=feed_id)
         hashtags.delete()
@@ -534,7 +534,18 @@ class UpdateFeed(APIView):
         # 피드 수정
         feed.update(id=feed_id, content=content, category=category)
 
-        # 정유진: 공유카테고리
+        # 정유진: 공유카테고리 삭제 후 다시 추가
+        shared_category = ShareCategory.objects.filter(feed_id=feed_id)
+        shared_category.delete()
+
+        # 정유진: 자기 자신을 추가.
+        email = request.session.get('email', None)
+        ShareCategory.objects.create(feed_id=feed_id, email=email)
+        for shared_category_nickname in shared_category_list:
+            print(feed_id)
+            print(shared_category_nickname)
+            shared_category_email = User.objects.filter(nickname__in=shared_category_nickname).first()
+            ShareCategory.objects.create(feed_id=feed_id, email=shared_category_email)
 
         return Response(status=200)
 
