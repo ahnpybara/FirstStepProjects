@@ -188,7 +188,7 @@ $("#button_feed_shared_category_list").click(function () {
     // 정유진: 프로필 화면의  공유카테고리 버튼 활성화 표시
     $('#button_feed_shared_category_list').css({
         borderTopStyle: "solid",
-        color: "#black"
+        color: "black"
     });
     //내 게시물의 게시물 숨기기
     $('#feed_list').css({
