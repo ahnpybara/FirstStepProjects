@@ -307,7 +307,7 @@ $(".modal_close").click(function () {
     input.value = null;
 
     // 파일 초기화(드래그 앤 드롭시 닫아도 파일이 남아 있어서 추가)
-    files = null
+    files = []
 
     // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
     $('#input_feed_content').each(function () {
@@ -333,6 +333,23 @@ $(".modal_close").click(function () {
     $('#feed_modal').css({
         display: 'none'
     });
+    // 업로드 이미지등을 안보이게 한것을 보이게 함
+    $('.feed_modal_area_upload_img').css({
+        "display": "flex"
+    });
+    $('.drag_here_image').css({
+        "display": "flex"
+    });
+    // 좌우버튼, 삭제 버튼을 안 보이게 함
+    $('.feed_modal_area_images_btn_dele').css({
+        "display": "none"
+    })
+    $('.feed_modal_feed_image_before').css({
+        "display": "none"
+    })
+    $('.feed_modal_feed_image_next').css({
+        "display": "none"
+    })
 });
 
 // 사용 범위를 위해 전역 변수 files 선언
@@ -453,25 +470,121 @@ function uploadFiles(e) {
             return;
         }
     }
-
-    // 파일 추가를 위해 필요한 로직을 실행 (예: 파일 목록 표시, 업로드 버튼 활성화 등)
-    displayFiles(); // 파일 목록을 표시하는 함수 호출
-}
-
-//  파일 목록을 표시하는 함수
-function displayFiles() {
-    // 파일 목록을 표시하는 로직을 구현
-    // 예시: 파일 목록을 ul 태그에 추가하여 표시
-    let fileList = document.getElementById('fileList');
-    fileList.innerHTML = ''; // 기존 파일 목록 초기화
-
-    for (var i = 0; i < files.length; i++) {
-        let file = files[i];
-        let listItem = document.createElement('li');
-        listItem.textContent = file.name;
-        fileList.appendChild(listItem);
+    // 업로드 이미지등 필요없는 부분은 안보이게 함
+    $('.feed_modal_area_upload_img').css({
+        "display": "none"
+    })
+    $('.drag_here_image').css({
+        "display": "none"
+    })
+    // 업로드한 파일이 1장을 초과했을 경우에만 좌우 버튼 및 삭제 버튼을 나타나게 함
+    if (files.length > 1) {
+        // 감춰져 있던 좌우 버튼 및 삭제 버튼을 나타나게 함
+        $('.feed_modal_area_images_btn_dele').css({
+            "display": "flex"
+        })
+        $('.feed_modal_feed_image_before').css({
+            "display": "flex"
+        })
+        $('.feed_modal_feed_image_next').css({
+            "display": "flex"
+        })
+        $('.feed_modal_area_images_btn').css({
+            "display": "flex"
+        })
     }
+    // 이미지를 표시함
+    $('.img_upload_space').css({
+        "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+        "outline": "none",
+        "background-size": "contain",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+    });
+
+    var files_Count = 0
+
+    $('.feed_modal_feed_image_next').click(function () {
+        files_Count++
+        if (files_Count < files.length && files_Count >= 0) {
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            files_Count = 0;
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        }
+    });
+
+    $('.feed_modal_feed_image_before').click(function () {
+        files_Count--
+        if (files_Count < files.length && files_Count >= 0) {
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            files_Count = files.length - 1;
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[files.length - 1]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        }
+    });
+    // 유재우 업로드한 이미지 삭제
+    $('.feed_modal_area_images_btn_dele').click(function () {
+        files.splice(files_Count, 1);
+        files_Count++
+        // 만일 사진이 1장 밖에 안남았을 경우
+        if (files.length == 1) {
+            $('.feed_modal_area_images_btn_dele').css({
+                "display": "none"
+            })
+            $('.feed_modal_feed_image_before').css({
+                "display": "none"
+            })
+            $('.feed_modal_feed_image_next').css({
+                "display": "none"
+            })
+        }
+
+        if (files_Count < files.length && files_Count >= 0) {
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            files_Count = 0;
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        }
+    })
 }
+
 
 // 모달창에서 사진 추가 버튼 클릭했을 시 (파일 시스템을 열어서 업로드 하는 경우)
 $('#image_upload_btn').click(function () {
@@ -480,19 +593,6 @@ $('#image_upload_btn').click(function () {
 
 // 파일 입력 폼에서 변화 발생시 해당 함수가 실행(
 function image_upload() {
-    // 타입을 판별하고 이미지면 아래 로식을 실행
-    if ($('#input_image_upload').files.length > 6) {
-        alert("파일의 갯수는 6장을 넘을 수 없습니다.")
-        return 0;
-    } else {
-            if (files.length + newFiles.length > 6) {
-                alert("파일의 개수는 5장을 넘을 수 없습니다.");
-                return;
-            } else { // 파일이 이미지가 아닐 경우
-                alert('이미지가 아닙니다.');
-                return 0;
-            }
-    }
 }
 
 // 유재우 : 모달창 넥스트 버튼 및 피드 이미지 앞뒤로 버튼 이밴트
@@ -570,6 +670,8 @@ $('#modal_next_button').click(function () {
     }
 });
 
+
+// 유재우 두번째 모달창에서 첫번째 모달창으로 돌아가기 버튼을 눌렸을때 이밴트
 $('#modal_before_button').click(function () {
     $('.img_upload_space').css({
         "background-color": "White",
@@ -583,4 +685,95 @@ $('#modal_before_button').click(function () {
     $('#second_modal').css({
         display: 'none'
     });
+
+    // 이미지를 표시함
+    $('.img_upload_space').css({
+        "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+        "outline": "none",
+        "background-size": "contain",
+        "background-repeat": "no-repeat",
+        "background-position": "center",
+    });
+    var files_Count = 0
+
+
+    $('.feed_modal_feed_image_next').click(function () {
+        files_Count++
+        if (files_Count < files.length && files_Count >= 0) {
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            files_Count = 0;
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        }
+    });
+
+    $('.feed_modal_feed_image_before').click(function () {
+        files_Count--
+        if (files_Count < files.length && files_Count >= 0) {
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            files_Count = files.length - 1;
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[files.length - 1]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        }
+    });
+    // 유재우 업로드한 이미지 삭제
+    $('.feed_modal_area_images_btn_dele').click(function () {
+        files.splice(files_Count, 1);
+        files_Count++
+        // 만일 사진이 1장 밖에 안남았을 경우
+        if (files.length == 1) {
+            $('.feed_modal_area_images_btn_dele').css({
+                "display": "none"
+            })
+            $('.feed_modal_feed_image_before').css({
+                "display": "none"
+            })
+            $('.feed_modal_feed_image_next').css({
+                "display": "none"
+            })
+        }
+
+        if (files_Count < files.length && files_Count >= 0) {
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        } else {
+            files_Count = 0;
+            $('.img_upload_space').css({
+                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                "outline": "none",
+                "background-size": "contain",
+                "background-repeat": "no-repeat",
+                "background-position": "center"
+            });
+        }
+    })
 });

@@ -463,13 +463,14 @@
 
 /*피드 업로드 좌우 버튼*/
 .feed_modal_area_images_btn {
-    display: flex;
+    display: none;
     justify-content: space-between;
     width: 95%;
 }
 
 .feed_modal_feed_image_before,
 .feed_modal_feed_image_next {
+    display: none;
     width: 25px;
     text-align: center;
     background-color:rgba(0, 0, 0, 0.1);/*까만색(0,0,0) 80% 불투명도*/
@@ -477,9 +478,11 @@
 }
 
 .feed_modal_feed_image_before {
+    display: none;
     order: 0;
 }
 .feed_modal_feed_image_next{
+    display: none;
     order: 1;
 }
 
@@ -500,3 +503,8 @@
     background-color:rgba(0, 0, 0, 0.2);/*까만색(0,0,0) 80% 불투명도*/
 }
 
+.feed_modal_area_images_btn_dele{
+    border: #0037AB;
+    color: red;
+    display: none;
+}
