@@ -428,5 +428,11 @@ body::-webkit-scrollbar {
     padding: 8px;
     font-size: 15px;
     border-radius: 5px;
-    margin-left: 5px;
+    margin: 0 5px;
+}
+
+/* 채팅 보낸 시간 */
+.time_chat {
+    font-size: 10px;
+    color: lightgray;
 }
