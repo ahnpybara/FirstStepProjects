@@ -147,3 +147,177 @@ $('#search_box').mousedown(function () {
         }, doneTypingInterval);
     });
 });
+
+
+//채팅할 친구 목록 모달창 여는 이벤트 처리 ajax
+var ajax_call = function (url) {
+    var request = $.ajax({
+        url: url, // 요청할 url
+        method: 'GET', // 요청 방식
+        contentType: 'application/text',  // 서버로 전송되는 데이터 형태
+    });
+
+    return request;
+};
+
+// 채팅할 친구 목록 모달창 이벤트 처리 함수
+var open_article1 = function (url) {
+    ajax_call(url).done(function (text) { // ajax 요청이 완료된 경우
+        document.querySelector('.chat_modal_user_area').innerHTML = text; // 채팅 유저 모달창 내용을 서버로부터 받은 내용으로 셋팅
+        document.getElementById('chat_user_modal_id').style.display = 'flex'; // 채팅 유저 목록 모달창을 flex로 설정하여 보여줌
+        document.getElementById('chat_modal_id').style.display = 'none'; // 채팅 모달창을 none로 설정
+
+    });
+};
+
+//채팅창 여는 이벤트 처리 ajax
+var ajax_call = function (url, user_email) {
+
+    var request = $.ajax({
+        url: url, // 요청할 자원
+        method: 'GET', // 요청 방식
+        contentType: 'application/text',  // 서버로 전송되는 데이터 형태
+        data: {
+            user_email: user_email
+        }
+    });
+
+    return request;
+};
+
+//채팅창 여는 이벤트 처리 함수
+var open_article2 = function (url, user_email) {
+    ajax_call(url, user_email).done(function (text) { // ajax 요청이 완료된 경우
+        document.querySelector('.chat_modal_text_area').innerHTML = text; // 채팅 모달창 내용을 서버로부터 받은 내용으로 셋팅
+        document.getElementById('chat_modal_id').style.display = 'flex'; // 채팅 모달창을 flex로 설정하여 보여줌
+        document.getElementById('chat_user_modal_id').style.display = 'none'; // 채팅 유저 목록 모달창을 none로 설정
+        // 채팅 업로드 버튼 이벤트 처리
+        $(".upload_chat").click(function (event) {
+            // 채팅 입력란에서 채팅 내용과 채팅을 받을 유저 정보를 가져옴
+            let chat_content = $('#chat_text_box').val();
+            let receive_chat_user = event.target.attributes.getNamedItem('receive_chat_user').value;
+
+            // 채팅의 길이가 0보다 작으면 알림창 뜸
+            if (chat_content.length <= 0) {
+                alert("채팅을 입력하세요");
+                return 0;
+            }
+            $.ajax({
+                url: "/user/chatting",
+                data: {
+                    chat_content: chat_content,
+                    receive_chat_user: receive_chat_user,
+                },
+                method: "POST",
+                success: function (data) {
+                    console.log("성공");
+                    // 채팅 비동기 전송을 위한 코드
+                    $('.chat_modal_content_area').append("<div class='send_chat_area'>" +
+                        "<span class='send_chat_cont'>" +
+                        "<span class='send_chat'>" + data.chat_content + "</span>" +
+                        "</span>" +
+                        "</div>");
+                    // 스크롤을 최하단으로 이동( 입력되고 스크롤을 아래로 이동해야 최하단으로 이동됩니다.)
+                    $('.chat_modal_content_area').scrollTop($('.chat_modal_content_area')[0].scrollHeight);
+                },
+                error: function (request, status, error) {
+                    console.log("에러");
+                },
+                complete: function () {
+                    console.log("완료");
+                    // 댓글을 입력하고 나면 댓글 입력 폼을 비워야 함.
+                    $('#chat_text_box').val('');
+                }
+            });
+        });
+        // 채팅 화면에서 다른 사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
+        $(".movetoprofile").click(function (event) {
+            let user_nickname = event.target.id;
+            location.href = "/user/reprofile?user_nickname=" + user_nickname;
+        });
+    });
+};
+
+// 채팅 유저 목록 모달창 드래그로 이동하는 코드, 문서가 로드되면 실행할 함수.
+$(document).ready(function () {
+    //모달과 모달헤더를 각각 잡아주고 마우스 위치의 오프셋 값을 저장하는 객체 변수를 초기화합니다. 드래그 동작 여부를 저장하는 변수를 초기화합니다.
+    var modal = $('.chat_user_modal_area');
+    var modalHeader = $('.chat_user_modal_header');
+    var mouseOffset = {x: 0, y: 0};
+    var isDragging = false;
+
+    // 모달 헤더에서 마우스를 눌렀을 때 실행할 함수를 정의. 마우스 위치와 모달의 현재 위치 간의 상대적인 오프셋 값을 계산하여 저장
+    modalHeader.mousedown(function (e) {
+        isDragging = true;
+        mouseOffset = {x: e.pageX - modal.offset().left, y: e.pageY - modal.offset().top};
+    });
+
+    // 모달 헤더에서 마우스 버튼을 놓았을 때 실행할 함수를 정의.
+    $(document).mouseup(function () {
+        isDragging = false;
+    });
+
+    // 모달 헤더에서 마우스를 움직일 때 실행할 함수를 정의. 드래그 동작 중일 때만 실행 마우스의 움직임에 따라 모달의 위치를 변경합니다. 상대적인 오프셋 값으로 모달의 위치를 설정합니다.
+    $(document).mousemove(function (e) {
+        if (isDragging) {
+            modal.offset({
+                top: e.pageY - mouseOffset.y,
+                left: e.pageX - mouseOffset.x
+            });
+        }
+    });
+    //모달 영역에서 마우스가 벗어났을 때 실행할 함수를 정의.
+    modal.mouseleave(function () {
+        isDragging = false;
+    });
+});
+
+// 채팅창 모달창 드래그로 이동하는 코드 문서가 로드되면 실행할 함수.
+$(document).ready(function () {
+    //모달과 모달헤더를 각각 잡아주고 마우스 위치의 오프셋 값을 저장하는 객체 변수를 초기화합니다. 드래그 동작 여부를 저장하는 변수를 초기화합니다.
+    var modal = $('.chat_modal_area');
+    var modalHeader = $('.chat_modal_header');
+    var mouseOffset = {x: 0, y: 0};
+    var isDragging = false;
+
+    // 모달 헤더에서 마우스를 눌렀을 때 실행할 함수를 정의. 마우스 위치와 모달의 현재 위치 간의 상대적인 오프셋 값을 계산하여 저장
+    modalHeader.mousedown(function (e) {
+        isDragging = true;
+        mouseOffset = {x: e.pageX - modal.offset().left, y: e.pageY - modal.offset().top};
+    });
+
+    // 모달 헤더에서 마우스 버튼을 놓았을 때 실행할 함수를 정의.
+    $(document).mouseup(function () {
+        isDragging = false;
+    });
+
+    // 모달 헤더에서 마우스를 움직일 때 실행할 함수를 정의. 드래그 동작 중일 때만 실행 마우스의 움직임에 따라 모달의 위치를 변경합니다. 상대적인 오프셋 값으로 모달의 위치를 설정합니다.
+    $(document).mousemove(function (e) {
+        if (isDragging) {
+            modal.offset({
+                top: e.pageY - mouseOffset.y,
+                left: e.pageX - mouseOffset.x
+            });
+        }
+    });
+    //모달 영역에서 마우스가 벗어났을 때 실행할 함수를 정의.
+    modal.mouseleave(function () {
+        isDragging = false;
+    });
+});
+
+// 채팅 모달창 닫기 버튼 이벤트 처리 (클래스명으로 해야함 why? TODO)
+$(".chat_modal_close").click(function () {
+    // 채팅 모달창 숨김, 채팅 모달창 위치 초기화
+    $('#chat_modal_id').css({
+        display: 'none',
+        top: '382.438px',
+        left: '1305.6px',
+    });
+    // 채팅 유저 목록 모달창 숨김, 채팅 유저 목록 모달창 위치 초기화
+    $('#chat_user_modal_id').css({
+        display: 'none',
+        top: '382.438px',
+        left: '1305.6px',
+    });
+});

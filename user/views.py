@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark
+from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark, Chat
 from .models import User
 from django.contrib.auth.hashers import make_password
 
@@ -220,6 +220,7 @@ class UpdatePassword(APIView):
             request.session.flush()
             return Response(status=200)
 
+
 # 설정 클래스
 class Settings(APIView):
     def get(self, request):
@@ -288,7 +289,7 @@ class Profile(APIView):
         if user is None:
             return render(request, "user/login.html")
 
-        # 사용자가 작성한 피드 수
+        # 사용자가 작성한 피드 수 TODO
         user_feed_count = Feed.objects.filter(email=email).count()
         # 사용자가 작성한 피드리스트
         feed_list = Feed.objects.filter(email=email).order_by('-id')
@@ -375,7 +376,7 @@ class ReplyProfile(APIView):
         # 유저의 객체에서 이메일을 구함
         email = user.email
 
-        # 사용자가 작성한 피드 수
+        # 사용자가 작성한 피드 수 TODO
         user_feed_count = Feed.objects.filter(email=email).count()
         # 사용자가 작성한 피드리스트
         feed_list = Feed.objects.filter(email=email).order_by('-id')
@@ -456,3 +457,72 @@ class ReplyProfile(APIView):
             Follow.objects.create(follower=user_follower, following=user_following)
 
         return Response(status=200)
+
+
+# 채팅 친구 목록 클래스
+class ChatView(APIView):
+    def get(self, request):
+        # 현재세션 정보를 받아옴. (네비바의 본인 프로필 정보를 위함)
+        email_session = request.session.get('email', None)
+
+        # 세션 정보를 토대로 User 테이블에서 현재 세션 유저의 객체를 뽑아냄 (user와 구분하기 위해서 user_session에 저장)
+        user_session = User.objects.filter(email=email_session).first()
+
+        # 세션 유저가 팔로우한 정보를 뽑아냄
+        user_following = Follow.objects.filter(follower=email_session).values('following')
+
+        # 채팅이 할 유저의 목록을 뽑음
+        chat_user = User.objects.filter(email__in=user_following)
+
+        # 내가 해당 유저에게 보낸 채팅과 해당유저가 받은 채팅 객체들 뽑음 (최신순으로 정렬)
+        receive_chat = Chat.objects.filter(receive_user=email_session, send_user__in=user_following).order_by('-id')
+
+        # receive_chat에서 중복을 제거하여 발신자(send_user)의 고유한 목록을 저장합니다.
+        send_user_set = set(chat.send_user for chat in receive_chat)
+        send_chat_list = []
+
+        # 각 발신자(send_user)의 가장 최근 채팅 객체가 저장됩니다. 즉, 각 발신자별로 최신 채팅을 가져와서 send_chat_list에 딕셔너리 형태로 추가합니다.
+        for send_user in send_user_set:
+            send_user_chat = receive_chat.filter(send_user=send_user).first()  # 해당 send_user의 가장 최근 채팅
+            send_chat_list.append(dict(send_user_chat=send_user_chat))
+
+        return render(request, "user/chat_user.html", context=dict(chat_user=chat_user, send_chat_list=send_chat_list))
+
+
+# 채팅 클래스
+class Chatting(APIView):
+    def get(self, request):
+        # 채팅을 보낼 유저의 이메일
+        receive_user_email = request.GET.get('user_email', '')
+        # 채팅을 보내는 나 자신의 이메일 (세션정보)
+        email = request.session.get('email', None)
+        # 세션 유저 객체
+        user_session = User.objects.filter(email=email).first()
+        # 채팅을 받는 유저 정보
+        receive_chat_user = User.objects.filter(email=receive_user_email).first()
+        # 내가 해당 유저에게 보낸 채팅과 해당유저가 받은 채팅 객체들
+        send_receive_chat = Chat.objects.filter(
+            Q(send_user=email, receive_user=receive_user_email) | Q(receive_user=email, send_user=receive_user_email)
+        )
+
+        # 만약 채팅의 개수가 30개라면 일괄 삭제
+        if send_receive_chat.count() > 30:
+            send_receive_chat.delete()
+
+        return render(request, "content/chat.html", context=dict(receive_chat_user=receive_chat_user,
+                                                                 send_receive_chat=send_receive_chat,
+                                                                 user_session=user_session))
+
+    def post(self, request):
+        # 서버로 전달된 데이터 ( 채팅 내용, 보낼 유저 )
+        chat_content = request.data.get('chat_content', None)
+        receive_chat_user = request.data.get('receive_chat_user', None)
+        # 세션에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장 -> 이메일로 세션 유저 객체를 구함
+        email = request.session.get('email', None)
+        user = User.objects.filter(email=email).first()
+
+        # 서버로 전달된 데이터를 토대로 채팅 테이블에 저장
+        Chat.objects.create(send_user=email, receive_user=receive_chat_user, chat_content=chat_content)
+
+        # 성공적으로 전달이 되었다는 응답과 ajax 비동기 처리를 위한 성공 함수 인자인 data에 데이터를 전달하기 위해서 보냄
+        return Response(status=200, data=dict(chat_content=chat_content))

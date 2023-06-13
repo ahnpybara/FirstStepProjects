@@ -12,7 +12,7 @@
 
     <!-- css 분리 -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=2">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=1">
 
     <!--  Google 심볼을 사용하기 위한 선언 -->
@@ -69,9 +69,10 @@
                     <label id="unfollow_btn_label" class="form-check-label" for="flexSwitchCheckChecked">팔로우</label>
                 {% endif %}
             </div>
-            <!-- 홈 아이콘과 게시물 추가 아이콘 메뉴 -->
+            <!-- 네비바 메뉴아이콘 (홈, 채팅, 알림, 피드추가, 프로필) -->
             <a href="/main"><span class="menu_icon material-icons"> home</span></a>
             <span id="nav_bar_add_box" class="menu_icon material-icons-outlined">add_box</span>
+            <span id="send_icon" onclick="open_article1('/user/chat');" class="material-symbols-outlined">send</span>
             <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
             <div class="dropdown">
                 <a href="#" role="button" id="dropdownMenuLink"
@@ -299,8 +300,8 @@
             <div id="my_profile_image" class="profile_box">
                 <!-- 내 프로필 사진-->
                 <a href="/user/profile"> <img class="profile"
-                                                 src="{% get_media_prefix %}{{ user_session.profile_image }}"
-                                                 alt="text"></a>
+                                              src="{% get_media_prefix %}{{ user_session.profile_image }}"
+                                              alt="text"></a>
             </div>
             <!-- 프로필 닉네임 이름 영역 -->
             <div class="my_profile_nickname_name">
@@ -631,6 +632,29 @@
     </div>
 </div>
 
+<!-- 채팅 친구 목록 모달창 -->
+<div id="chat_user_modal_id" class="chat_user_modal_area">
+    <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
+    <div class="chat_modal_bar_area">
+        <div class="chat_modal_blank"></div>
+        <div class="chat_user_modal_header">팔로우 목록</div>
+        <span class="chat_modal_close material-icons-outlined">close</span>
+    </div>
+    <!-- 채팅할 친구 목록이 리스트 영역 -->
+    <div class="chat_modal_user_area"></div>
+</div>
+
+<!-- 채팅 모달창 -->
+<div id="chat_modal_id" class="chat_modal_area">
+    <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
+    <div class="chat_modal_bar_area">
+        <div class="chat_modal_blank"></div>
+        <div class="chat_modal_header">쪽지</div>
+        <span class="chat_modal_close material-icons-outlined">close</span>
+    </div>
+    <!-- 채팅창 내용 영역 -->
+    <div class="chat_modal_text_area"></div>
+</div>
 
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -642,8 +666,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'js/main.js' %}?ver=2"></script>
-<script src="{% static 'js/main_profile_same.js' %}?ver=12"></script>
+<script src="{% static 'js/main.js' %}?ver=1"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=1"></script>
 <script src="{% static 'js/allsame.js' %}?ver=2"></script>
 </body>
 </html>
