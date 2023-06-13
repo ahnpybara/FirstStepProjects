@@ -436,3 +436,30 @@ body::-webkit-scrollbar {
     font-size: 10px;
     color: lightgray;
 }
+
+/* 채팅 불러오기 알림창, 알림창을 정확히 화면의 중앙으로 정렬합니다.알림창의 배경색을 검은색의 반투명한 색상으로 설정합니다.
+   라는 이름의 페이드 아웃 애니메이션을 2초 동안 적용하고, 시작과 끝에는 부드럽게 진행되도록 설정합니다. */
+.chat_alarm {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  animation: fadeOut 2s ease-in-out;
+}
+
+/*
+또한, fadeOut라는 이름의 키 프레임 애니메이션을 정의하였습니다. 이 애니메이션은 opacity 속성을 이용하여 알림창의 페이드 아웃 효과를 구현합니다.
+시작과 끝 지점에서 각각 opacity를 1과 0으로 설정하여 투명도가 서서히 줄어들도록 합니다.
+마지막 100% 지점에서는 opacity를 0으로 설정하고 display: none을 적용하여 알림창이 완전히 사라지도록 합니다.
+*/
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; display: none; }
+}
