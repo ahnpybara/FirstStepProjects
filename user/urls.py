@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import Join, Login, LogOut, UploadProfile, RemoveProfile, ResetProfile, UpdatePassword, Settings, \
-    UpdateEmail, UpdateNickname, Profile, ReplyProfile
+    UpdateEmail, UpdateNickname, Profile, ReplyProfile, ChatView, Chatting
 
 # 사용자가 어떤 url를 요청하느냐에 따라 어떤 뷰를 실행할지 결정하는 리스트
 urlpatterns = [
@@ -16,5 +16,8 @@ urlpatterns = [
     path('profile/updatenickname', UpdateNickname.as_view()),
     path('profile/', Profile.as_view()),
     path('reprofile/', ReplyProfile.as_view()),
-    path('follow', ReplyProfile.as_view())
+    path('follow', ReplyProfile.as_view()),
+    path('chat', ChatView.as_view()),
+    path('chatting', Chatting.as_view())
 ]
+

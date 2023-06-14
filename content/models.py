@@ -42,5 +42,13 @@ class Follow(models.Model):
 
 # 해시태그 테이블
 class Hashtag(models.Model):
-    feed_id = models.IntegerField(default=0)  # Feed id
-    content = models.TextField()  # 해시태그 내용
+    feed_id = models.IntegerField(default=0)                   # Feed id
+    content = models.TextField()                               # 해시태그 내용
+
+
+# 채팅 테이블
+class Chat(models.Model):
+    send_user = models.EmailField(default='')                   # 채팅 보낸 유저
+    receive_user = models.EmailField(default='')                # 채팅을 받은 유저
+    chat_content = models.TextField()                           # 채팅 내용
+    send_time = models.DateTimeField(auto_now_add=True)         # 채팅 시간

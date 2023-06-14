@@ -16,7 +16,6 @@ from django.db.models import Q
 class Main(APIView):
     # noinspection PyMethodMayBeStatic
     def get(self, request):
-
         # 세션 정보에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장
         email = request.session.get('email', None)
         # 세션에 이메일 정보가 없는경우 -> 로그인을 하지 않고 메인페이지에 접속했다는 뜻 -> 로그인 페이지로 이동시킴
@@ -35,22 +34,34 @@ class Main(APIView):
         # 유재우 : 팔로우 추천을 위해 추가
         Recommend_Followers_list = []
         Recommend_Followers_count = []
-        # 세션에 유저가 팔로잉하고 있는 사람들
+
+        now_following = 0
+        added_followers = set()  # 중복 체크를 위한 집합
+        # 세션에 유저가 팔로잉하고 있는 사람들 6명만 뽑아냄
         user_following = Follow.objects.filter(follower=email)[:6]
+        user_followings_list = Follow.objects.filter(follower=email)
+        user_followings = []
+        for user_followings_list in user_followings_list:
+            user_followings.append(user_followings_list.following)
+        print(user_followings)
         for user_following in user_following:
             # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들(대표로 2명만 뽑음)
             user_follower = Follow.objects.filter(follower=user_following.following).order_by('-id')[:2]
             for user_follower in user_follower:
-                if user_follower.follower != email:
-                    Recommend_Followers = User.objects.filter(email=user_follower.follower).first()
-                    Recommend_Following = User.objects.filter(email=user_follower.following).first()
+                print(added_followers)
+                if user_follower.following != email and user_follower.following not in added_followers and user_follower.following not in user_followings:
+                    Recommend_Followers = User.objects.filter(email=user_follower.following).first()
+                    Recommend_Following = User.objects.filter(email=user_follower.follower).first()
                     Recommend_Followers_count.append(Recommend_Followers.email)
+                    added_followers.add(user_follower.following)  # 팔로워 이메일을 추가
+                    if Follow.objects.filter(follower=user_follower.following, following=email).exists():
+                        now_following = 1
                     Recommend_Followers_list.append(
                         dict(id=Recommend_Followers.id, nicname=Recommend_Followers.nickname,
+                             now_following=now_following,
                              Recommend_nicname=Recommend_Following.nickname, email=Recommend_Followers.email,
                              profile_image=Recommend_Followers.profile_image))
-                    print(user_follower.follower)
-                    print(Recommend_Followers_count)
+                    now_following = 0
 
         # 유저를 검색하기 위해서 유저 정보를 모두 가져옴
         user_object_list = User.objects.all()
@@ -79,7 +90,7 @@ class Main(APIView):
                 hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
             for image in images_object_list:
                 images_feed = Feed.objects.filter(id=feed.id).first()
-                images_list.append(dict(feed_id=images_feed, image=image.image, count=count, now_count = count+1))
+                images_list.append(dict(feed_id=images_feed, image=image.image, count=count, now_count=count + 1))
                 count = count + 1
             # 좋아요 수, 좋아요 여부, 북마크 여부
             like_count = Like.objects.filter(feed_id=feed.id).count()
@@ -769,12 +780,17 @@ class FeedUpdateIMG(APIView):
         # 해시태그를 띄여쓰기로 구분
         hashtag_content = '#' + '#'.join(hashtag_content_lists)
 
+        i = 0
         images_list = []
-        images_object_list = Image.objects.filter(feed_id=feed.id).first()
+        images_object_list = Image.objects.filter(feed_id=feed.id)
+        for images_object_list in images_object_list:
+            images_list.append(images_object_list.image)
+            i = i + 1
         # 사용자로 보낼 데이터
         data = {
             'id': feed.id,
-            'image': images_object_list.image,
+            'count': i,
+            'image[]': images_list,
             'feed_content': feed.content,
             'hashtag_content': hashtag_content,
             'category': feed.category

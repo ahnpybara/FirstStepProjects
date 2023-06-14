@@ -330,14 +330,15 @@ $('.update_feed').click(function (event) {
         success: function (data) {
             console.log("성공");
             // 서버에서 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 변수에 따로 할당.
-            var feed_image = "/media/" + data['image'];
+            var count = data['count'];
+            var imgs = data['image[]'];
             var feed_content = data['feed_content'];
             var hashtag_content = data['hashtag_content']
             // 정유진: 카테고리 추가
             var category = data['category']
             // 업로드 창 이미지 부분 배경을 업로드된 이미지로 변경
             $('#update_feed_modal_image').css({
-                "background-image": "url(" + feed_image[0] + ")",
+                "background-image": "url(" + "/media/" + imgs[0] + ")",
                 "outline": "none",
                 "background-size": "contain",
                 "background-repeat": "no-repeat",
@@ -358,6 +359,7 @@ $('.update_feed').click(function (event) {
 
         }
     });
+
 });
 
 // 피드 수정하기 버튼 클릭 이벤트 처리
@@ -571,6 +573,7 @@ $('.prev_image_button').click(function (event) {
     }
 })
 
+// 유재우: 이미지 슬라이드를 우해 추가한 이밴트들
 $('.next_image_button').click(function (event) {
     let feed_id = event.target.attributes.getNamedItem('feed_id').value;
     feeds_id = parseInt(feed_id / 100)
@@ -630,10 +633,30 @@ $('.next_image_button').click(function (event) {
     }
 })
 
+// 유재우 : 팔로우 추천 에서 팔로우를 눌렸을 때 이밴트들
 $('.follow_button').click(function (event) {
-    alert("123")
     let following_id = event.target.attributes.getNamedItem('following_id').value;
-    alert(following_id)
-    let user_email = document.getElementById("user_follow_btn").getAttribute("user_email");
+    let user_email = event.target.attributes.getNamedItem('user_email').value;
     alert(user_email)
+
+    // 서버로 보낼 데이터 (json)
+    $.ajax({
+        url: "/user/follow",
+        data: {
+            session_user_email: user_email,
+            user_email: following_id,
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+            alert("123")
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+            location.replace("/main")
+        }
+    });
 })
