@@ -769,12 +769,12 @@ class FeedUpdateIMG(APIView):
         # 해시태그를 띄여쓰기로 구분
         hashtag_content = '#' + '#'.join(hashtag_content_lists)
 
-        images = Image.objects.filter(feed_id=feed.id).first()
-
+        images_list = []
+        images_object_list = Image.objects.filter(feed_id=feed.id).first()
         # 사용자로 보낼 데이터
         data = {
             'id': feed.id,
-            'image': images.image,
+            'image': images_object_list.image,
             'feed_content': feed.content,
             'hashtag_content': hashtag_content,
             'category': feed.category

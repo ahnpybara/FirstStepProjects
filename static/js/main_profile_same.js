@@ -495,6 +495,7 @@ function uploadFiles(e) {
     }
     // 이미지를 표시함
     $('.img_upload_space').css({
+        "background":"#e9e9e9",
         "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
         "outline": "none",
         "background-size": "contain",
@@ -502,6 +503,7 @@ function uploadFiles(e) {
         "background-position": "center",
     });
 
+    // 몇번쨰 파일인지를 알기위해 추가
     var files_Count = 0
 
     $('.feed_modal_feed_image_next').click(function () {
@@ -595,7 +597,7 @@ $('#image_upload_btn').click(function () {
 function image_upload() {
 }
 
-// 유재우 : 모달창 넥스트 버튼 및 피드 이미지 앞뒤로 버튼 이밴트
+// 유재우 : 두번째 모달창을 보기위한 다음으로 버튼
 $('#modal_next_button').click(function () {
     if (files.length > 0 && files.length < 7) {
         // 이미지 업로드시 사진업로드 모달창 (첫 번째 모달창)을 가림
@@ -621,6 +623,7 @@ $('#modal_next_button').click(function () {
             "background-repeat": "no-repeat",
             "background-position": "center"
         });
+        // 몇번쨰 파일인지를 알기위해 추가
         var files_Count = 0
 
 
@@ -688,12 +691,14 @@ $('#modal_before_button').click(function () {
 
     // 이미지를 표시함
     $('.img_upload_space').css({
+        "background":"#e9e9e9",
         "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
         "outline": "none",
         "background-size": "contain",
         "background-repeat": "no-repeat",
         "background-position": "center",
     });
+    // 몇번쨰 파일인지를 알기위해 추가
     var files_Count = 0
 
 

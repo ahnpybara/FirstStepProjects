@@ -310,13 +310,15 @@ class Profile(APIView):
         # 사용자가 작성한 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         feed_count_list = []
         for feed in feed_list:
+            image = Image.objects.filter(feed_id=feed.id).first()
             # 좋아요 수
             like_count = Like.objects.filter(feed_id=feed.id).count()
             # 댓글 수
             reply_count = Reply.objects.filter(feed_id=feed.id).count()
             feed_count_list.append(dict(id=feed.id,
                                         like_count=like_count,
-                                        reply_count=reply_count))
+                                        reply_count=reply_count,
+                                        image=image))
 
         # 사용자가 좋아요한 각 게시물들의 좋아요와 댓글 수를 조회할 때 필요한 리스트를 구하는 과정
         like_count_list = []
