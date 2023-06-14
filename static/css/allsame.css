@@ -21,6 +21,19 @@ body {
     align-items: center;
 }
 
+/* 채팅아이콘 */
+#send_icon {
+    padding-top: 2px;
+    font-size: 30px !important;
+    padding-right: 20px;
+    cursor: pointer;
+    font-variation-settings: 'FILL' 0,
+    'wght' 700,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+
 /* 로고 */
 .astro_logo {
     width: 167px;
@@ -51,13 +64,21 @@ body {
 /* 네비바 메뉴 아이콘  */
 .menu_icons {
     display: flex;
-    padding-top: 5px;
+    padding-top: 3px;
 }
 
 /* 링크 태그 디자인 수정 */
 a {
     color: black;
     text-decoration: none;
+}
+
+/* 채팅 유저 목록 리스트의 프로필 사진 박스 */
+.chat_user_list_area > .profile_box {
+    margin-right: 12px;
+    width: 45px;
+    height: 45px;
+    margin-left: 15px;
 }
 
 /* 프로필 사진 외부 박스 */
@@ -76,9 +97,15 @@ a {
     cursor: pointer;
 }
 
+
 /* 프로필 정보 커서 변경 */
 .movetoprofile {
     cursor: pointer;
+}
+
+/**/
+.dropdown {
+    padding-top: 2px;
 }
 
 /* 네비바 드롭다운 메뉴 */
@@ -208,4 +235,231 @@ body::-webkit-scrollbar {
     margin-left: 10px;
     color: gray;
     font-size: 14px;
+}
+
+/* 채팅 모달창 */
+.chat_modal_area, .chat_user_modal_area {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 53%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #d8d8d8;
+    width: 400px;
+    height: 600px;
+}
+
+/* 채팅창 설명란 */
+.start_chat_explain {
+    text-align: center;
+    color: gray;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+/*채팅 모달창 상단바*/
+.chat_modal_bar_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-bottom: #d8d8d8 1px solid;
+    background-color: #add1ff;
+    color: #536d95;
+    font-weight: bold;
+}
+
+/* 채팅 모달창 드래그 핸들러 */
+.chat_modal_header, .chat_user_modal_header {
+    padding: 8px;
+    cursor: move;
+    text-align: center;
+    width: 100%;
+    padding-right: 0;
+}
+
+/* 채팅 모달창 닫기 */
+.chat_modal_close {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* 채팅 모달창 상단바 공백 */
+.chat_modal_blank {
+    margin-left: 20px;
+}
+
+/* 채팅 내역 영역(모달창안에 페이지를 불러옴) */
+.chat_modal_content_area {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid #d8d8d8;
+    overflow-y: auto;
+}
+
+/* 채팅 모달창 텍스트 영역 */
+.chat_modal_text_area {
+    width: 100%;
+    height: 87%;
+}
+
+/* 채팅 유저 목록 모달창 영역 */
+.chat_modal_user_area {
+    width: 100%;
+    height: 100%;
+}
+
+/* 채팅모달창 채팅입력 영역 */
+.chat_add_textbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 채팅 모달창 채팅 입력 박스 */
+#chat_text_box {
+    border: none;
+    box-shadow: none;
+}
+
+/* 채팅 보내기 버튼 */
+.upload_chat {
+    width: 50px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 채팅관련 모달창 */
+#chat_modal_id, #chat_user_modal_id {
+    display: none;
+}
+
+/* 채팅 친구 목록 영역(모달창안에 페이지를 불러옴) */
+.chat_user_list_modal_area {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* 채팅 친구 목록 1명 기준 영역 */
+.chat_user_list_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-bottom: 1px solid #d8d8d8;
+    cursor: pointer;
+}
+
+/* 채팅할 유저 목록(닉네임 이름) 영역*/
+.chat_nick_name_area {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+/* 유저 닉네임 */
+.chat_nickname {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+/* 프로필과 마지막 채팅 내용 영역 */
+.profile_and_chat_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 15px;
+}
+
+/* 마지막 채팅 메시지 시간 */
+.send_chat_time {
+    font-size: 12px;
+    font-weight: bold;
+    color: #4e96ff;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    margin-right: 10px;
+}
+
+/* 마지막 채팅 내용 */
+.send_user_chat {
+    font-size: 14px;
+    color: gray;
+}
+
+/* 보내는 자의 채팅 말풍선 영역 */
+.send_chat_area {
+    text-align: right;
+    padding: 15px
+}
+
+/* 보내는자의 채팅 말풍선 디자인 */
+.send_chat {
+    background-color: #cae1ff;
+    padding: 8px;
+    font-size: 15px;
+    border-radius: 5px;
+}
+
+/* 받는 사람의 채팅 말풍선 영역 */
+.receive_chat_area {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    padding: 15px
+}
+
+/* 받는 사람의 채팅 말풍선 디자인 */
+.receive_chat {
+    background-color: #e3e3e3;
+    padding: 8px;
+    font-size: 15px;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+/* 채팅 보낸 시간 */
+.time_chat {
+    font-size: 10px;
+    color: lightgray;
+}
+
+/* 채팅 불러오기 알림창, 알림창을 정확히 화면의 중앙으로 정렬합니다.알림창의 배경색을 검은색의 반투명한 색상으로 설정합니다.
+   라는 이름의 페이드 아웃 애니메이션을 2초 동안 적용하고, 시작과 끝에는 부드럽게 진행되도록 설정합니다. */
+.chat_alarm {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  animation: fadeOut 2s ease-in-out;
+}
+
+/*
+또한, fadeOut라는 이름의 키 프레임 애니메이션을 정의하였습니다. 이 애니메이션은 opacity 속성을 이용하여 알림창의 페이드 아웃 효과를 구현합니다.
+시작과 끝 지점에서 각각 opacity를 1과 0으로 설정하여 투명도가 서서히 줄어들도록 합니다.
+마지막 100% 지점에서는 opacity를 0으로 설정하고 display: none을 적용하여 알림창이 완전히 사라지도록 합니다.
+*/
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; display: none; }
 }
