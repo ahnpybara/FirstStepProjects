@@ -319,6 +319,9 @@ $('.update_feed').click(function (event) {
     $('#update_feed_modal_image').css({
         background: '#e9e9e9'
     });
+    var img_count
+    var now_img_count = 0
+    var imgs_list = []
 
     //서버로 보낼 데이터 (json 형태)
     $.ajax({
@@ -334,6 +337,7 @@ $('.update_feed').click(function (event) {
             var imgs = data['image[]'];
             var feed_content = data['feed_content'];
             var hashtag_content = data['hashtag_content']
+            imgs_list = imgs
             // 정유진: 카테고리 추가
             var category = data['category']
             // 업로드 창 이미지 부분 배경을 업로드된 이미지로 변경
@@ -345,6 +349,7 @@ $('.update_feed').click(function (event) {
                 "background-position": "center",
                 "margin-right": "1px"
             });
+            img_count = count
             // 할당 받은 게시물 내용, 해시태그들을 모달창에 추가
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
@@ -359,7 +364,65 @@ $('.update_feed').click(function (event) {
 
         }
     });
-
+    $('.update_feed_modal_feed_image_before').click(function () {
+        if (now_img_count == 0) {
+            $('#update_feed_modal_image').css({
+                "background-image": "url(" + "/media/" + imgs_list[img_count - 1] + ")"
+            });
+            now_img_count = img_count - 1
+        } else {
+            $('#update_feed_modal_image').css({
+                "background-image": "url(" + "/media/" + imgs_list[now_img_count - 1] + ")"
+            });
+            now_img_count--
+        }
+    });
+    $('.update_feed_modal_feed_image_next').click(function () {
+        if (now_img_count == img_count - 1) {
+            $('#update_feed_modal_image').css({
+                "background-image": "url(" + "/media/" + imgs_list[0] + ")"
+            });
+            now_img_count = 0
+        } else {
+            $('#update_feed_modal_image').css({
+                "background-image": "url(" + "/media/" + imgs_list[now_img_count + 1] + ")"
+            });
+            now_img_count++
+        }
+    });
+    $('.update_feed_modal_feed_image_dele').click(function () {
+        //서버로 보낼 데이터 (json 형태)
+        $.ajax({
+            url: "/content/removeimg",
+            data: {
+                img_content: imgs_list[now_img_count]
+            },
+            method: "POST",
+            success: function (data) {
+                console.log("성공");
+                alert("피드를 성공적으로 삭제 되었습니다.");
+            },
+            error: function (request, status, error) {
+                console.log("에러");
+            },
+            complete: function () {
+                console.log("완료");
+            }
+        });
+        delete imgs_list[]
+        if (now_img_count == img_count-1) {
+            $('#update_feed_modal_image').css({
+                "background-image": "url(" + "/media/" + imgs_list[0] + ")"
+            });
+            now_img_count = 0
+        }
+        else {
+            $('#update_feed_modal_image').css({
+                "background-image": "url(" + "/media/" + imgs_list[now_img_count+1] + ")"
+            });
+            now_img_count ++
+        }
+    })
 });
 
 // 피드 수정하기 버튼 클릭 이벤트 처리

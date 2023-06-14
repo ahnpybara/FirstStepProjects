@@ -43,12 +43,10 @@ class Main(APIView):
         user_followings = []
         for user_followings_list in user_followings_list:
             user_followings.append(user_followings_list.following)
-        print(user_followings)
         for user_following in user_following:
             # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들(대표로 2명만 뽑음)
             user_follower = Follow.objects.filter(follower=user_following.following).order_by('-id')[:2]
             for user_follower in user_follower:
-                print(added_followers)
                 if user_follower.following != email and user_follower.following not in added_followers and user_follower.following not in user_followings:
                     Recommend_Followers = User.objects.filter(email=user_follower.following).first()
                     Recommend_Following = User.objects.filter(email=user_follower.follower).first()

@@ -458,9 +458,10 @@ function uploadFiles(e) {
     let newFiles = e.target.files || e.dataTransfer.files; // 새로 추가된 파일들을 가져옴
 
     if (files.length + newFiles.length > 6) {
-        alert("파일의 개수는 6장을 넘을 수 없습니다.");
+        alert("파일의 개수는 6장 넘을 수 없습니다.");
         return;
     }
+
 
     for (var i = 0; i < newFiles.length; i++) {
         if (newFiles[i].type.match(/image.*/)) {
@@ -470,121 +471,123 @@ function uploadFiles(e) {
             return;
         }
     }
-    // 업로드 이미지등 필요없는 부분은 안보이게 함
-    $('.feed_modal_area_upload_img').css({
-        "display": "none"
-    })
-    $('.drag_here_image').css({
-        "display": "none"
-    })
-    // 업로드한 파일이 1장을 초과했을 경우에만 좌우 버튼 및 삭제 버튼을 나타나게 함
-    if (files.length > 1) {
-        // 감춰져 있던 좌우 버튼 및 삭제 버튼을 나타나게 함
-        $('.feed_modal_area_images_btn_dele').css({
-            "display": "flex"
+    if (files.length != 0) {
+        // 업로드 이미지등 필요없는 부분은 안보이게 함
+        $('.feed_modal_area_upload_img').css({
+            "display": "none"
         })
-        $('.feed_modal_feed_image_before').css({
-            "display": "flex"
+        $('.drag_here_image').css({
+            "display": "none"
         })
-        $('.feed_modal_feed_image_next').css({
-            "display": "flex"
-        })
-        $('.feed_modal_area_images_btn').css({
-            "display": "flex"
-        })
-    }
-    // 이미지를 표시함
-    $('.img_upload_space').css({
-        "background":"#e9e9e9",
-        "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-        "outline": "none",
-        "background-size": "contain",
-        "background-repeat": "no-repeat",
-        "background-position": "center",
-    });
-
-    // 몇번쨰 파일인지를 알기위해 추가
-    var files_Count = 0
-
-    $('.feed_modal_feed_image_next').click(function () {
-        files_Count++
-        if (files_Count < files.length && files_Count >= 0) {
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        } else {
-            files_Count = 0;
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        }
-    });
-
-    $('.feed_modal_feed_image_before').click(function () {
-        files_Count--
-        if (files_Count < files.length && files_Count >= 0) {
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        } else {
-            files_Count = files.length - 1;
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[files.length - 1]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        }
-    });
-    // 유재우 업로드한 이미지 삭제
-    $('.feed_modal_area_images_btn_dele').click(function () {
-        files.splice(files_Count, 1);
-        files_Count++
-        // 만일 사진이 1장 밖에 안남았을 경우
-        if (files.length == 1) {
+        // 업로드한 파일이 1장을 초과했을 경우에만 좌우 버튼 및 삭제 버튼을 나타나게 함
+        if (files.length > 1) {
+            // 감춰져 있던 좌우 버튼 및 삭제 버튼을 나타나게 함
             $('.feed_modal_area_images_btn_dele').css({
-                "display": "none"
+                "display": "flex"
             })
             $('.feed_modal_feed_image_before').css({
-                "display": "none"
+                "display": "flex"
             })
             $('.feed_modal_feed_image_next').css({
-                "display": "none"
+                "display": "flex"
+            })
+            $('.feed_modal_area_images_btn').css({
+                "display": "flex"
             })
         }
+        // 이미지를 표시함
+        $('.img_upload_space').css({
+            "background": "#e9e9e9",
+            "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+            "outline": "none",
+            "background-size": "contain",
+            "background-repeat": "no-repeat",
+            "background-position": "center",
+        });
 
-        if (files_Count < files.length && files_Count >= 0) {
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        } else {
-            files_Count = 0;
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        }
-    })
+        // 몇번쨰 파일인지를 알기위해 추가
+        var files_Count = 0
+
+        $('.feed_modal_feed_image_next').click(function () {
+            files_Count++
+            if (files_Count < files.length && files_Count >= 0) {
+                $('.img_upload_space').css({
+                    "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                    "outline": "none",
+                    "background-size": "contain",
+                    "background-repeat": "no-repeat",
+                    "background-position": "center"
+                });
+            } else {
+                files_Count = 0;
+                $('.img_upload_space').css({
+                    "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                    "outline": "none",
+                    "background-size": "contain",
+                    "background-repeat": "no-repeat",
+                    "background-position": "center"
+                });
+            }
+        });
+
+        $('.feed_modal_feed_image_before').click(function () {
+            files_Count--
+            if (files_Count < files.length && files_Count >= 0) {
+                $('.img_upload_space').css({
+                    "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                    "outline": "none",
+                    "background-size": "contain",
+                    "background-repeat": "no-repeat",
+                    "background-position": "center"
+                });
+            } else {
+                files_Count = files.length - 1;
+                $('.img_upload_space').css({
+                    "background-image": "url(" + window.URL.createObjectURL(files[files.length - 1]) + ")",
+                    "outline": "none",
+                    "background-size": "contain",
+                    "background-repeat": "no-repeat",
+                    "background-position": "center"
+                });
+            }
+        });
+        // 유재우 업로드한 이미지 삭제
+        $('.feed_modal_area_images_btn_dele').click(function () {
+            files.splice(files_Count, 1);
+            files_Count++
+            // 만일 사진이 1장 밖에 안남았을 경우
+            if (files.length == 1) {
+                $('.feed_modal_area_images_btn_dele').css({
+                    "display": "none"
+                })
+                $('.feed_modal_feed_image_before').css({
+                    "display": "none"
+                })
+                $('.feed_modal_feed_image_next').css({
+                    "display": "none"
+                })
+            }
+
+            if (files_Count < files.length && files_Count >= 0) {
+                $('.img_upload_space').css({
+                    "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
+                    "outline": "none",
+                    "background-size": "contain",
+                    "background-repeat": "no-repeat",
+                    "background-position": "center"
+                });
+            } else {
+                files_Count = 0;
+                $('.img_upload_space').css({
+                    "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
+                    "outline": "none",
+                    "background-size": "contain",
+                    "background-repeat": "no-repeat",
+                    "background-position": "center"
+                });
+            }
+        })
+    }
 }
 
 
@@ -599,7 +602,7 @@ function image_upload() {
 
 // 유재우 : 두번째 모달창을 보기위한 다음으로 버튼
 $('#modal_next_button').click(function () {
-    if (files.length > 0 && files.length < 7) {
+    if (files.length > 0 && files.length < 101) {
         // 이미지 업로드시 사진업로드 모달창 (첫 번째 모달창)을 가림
         $('#first_modal').css({
             display: 'none'
@@ -691,7 +694,7 @@ $('#modal_before_button').click(function () {
 
     // 이미지를 표시함
     $('.img_upload_space').css({
-        "background":"#e9e9e9",
+        "background": "#e9e9e9",
         "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
         "outline": "none",
         "background-size": "contain",

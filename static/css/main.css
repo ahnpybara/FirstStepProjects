@@ -518,3 +518,7 @@
     background-color:rgba(255, 255, 255, 0.6);/*까만색(0,0,0) 80% 불투명도*/
     color: rgba(0,0,0,1);
 }
+
+.update_feed_modal_feed_image_dele{
+    color: red;
+}
