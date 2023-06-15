@@ -134,7 +134,6 @@ class UploadFeed(APIView):
         file_length = int(request.data['file_length'])
         content = request.data.get('content')
         email = request.session.get('email', None)
-        file = []
         # 정유진: 카테고리 추가
         category = request.data.get('category')
 
@@ -157,9 +156,8 @@ class UploadFeed(APIView):
                 hashtags_lists.append(value)
         # #으로 구분 했을때 #앞에 아무것 없는 공백이 저장 되는 부분을 삭제
         hashtags_list = list(filter(None, hashtags_lists))
-        image = []
         # 피드 테이블에 튜플을 만들고 그 튜플을 feed_id 객체로 저장
-        feed_id = Feed.objects.create(content=content, email=email, category=category)
+
         # 이미지는 여러개라 반복문으로 튜플 생성
         for i in range(file_length):
             file = request.FILES.get('file[' + str(i) + ']')
@@ -167,12 +165,13 @@ class UploadFeed(APIView):
             uuid_name = uuid4().hex
             # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
             save_path = os.path.join(MEDIA_ROOT, uuid_name)
+            if i == 0:
+                feed_id = Feed.objects.create(content=content, email=email, category=category, image=uuid_name)
             # media 폴더에 파일이 저장됨
             with open(save_path, 'wb+') as destination:
                 for chunk in file.chunks():
                     destination.write(chunk)
             # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
-            image = uuid_name
             Image.objects.create(image=uuid_name, feed_id=feed_id.id)
 
         # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
@@ -723,6 +722,7 @@ class FollowerFeed(APIView):
 
         # 내가 팔로우한 유저의 피드의 정보를 가져오기 위한 작업
         for feed in follwing_feed:
+            count = 0
             user = User.objects.filter(email=feed.email).first()
             reply_object_list = Reply.objects.filter(feed_id=feed.id)
             reply_list = []
@@ -730,6 +730,14 @@ class FollowerFeed(APIView):
             # 해당 feed_id에 존재하는 해시태그들을 가져옴 ,해시태그 리스트 생성
             hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
             hashtag_list = []
+
+            # 이미지 추가
+            images_object_list = Image.objects.filter(feed_id=feed.id)
+            images_list = []
+            for image in images_object_list:
+                images_feed = Feed.objects.filter(id=feed.id).first()
+                images_list.append(dict(feed_id=images_feed, image=image.image, count=count, now_count=count + 1))
+                count = count + 1
 
             # 내가 팔로우한 유저의 피드에 달린 댓글을 가져오기 위한 작업
             for reply in reply_object_list:
@@ -747,7 +755,7 @@ class FollowerFeed(APIView):
             is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
             is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
             feed_list.append(dict(id=feed.id,
-                                  image=feed.image,
+                                  images_list=images_list,
                                   content=feed.content,
                                   like_count=like_count,
                                   profile_image=user.profile_image,
@@ -797,3 +805,53 @@ class FeedUpdateIMG(APIView):
         json_data = json.dumps(data)
         # ajax를 이용해서 html 추가하거나 변경할려면 이런방식을 써야한다.
         return HttpResponse(json_data, content_type='application/json')
+
+
+# 유재우 이미지 삭제
+class Removeimg(APIView):
+    def post(self, request):
+        now_img_count = request.data.get('now_img_count')
+        img_content = request.data.get('img_content')
+        img = Image.objects.filter(image=img_content).first()
+        print(img)
+        img_feed_id = img.feed_id
+        print(img_feed_id)
+        img.delete()
+        print(now_img_count)
+        if now_img_count == "0":
+            print("123")
+            img_feed = Feed.objects.filter(id=img_feed_id).first()
+            img = Image.objects.filter(feed_id=img_feed_id).first()
+            img_feed.image = img.image
+            img_feed.save()
+
+        return Response(status=200)
+
+
+# 유재우 이미지 추가
+class Updateimages(APIView):
+    def post(self, request):
+        print("123")
+        file_length = int(request.data['file_length'])
+        print(file_length)
+        feed_id = int(request.data['feed_id'])
+        print(feed_id)
+        for i in range(file_length):
+            file = request.FILES.get('file[' + str(i) + ']')
+            print(file)
+            # uuid 값 생성
+            uuid_name = uuid4().hex
+            # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
+            save_path = os.path.join(MEDIA_ROOT, uuid_name)
+            # media 폴더에 파일이 저장됨
+            with open(save_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
+            Image.objects.create(image=uuid_name, feed_id=feed_id)
+            print(uuid_name)
+
+            # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
+
+        return Response(status=200)
+

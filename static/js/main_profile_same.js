@@ -350,6 +350,7 @@ $(".modal_close").click(function () {
     $('.feed_modal_feed_image_next').css({
         "display": "none"
     })
+
 });
 
 // 사용 범위를 위해 전역 변수 files 선언
@@ -463,7 +464,7 @@ function uploadFiles(e) {
     }
 
 
-    for (var i = 0; i < newFiles.length; i++) {
+    for (let i = 0; i < newFiles.length; i++) {
         if (newFiles[i].type.match(/image.*/)) {
             files.push(newFiles[i]); // 새로운 파일을 기존 파일 배열에 추가
         } else {
@@ -506,7 +507,7 @@ function uploadFiles(e) {
         });
 
         // 몇번쨰 파일인지를 알기위해 추가
-        var files_Count = 0
+        let files_Count = 0
 
         $('.feed_modal_feed_image_next').click(function () {
             files_Count++
@@ -602,7 +603,7 @@ function image_upload() {
 
 // 유재우 : 두번째 모달창을 보기위한 다음으로 버튼
 $('#modal_next_button').click(function () {
-    if (files.length > 0 && files.length < 101) {
+    if (files.length > 0 && files.length < 6) {
         // 이미지 업로드시 사진업로드 모달창 (첫 번째 모달창)을 가림
         $('#first_modal').css({
             display: 'none'
@@ -627,7 +628,7 @@ $('#modal_next_button').click(function () {
             "background-position": "center"
         });
         // 몇번쨰 파일인지를 알기위해 추가
-        var files_Count = 0
+        let files_Count = 0
 
 
         $('#feed_modal_feed_image_next_btn').click(function () {

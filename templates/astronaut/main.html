@@ -12,7 +12,7 @@
 
     <!-- css 분리 -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=1">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=1">
 
     <!--  Google 심볼을 사용하기 위한 선언 -->
@@ -143,7 +143,8 @@
                             </li>
                             <li>
                                 <!-- 피드 수정 -->
-                                <div feed_id="{{ feed.id }}" class="update_feed dropdown-item" href="#"> 수정</div>
+                                <!-- 유재우 id 추가(feed.id_update_feed_btn으로 설정) 피드 수정에서 이미지 추가시 쓰기 위해 추가함 -->
+                                <div feed_id="{{ feed.id }}" id="{{ feed.id }}_update_feed_btn" class="update_feed dropdown-item" href="#"> 수정</div>
                             </li>
                         </ul>
                     </div>
@@ -406,7 +407,6 @@
             <div>
                 <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
             </div>
-
         </div>
 
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
@@ -417,18 +417,23 @@
             <div class="drag_here_image">
                 이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
             </div>
-            <div class="feed_modal_area_images_btn_dele">
-                삭제
-            </div>
-            <div class="feed_modal_area_images_btn">
-                <div class="feed_modal_feed_image_before material-symbols-outlined" id="feed_modal_feed_image_before_F">
-                    arrow_back_ios
+            <div class="feed_image_area_img_control_btns_parent">
+                <div class="feed_image_area_img_control_btns">
+                    <div class="feed_modal_area_images_btn_dele">
+                        삭제
+                    </div>
+                    <div class="feed_modal_area_images_btn">
+                        <div class="feed_modal_feed_image_before material-symbols-outlined"
+                             id="feed_modal_feed_image_before_F">
+                            arrow_back_ios
+                        </div>
+                        <div class="feed_modal_feed_image_next material-symbols-outlined"
+                             id="feed_modal_feed_image_next_F">
+                            arrow_forward_ios
+                        </div>
+                    </div>
                 </div>
-                <div class="feed_modal_feed_image_next material-symbols-outlined" id="feed_modal_feed_image_next_F">
-                    arrow_forward_ios
-                </div>
             </div>
-
             <!--사진 찾는 파일 시스템을 여는 버튼-->
             <button id="image_upload_btn" type="button" class="btn btn-primary">
                 사진 추가
@@ -527,22 +532,31 @@
             </div>
             <!-- 모달창 닫기 버튼 -->
             <div>
-                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+                <span id="modal_close_button" class="update_feed_modal_close material-icons-outlined">close</span>
             </div>
         </div>
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
         <div class="feed_image_text_modal">
             <!-- 이미지 영역 -->
             <div id="update_feed_modal_image">
-                <div class="update_feed_modal_image_btns">
-                    <div class="update_feed_modal_feed_image_before material-symbols-outlined">
-                        arrow_back_ios
-                    </div>
-                    <div class="update_feed_modal_feed_image_next material-symbols-outlined">
-                        arrow_forward_ios
+                <div class="update_feed_modal_image_btns_parent">
+                    <div class="update_feed_modal_image_btns">
+                        <div class="update_feed_modal_image_file_btn">
+                            <div class="update_feed_modal_image_update">추가</div>
+                            <input multiple="multiple" type="file" id="update_feed_modal_input_image_upload"
+                                   onchange="image_update();"/>
+                            <div class="update_feed_modal_feed_image_dele"> 삭제</div>
+                        </div>
+                        <div class="update_feed_modal_image_LR_btns">
+                            <div class="update_feed_modal_feed_image_before material-symbols-outlined">
+                                arrow_back_ios
+                            </div>
+                            <div class="update_feed_modal_feed_image_next material-symbols-outlined">
+                                arrow_forward_ios
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="update_feed_modal_feed_image_dele"> 삭제</div>
             </div>
             <!-- 텍스트 영역 -->
             <div class="modal_text_area">
@@ -731,8 +745,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'js/main.js' %}?ver=3"></script>
-<script src="{% static 'js/main_profile_same.js' %}?ver=3"></script>
-<script src="{% static 'js/allsame.js' %}?ver=3"></script>
+<script src="{% static 'js/main.js' %}?ver=2"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=2"></script>
+<script src="{% static 'js/allsame.js' %}?ver=2"></script>
 </body>
 </html>

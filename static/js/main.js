@@ -319,9 +319,9 @@ $('.update_feed').click(function (event) {
     $('#update_feed_modal_image').css({
         background: '#e9e9e9'
     });
-    var img_count
-    var now_img_count = 0
-    var imgs_list = []
+    let img_count = 0
+    let now_img_count = 0
+    let imgs_list = []
 
     //서버로 보낼 데이터 (json 형태)
     $.ajax({
@@ -333,10 +333,11 @@ $('.update_feed').click(function (event) {
         success: function (data) {
             console.log("성공");
             // 서버에서 받은 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임 변수에 따로 할당.
-            var count = data['count'];
-            var imgs = data['image[]'];
-            var feed_content = data['feed_content'];
-            var hashtag_content = data['hashtag_content']
+            let count = data['count'];
+            let imgs = data['image[]'];
+            files = imgs
+            let feed_content = data['feed_content'];
+            let hashtag_content = data['hashtag_content']
             imgs_list = imgs
             // 정유진: 카테고리 추가
             var category = data['category']
@@ -349,6 +350,21 @@ $('.update_feed').click(function (event) {
                 "background-position": "center",
                 "margin-right": "1px"
             });
+            if (count == 1) {
+                $('.update_feed_modal_image_LR_btns').css({
+                    "display": "none"
+                })
+                $('.update_feed_modal_feed_image_dele').css({
+                    "display": "none"
+                })
+            } else {
+                $('.update_feed_modal_image_LR_btns').css({
+                    "display": "flex"
+                })
+                $('.update_feed_modal_feed_image_dele').css({
+                    "display": "flex"
+                })
+            }
             img_count = count
             // 할당 받은 게시물 내용, 해시태그들을 모달창에 추가
             $("#input_updatefeed_content").html(feed_content);
@@ -364,6 +380,7 @@ $('.update_feed').click(function (event) {
 
         }
     });
+    // 피드 수정하기 에서 이미지 이전 버튼 이밴트
     $('.update_feed_modal_feed_image_before').click(function () {
         if (now_img_count == 0) {
             $('#update_feed_modal_image').css({
@@ -377,6 +394,7 @@ $('.update_feed').click(function (event) {
             now_img_count--
         }
     });
+    // 피드 수정하기 에서 이미지 다음 버튼 이밴트
     $('.update_feed_modal_feed_image_next').click(function () {
         if (now_img_count == img_count - 1) {
             $('#update_feed_modal_image').css({
@@ -390,17 +408,18 @@ $('.update_feed').click(function (event) {
             now_img_count++
         }
     });
+    //  피드 수정하기 에서 이미지 삭제 버튼 이밴트
     $('.update_feed_modal_feed_image_dele').click(function () {
         //서버로 보낼 데이터 (json 형태)
         $.ajax({
             url: "/content/removeimg",
             data: {
+                now_img_count: now_img_count,
                 img_content: imgs_list[now_img_count]
             },
             method: "POST",
             success: function (data) {
                 console.log("성공");
-                alert("피드를 성공적으로 삭제 되었습니다.");
             },
             error: function (request, status, error) {
                 console.log("에러");
@@ -409,23 +428,32 @@ $('.update_feed').click(function (event) {
                 console.log("완료");
             }
         });
-        delete imgs_list[]
-        if (now_img_count == img_count-1) {
-            $('#update_feed_modal_image').css({
-                "background-image": "url(" + "/media/" + imgs_list[0] + ")"
-            });
-            now_img_count = 0
-        }
-        else {
-            $('#update_feed_modal_image').css({
-                "background-image": "url(" + "/media/" + imgs_list[now_img_count+1] + ")"
-            });
-            now_img_count ++
+        imgs_list.splice(now_img_count, 1);
+        $('#update_feed_modal_image').css({
+            "background-image": "url(" + "/media/" + imgs_list[0] + ")"
+        });
+        now_img_count = 0
+        img_count--
+
+        if (img_count == 1) {
+            $('.update_feed_modal_image_LR_btns').css({
+                "display": "none"
+            })
+            $('.update_feed_modal_feed_image_dele').css({
+                "display": "none"
+            })
         }
     })
-});
 
-// 피드 수정하기 버튼 클릭 이벤트 처리
+
+    // 피드 수정 모달창에서 사진 추가 버튼 클릭했을 시 (파일 시스템을 열어서 업로드 하는 경우)
+    $('.update_feed_modal_image_update').click(function () {
+        $('#update_feed_modal_input_image_upload').click()
+    });
+})
+;
+
+// 피드 수정하기 모달에서 수정하기 버튼 클릭 이벤트 처리
 $('#feed_update_button').click(function (event) {
     // 수정할 피드의 feed_id를 전역변수에서 가져오고, 해시태그 내용, 글 내용은 각각 입력 폼에서 가져옴
     let feed_id = Feeds_id
@@ -576,7 +604,7 @@ $('#flexSwitchCheckChecked').click(function (event) {
 });
 
 
-// 유재우: 이미지 슬라이드를 우해 추가한 이밴트들
+// 유재우: 매인에서 이미지 슬라이드를 위해 추가한 이밴트들
 $('.prev_image_button').click(function (event) {
     let feed_id = event.target.attributes.getNamedItem('feed_id').value;
     feeds_id = parseInt(feed_id / 100)
@@ -636,7 +664,7 @@ $('.prev_image_button').click(function (event) {
     }
 })
 
-// 유재우: 이미지 슬라이드를 우해 추가한 이밴트들
+// 유재우: 매인에서 이미지 슬라이드를 위해 추가한 이밴트들
 $('.next_image_button').click(function (event) {
     let feed_id = event.target.attributes.getNamedItem('feed_id').value;
     feeds_id = parseInt(feed_id / 100)
@@ -700,7 +728,6 @@ $('.next_image_button').click(function (event) {
 $('.follow_button').click(function (event) {
     let following_id = event.target.attributes.getNamedItem('following_id').value;
     let user_email = event.target.attributes.getNamedItem('user_email').value;
-    alert(user_email)
 
     // 서버로 보낼 데이터 (json)
     $.ajax({
@@ -712,7 +739,6 @@ $('.follow_button').click(function (event) {
         method: "POST",
         success: function (data) {
             console.log("성공");
-            alert("123")
         },
         error: function (request, status, error) {
             console.log("에러");
@@ -722,4 +748,49 @@ $('.follow_button').click(function (event) {
             location.replace("/main")
         }
     });
+})
+
+
+// 유재우 : 수정하기에 이미지 추가
+function image_update(e) {
+    let fd = new FormData();
+    let fileInput = document.getElementById("update_feed_modal_input_image_upload");
+    if (fileInput.files.length + files.length > 6) {
+        alert("이미지 파일은 6장을 넘을 수 없습니다")
+        return;
+    }
+    let file_length = fileInput.files.length
+    let feed_id = Feeds_id
+
+    for (let i = 0; i < fileInput.files.length; i++) {
+        fd.append('file[' + i + ']', fileInput.files[i]);
+        fd.append('image[' + i + ']', fileInput.files[i].name);
+    }
+    fd.append('file_length', file_length)
+    fd.append('feed_id', feed_id)
+
+    // 이미지를 Django 서버로 전송하는 AJAX 요청
+    $.ajax({
+        url: "/content/updateimages", // 이미지를 처리할 Django 뷰의 URL
+        method: "POST",
+        data: fd,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            console.log("성공");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+            $('#modal_close_button').click()
+            $('#' + feed_id + '_update_feed_btn').click()
+        }
+    });
+}
+
+// 피드 수정을 하지 않고 닫고 다음 피드수정을 할 시 앞에 열었던 피드도 같이 수정되는 버그를 막기위해 새로고침함
+$('.update_feed_modal_close').click(function () {
+    location.reload()
 })

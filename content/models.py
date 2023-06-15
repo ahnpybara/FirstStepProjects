@@ -7,7 +7,7 @@ class Feed(models.Model):
     email = models.EmailField(default='')  # 이메일
     create_at = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=20, default='')  # 카테고리 이름
-
+    image = models.TextField()  # 피드에 업로드되는 이미지
 
 # 이미지 테이블
 class Image(models.Model):
