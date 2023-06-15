@@ -85,16 +85,6 @@ a {
     text-decoration: none;
 }
 
-/* 채팅 유저 목록 리스트의 프로필 사진 박스 */
-.chat_profile {
-    margin-right: 12px;
-    width: 45px;
-    height: 45px;
-    margin-left: 15px;
-    min-width: 45px;
-    min-height: 45px;
-}
-
 /* 프로필 사진 외부 박스 */
 .profile_box {
     width: 32px;
@@ -311,6 +301,11 @@ body::-webkit-scrollbar {
     margin-left: 20px;
 }
 
+.chat_modal_back_btn {
+    margin-left: 20px;
+    width: 42px;
+}
+
 /* 채팅 내역 영역(모달창안에 페이지를 불러옴) */
 .chat_modal_content_area {
     display: flex;
@@ -417,6 +412,18 @@ body::-webkit-scrollbar {
     color: gray;
 }
 
+/* 채팅 유저목록 리스트 새로고침 */
+.refresh_chat_modal_user_area {
+    text-align: center;
+    font-size: 18px;
+    padding: 5px;
+    border-top: 1px solid #d8d8d8;
+    background-color: #e7ecff;
+    color: #a7a7a7;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 /* 보내는 자의 채팅 말풍선 영역 */
 .send_chat_area {
     text-align: right;
@@ -485,6 +492,19 @@ body::-webkit-scrollbar {
     animation: fadeOut 2s ease-in-out;
 }
 
+.chat_user_alarm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    animation: fadeOut 2s ease-in-out;
+}
 
 /*
 또한, fadeOut라는 이름의 키 프레임 애니메이션을 정의하였습니다. 이 애니메이션은 opacity 속성을 이용하여 알림창의 페이드 아웃 효과를 구현합니다.
@@ -564,7 +584,7 @@ body::-webkit-scrollbar {
 .alert_content_area {
     display: flex;
     flex-direction: column;
-    padding-right: 38px;
+    padding-right: 45px;
     font-size: 13px;
 }
 
@@ -572,7 +592,7 @@ body::-webkit-scrollbar {
 .reply_alert_content_area {
     display: flex;
     flex-direction: column;
-    padding-right: 19px;
+    padding-right: 26px;
     font-size: 13px;
 }
 
@@ -580,7 +600,6 @@ body::-webkit-scrollbar {
 .follow_alert_content_area {
     display: flex;
     flex-direction: column;
-    padding-left: 4px;
     font-size: 13px;
 }
 
@@ -629,6 +648,7 @@ body::-webkit-scrollbar {
     padding: 3px;
     color: lightcoral;
     font-weight: bold;
+    cursor: pointer;
 }
 
 /* 알림 아이콘 */
@@ -670,4 +690,33 @@ body::-webkit-scrollbar {
 /* 팔로우 알림 글내용과 프로필 사진 간격 */
 .follow_alert > .alert_profile {
     margin-right: 20px;
+}
+
+/* 채팅 확인 유무 */
+.red-circle {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+/* 채팅확인 및 시간 영역 */
+.alert_time_read_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 10px;
+}
+
+/* 나에게 온 채팅이 있는지 유무 */
+.chat_is_exist {
+    padding-top: 2px;
+    font-size: 30px !important;
+    padding-right: 20px;
+    cursor: pointer;
+    color: #add1ff !important;
+    font-variation-settings: 'FILL' 1 !important;,
+'wght' 700,
+'GRAD' 0,
+'opsz' 48
 }

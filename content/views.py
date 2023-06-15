@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, Image, Alert
+from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, Image, Alert, Chat
 from user.models import User
 import os
 import json
@@ -123,10 +123,14 @@ class Main(APIView):
         # 세션 유저에게 온 알림 유무
         alert_exists = Alert.objects.filter(receive_user=email).exists()
 
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
+        print(is_delivered_chat)
+
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list,
-                                   Recommend_Followers_list=Recommend_Followers_list, alert_exists=alert_exists
+                                   Recommend_Followers_list=Recommend_Followers_list, alert_exists=alert_exists, is_delivered_chat=is_delivered_chat,
                                    ))
 
 
@@ -512,6 +516,9 @@ class SearchFeed(APIView):
         # 세션 유저에게 온 알림 유무
         alert_exists = Alert.objects.filter(receive_user=email).exists()
 
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
+
         # 검색결과를 검색결과 페이지랑 데이터를 사용자에게 반환
         return render(request, "astronaut/search.html",
                       context=dict(user_session=user_session,
@@ -520,7 +527,8 @@ class SearchFeed(APIView):
                                    start_date=start_date, end_date=end_date, show_method_recent=show_recent,
                                    show_method_like=show_like, show_method_reply=show_reply,
                                    feed_all_count=feed_all_count, category_option1=category_option1,
-                                   category_option2=category_option2, alert_exists=alert_exists))
+                                   category_option2=category_option2, alert_exists=alert_exists,
+                                   is_delivered_chat=is_delivered_chat))
 
 
 # 댓글 삭제 클래스
@@ -794,10 +802,13 @@ class FollowerFeed(APIView):
 
         # 알림 유무
         alert_exists = Alert.objects.filter(receive_user=email).exists()
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
 
         # 팔로우 스위치 버튼 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
-                      context=dict(feeds=feed_list, user_session=user_session, is_checked=is_checked, alert_exists=alert_exists))
+                      context=dict(feeds=feed_list, user_session=user_session, is_checked=is_checked,
+                                   alert_exists=alert_exists, is_delivered_chat=is_delivered_chat))
 
 
 # 피드 수정시 이전 정보를 수정창에 불러오는 클래스

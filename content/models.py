@@ -49,10 +49,11 @@ class Hashtag(models.Model):
 
 # 채팅 테이블
 class Chat(models.Model):
-    send_user = models.EmailField(default='')  # 채팅 보낸 유저
-    receive_user = models.EmailField(default='')  # 채팅을 받은 유저
-    chat_content = models.TextField()  # 채팅 내용
-    send_time = models.DateTimeField(auto_now_add=True)  # 채팅 시간
+    send_user = models.EmailField(default='')                   # 채팅 보낸 유저
+    receive_user = models.EmailField(default='')                # 채팅을 받은 유저
+    chat_content = models.TextField()                           # 채팅 내용
+    send_time = models.DateTimeField(auto_now_add=True)         # 채팅 시간
+    is_read = models.BooleanField(default=True)                # 채팅 확인 유무
 
 
 # 알림 테이블

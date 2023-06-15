@@ -461,6 +461,7 @@
     color: gray;
 }
 
+/*좌우 버튼들의 부모*/
 .feed_image_area_img_control_btns_parent {
     display: none;
     position: relative;
@@ -469,6 +470,7 @@
     height: 100%;
 }
 
+/*좌우 버튼들*/
 .feed_image_area_img_control_btns {
     width: 100%;
 }

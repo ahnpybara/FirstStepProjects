@@ -342,6 +342,8 @@ class Profile(APIView):
                                             reply_count=reply_count))
         # 알림 유무
         alert_exists = Alert.objects.filter(receive_user=email).exists()
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
 
         # 프로필 화면을 요청한 사용자에게 프로필화면과 해당 데이터를 전달
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
@@ -355,7 +357,8 @@ class Profile(APIView):
                                                                     user_feed_count=user_feed_count,
                                                                     follower_count=follower_count,
                                                                     following_count=following_count,
-                                                                    alert_exists=alert_exists))
+                                                                    alert_exists=alert_exists,
+                                                                    is_delivered_chat=is_delivered_chat))
 
 
 # 유저 프로필로 이동 클래스
@@ -363,6 +366,7 @@ class ReplyProfile(APIView):
     def get(self, request):
         # 서버로 전달된 사용자의 닉네임을 받음
         nickname = request.GET.get('user_nickname')
+        print(nickname)
 
         # 현재세션 정보를 받아옴. (네비바의 본인 프로필 정보를 위함)
         email_session = request.session.get('email', None)
@@ -380,6 +384,8 @@ class ReplyProfile(APIView):
 
         # 전달된 닉네임을 통해서 프로필로 이동할 유저의 객체를 뽑음
         user = User.objects.filter(nickname=nickname).first()
+        if user is None:
+            return render(request, "astronaut/main.html")
         # 유저의 객체에서 이메일을 구함
         email = user.email
 
@@ -436,6 +442,9 @@ class ReplyProfile(APIView):
         # 알림 유무
         alert_exists = Alert.objects.filter(receive_user=email).exists()
 
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
+
         # 프로필 화면을 요청한 사용자에게 프로필화면과 해당 데이터를 전달
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
@@ -449,7 +458,8 @@ class ReplyProfile(APIView):
                                                                     is_follow=is_follow,
                                                                     follower_count=follower_count,
                                                                     following_count=following_count,
-                                                                    alert_exists=alert_exists))
+                                                                    alert_exists=alert_exists,
+                                                                    is_delivered_chat=is_delivered_chat))
 
     # 팔로우는 내 프로필 페이지가 아닌 다른 사용자의 프로필 페이지에 접속했을 때 가능한 것이므로 ReplyProfile 클래스에 post 함수로 추가
     def post(self, request):
@@ -516,6 +526,10 @@ class Chatting(APIView):
         send_receive_chat = Chat.objects.filter(
             Q(send_user=email, receive_user=receive_user_email) | Q(receive_user=email, send_user=receive_user_email)
         )
+
+        # 채팅을 받은 사용자가 채팅 확인 유무
+        is_read_chat = Chat.objects.filter(send_user=receive_user_email, receive_user=email)
+        is_read_chat.update(is_read=False)
 
         # 만약 채팅의 개수가 30개라면 일괄 삭제
         if send_receive_chat.count() > 30:
