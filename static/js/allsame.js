@@ -68,7 +68,6 @@ $('#search_box').mousedown(function () {
                         // 키 입력이 검색 키워드 변경으로 인해 새로운 자동완성 모달창 다시 만들어줘야 하기 위해서 모달창을 비움
                         $("#auto_modal_list").html('');
                         // 정유진: 해시태그 모음의 게시글 수
-                        let hashtag_bundle_count = 0
                         // prioritize_list 리스트에 있는 요소 수 만큼 반복
                         for (let i = 0; i < data['prioritize_list'].length; i++) {
                             // 사용자 검색 시(prioritize_list 리스트에 content의 정보가 없을 경우 -> 유저 검색)
@@ -96,7 +95,7 @@ $('#search_box').mousedown(function () {
                                 // prioritize_list 리스트에서 검색 키워드에 필터링된 해시태그 정보를 꺼냄
                                 let hashtag_content = data['prioritize_list'][i].content;
                                 let hashtag_count = data['prioritize_list'][i].hashtag_count;
-                                hashtag_bundle_count += hashtag_count
+                                let hashtag_bundle_count = data['prioritize_list'][i].hashtag_bundle_count;
 
                                 // 자동완성 모달창에 자동완성 목록을 만드는 과정
                                 // 정유진: 가장 앞에 만들기 위해서.
@@ -107,19 +106,15 @@ $('#search_box').mousedown(function () {
                                     $("#auto_modal_object_bundle").append('<div id="auto_modal_hashtag_bundle"></div>');
 
                                     $("#auto_modal_hashtag_bundle").append('<div class="auto_modal_text_object1" hashtag_content="' + search_box_value + '모음보기">' + search_box_value + ' 모음보기</div>');
+                                    $("#auto_modal_hashtag_bundle").append('<div class="auto_modal_text_object2" hashtag_content="' + search_box_value + '">게시물 ' + hashtag_count + '</div>');
+                                } else {
+                                    $("#auto_modal_list").append('<div id="auto_modal_object_' + i + '" class="hashtags auto_modal_object" hashtag_content="' + hashtag_content + '"></div>');
+                                    $("#auto_modal_object_" + i).append('<span class="auto_modal_hashtag_icon material-symbols-outlined" hashtag_content="' + hashtag_content + '">tag</span>');
+                                    $("#auto_modal_object_" + i).append('<div id="auto_modal_hashtag_' + i + '"></div>');
+
+                                    $("#auto_modal_hashtag_" + i).append('<div class="auto_modal_text_object1" hashtag_content="' + hashtag_content + '"> #' + hashtag_content + '</div>');
+                                    $("#auto_modal_hashtag_" + i).append('<div class="auto_modal_text_object2" hashtag_content="' + hashtag_content + '">게시물 ' + hashtag_count + '</div>');
                                 }
-                                // 정유진: hashtag_bundle_count는 가장 마지막에 측정되서 마지막 루프 때.
-                                if (i == data['prioritize_list'].length - 1) {
-                                    $("#auto_modal_hashtag_bundle").append('<div class="auto_modal_text_object2" hashtag_content="' + search_box_value + '모음보기">게시물 ' + hashtag_bundle_count + '</div>');
-                                }
-
-                                $("#auto_modal_list").append('<div id="auto_modal_object_' + i + '" class="hashtags auto_modal_object" hashtag_content="' + hashtag_content + '"></div>');
-                                $("#auto_modal_object_" + i).append('<span class="auto_modal_hashtag_icon material-symbols-outlined" hashtag_content="' + hashtag_content + '">tag</span>');
-                                $("#auto_modal_object_" + i).append('<div id="auto_modal_hashtag_' + i + '"></div>');
-
-                                $("#auto_modal_hashtag_" + i).append('<div class="auto_modal_text_object1" hashtag_content="' + hashtag_content + '"> #' + hashtag_content + '</div>');
-                                $("#auto_modal_hashtag_" + i).append('<div class="auto_modal_text_object2" hashtag_content="' + hashtag_content + '">게시물 ' + hashtag_count + '</div>');
-
                             }
                         }
 
