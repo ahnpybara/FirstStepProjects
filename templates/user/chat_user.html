@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     {% load static %}
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=3">
     <!--  jQuery를 사용하기 위한 선언  -->
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 
@@ -37,11 +37,16 @@
                     {% endfor %}
                 </div>
             </div>
-            <!-- 마지막으로 보낸 채팅의 시간 영역 -->
-            <div>
+            <!-- 마지막으로 보낸 채팅의 시간과 확인 유무 영역 -->
+            <div class="alert_time_read_area">
+                <!-- 마지막으로 보낸 채팅의 시간 영역 -->
                 {% for chat in send_chat_list %}
                     {% if chat.send_user_chat.send_user == user.email %}
                         <div class="send_chat_time">{{ chat.send_user_chat.send_time }}</div>
+                    {% endif %}
+                    <!-- 채팅 확인 유무 -->
+                    {% if chat.send_user_chat.send_user == user.email and chat.send_user_chat.is_read %}
+                        <div class="red-circle"></div>
                     {% endif %}
                 {% endfor %}
             </div>
