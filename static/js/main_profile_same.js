@@ -531,3 +531,15 @@ function image_upload() {
         return 0;
     }
 }
+
+// 정유진: 공유카테고리의 항목 선택 시 닉네임을 눌러도 체그된다.
+function toggleCheckbox(event) {
+    var checkbox = event.target.previousElementSibling.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+}
+
+// 정유진: 공유카테고리의 항목 선택 시 자동 닫는 것을 방지
+$('.dropdown-menu .dropdown-item_shared_category').on('click', function (e) {
+    // 정유진: 부모 요소의 클릭 이벤트 전파 중지
+    e.stopPropagation();
+});
