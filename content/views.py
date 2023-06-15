@@ -89,7 +89,7 @@ class Main(APIView):
                                   is_shared_category=is_shared_category,
                                   is_shared_category_user=is_shared_category_user
                                   ))
-        # 정유진: 피드 업로드 시 맞팔되어 있는 유저 리스트
+        # 정유진: 피드 업로드 및 수정 시 필요한 맞팔되어 있는 유저 리스트
         follower_user_email_list = list(Follow.objects.filter(follower=user_session.email).values_list('following', flat=True))
         following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=user_session.email).values_list('follower', flat=True))
 
@@ -592,7 +592,7 @@ class FeedModal(APIView):
         # 게시물에 달린 해시태그들을 뽑아냄
         feed_modal_hashtag_object_list = Hashtag.objects.filter(feed_id=feed_id)
         # 해시태그 내용을 전달하기 위해서 리스트를 선언한 뒤 반복문을 통해 해시태그를 채움
-        # 해시태그 내용을 리스트로 추출 TODO
+        # 해시태그 내용을 리스트로 추출 TODO 수정 완료
         hashtag_list = list(feed_modal_hashtag_object_list.values_list('content', flat=True))
 
         # 게시물에 달린 댓글 정보
@@ -662,6 +662,11 @@ class Autocomplete(APIView):
             hashtag_content_lists = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list(
                 'content', flat=True)[:10]
 
+            # 정유진: 해시태그 모음 보기
+            hashtag_bundle_count = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list(
+                'feed_id', flat=True).count()
+            print(hashtag_bundle_count)
+
             # 반복문을 통해 특정 해시태그가 달린 게시물 수 와 해시태그를 리스트에 저장
             for hashtag in hashtag_content_lists:
                 # 해당 해시태그가 포함된 게시글 수. 같은 게시물에 같은 해시태그는 미포함.
@@ -673,6 +678,9 @@ class Autocomplete(APIView):
             # 해시태그가 달린 게시물 수가 많은 순으로 정렬 람다식 이용
             autocomplete_hashtag_list = sorted(autocomplete_hashtag_list, key=lambda x: x['hashtag_count'],
                                                reverse=True)
+            autocomplete_hashtag_list.insert(0, dict(content=search_box_value,
+                                                     hashtag_count=hashtag_bundle_count))
+            print(autocomplete_hashtag_list[0])
         # 만약 유저 검색일 경우
         else:
             # TODO 검색키워드가 닉네임 또는 이름에 포함되는지 객체를 10개만 뽑아냄
