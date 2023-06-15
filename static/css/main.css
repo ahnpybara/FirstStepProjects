@@ -559,14 +559,22 @@
     width: 100%;
     text-align: left;
 }
-
+/* 업데이트 피드 자우 버튼*/
 .update_feed_modal_feed_image_before,
 .update_feed_modal_feed_image_next {
     margin: 0;
 }
-.update_feed_modal_feed_image_before{
-    left: 5px;
-}
 #update_feed_modal_input_image_upload{
     display: none;
+}
+/*업데이트 자우버튼 끝*/
+/*피드 이미지 카운터*/
+.now_img_count {
+    position: absolute;
+    bottom: 10px; /* 원하는 위치로 조정 */
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d8d8d8;
+    border: black;
+    background-color: rgba(0, 0, 0, 0.2); /*까만색(0,0,0) 80% 불투명도*/
 }

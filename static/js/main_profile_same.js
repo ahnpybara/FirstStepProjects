@@ -492,7 +492,7 @@ function uploadFiles(e) {
             $('.feed_modal_feed_image_next').css({
                 "display": "flex"
             })
-            $('.feed_modal_area_images_btn').css({
+            $('.feed_image_area_img_control_btns_parent').css({
                 "display": "flex"
             })
         }
