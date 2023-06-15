@@ -352,6 +352,11 @@ class Profile(APIView):
                                                    like_count=like_count,
                                                    reply_count=reply_count))
 
+        # 정유진: 피드 업로드 및 수정 시 필요한 맞팔되어 있는 유저 리스트
+        follower_user_email_list = list(Follow.objects.filter(follower=email).values_list('following', flat=True))
+        following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=email).values_list('follower', flat=True))
+
+        shared_category_nickname_list = User.objects.filter(email__in=following_user_email_list)
         # 프로필 화면을 요청한 사용자에게 프로필화면과 해당 데이터를 전달
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
@@ -365,7 +370,8 @@ class Profile(APIView):
                                                                     shared_category_count_list=shared_category_count_list,
                                                                     user_feed_count=user_feed_count,
                                                                     follower_count=follower_count,
-                                                                    following_count=following_count))
+                                                                    following_count=following_count,
+                                                                    shared_category_nickname_list=shared_category_nickname_list))
 
 
 # 유저 프로필로 이동 클래스
@@ -458,6 +464,11 @@ class ReplyProfile(APIView):
                                                    like_count=like_count,
                                                    reply_count=reply_count))
 
+        # 정유진: 피드 업로드 및 수정 시 필요한 맞팔되어 있는 유저 리스트
+        follower_user_email_list = list(Follow.objects.filter(follower=email_session).values_list('following', flat=True))
+        following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=email_session).values_list('follower', flat=True))
+
+        shared_category_nickname_list = User.objects.filter(email__in=following_user_email_list)
         # 프로필 화면을 요청한 사용자에게 프로필화면과 해당 데이터를 전달
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
@@ -472,7 +483,8 @@ class ReplyProfile(APIView):
                                                                     user_feed_count=user_feed_count,
                                                                     is_follow=is_follow,
                                                                     follower_count=follower_count,
-                                                                    following_count=following_count))
+                                                                    following_count=following_count,
+                                                                    shared_category_nickname_list=shared_category_nickname_list))
 
     # 팔로우는 내 프로필 페이지가 아닌 다른 사용자의 프로필 페이지에 접속했을 때 가능한 것이므로 ReplyProfile 클래스에 post 함수로 추가
     def post(self, request):

@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% load static %}
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}?ver=8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}?ver=3">
     <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=3">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=3">
 
     <!-- Bootstrap CSS 사용하기 위한 선언  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -109,13 +109,13 @@
                 {% if is_follow %}
                     <button id="user_follow_btn" user_session_email="{{ user_session.email }}"
                             user_email="{{ user.email }}" type="button" class="follow_btn btn btn-primary"
-                            style="width: 90px; height: 30px; background-color: gray; margin-right: 15px; font-weight: bold; border-radius: 12%; display: flex; align-items: center; {% if user_session.email == user.email %} display: none {% endif %}">
+                            style="width: 90px; height: 30px; background-color: gray; margin-right: 15px; font-weight: bold; border-radius: 12%; display: flex; align-items: center; {% if user_session.email == user.email %} display: none {% endif %}; border-color: #0d6efd00; box-shadow: none;">
                         언팔로우
                     </button>
                 {% else %}
                     <button id="user_follow_btn" user_session_email="{{ user_session.email }}"
                             user_email="{{ user.email }}" type="button" class="follow_btn btn btn-primary"
-                            style="width: 74px; height: 30px; background-color: rgb(0, 149, 246); margin-right: 15px; font-weight: bold; border-radius: 12%; display: flex; align-items: center; {% if user_session.email == user.email %} display: none {% endif %}">
+                            style="width: 74px; height: 30px; background-color: rgb(0, 149, 246); margin-right: 15px; font-weight: bold; border-radius: 12%; display: flex; align-items: center; {% if user_session.email == user.email %} display: none {% endif %}; border-color: #0d6efd00; box-shadow: none;">
                         팔로우
                     </button>
                 {% endif %}
@@ -146,7 +146,7 @@
     </div>
 </div>
 
-<!-- 사용자가 게시, 좋아요, 북마크한 게시글을 보여주기 위한 영역 -->
+<!-- 사용자가 게시, 좋아요, 북마크, 공유카테고리 게시글을 보여주기 위한 영역 -->
 <div class="show_feed_root_area">
     <!-- 내가 게시, 좋아요, 북마크한 게시글을 보여주기 위한 버튼 영역 -->
     <div class="show_feed_list_area">
@@ -167,7 +167,7 @@
         </div>
         <!-- 정유진: 공유카테고리된 게시글들을 보기 위한 버튼 -->
         <div id="button_feed_shared_category_list"><span
-                class="material-icons-outlined">bookmark_border</span><b
+                class="material-icons-outlined">group</span><b
                 class="feed_select_button">공유 카테고리</b>
         </div>
     </div>
@@ -418,14 +418,40 @@
                     </div>
                     <!-- 정유진: 카테고리 선택 영역 -->
                     <div class="second_third_modal_category">
-                        <span class="feed_category_explain">카테고리</span>
-                        <select id="input_feed_category" class="form-control" style="box-shadow: none">
-                            <option value="">선택</option>
-                            <option value="travel">여행</option>
-                            <option value="food">음식</option>
-                            <option value="movie">영화</option>
-                            <option value="book">책</option>
-                        </select>
+                        <div class="modal_category_select_area">
+                            <span class="feed_category_explain">카테고리</span>
+                            <select id="input_feed_category" class="form-control" style="box-shadow: none">
+                                <option value="">선택</option>
+                                <option value="travel">여행</option>
+                                <option value="food">음식</option>
+                                <option value="movie">영화</option>
+                                <option value="book">책</option>
+                            </select>
+                        </div>
+                        <!-- 정유진: 공유카테고리 선택 영역 -->
+                        <div class="dropdown shared_category_area">
+                            <p class="shared_category_approach_suggestion_text">
+                                접근제어
+                            </p>
+                            <a class="shared_category_btn" href="#" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                공유
+                            </a>
+                            <ul class="dropdown-menu shared_category_select_area"
+                                aria-labelledby="dropdownMenuLink" data-popper-placement="top-start">
+                                {% for user in shared_category_nickname_list %}
+                                    <li class="text_line shared_category_select">
+                                        <div>
+                                            <input class="shared_category_select" input type="checkbox" name="shared_category_nickname_list"
+                                                   value="{{ user.nickname }}"/>
+                                        </div>
+                                        <p class="dropdown-item_shared_category shared_category_select"
+                                           onclick="toggleCheckbox(event)">{{ user.nickname }}</p>
+                                        </input>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <!-- 공유하기 버튼 -->
@@ -584,8 +610,8 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 <script src="{% static 'js/profile.js' %}?ver=3"></script>
-<script src="{% static 'js/main_profile_same.js' %}?ver=2"></script>
-<script src="{% static 'js/allsame.js' %}?ver=2"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=3"></script>
+<script src="{% static 'js/allsame.js' %}?ver=3"></script>
 <!-- Option 2: Separate Popper and Bootstrap JS -->
 <!--
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
