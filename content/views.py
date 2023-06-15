@@ -813,13 +813,9 @@ class Removeimg(APIView):
         now_img_count = request.data.get('now_img_count')
         img_content = request.data.get('img_content')
         img = Image.objects.filter(image=img_content).first()
-        print(img)
         img_feed_id = img.feed_id
-        print(img_feed_id)
         img.delete()
-        print(now_img_count)
         if now_img_count == "0":
-            print("123")
             img_feed = Feed.objects.filter(id=img_feed_id).first()
             img = Image.objects.filter(feed_id=img_feed_id).first()
             img_feed.image = img.image
@@ -831,14 +827,10 @@ class Removeimg(APIView):
 # 유재우 이미지 추가
 class Updateimages(APIView):
     def post(self, request):
-        print("123")
         file_length = int(request.data['file_length'])
-        print(file_length)
         feed_id = int(request.data['feed_id'])
-        print(feed_id)
         for i in range(file_length):
             file = request.FILES.get('file[' + str(i) + ']')
-            print(file)
             # uuid 값 생성
             uuid_name = uuid4().hex
             # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
@@ -849,7 +841,6 @@ class Updateimages(APIView):
                     destination.write(chunk)
             # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
             Image.objects.create(image=uuid_name, feed_id=feed_id)
-            print(uuid_name)
 
             # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
 
