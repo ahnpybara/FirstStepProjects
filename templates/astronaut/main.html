@@ -12,7 +12,7 @@
 
     <!-- css 분리 -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=2">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=2">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=3">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=1">
 
     <!--  Google 심볼을 사용하기 위한 선언 -->
@@ -660,13 +660,14 @@
     </div>
     <!-- 채팅할 친구 목록이 리스트 영역 -->
     <div class="chat_modal_user_area"></div>
+    <div class="refresh_chat_modal_user_area" onclick="open_article1('/user/chat');">새로고침</div>
 </div>
 
 <!-- 채팅 모달창 -->
 <div id="chat_modal_id" class="chat_modal_area">
     <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
     <div class="chat_modal_bar_area">
-        <div class="chat_modal_blank"></div>
+        <div class="chat_modal_back_btn" onclick="open_article1('/user/chat');">이전</div>
         <div class="chat_modal_header">쪽지</div>
         <span class="chat_modal_close material-icons-outlined">close</span>
     </div>
@@ -699,6 +700,6 @@
 -->
 <script src="{% static 'js/main.js' %}?ver=1"></script>
 <script src="{% static 'js/main_profile_same.js' %}?ver=3"></script>
-<script src="{% static 'js/allsame.js' %}?ver=91"></script>
+<script src="{% static 'js/allsame.js' %}?ver=93"></script>
 </body>
 </html>
