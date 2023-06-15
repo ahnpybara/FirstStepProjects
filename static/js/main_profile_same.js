@@ -692,6 +692,14 @@ $('#modal_before_button').click(function () {
     $('#second_modal').css({
         display: 'none'
     });
+    // 글내용을 리셋하는 부분
+    $('#input_feed_content').each(function () {
+        $(this).val('');
+    });
+    // 해시태그 내용을 리셋하는 부분
+    $('#input_feed_hashtag').each(function () {
+        $(this).val('');
+    });
 
     // 이미지를 표시함
     $('.img_upload_space').css({
@@ -706,6 +714,7 @@ $('#modal_before_button').click(function () {
     var files_Count = 0
 
 
+    // 이미지 슬라이드
     $('.feed_modal_feed_image_next').click(function () {
         files_Count++
         if (files_Count < files.length && files_Count >= 0) {
