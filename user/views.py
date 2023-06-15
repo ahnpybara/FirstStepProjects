@@ -568,7 +568,7 @@ class AlertAll(APIView):
         print(alert_id)
 
         # 만약 메시지 내용이 모두 삭제이면 해당 유저에게 온 모든 알림을 삭제
-        if remove_message == '모두 삭제':
+        if remove_message == '모두 확인':
             remove_alert = Alert.objects.filter(receive_user=email)
             remove_alert.delete()
         # 개별 삭제일 경우 해당 id를 가진 알림만 삭제

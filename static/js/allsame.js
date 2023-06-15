@@ -629,6 +629,25 @@ var open_article3 = function (url) {
 $(".alert_all_remove").click(function (event) {
     // 알림 삭제 버튼 내용을 가져옴
     var remove_message = $(".alert_all_remove").html().trim();
+    // 알람 일괄 삭제 알람 관련 js 코드
+    // 새로운 <div> 요소를 생성하여 toastElement 변수에 할당합니다.
+    var toastElement = document.createElement("div");
+    // alert_alarm 클래스를 toastElement 요소에 추가합니다. 이를 통해 CSS 스타일이 적용될 수 있습니다.
+    toastElement.classList.add("alert_alarm");
+    // 알림창에 표시될 텍스트를 설정합니다.
+    toastElement.textContent = "알림을 모두 확인했습니다.";
+    // toastElement를 <body> 요소에 추가합니다. 이로써 알림창이 화면에 표시됩니다.
+    document.body.appendChild(toastElement);
+    // 2초 후에 실행되는 함수를 설정합니다.
+    setTimeout(function () {
+        // toastElement의 스타일 속성을 수정하여 fadeOut 애니메이션을 적용하고, 알림창이 사라지도록 설정합니다.
+        toastElement.style.animation = "fadeOut 2s forwards";
+        // 2초 후에 실행되는 함수를 설정합니다.
+        setTimeout(function () {
+            // toastElement를 DOM에서 제거하여 알림창을 완전히 사라지게 합니다.
+            toastElement.remove();
+        }, 2000);
+    }, 2000);
 
     $.ajax({
         url: "/user/alert",
@@ -638,7 +657,6 @@ $(".alert_all_remove").click(function (event) {
         method: "POST",
         success: function (data) {
             console.log("성공");
-            alert("알림을 모두 삭제 했습니다.");
         },
         error: function (request, status, error) {
             console.log("에러");
