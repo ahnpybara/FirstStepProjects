@@ -102,11 +102,6 @@
     border-radius: 9%
 }
 
-/* 하위 드롭다운 메뉴 일괄 설정 */
-.dropdown-menu {
-    cursor: pointer;
-}
-
 /* 드롭다운 삭제 관련 텍스트 일괄 설정 */
 .delete_text {
     color: red;
@@ -184,7 +179,7 @@
 }
 
 /* 댓글 모두 보기 */
-.feed_modal {
+.show_all_reply {
     font-size: 14px;
     color: gray;
     cursor: pointer;
