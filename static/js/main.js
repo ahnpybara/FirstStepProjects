@@ -476,8 +476,6 @@ $('#feed_update_button').click(function (event) {
     for (var i = 0; i < shared_categories.length; i++) {
         shared_category_list.push(shared_categories[i].value)
     }
-
-    console.log(typeof(shared_category_list))
     // 서버로 보낼 (json 형태)
     $.ajax({
         url: "/content/updatefeed",
@@ -485,7 +483,8 @@ $('#feed_update_button').click(function (event) {
             feed_id: feed_id,
             content: content,
             hashtag_content: hashtag_content,
-            category: category
+            category: category,
+            shared_category_list: shared_category_list
         },
         method: "POST",
         success: function (data) {
