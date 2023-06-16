@@ -380,12 +380,12 @@
             <div class="follow_recommend_profile_area">
                 <div class="follow_recommend_profile">
                     <div id="f_recommender_profile" class="profile_box">
-                        <img class="movetoprofile profile" id="{{ Recommend_Followers_list.nicname }}"
+                        <img class="recommend_movetoprofile profile" id="{{ Recommend_Followers_list.nicname }}"
                              src="{% get_media_prefix %}{{ Recommend_Followers_list.profile_image }}"
                              alt="text"></a>
                     </div>
                     <div class="follow_profile_nickname_explain">
-                        <div class="movetoprofile follow_profile_nickname" id="{{ Recommend_Followers_list.nicname }}">
+                        <div class="recommend_movetoprofile follow_profile_nickname" id="{{ Recommend_Followers_list.nicname }}">
                             {{ Recommend_Followers_list.nicname }}
                         </div>
                         <div class="follow_profile_explain">{% if Recommend_Followers_list.now_following != 4 %}
@@ -809,12 +809,12 @@
             <div class="follow_recommend_profile_area">
                 <div class="follow_recommend_profile">
                     <div id="f_recommender_profile" class="profile_box">
-                        <img class="profile movetoprofile" id="{{ Recommend_ALl_Followers_list.nicname }}"
+                        <img class="profile recommend_all_movetoprofile" id="{{ Recommend_ALl_Followers_list.nicname }}"
                              src="{% get_media_prefix %}{{ Recommend_ALl_Followers_list.profile_image }}"
                              alt="text"></a>
                     </div>
                     <div class="follow_profile_nickname_explain">
-                        <div class="movetoprofile follow_profile_nickname" id="{{ Recommend_ALl_Followers_list.nicname }}">
+                        <div class="recommend_all_movetoprofile follow_profile_nickname" id="{{ Recommend_ALl_Followers_list.nicname }}">
                             {{ Recommend_ALl_Followers_list.nicname }}
                         </div>
                         <div class="follow_profile_explain">{% if Recommend_ALl_Followers_list.now_following != 4 %}

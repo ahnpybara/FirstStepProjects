@@ -6,6 +6,20 @@ $(".movetoprofile").click(function (event) {
     location.href = "/user/reprofile?user_nickname=" + user_nickname;
 });
 
+// 매인 팔로우 추천 프로필 이동
+$('.recommend_movetoprofile').click(function (event) {
+    // 이벤트가 발생한 태그의 id를 가져옴 id는 user_nickname 형태
+    let user_nickname = event.target.id;
+    // 해당 url로 요청하게 되면 매핑된 view도 실행되고 url뒤에 데이터를 붙여서 전송이 가능하다.
+    location.href = "/user/reprofile?user_nickname=" + user_nickname;
+});
+// 팔로우 추천 모두보기 프로필이동
+$('.recommend_all_movetoprofile').click(function (event) {
+    // 이벤트가 발생한 태그의 id를 가져옴 id는 user_nickname 형태
+    let user_nickname = event.target.id;
+    // 해당 url로 요청하게 되면 매핑된 view도 실행되고 url뒤에 데이터를 붙여서 전송이 가능하다.
+    location.href = "/user/reprofile?user_nickname=" + user_nickname;
+});
 // 북마크 아이콘 클릭 이벤트 처리
 $(".bookmark").click(function (event) {
     // 북마크 아이콘 태그의 feed_id 속성 값을 가져옴 ( 피드는 여러개이므로 어떤 피드에 북마크를 했는지 알아야함 )
