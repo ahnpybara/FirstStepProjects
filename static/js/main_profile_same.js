@@ -107,6 +107,7 @@ $(".feed_modal").click(function () {
 
             // 댓글 게시할 때 댓글리스트에서 몇 번째인지 알려준다. 마지막으로 입력한 댓글을 기점으로 이어서 댓글 게시 하기 위함 TODO
             document.getElementById("reply_content_upload").setAttribute("reply_id", data['reply_list'].length);
+            document.getElementById("reply_content_upload").setAttribute("feed_user_nickname", writer_nickname);
 
             // 피드모달을 보여줌 (데이터를 불러온 뒤 보여주기 위함)
             $("#feed_modal").css({
@@ -164,6 +165,8 @@ $(".feed_modal").click(function () {
                 let favorite_id = event.target.id;
                 // 해당 태그의 style 속성중 color 값을 가져옴
                 let favorite_color = $('#' + favorite_id).css('color');
+                // 피드의 작성자 닉네임
+                let feed_user_nickname = event.target.attributes.getNamedItem('feed_user_nickname').value;
 
                 // 현재 좋아요 상태가 아니면 북마크 상태로 바꿈 -> css를 토글하는 개념
                 if (favorite_color === 'rgb(0, 0, 0)') {
@@ -183,7 +186,8 @@ $(".feed_modal").click(function () {
                     url: "/content/like",
                     data: {
                         feed_id: feed_id,
-                        favorite_color: favorite_color
+                        favorite_color: favorite_color,
+                        feed_user_nickname: feed_user_nickname
                     },
                     method: "POST",
                     success: function (data) {
@@ -233,6 +237,7 @@ $(".modal_upload_reply").click(function (event) {
     let relpy_upload_id = document.getElementById("reply_content_upload").getAttribute("reply_id");
     // 댓글 입력 폼의 아이디를 통해서 입력 폼의 내용을 가져옴
     let reply_content = $('#reply_content_text').val();
+    let feed_user_nickname = event.target.attributes.getNamedItem('feed_user_nickname').value;
 
     // 댓글의 길이가 0보다 작으면 알림창 뜸
     if (reply_content.length <= 0) {
@@ -245,7 +250,8 @@ $(".modal_upload_reply").click(function (event) {
         url: "/content/reply",
         data: {
             feed_id: feed_id,
-            reply_content: reply_content
+            reply_content: reply_content,
+            feed_user_nickname: feed_user_nickname
         },
         method: "POST",
         success: function (data) {
