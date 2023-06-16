@@ -539,3 +539,50 @@ shared_category_select_area {
 .shared_category_checkbox {
     margin: 0 5px;
 }
+
+/*이미지 슬라이드 기능*/
+/*좌우 버튼들의 부모*/
+.feed_image_area_img_control_btns_parent {
+    display: none;
+    position: relative;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/*좌우 버튼들*/
+.feed_image_area_img_control_btns {
+    width: 100%;
+}
+
+/*좌우 버튼*/
+.feed_modal_feed_image_before,
+.feed_modal_feed_image_next {
+    display: none;
+    margin: 0;
+    width: 25px;
+}
+
+/*좌우 버튼에 마우스 유지하면*/
+.feed_modal_feed_image_before:hover,
+.feed_modal_feed_image_next:hover {
+    font-variation-settings: 'wght' 700;
+}
+/*이미지 슬라이드 기능 끝*/
+
+/*피드 업로드 사진 삭제*/
+.feed_modal_area_images_btn_dele {
+    width: 100%;
+    border: #0037AB;
+    color: red;
+    display: none;
+    bottom: 50%;
+}
+/*피드 업로드 좌우 버튼*/
+.feed_modal_area_images_btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+}

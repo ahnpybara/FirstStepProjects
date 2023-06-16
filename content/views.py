@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, ShareCategory, Alert, Chat
+from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, Image, ShareCategory, Alert, Chat
 from user.models import User
 import os
 import json
@@ -31,12 +31,97 @@ class Main(APIView):
         # feed_list에 담을 정보를 위해서 Feed 테이블에 있는 모든 객체를 가져와서 필터링을 진행할 예정
         feed_object_list = Feed.objects.all().order_by('-id')
         feed_list = []
+        # 유재우 : 팔로우 추천을 위해 추가
+        Recommend_Followers_list = []
+        Recommend_Followers_count = []
+        Recommend_ALl_Followers_list = []
+
+        now_following = 0
+        added_followers = set()  # 중복 체크를 위한 집합
+        # 세션에 유저가 팔로잉하고 있는 사람들 6명만 뽑아냄
+        user_following = Follow.objects.filter(follower=email)[:6]
+        user_followings_list = Follow.objects.filter(follower=email)
+        user_followings = []
+        for user_followings_list in user_followings_list:
+            user_followings.append(user_followings_list.following)
+
+        for user_following in user_following:
+            # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들(대표로 2명만 뽑음)
+            user_follower = Follow.objects.filter(follower=user_following.following).order_by('-id')[:2]
+            for user_follower in user_follower:
+                # 자신이 이미 팔로잉 하고 있는 사람 자기 자신, 중복 제거
+                if user_follower.following != email and user_follower.following not in added_followers and user_follower.following not in user_followings:
+                    Recommend_Followers = User.objects.filter(email=user_follower.following).first()
+                    Recommend_Following = User.objects.filter(email=user_follower.follower).first()
+                    Recommend_Following_count = -1
+                    Recommend_Following_list = Follow.objects.filter(following=user_follower.following)
+                    for Recommend_Following_list in Recommend_Following_list:
+                        if (Recommend_Following_list.follower in user_followings):
+                            Recommend_Following_count += 1
+                    Recommend_Followers_count.append(Recommend_Followers.email)
+                    added_followers.add(user_follower.following)  # 팔로워 이메일을 추가
+                    if Follow.objects.filter(follower=user_follower.following, following=email).exists():
+                        now_following = 1
+                    Recommend_Followers_list.append(
+                        dict(id=Recommend_Followers.id, nicname=Recommend_Followers.nickname,
+                             now_following=now_following,
+                             Recommend_nicname=Recommend_Following.nickname, email=Recommend_Followers.email,
+                             profile_image=Recommend_Followers.profile_image,
+                             Recommend_Following_count=Recommend_Following_count))
+                    now_following = 0
 
         # 유저를 검색하기 위해서 유저 정보를 모두 가져옴
         user_object_list = User.objects.all()
 
+        # 팔로잉 추천 모두보기를 위해 모든 유저리스트를 받아 옴
+        Recommend_all_user = user_object_list
+        added_all_followers = set()  # 중복 체크를 위한 집합
+        user_followings_list = Follow.objects.filter(follower=email)
+
+        # 팔로우중인 모든사람
+        for user_followings_list in user_followings_list:
+            # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들
+            user_follower_all = Follow.objects.filter(follower=user_followings_list.following).order_by('-id')
+            for user_follower_all in user_follower_all:
+                # 자신이 이미 팔로잉 하고 있는 사람 자기 자신, 중복 제거
+                if user_follower_all.following != email and user_follower_all.following not in added_all_followers and user_follower_all.following not in user_followings:
+                    Recommend_all_Followers = User.objects.filter(email=user_follower_all.following).first()
+                    Recommend_all_Following = User.objects.filter(email=user_follower_all.follower).first()
+                    Recommend_all_Following_count = -1
+                    Recommend_all_Following_list = Follow.objects.filter(following=user_follower_all.following)
+
+                    for Recommend_all_Following_list in Recommend_all_Following_list:
+                        if (Recommend_all_Following_list.follower in user_followings):
+                            Recommend_all_Following_count += 1
+                    Recommend_Followers_count.append(Recommend_all_Followers.email)
+                    added_all_followers.add(user_follower_all.following)  # 팔로워 이메일을 추가
+                    if Follow.objects.filter(follower=user_follower_all.following, following=email).exists():
+                        now_following = 1
+                    Recommend_ALl_Followers_list.append(
+                        dict(id=Recommend_all_Followers.id, nicname=Recommend_all_Followers.nickname,
+                             now_following=now_following,
+                             Recommend_nicname=Recommend_all_Following.nickname, email=Recommend_all_Followers.email,
+                             profile_image=Recommend_all_Followers.profile_image,
+                             Recommend_all_Following_count=Recommend_all_Following_count))
+                    now_following = 0
+
+        # 모든 사람
+        for Recommend_all_user in Recommend_all_user:
+            # 자기자신 제외
+            if Recommend_all_user.email != email and Recommend_all_user.email not in added_all_followers and Recommend_all_user.email not in user_followings:
+                now_following = 3
+                if Follow.objects.filter(follower=Recommend_all_user.email, following=email).exists():
+                    now_following = 4
+                Recommend_ALl_Followers_list.append(
+                    dict(id=Recommend_all_user.id, nicname=Recommend_all_user.nickname,
+                         now_following=now_following,
+                         Recommend_nicname="Astronaut", email=Recommend_all_user.email,
+                         profile_image=Recommend_all_user.profile_image))
+
+        random.shuffle(Recommend_ALl_Followers_list)
         # 아래 반복문은 메인 페이지에 전달할 정보를 각종 여러 테이블의 필터링을 통해서 구하는 과정
         for feed in feed_object_list:
+            count = 0
             user = User.objects.filter(email=feed.email).first()
             # 댓글의 2개만 가져온다. -> 나머지 댓글은 더보기로 보여줄 예정, 댓글리스트 생성
             reply_object_list = Reply.objects.filter(feed_id=feed.id)[:2]
@@ -44,6 +129,8 @@ class Main(APIView):
             # 해당 feed_id에 존재하는 해시태그들을 가져옴 ,해시태그 리스트 생성
             hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
             hashtag_list = []
+            images_object_list = Image.objects.filter(feed_id=feed.id)
+            images_list = []
             # 댓글 리스트에 채울 데이터를 여러 테이블의 필터링을 통해서 채움
             for reply in reply_object_list:
                 reply_user = User.objects.filter(email=reply.email).first()
@@ -54,6 +141,10 @@ class Main(APIView):
             for hashtag in hashtag_object_list:
                 hashtag_feed = Feed.objects.filter(id=feed.id).first()
                 hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
+            for image in images_object_list:
+                images_feed = Feed.objects.filter(id=feed.id).first()
+                images_list.append(dict(feed_id=images_feed, image=image.image, count=count, now_count=count + 1))
+                count = count + 1
             # 좋아요 수, 좋아요 여부, 북마크 여부
             like_count = Like.objects.filter(feed_id=feed.id).count()
             is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
@@ -74,7 +165,7 @@ class Main(APIView):
 
             # 각종 데이터를 feed_list에 담음
             feed_list.append(dict(id=feed.id,
-                                  image=feed.image,
+                                  images_list=images_list,
                                   content=feed.content,
                                   like_count=like_count,
                                   profile_image=user.profile_image,
@@ -86,6 +177,7 @@ class Main(APIView):
                                   hashtag_list=hashtag_list,
                                   category=feed.category,
                                   category_kr=category_kr,
+                                  image_count=count,
                                   is_shared_category=is_shared_category,
                                   is_shared_category_user=is_shared_category_user
                                   ))
@@ -105,7 +197,9 @@ class Main(APIView):
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list,
-                                   alert_exists=alert_exists, is_delivered_chat=is_delivered_chat,
+                                   Recommend_Followers_list=Recommend_Followers_list, alert_exists=alert_exists,
+                                   is_delivered_chat=is_delivered_chat,
+                                   Recommend_ALl_Followers_list=Recommend_ALl_Followers_list,
                                    shared_category_nickname_list=shared_category_nickname_list
                                    ))
 
@@ -115,18 +209,7 @@ class UploadFeed(APIView):
     # noinspection PyMethodMayBeStatic
     def post(self, request):
         # 서버로 전달된 폼 데이터 객체에서 파일을 꺼냄
-        file = request.FILES['file']
-        # uuid 값 생성
-        uuid_name = uuid4().hex
-        # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
-        save_path = os.path.join(MEDIA_ROOT, uuid_name)
-        # media 폴더에 파일이 저장됨
-        with open(save_path, 'wb+') as destination:
-            for chunk in file.chunks():
-                destination.write(chunk)
-
-        # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
-        image = uuid_name
+        file_length = int(request.data['file_length'])
         content = request.data.get('content')
         email = request.session.get('email', None)
         # 정유진: 카테고리 추가
@@ -151,12 +234,25 @@ class UploadFeed(APIView):
         for value in hashtags_list:
             if value not in hashtags_lists:
                 hashtags_lists.append(value)
-
         # #으로 구분 했을때 #앞에 아무것 없는 공백이 저장 되는 부분을 삭제
         hashtags_list = list(filter(None, hashtags_lists))
-
         # 피드 테이블에 튜플을 만들고 그 튜플을 feed_id 객체로 저장
-        feed_id = Feed.objects.create(image=uuid_name, content=content, email=email, category=category)
+
+        # 이미지는 여러개라 반복문으로 튜플 생성
+        for i in range(file_length):
+            file = request.FILES.get('file[' + str(i) + ']')
+            # uuid 값 생성
+            uuid_name = uuid4().hex
+            # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
+            save_path = os.path.join(MEDIA_ROOT, uuid_name)
+            if i == 0:
+                feed_id = Feed.objects.create(content=content, email=email, category=category, image=uuid_name)
+            # media 폴더에 파일이 저장됨
+            with open(save_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
+            Image.objects.create(image=uuid_name, feed_id=feed_id.id)
 
         # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
         for hashtags_list in hashtags_list:
@@ -280,6 +376,9 @@ class RemoveFeed(APIView):
         # 전달된 피드id를 통해서 삭제할 피드 객체를 뽑음
         feeds = Feed.objects.filter(id=feed_id).first()
 
+        # 전달된 피드id를 통해서 작제할 이미지들을 뽑음
+        images = Image.objects.filter(feed_id=feed_id)
+        images.delete()
         # 전달된 피드id를 통해서 삭제할 댓글 객체를 뽑음
         reply = Reply.objects.filter(feed_id=feed_id)
         reply.delete()
@@ -334,7 +433,6 @@ class SearchFeed(APIView):
         # 검색창에 검색시 기본 정렬을 최신순으로 한다.
         if show_recent == '' and show_like == '' and show_reply == '':
             show_recent = 'recent_sort'
-
         # 해시태그 검색
         if (searchKeyword.find("#") == 0):
             # 해시태그의 #을 제거
@@ -382,6 +480,9 @@ class SearchFeed(APIView):
             # 없을경우 해당 페이지를 보여줌
             if not is_exist_feed:
                 return render(request, 'astronaut/noresult.html', context=dict(user_session=user_session))
+
+            # 이미지 리스트
+            image_list = []
 
             # 피드 리스트와 해당 피드에 좋아요와 댓글수를 저장할 리스트 선언
             feed_search_list = []
@@ -762,6 +863,7 @@ class FollowerFeed(APIView):
 
         # 내가 팔로우한 유저의 피드의 정보를 가져오기 위한 작업
         for feed in follwing_feed:
+            count = 0
             user = User.objects.filter(email=feed.email).first()
             reply_object_list = Reply.objects.filter(feed_id=feed.id)
             reply_list = []
@@ -769,6 +871,14 @@ class FollowerFeed(APIView):
             # 해당 feed_id에 존재하는 해시태그들을 가져옴 ,해시태그 리스트 생성
             hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
             hashtag_list = []
+
+            # 이미지 추가
+            images_object_list = Image.objects.filter(feed_id=feed.id)
+            images_list = []
+            for image in images_object_list:
+                images_feed = Feed.objects.filter(id=feed.id).first()
+                images_list.append(dict(feed_id=images_feed, image=image.image, count=count, now_count=count + 1))
+                count = count + 1
 
             # 내가 팔로우한 유저의 피드에 달린 댓글을 가져오기 위한 작업
             for reply in reply_object_list:
@@ -786,7 +896,7 @@ class FollowerFeed(APIView):
             is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
             is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
             feed_list.append(dict(id=feed.id,
-                                  image=feed.image,
+                                  images_list=images_list,
                                   content=feed.content,
                                   like_count=like_count,
                                   profile_image=user.profile_image,
@@ -823,13 +933,23 @@ class FeedUpdateIMG(APIView):
         # 해시태그를 띄여쓰기로 구분
         hashtag_content = '#' + '#'.join(hashtag_content_lists)
 
+        i = 0
+        images_list = []
+        images_object_list = Image.objects.filter(feed_id=feed.id)
+        for images_object_list in images_object_list:
+            images_list.append(images_object_list.image)
+            i = i + 1
+
         # 정유진: 기존 공유카테고리
         shared_category_email = list(ShareCategory.objects.filter(feed_id=feed_id).values_list('email', flat=True))
-        shared_category_nickname = list(User.objects.filter(email__in=shared_category_email).values_list('nickname', flat=True))
+        shared_category_nickname = list(
+        User.objects.filter(email__in=shared_category_email).values_list('nickname', flat=True))
+
         # 사용자로 보낼 데이터
         data = {
             'id': feed.id,
-            'image': feed.image,
+            'count': i,
+            'image[]': images_list,
             'feed_content': feed.content,
             'hashtag_content': hashtag_content,
             'category': feed.category,
@@ -839,3 +959,43 @@ class FeedUpdateIMG(APIView):
         json_data = json.dumps(data)
         # ajax를 이용해서 html 추가하거나 변경할려면 이런방식을 써야한다.
         return HttpResponse(json_data, content_type='application/json')
+
+
+# 유재우 이미지 삭제
+class Removeimg(APIView):
+    def post(self, request):
+        now_img_count = request.data.get('now_img_count')
+        img_content = request.data.get('img_content')
+        img = Image.objects.filter(image=img_content).first()
+        img_feed_id = img.feed_id
+        img.delete()
+        if now_img_count == "0":
+            img_feed = Feed.objects.filter(id=img_feed_id).first()
+            img = Image.objects.filter(feed_id=img_feed_id).first()
+            img_feed.image = img.image
+            img_feed.save()
+
+        return Response(status=200)
+
+
+# 유재우 이미지 추가
+class Updateimages(APIView):
+    def post(self, request):
+        file_length = int(request.data['file_length'])
+        feed_id = int(request.data['feed_id'])
+        for i in range(file_length):
+            file = request.FILES.get('file[' + str(i) + ']')
+            # uuid 값 생성
+            uuid_name = uuid4().hex
+            # 파일을 어디에 저장할 것 인지 경로를 설정 (미디어 루트 + uuid_name)
+            save_path = os.path.join(MEDIA_ROOT, uuid_name)
+            # media 폴더에 파일이 저장됨
+            with open(save_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            # 폼 데이터객체에서 나머지 일반 데이터(글내용, 작성자 이메일)를 꺼냄
+            Image.objects.create(image=uuid_name, feed_id=feed_id)
+
+            # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
+
+        return Response(status=200)
