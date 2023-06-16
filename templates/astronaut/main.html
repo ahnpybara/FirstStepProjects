@@ -571,7 +571,7 @@
             <div id="update_feed_modal_image">
                 <div class="update_feed_modal_image_btns_parent">
                     <div class="update_feed_modal_image_btns">
-                            <div class="update_feed_modal_feed_image_dele"> 삭제</div>
+                        <div class="update_feed_modal_feed_image_dele"> 삭제</div>
                         <div class="update_feed_modal_image_LR_btns">
                             <div class="update_feed_modal_feed_image_before material-symbols-outlined"
                                  style="padding-left: 5px">
@@ -585,6 +585,7 @@
                     <div class="update_feed_modal_image_update_parent">
                         <button class="update_feed_modal_image_update">추가</button>
                         <input multiple="multiple" type="file" id="update_feed_modal_input_image_upload"
+                               class="update_feed_modal_input_image_upload_btn"
                                onchange="image_update();"/>
                     </div>
                 </div>
@@ -800,43 +801,50 @@
                 <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
             </div>
         </div>
-        <br>
-
-        {% for Recommend_ALl_Followers_list in Recommend_ALl_Followers_list %}
-            <!-- 팔로우 추천인 프로필 -->
-            <div class="follow_recommend_profile_area">
-                <div class="follow_recommend_profile">
-                    <div id="f_recommender_profile" class="profile_box">
-                        <img class="profile recommend_all_movetoprofile" id="{{ Recommend_ALl_Followers_list.nicname }}"
-                             src="{% get_media_prefix %}{{ Recommend_ALl_Followers_list.profile_image }}"
-                             alt="text"></a>
-                    </div>
-                    <div class="follow_profile_nickname_explain">
-                        <div class="recommend_all_movetoprofile follow_profile_nickname"
-                             id="{{ Recommend_ALl_Followers_list.nicname }}">
-                            {{ Recommend_ALl_Followers_list.nicname }}
+        <hr>
+        <div style="overflow-y: initial !important">
+            <div style="overflow-y: auto;">
+                {% for Recommend_ALl_Followers_list in Recommend_ALl_Followers_list %}
+                    <!-- 팔로우 추천인 프로필 -->
+                    <div class="follow_recommend_profile_area">
+                        <div class="follow_recommend_profile">
+                            <div id="f_recommender_profile" class="profile_box">
+                                <img class="profile recommend_all_movetoprofile"
+                                     id="{{ Recommend_ALl_Followers_list.nicname }}"
+                                     src="{% get_media_prefix %}{{ Recommend_ALl_Followers_list.profile_image }}"
+                                     alt="text"></a>
+                            </div>
+                            <div class="follow_profile_nickname_explain">
+                                <div class="recommend_all_movetoprofile follow_profile_nickname"
+                                     id="{{ Recommend_ALl_Followers_list.nicname }}">
+                                    {{ Recommend_ALl_Followers_list.nicname }}
+                                </div>
+                                <div class="follow_profile_explain">
+                                    {% if Recommend_ALl_Followers_list.now_following != 4 %}
+                                        {{ Recommend_ALl_Followers_list.Recommend_nicname }}
+                                        {% if Recommend_ALl_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 0 %}
+                                            님{% if Recommend_ALl_Followers_list.Recommend_all_Following_count != 0 %}외
+                                            {{ Recommend_ALl_Followers_list.Recommend_all_Following_count }}명이
+                                        {% else %}이
+                                        {% endif %}
+                                            팔로잉 중{% else %}의 추천{% endif %}{% else %}회원님을 팔로우 합니다{% endif %}
+                                </div>
+                            </div>
                         </div>
-                        <div class="follow_profile_explain">{% if Recommend_ALl_Followers_list.now_following != 4 %}
-                            {{ Recommend_ALl_Followers_list.Recommend_nicname }}
-                            {% if Recommend_ALl_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 0 %}
-                                님{% if Recommend_ALl_Followers_list.Recommend_all_Following_count != 0 %}외
-                                {{ Recommend_ALl_Followers_list.Recommend_all_Following_count }}명이 {% else %}이
-                            {% endif %}
-                                팔로잉 중{% else %}의 추천{% endif %}{% else %}회원님을 팔로우 합니다{% endif %}
+
+                        <div>
+                            <a class="all_follow_button" id="{{ Recommend_ALl_Followers_list.email }}_all_follwing_btn"
+                               href="#"
+                               following_id="{{ Recommend_ALl_Followers_list.email }}"
+                               user_email="{{ user_session.email }}">
+                                {% if Recommend_ALl_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 4 %}
+                                    맞{% endif %} 팔로우</a>
                         </div>
                     </div>
-                </div>
-
-                <div>
-                    <a class="all_follow_button" id="{{ Recommend_ALl_Followers_list.email }}_all_follwing_btn" href="#"
-                       following_id="{{ Recommend_ALl_Followers_list.email }}"
-                       user_email="{{ user_session.email }}">
-                        {% if Recommend_ALl_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 4 %}
-                            맞{% endif %} 팔로우</a>
-                </div>
+                    <hr>
+                {% endfor %}
             </div>
-            <hr>
-        {% endfor %}
+        </div>
     </div>
 </div>
 <!-- Option 1: Bootstrap Bundle with Popper -->

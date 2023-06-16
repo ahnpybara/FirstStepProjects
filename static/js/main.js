@@ -369,6 +369,7 @@ $('.update_feed').click(function (event) {
                 "background-position": "center",
                 "margin-right": "1px"
             });
+            // 사진이 1장뿐이라면 좌우 버튼이랑 이미지 삭제 버튼을 숨김
             if (count == 1) {
                 $('.update_feed_modal_image_LR_btns').css({
                     "display": "none"
@@ -433,42 +434,25 @@ $('.update_feed').click(function (event) {
         $.ajax({
             url: "/content/removeimg",
             data: {
-                now_img_count: now_img_count,
-                img_content: imgs_list[now_img_count]
+                now_img_count: parseInt(now_img_count),
+                img_content: imgs_list[now_img_count],
+                img_feed_id: Feeds_id
             },
             method: "POST",
             success: function (data) {
                 console.log("성공");
+                $('#modal_close_button').click()
             },
             error: function (request, status, error) {
                 console.log("에러");
             },
             complete: function () {
                 console.log("완료");
+                $('#' + Feeds_id + '_update_feed_btn').click()
             }
         });
-        imgs_list.splice(now_img_count, 1);
-        $('#update_feed_modal_image').css({
-            "background-image": "url(" + "/media/" + imgs_list[0] + ")"
-        });
-        now_img_count = 0
-        img_count--
-
-        if (img_count == 1) {
-            $('.update_feed_modal_image_LR_btns').css({
-                "display": "none"
-            })
-            $('.update_feed_modal_feed_image_dele').css({
-                "display": "none"
-            })
-        }
     })
 
-
-    // 피드 수정 모달창에서 사진 추가 버튼 클릭했을 시 (파일 시스템을 열어서 업로드 하는 경우)
-    $('.update_feed_modal_image_update').click(function () {
-        $('#update_feed_modal_input_image_upload').click()
-    });
 })
 ;
 
@@ -829,18 +813,24 @@ function image_update(e) {
             console.log("완료");
             $('#modal_close_button').click()
             $('#' + feed_id + '_update_feed_btn').click()
+
         }
     });
 }
 
-// 피드 수정을 하지 않고 닫고 다음 피드수정을 할 시 앞에 열었던 피드도 같이 수정되는 버그를 막기위해 새로고침함
+// 유재우 : 피드 수정을 하지 않고 닫고 다음 피드수정을 할 시 앞에 열었던 피드도 같이 수정되는 버그를 막기위해 새로고침함
 $('.update_feed_modal_close').click(function () {
     location.reload()
 })
 
-// 팔로우 모두 보기 클릭 이밴트
+// 유재우 : 팔로우 모두 보기 클릭 이밴트
 $('.follow_recommend_list_all').click(function () {
     $('#Recommend_Followers_all').css({
-        "display":"flex"
+        "display": "flex"
     })
 })
+
+// 유재우 : 피드 수정 모달창에서 사진 추가 버튼 클릭했을 시 (파일 시스템을 열어서 업로드 하는 경우)
+$('.update_feed_modal_image_update').click(function () {
+    $('.update_feed_modal_input_image_upload_btn').click()
+});

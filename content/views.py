@@ -906,13 +906,13 @@ class FeedUpdateIMG(APIView):
         return HttpResponse(json_data, content_type='application/json')
 
 
-# 유재우 이미지 삭제
+# 유재우 : 이미지 삭제
 class Removeimg(APIView):
     def post(self, request):
         now_img_count = request.data.get('now_img_count')
         img_content = request.data.get('img_content')
-        img = Image.objects.filter(image=img_content).first()
-        img_feed_id = img.feed_id
+        img = Image.objects.filter(image=img_content)
+        img_feed_id = request.data.get('img_feed_id')
         img.delete()
         if now_img_count == "0":
             img_feed = Feed.objects.filter(id=img_feed_id).first()
@@ -923,7 +923,7 @@ class Removeimg(APIView):
         return Response(status=200)
 
 
-# 유재우 이미지 추가
+# 유재우 : 이미지 추가
 class Updateimages(APIView):
     def post(self, request):
         file_length = int(request.data['file_length'])

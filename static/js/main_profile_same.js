@@ -611,7 +611,7 @@ function image_upload() {
 
 // 유재우 : 두번째 모달창을 보기위한 다음으로 버튼
 $('#modal_next_button').click(function () {
-    if (files.length > 0 && files.length < 6) {
+    if (files.length > 0 && files.length < 7) {
         // 이미지 업로드시 사진업로드 모달창 (첫 번째 모달창)을 가림
         $('#first_modal').css({
             display: 'none'
