@@ -384,7 +384,8 @@
                              alt="text"></a>
                     </div>
                     <div class="follow_profile_nickname_explain">
-                        <div class="recommend_movetoprofile follow_profile_nickname" id="{{ Recommend_Followers_list.nicname }}">
+                        <div class="recommend_movetoprofile follow_profile_nickname"
+                             id="{{ Recommend_Followers_list.nicname }}">
                             {{ Recommend_Followers_list.nicname }}
                         </div>
                         <div class="follow_profile_explain">{% if Recommend_Followers_list.now_following != 4 %}
@@ -570,11 +571,7 @@
             <div id="update_feed_modal_image">
                 <div class="update_feed_modal_image_btns_parent">
                     <div class="update_feed_modal_image_btns">
-                        <div class="update_feed_modal_image_file_btn">
-                            <input multiple="multiple" type="file" id="update_feed_modal_input_image_upload"
-                                   onchange="image_update();"/>
                             <div class="update_feed_modal_feed_image_dele"> 삭제</div>
-                        </div>
                         <div class="update_feed_modal_image_LR_btns">
                             <div class="update_feed_modal_feed_image_before material-symbols-outlined"
                                  style="padding-left: 5px">
@@ -584,12 +581,14 @@
                                 arrow_forward_ios
                             </div>
                         </div>
-
                     </div>
                     <div class="update_feed_modal_image_update_parent">
                         <button class="update_feed_modal_image_update">추가</button>
+                        <input multiple="multiple" type="file" id="update_feed_modal_input_image_upload"
+                               onchange="image_update();"/>
                     </div>
                 </div>
+
             </div>
             <!-- 텍스트 영역 -->
             <div class="modal_text_area">
@@ -813,7 +812,8 @@
                              alt="text"></a>
                     </div>
                     <div class="follow_profile_nickname_explain">
-                        <div class="recommend_all_movetoprofile follow_profile_nickname" id="{{ Recommend_ALl_Followers_list.nicname }}">
+                        <div class="recommend_all_movetoprofile follow_profile_nickname"
+                             id="{{ Recommend_ALl_Followers_list.nicname }}">
                             {{ Recommend_ALl_Followers_list.nicname }}
                         </div>
                         <div class="follow_profile_explain">{% if Recommend_ALl_Followers_list.now_following != 4 %}
@@ -849,7 +849,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'js/main.js' %}?ver=15"></script>
+<script src="{% static 'js/main.js' %}?ver=1"></script>
 <script src="{% static 'js/main_profile_same.js' %}?ver=5"></script>
 <script src="{% static 'js/allsame.js' %}?ver=12"></script>
 </body>
