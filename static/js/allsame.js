@@ -684,3 +684,14 @@ $(".alert_all_remove").click(function (event) {
         }
     });
 });
+
+
+// 검색창에 아무것도 입력되지 않았을 때 이벤트 처리
+document.getElementById("search_bar").addEventListener("submit", function (event) {
+    event.preventDefault(); // 기본 폼 제출 동작 취소
+    if (document.getElementById("search_box").value === "") {
+        alert("검색어를 입력하세요.");
+    } else {
+        this.submit(); // 폼 실행
+    }
+});
