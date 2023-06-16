@@ -534,8 +534,11 @@ class UpdateFeed(APIView):
         hashtag_content = request.data.get('hashtag_content')
         content = request.data.get('content')
         feed_id = request.data.get('feed_id')
+        email = request.session.get('email', None)
         # 정유진: 수정을 위한 서버로 전달된 데이터 (카테고리)
         category = request.data.get('category')
+        # 정유진: 수정을 위한 서버로 전달된 데이터 (공유카테고리)
+        shared_category_list = request.data.getlist('shared_category_list[]')
         # 피드id를 통한 피드에 달린 기존 해시태그들 삭제
         hashtags = Hashtag.objects.filter(feed_id=feed_id)
         hashtags.delete()
