@@ -308,6 +308,10 @@ $(".modal_close").click(function () {
 
     // 파일 초기화(드래그 앤 드롭시 닫아도 파일이 남아 있어서 추가)
     files = []
+    //닫았을 때 버튼들을 리셋하는 부분
+    $('.feed_image_area_img_control_btns_parent').css({
+        display: 'none'
+    })
 
     // 모달창 닫기와 닫았을 때 글내용을 리셋하는 부분
     $('#input_feed_content').each(function () {
@@ -331,6 +335,10 @@ $(".modal_close").click(function () {
     });
     // 피드 모달 숨김
     $('#feed_modal').css({
+        display: 'none'
+    });
+    // 팔로우 추천 모달창 가림
+    $('#Recommend_Followers_all').css({
         display: 'none'
     });
     // 업로드 이미지등을 안보이게 한것을 보이게 함

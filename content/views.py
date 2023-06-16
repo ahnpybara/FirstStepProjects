@@ -34,6 +34,7 @@ class Main(APIView):
         # 유재우 : 팔로우 추천을 위해 추가
         Recommend_Followers_list = []
         Recommend_Followers_count = []
+        Recommend_ALl_Followers_list = []
 
         now_following = 0
         added_followers = set()  # 중복 체크를 위한 집합
@@ -43,13 +44,20 @@ class Main(APIView):
         user_followings = []
         for user_followings_list in user_followings_list:
             user_followings.append(user_followings_list.following)
+
         for user_following in user_following:
             # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들(대표로 2명만 뽑음)
             user_follower = Follow.objects.filter(follower=user_following.following).order_by('-id')[:2]
             for user_follower in user_follower:
+                # 자신이 이미 팔로잉 하고 있는 사람 자기 자신, 중복 제거
                 if user_follower.following != email and user_follower.following not in added_followers and user_follower.following not in user_followings:
                     Recommend_Followers = User.objects.filter(email=user_follower.following).first()
                     Recommend_Following = User.objects.filter(email=user_follower.follower).first()
+                    Recommend_Following_count = -1
+                    Recommend_Following_list = Follow.objects.filter(following=user_follower.following)
+                    for Recommend_Following_list in Recommend_Following_list:
+                        if (Recommend_Following_list.follower in user_followings):
+                            Recommend_Following_count += 1
                     Recommend_Followers_count.append(Recommend_Followers.email)
                     added_followers.add(user_follower.following)  # 팔로워 이메일을 추가
                     if Follow.objects.filter(follower=user_follower.following, following=email).exists():
@@ -58,12 +66,59 @@ class Main(APIView):
                         dict(id=Recommend_Followers.id, nicname=Recommend_Followers.nickname,
                              now_following=now_following,
                              Recommend_nicname=Recommend_Following.nickname, email=Recommend_Followers.email,
-                             profile_image=Recommend_Followers.profile_image))
+                             profile_image=Recommend_Followers.profile_image,
+                             Recommend_Following_count=Recommend_Following_count))
                     now_following = 0
 
         # 유저를 검색하기 위해서 유저 정보를 모두 가져옴
         user_object_list = User.objects.all()
 
+        # 팔로잉 추천 모두보기를 위해 모든 유저리스트를 받아 옴
+        Recommend_all_user = user_object_list
+        added_all_followers = set()  # 중복 체크를 위한 집합
+        user_followings_list = Follow.objects.filter(follower=email)
+
+        # 팔로우중인 모든사람
+        for user_followings_list in user_followings_list:
+            # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들
+            user_follower_all = Follow.objects.filter(follower=user_followings_list.following).order_by('-id')
+            for user_follower_all in user_follower_all:
+                # 자신이 이미 팔로잉 하고 있는 사람 자기 자신, 중복 제거
+                if user_follower_all.following != email and user_follower_all.following not in added_all_followers and user_follower_all.following not in user_followings:
+                    Recommend_all_Followers = User.objects.filter(email=user_follower_all.following).first()
+                    Recommend_all_Following = User.objects.filter(email=user_follower_all.follower).first()
+                    Recommend_all_Following_count = -1
+                    Recommend_all_Following_list = Follow.objects.filter(following=user_follower_all.following)
+
+                    for Recommend_all_Following_list in Recommend_all_Following_list:
+                        if (Recommend_all_Following_list.follower in user_followings):
+                            Recommend_all_Following_count += 1
+                    Recommend_Followers_count.append(Recommend_all_Followers.email)
+                    added_all_followers.add(user_follower_all.following)  # 팔로워 이메일을 추가
+                    if Follow.objects.filter(follower=user_follower_all.following, following=email).exists():
+                        now_following = 1
+                    Recommend_ALl_Followers_list.append(
+                        dict(id=Recommend_all_Followers.id, nicname=Recommend_all_Followers.nickname,
+                             now_following=now_following,
+                             Recommend_nicname=Recommend_all_Following.nickname, email=Recommend_all_Followers.email,
+                             profile_image=Recommend_all_Followers.profile_image,
+                             Recommend_all_Following_count=Recommend_all_Following_count))
+                    now_following = 0
+
+        # 모든 사람
+        for Recommend_all_user in Recommend_all_user:
+            # 자기자신 제외
+            if Recommend_all_user.email != email and Recommend_all_user.email not in added_all_followers and Recommend_all_user.email not in user_followings:
+                now_following = 3
+                if Follow.objects.filter(follower=Recommend_all_user.email, following=email).exists():
+                    now_following = 4
+                Recommend_ALl_Followers_list.append(
+                    dict(id=Recommend_all_user.id, nicname=Recommend_all_user.nickname,
+                         now_following=now_following,
+                         Recommend_nicname="Astronaut", email=Recommend_all_user.email,
+                         profile_image=Recommend_all_user.profile_image))
+
+        random.shuffle(Recommend_ALl_Followers_list)
         # 아래 반복문은 메인 페이지에 전달할 정보를 각종 여러 테이블의 필터링을 통해서 구하는 과정
         for feed in feed_object_list:
             count = 0
@@ -130,7 +185,9 @@ class Main(APIView):
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list,
-                                   Recommend_Followers_list=Recommend_Followers_list, alert_exists=alert_exists, is_delivered_chat=is_delivered_chat,
+                                   Recommend_Followers_list=Recommend_Followers_list, alert_exists=alert_exists,
+                                   is_delivered_chat=is_delivered_chat,
+                                   Recommend_ALl_Followers_list=Recommend_ALl_Followers_list
                                    ))
 
 
@@ -884,4 +941,3 @@ class Updateimages(APIView):
             # 해시태그는 여러개라 반복문으로 테이블 튜플을 생성 ( 해시태그 리스트는 리스트 형태 )
 
         return Response(status=200)
-

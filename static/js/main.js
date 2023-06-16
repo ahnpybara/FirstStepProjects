@@ -799,3 +799,10 @@ function image_update(e) {
 $('.update_feed_modal_close').click(function () {
     location.reload()
 })
+
+// 팔로우 모두 보기 클릭 이밴트
+$('.follow_recommend_list_all').click(function () {
+    $('#Recommend_Followers_all').css({
+        "display":"flex"
+    })
+})
