@@ -26,7 +26,6 @@ $(".feed_modal").click(function () {
             var writer_profile_image = "/media/" + data['writer_profile_image'];
             var writer_nickname = data['writer_nickname'];
             var is_shared_category = data['is_shared_category'];
-            var category = data['category'];
             var category_kr = data['category_kr'];
 
             // 피드 모달창을 열 때 댓글리스트를 불러오는데 모달창을 닫아도 계속 댓글 리스트가 남아있음 때문에 모달창을 여는 시점으로 해서 댓글리스트를 리셋해줘야 함
@@ -93,10 +92,10 @@ $(".feed_modal").click(function () {
             // 좋아요, 북마크 여부에 따라 상황에 맞는 좋아요 북마크 아이콘을 피드 모달에 추가
             if (is_liked)
                 $("#feed_modal_is_liked").html(
-                    '<span id="feed_modla_favorite_' + feed_id + '" feed_id="' + feed_id + '" style="color: red" class="uTrue favorite material-symbols-outlined">favorite</span>');
+                    '<span id="feed_modla_favorite_' + feed_id + '" feed_id="' + feed_id + '" feed_user_nickname="' + writer_nickname + '"  style="color: red" class="uTrue favorite material-symbols-outlined">favorite</span>');
             else
                 $("#feed_modal_is_liked").html(
-                    '<span id="feed_modla_favorite_' + feed_id + '" feed_id="' + feed_id + '" class="uFalse favorite material-symbols-outlined">favorite</span>');
+                    '<span id="feed_modla_favorite_' + feed_id + '" feed_id="' + feed_id + '" feed_user_nickname="' + writer_nickname + '" class="uFalse favorite material-symbols-outlined">favorite</span>');
 
             if (is_marked)
                 $("#feed_modal_is_marked").html(
@@ -112,6 +111,7 @@ $(".feed_modal").click(function () {
 
             // 댓글 게시할 때 댓글리스트에서 몇 번째인지 알려준다. 마지막으로 입력한 댓글을 기점으로 이어서 댓글 게시 하기 위함 TODO
             document.getElementById("reply_content_upload").setAttribute("reply_id", data['reply_list'].length);
+            document.getElementById("reply_content_upload").setAttribute("feed_user_nickname", writer_nickname);
 
             // 피드모달을 보여줌 (데이터를 불러온 뒤 보여주기 위함)
             $("#feed_modal").css({
@@ -169,6 +169,8 @@ $(".feed_modal").click(function () {
                 let favorite_id = event.target.id;
                 // 해당 태그의 style 속성중 color 값을 가져옴
                 let favorite_color = $('#' + favorite_id).css('color');
+                // 피드의 작성자 닉네임
+                let feed_user_nickname = event.target.attributes.getNamedItem('feed_user_nickname').value;
 
                 // 현재 좋아요 상태가 아니면 북마크 상태로 바꿈 -> css를 토글하는 개념
                 if (favorite_color === 'rgb(0, 0, 0)') {
@@ -188,7 +190,8 @@ $(".feed_modal").click(function () {
                     url: "/content/like",
                     data: {
                         feed_id: feed_id,
-                        favorite_color: favorite_color
+                        favorite_color: favorite_color,
+                        feed_user_nickname: feed_user_nickname
                     },
                     method: "POST",
                     success: function (data) {
@@ -238,6 +241,7 @@ $(".modal_upload_reply").click(function (event) {
     let relpy_upload_id = document.getElementById("reply_content_upload").getAttribute("reply_id");
     // 댓글 입력 폼의 아이디를 통해서 입력 폼의 내용을 가져옴
     let reply_content = $('#reply_content_text').val();
+    let feed_user_nickname = event.target.attributes.getNamedItem('feed_user_nickname').value;
 
     // 댓글의 길이가 0보다 작으면 알림창 뜸
     if (reply_content.length <= 0) {
@@ -250,7 +254,8 @@ $(".modal_upload_reply").click(function (event) {
         url: "/content/reply",
         data: {
             feed_id: feed_id,
-            reply_content: reply_content
+            reply_content: reply_content,
+            feed_user_nickname: feed_user_nickname
         },
         method: "POST",
         success: function (data) {

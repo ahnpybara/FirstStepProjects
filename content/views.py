@@ -186,7 +186,7 @@ class UploadReply(APIView):
 
         # 알림을 받을 유저 정보를 구함
         receive_user = User.objects.filter(nickname=feed_user_nickname).first()
-        receive_user_email = receive_user.email
+        receive_user_email = receive_user
 
         # 세션에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장 -> 이메일로 세션 유저 객체를 구함
         email = request.session.get('email', None)
@@ -219,7 +219,7 @@ class ToggleLike(APIView):
 
         # 알림을 받을 유저 정보를 구함
         receive_user = User.objects.filter(nickname=feed_user_nickname).first()
-        receive_user_email = receive_user.email
+        receive_user_email = receive_user
 
         # 해당 피드에 현재 세션의 사용자가 좋아요를 누른 정보가 있다면 뽑아서 like에 저장
         like = Like.objects.filter(feed_id=feed_id, email=email).first()
