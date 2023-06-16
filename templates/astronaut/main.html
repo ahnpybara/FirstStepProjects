@@ -443,20 +443,40 @@
                     </div>
                     <!-- 정유진: 카테고리 선택 영역 -->
                     <div class="second_third_modal_category">
-                        <span class="feed_category_explain">카테고리</span>
-                        <select id="input_feed_category" class="form-control" style="box-shadow: none">
-                            <option value="">선택</option>
-                            <option value="travel">여행</option>
-                            <option value="food">음식</option>
-                            <option value="movie">영화</option>
-                            <option value="book">책</option>
-                        </select>
-                    </div>
-                    <!-- 정유진: 공유카테고리 선택 영역 -->
-                    <div>
-                        {% for user in shared_category_nickname_list %}
-                            <input type="checkbox" name="shared_category_nickname_list" value="{{ user.nickname }}">{{ user.nickname }}</input>
-                        {% endfor %}
+                        <div class="modal_category_select_area">
+                            <span class="feed_category_explain">카테고리</span>
+                            <select id="input_feed_category" class="form-control">
+                                <option value="">선택</option>
+                                <option value="travel">여행</option>
+                                <option value="food">음식</option>
+                                <option value="movie">영화</option>
+                                <option value="book">책</option>
+                            </select>
+                        </div>
+                        <!-- 정유진: 공유카테고리 선택 영역 -->
+                        <div class="dropdown shared_category_area">
+                            <p class="shared_category_approach_suggestion_text">
+                                접근제어
+                            </p>
+                            <a class="shared_category_btn" href="#" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                공유
+                            </a>
+                            <ul class="dropdown-menu shared_category_select_area"
+                                aria-labelledby="dropdownMenuLink" data-popper-placement="top-start">
+                                {% for user in shared_category_nickname_list %}
+                                    <li class="text_line shared_category_select">
+                                        <div>
+                                            <input class="shared_category_checkbox" input type="checkbox" name="shared_category_nickname_list"
+                                                   value="{{ user.nickname }}"/>
+                                        </div>
+                                        <p class="dropdown-item_shared_category shared_category_nickname_select"
+                                           onclick="toggleCheckbox(event)">{{ user.nickname }}</p>
+                                        </input>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <!-- 공유하기 버튼 -->
@@ -510,20 +530,41 @@
                     </div>
                     <!-- 정유진: 카테고리 선택 영역 -->
                     <div class="second_third_modal_category">
-                        <span class="feed_category_explain">카테고리</span>
-                        <select id="input_updatefeed_category" class="form-control" style="box-shadow: none">
-                            <option value="">선택</option>
-                            <option id="category_travel" value="travel">여행</option>
-                            <option id="category_food" value="food">음식</option>
-                            <option id="category_movie" value="movie">영화</option>
-                            <option id="category_book" value="book">책</option>
-                        </select>
-                    </div>
-                    <!-- 정유진: 공유카테고리 선택 영역 -->
-                    <div style="margin: 5px 10px">
-                        {% for user in shared_category_nickname_list %}
-                            <input id="update_shared_user_nickname_{{ user.nickname }}" type="checkbox" name="update_shared_category_nickname_list" value="{{ user.nickname }}">{{ user.nickname }}</input>
-                        {% endfor %}
+                        <div class="modal_category_select_area">
+                            <span class="feed_category_explain">카테고리</span>
+                            <select id="input_updatefeed_category" class="form-control" style="box-shadow: none">
+                                <option value="">선택</option>
+                                <option id="category_travel" value="travel">여행</option>
+                                <option id="category_food" value="food">음식</option>
+                                <option id="category_movie" value="movie">영화</option>
+                                <option id="category_book" value="book">책</option>
+                            </select>
+                        </div>
+                        <!-- 정유진: 공유카테고리 선택 영역 -->
+                        <div class="dropdown shared_category_area">
+                            <p class="shared_category_approach_suggestion_text">
+                                접근제어
+                            </p>
+                            <a class="shared_category_btn" href="#" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                공유
+                            </a>
+                            <ul class="dropdown-menu shared_category_select_area"
+                                aria-labelledby="dropdownMenuLink" data-bs-popper="end" data-popper-placement="bottom-end">
+                                {% for user in shared_category_nickname_list %}
+                                    <li class="text_line shared_category_select">
+                                        <div>
+                                            <input class="shared_category_checkbox" id="update_shared_user_nickname_{{ user.nickname }}" type="checkbox"
+                                                   name="update_shared_category_nickname_list"
+                                                   value="{{ user.nickname }}">
+                                        </div>
+                                        <p class="dropdown-item_shared_category shared_category_nickname_select"
+                                           onclick="toggleCheckbox(event)">{{ user.nickname }}</p>
+                                        </input>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <!-- 공유하기 버튼 -->

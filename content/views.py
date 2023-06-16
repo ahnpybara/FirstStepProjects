@@ -500,6 +500,7 @@ class UpdateFeed(APIView):
         hashtag_content = request.data.get('hashtag_content')
         content = request.data.get('content')
         feed_id = request.data.get('feed_id')
+        email = request.session.get('email', None)
         # 정유진: 수정을 위한 서버로 전달된 데이터 (카테고리)
         category = request.data.get('category')
         # 정유진: 수정을 위한 서버로 전달된 데이터 (공유카테고리)
@@ -536,17 +537,16 @@ class UpdateFeed(APIView):
         # 피드 수정
         feed.update(id=feed_id, content=content, category=category)
 
-        # 정유진: 공유카테고리 삭제 후 다시 추가
-        shared_category = ShareCategory.objects.filter(feed_id=feed_id)
-        shared_category.delete()
+        # 정유진: 공유카테고리. 삭제(feed_id, 맞팔) 후 다시 추가
+        follower_user_email_list = list(Follow.objects.filter(follower=email).values_list('following', flat=True))
+        following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=email).values_list('follower', flat=True))
 
-        # 정유진: 자기 자신을 추가.
-        email = request.session.get('email', None)
-        ShareCategory.objects.create(feed_id=feed_id, email=email)
+        delete_shared_category_user_list = ShareCategory.objects.filter(feed_id=feed_id, email__in=following_user_email_list)
+
+        delete_shared_category_user_list.delete()
+
         for shared_category_nickname in shared_category_list:
-            print(feed_id)
-            print(shared_category_nickname)
-            shared_category_email = User.objects.filter(nickname__in=shared_category_nickname).first()
+            shared_category_email = User.objects.filter(nickname=shared_category_nickname).first()
             ShareCategory.objects.create(feed_id=feed_id, email=shared_category_email)
 
         return Response(status=200)

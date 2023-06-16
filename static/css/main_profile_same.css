@@ -437,16 +437,18 @@
 
 /* 정유진: 피드업로드 및 피드수정 모달 카테고리 */
 .second_third_modal_category {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
-    margin-top: 18px;
+    justify-content: space-between;
     align-items: center;
-    margin-left: 10px;
+    align-items: center;
 }
 
 /* 피드 업로드시 카테고리 설명란 */
 .feed_category_explain {
-    margin-right: 10px;
+    margin-right: 3px;
     color: gray;
     font-size: 15px;
 
@@ -459,6 +461,25 @@
     text-align-last: center;
     padding: 0;
     color: gray;
+    box-shadow: none;
+}
+
+/* 정유진: 공유카테고리 버튼 */
+.shared_category_btn {
+    height: 100%;
+    border: 1px solid #ced4da;
+    padding: 0 3px;
+    border-radius: .25rem;
+    color: gray !important;
+    text-decoration: none;
+}
+
+/* 정유진: 카테고리 영역. 피드업로드, 피드수정 모달에 사용*/
+.modal_category_select_area {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 /* 정유진: 공유카테고리 */
@@ -474,4 +495,47 @@
 .feed_modal_category_area {
     display: flex;
     justify-content: space-between;
+}
+
+/* 정유진: 공유카테고리 영역*/
+.shared_category_area {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 정유진: 공유카테고리 선택 영역*/
+shared_category_select_area {
+    overflow: auto;
+    overflow-y: auto;
+    width: 20px;
+    max-height: 200px;
+}
+
+/* 정유진: 공유카테고리의 접근제안 텍스트*/
+.shared_category_approach_suggestion_text {
+    font-size: 15px;
+    color: gray;
+    margin-bottom: 0px;
+    margin-right: 3px;
+}
+
+/* 정유진: 공유카테고리 닉네임 영역*/
+.shared_category_nickname_select {
+    width: 100%;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+/* 정유진: 공유카테고리 선택지 영역*/
+.shared_category_select {
+    margin: 0 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+/* 정유진: 공유카테고리 체크박스*/
+.shared_category_checkbox {
+    margin: 0 5px;
 }
