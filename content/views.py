@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, ShareCategory
+from .models import Feed, Reply, Like, Bookmark, Hashtag, Follow, ShareCategory, Alert, Chat
 from user.models import User
 import os
 import json
@@ -95,10 +95,19 @@ class Main(APIView):
 
         shared_category_nickname_list = User.objects.filter(email__in=following_user_email_list)
 
+        # 세션 유저에게 온 알림 유무
+        alert_exists = Alert.objects.filter(receive_user=email).exists()
+
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
+        print(is_delivered_chat)
+
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list,
-                                   shared_category_nickname_list=shared_category_nickname_list))
+                                   alert_exists=alert_exists, is_delivered_chat=is_delivered_chat,
+                                   shared_category_nickname_list=shared_category_nickname_list
+                                   ))
 
 
 # 피드 업로드 클래스
@@ -172,6 +181,12 @@ class UploadReply(APIView):
         # 서버로 전달된 데이터를 받아서 처리(피드id, 댓글 내용,
         feed_id = request.data.get('feed_id', None)
         reply_content = request.data.get('reply_content', None)
+        # 피드 작성자 닉네임
+        feed_user_nickname = request.data.get('feed_user_nickname', True)
+
+        # 알림을 받을 유저 정보를 구함
+        receive_user = User.objects.filter(nickname=feed_user_nickname).first()
+        receive_user_email = receive_user.email
 
         # 세션에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장 -> 이메일로 세션 유저 객체를 구함
         email = request.session.get('email', None)
@@ -179,7 +194,10 @@ class UploadReply(APIView):
 
         # 서버로 전달된 데이터를 토대로 Reply 테이블에 새로운 튜플을 생성한 뒤 생성된 객체의 id값을 변수 reply_id에 저장
         reply_id = Reply.objects.create(feed_id=feed_id, reply_content=reply_content, email=email).id
-
+        # 자기 자신의 게시물에 댓글을 작성한 경우 알림이 가지 않게 함 TODO
+        if email != receive_user_email:
+            Alert.objects.create(send_user=email, receive_user=receive_user_email, alert_content='reply',
+                                 feed_id=feed_id, reply_content=reply_content)
         # 성공적으로 전달이 되었다는 응답과 ajax 비동기 처리를 위한 성공 함수 인자인 data에 데이터를 전달하기 위해서 보냄
         return Response(status=200, data=dict(user_nickname=user.nickname,
                                               user_profile_image=user.profile_image,
@@ -196,6 +214,12 @@ class ToggleLike(APIView):
         favorite_color = request.data.get('favorite_color', True)
         # 세션에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장 -> 이메일로 세션 유저 객체를 구함
         email = request.session.get('email', None)
+        # 피드 작성자 닉네임
+        feed_user_nickname = request.data.get('feed_user_nickname', True)
+
+        # 알림을 받을 유저 정보를 구함
+        receive_user = User.objects.filter(nickname=feed_user_nickname).first()
+        receive_user_email = receive_user.email
 
         # 해당 피드에 현재 세션의 사용자가 좋아요를 누른 정보가 있다면 뽑아서 like에 저장
         like = Like.objects.filter(feed_id=feed_id, email=email).first()
@@ -206,6 +230,10 @@ class ToggleLike(APIView):
         # like 객체가 존재하지 않다면 좋아요 테이블에 새로운 튜플을 생성
         else:
             Like.objects.create(feed_id=feed_id, email=email)
+            # 자기 자신의 게시물에 좋아요를 누른경우 알림이 가지 않게 함 TODO
+            if email != receive_user_email:
+                Alert.objects.create(send_user=email, receive_user=receive_user_email, alert_content='like',
+                                     feed_id=feed_id)
 
         # 비동기 처리를 위한 좋아요 수
         async_like_count = Like.objects.filter(feed_id=feed_id).count()
@@ -468,6 +496,11 @@ class SearchFeed(APIView):
                 # 댓글이 많은 게시물 순으로 정렬 람다식 이용
                 feed_search_list = sorted(feed_search_list, key=lambda x: x['reply_count'],
                                           reverse=True)
+        # 세션 유저에게 온 알림 유무
+        alert_exists = Alert.objects.filter(receive_user=email).exists()
+
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
 
         # 검색결과를 검색결과 페이지랑 데이터를 사용자에게 반환
         return render(request, "astronaut/search.html",
@@ -477,7 +510,8 @@ class SearchFeed(APIView):
                                    start_date=start_date, end_date=end_date, show_method_recent=show_recent,
                                    show_method_like=show_like, show_method_reply=show_reply,
                                    feed_all_count=feed_all_count, category_option1=category_option1,
-                                   category_option2=category_option2))
+                                   category_option2=category_option2, alert_exists=alert_exists,
+                                   is_delivered_chat=is_delivered_chat))
 
 
 # 댓글 삭제 클래스
@@ -500,11 +534,8 @@ class UpdateFeed(APIView):
         hashtag_content = request.data.get('hashtag_content')
         content = request.data.get('content')
         feed_id = request.data.get('feed_id')
-        email = request.session.get('email', None)
         # 정유진: 수정을 위한 서버로 전달된 데이터 (카테고리)
         category = request.data.get('category')
-        # 정유진: 수정을 위한 서버로 전달된 데이터 (공유카테고리)
-        shared_category_list = request.data.getlist('shared_category_list[]')
         # 피드id를 통한 피드에 달린 기존 해시태그들 삭제
         hashtags = Hashtag.objects.filter(feed_id=feed_id)
         hashtags.delete()
@@ -764,9 +795,15 @@ class FollowerFeed(APIView):
                                   hashtag_list=hashtag_list
                                   ))
 
+        # 알림 유무
+        alert_exists = Alert.objects.filter(receive_user=email).exists()
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
+
         # 팔로우 스위치 버튼 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
-                      context=dict(feeds=feed_list, user_session=user_session, is_checked=is_checked))
+                      context=dict(feeds=feed_list, user_session=user_session, is_checked=is_checked,
+                                   alert_exists=alert_exists, is_delivered_chat=is_delivered_chat))
 
 
 # 피드 수정시 이전 정보를 수정창에 불러오는 클래스

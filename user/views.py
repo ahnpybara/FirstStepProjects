@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from Astronaut.settings import MEDIA_ROOT
-from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark, ShareCategory, Chat
+from content.models import Feed, Reply, Hashtag, Follow, Like, Bookmark, ShareCategory, Chat, Alert
 from .models import User
 from django.contrib.auth.hashers import make_password
 
@@ -336,6 +336,10 @@ class Profile(APIView):
             bookmark_count_list.append(dict(id=feed.id,
                                             like_count=like_count,
                                             reply_count=reply_count))
+        # 알림 유무
+        alert_exists = Alert.objects.filter(receive_user=email).exists()
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
 
         # 정유진: 공유카테고리 피드들의 id 리스트
         shared_category_list = list(ShareCategory.objects.filter(email=email).values_list('feed_id', flat=True))
@@ -371,7 +375,9 @@ class Profile(APIView):
                                                                     user_feed_count=user_feed_count,
                                                                     follower_count=follower_count,
                                                                     following_count=following_count,
-                                                                    shared_category_nickname_list=shared_category_nickname_list))
+                                                                    shared_category_nickname_list=shared_category_nickname_list,
+                                                                    alert_exists=alert_exists,
+                                                                    is_delivered_chat=is_delivered_chat))
 
 
 # 유저 프로필로 이동 클래스
@@ -379,6 +385,7 @@ class ReplyProfile(APIView):
     def get(self, request):
         # 서버로 전달된 사용자의 닉네임을 받음
         nickname = request.GET.get('user_nickname')
+        print(nickname)
 
         # 현재세션 정보를 받아옴. (네비바의 본인 프로필 정보를 위함)
         email_session = request.session.get('email', None)
@@ -396,6 +403,8 @@ class ReplyProfile(APIView):
 
         # 전달된 닉네임을 통해서 프로필로 이동할 유저의 객체를 뽑음
         user = User.objects.filter(nickname=nickname).first()
+        if user is None:
+            return render(request, "astronaut/main.html")
         # 유저의 객체에서 이메일을 구함
         email = user.email
 
@@ -469,6 +478,12 @@ class ReplyProfile(APIView):
         following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=email_session).values_list('follower', flat=True))
 
         shared_category_nickname_list = User.objects.filter(email__in=following_user_email_list)
+        # 알림 유무
+        alert_exists = Alert.objects.filter(receive_user=email).exists()
+
+        # 세션 유저에게 온 채팅 유무
+        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
+
         # 프로필 화면을 요청한 사용자에게 프로필화면과 해당 데이터를 전달
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,
                                                                     like_feed_list=like_feed_list,
@@ -484,7 +499,9 @@ class ReplyProfile(APIView):
                                                                     is_follow=is_follow,
                                                                     follower_count=follower_count,
                                                                     following_count=following_count,
-                                                                    shared_category_nickname_list=shared_category_nickname_list))
+                                                                    shared_category_nickname_list=shared_category_nickname_list,
+                                                                    alert_exists=alert_exists,
+                                                                    is_delivered_chat=is_delivered_chat))
 
     # 팔로우는 내 프로필 페이지가 아닌 다른 사용자의 프로필 페이지에 접속했을 때 가능한 것이므로 ReplyProfile 클래스에 post 함수로 추가
     def post(self, request):
@@ -501,6 +518,7 @@ class ReplyProfile(APIView):
         # Follow 객체가 없다면 follow 테이블에 새로운 튜플을 생성
         else:
             Follow.objects.create(follower=user_follower, following=user_following)
+            Alert.objects.create(send_user=user_follower, receive_user=user_following, alert_content='follow')
 
         return Response(status=200)
 
@@ -551,6 +569,10 @@ class Chatting(APIView):
             Q(send_user=email, receive_user=receive_user_email) | Q(receive_user=email, send_user=receive_user_email)
         )
 
+        # 채팅을 받은 사용자가 채팅 확인 유무
+        is_read_chat = Chat.objects.filter(send_user=receive_user_email, receive_user=email)
+        is_read_chat.update(is_read=False)
+
         # 만약 채팅의 개수가 30개라면 일괄 삭제
         if send_receive_chat.count() > 30:
             send_receive_chat.delete()
@@ -572,3 +594,46 @@ class Chatting(APIView):
 
         # 성공적으로 전달이 되었다는 응답과 ajax 비동기 처리를 위한 성공 함수 인자인 data에 데이터를 전달하기 위해서 보냄
         return Response(status=200, data=dict(chat_content=chat_content))
+
+
+# 알림 클래스
+class AlertAll(APIView):
+    def get(self, request):
+        # 세션 유저 이메일을 가져옴
+        email = request.session.get('email', None)
+        # 나에게 온 알림을 전부 가져옴
+        receive_alert_me = Alert.objects.filter(receive_user=email)
+
+        # 알림 리스트 생성후 데이터 채움
+        alert_list = []
+        for alert in receive_alert_me:
+            alert_send_user = User.objects.filter(email=alert.send_user).first()
+            alert_feed = Feed.objects.filter(id=alert.feed_id).first()
+            alert_list.append(dict(alert_id=alert.id,
+                                   alert_send_user=alert_send_user,
+                                   alert_content=alert.alert_content,
+                                   alert_time=alert.alert_time,
+                                   alert_feed=alert_feed,
+                                   alert_reply=alert.reply_content))
+
+        return render(request, "content/alert.html", context=dict(alert_list=alert_list))
+
+    def post(self, request):
+        # 알림을 삭제할 세션유저의 이메일을 가져옴
+        email = request.session.get('email', None)
+        # 알림 모두 삭제 메시지 내용
+        remove_message = request.data.get('remove_message', None)
+        # 삭제할 알림의 id
+        alert_id = request.data.get('alert_id', None)
+        print(alert_id)
+
+        # 만약 메시지 내용이 모두 삭제이면 해당 유저에게 온 모든 알림을 삭제
+        if remove_message == '모두 확인':
+            remove_alert = Alert.objects.filter(receive_user=email)
+            remove_alert.delete()
+        # 개별 삭제일 경우 해당 id를 가진 알림만 삭제
+        else:
+            remove_alert = Alert.objects.filter(id=alert_id)
+            remove_alert.delete()
+
+        return Response(status=200)

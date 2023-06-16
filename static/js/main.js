@@ -55,6 +55,8 @@ $(".favorite").click(function (event) {
     let favorite_id = event.target.id;
     // 해당 태그의 style 속성중 color 값을 가져옴
     let favorite_color = $('#' + favorite_id).css('color');
+    // 피드의 작성자 닉네임
+    let feed_user_nickname = event.target.attributes.getNamedItem('feed_user_nickname').value;
 
     // 현재 좋아요 상태가 아니면 북마크 상태로 바꿈 -> css를 토글하는 개념
     if (favorite_color === 'rgb(0, 0, 0)') {
@@ -69,12 +71,13 @@ $(".favorite").click(function (event) {
         });
     }
 
-    // 서버로 보낼 (Json 형태)
+    // 좋아요 관련 ajax 호출
     $.ajax({
         url: "/content/like",
         data: {
             feed_id: feed_id,
-            favorite_color: favorite_color
+            favorite_color: favorite_color,
+            feed_user_nickname: feed_user_nickname,
         },
         method: "POST",
         success: function (data) {
@@ -102,6 +105,7 @@ $(".upload_reply").click(function (event) {
     let reply_id = 'reply_' + feed_id;
     // 댓글 입력 폼의 아이디를 이용해서 입력 폼의 내용을 가져옴
     let reply_content = $('#' + reply_id).val();
+    let feed_user_nickname = event.target.attributes.getNamedItem('feed_user_nickname').value;
 
     // 댓글의 길이가 0보다 작으면 알림창 뜸
     if (reply_content.length <= 0) {
@@ -115,6 +119,7 @@ $(".upload_reply").click(function (event) {
         data: {
             feed_id: feed_id,
             reply_content: reply_content,
+            feed_user_nickname: feed_user_nickname,
         },
         method: "POST",
         success: function (data) {
