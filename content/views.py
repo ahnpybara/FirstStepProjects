@@ -129,8 +129,6 @@ class Main(APIView):
             # 해당 feed_id에 존재하는 해시태그들을 가져옴 ,해시태그 리스트 생성
             hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
             hashtag_list = []
-            images_object_list = Image.objects.filter(feed_id=feed.id)
-            images_list = []
             # 댓글 리스트에 채울 데이터를 여러 테이블의 필터링을 통해서 채움
             for reply in reply_object_list:
                 reply_user = User.objects.filter(email=reply.email).first()
@@ -141,6 +139,9 @@ class Main(APIView):
             for hashtag in hashtag_object_list:
                 hashtag_feed = Feed.objects.filter(id=feed.id).first()
                 hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
+                # 이미지 추가
+            images_object_list = Image.objects.filter(feed_id=feed.id)
+            images_list = []
             for image in images_object_list:
                 images_feed = Feed.objects.filter(id=feed.id).first()
                 images_list.append(dict(feed_id=images_feed, image=image.image, count=count, now_count=count + 1))
@@ -854,7 +855,9 @@ class FollowerFeed(APIView):
                                   is_liked=is_liked,
                                   is_marked=is_marked,
                                   create_at=feed.create_at,
-                                  hashtag_list=hashtag_list
+                                  hashtag_list=hashtag_list,
+                                  category=feed.category,
+                                  image_count=count
                                   ))
 
         # 알림 유무

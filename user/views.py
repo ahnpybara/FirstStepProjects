@@ -366,7 +366,6 @@ class ReplyProfile(APIView):
     def get(self, request):
         # 서버로 전달된 사용자의 닉네임을 받음
         nickname = request.GET.get('user_nickname')
-        print(nickname)
 
         # 현재세션 정보를 받아옴. (네비바의 본인 프로필 정보를 위함)
         email_session = request.session.get('email', None)

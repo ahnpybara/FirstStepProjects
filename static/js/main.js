@@ -625,10 +625,10 @@ $('#flexSwitchCheckChecked').click(function (event) {
 
 // 유재우: 매인에서 이미지 슬라이드를 위해 추가한 이밴트들
 $('.prev_image_button').click(function (event) {
-    let feed_id = event.target.attributes.getNamedItem('feed_id').value;
-    feeds_id = parseInt(feed_id / 100)
-    now_img_id = parseInt((feed_id % 100) / 10)
-    last_img_id = parseInt(feed_id % 10) - 1
+    let feed_id = event.target.attributes.getNamedItem('feed_ids').value;
+    let feeds_id = parseInt(feed_id / 100)
+    let now_img_id = parseInt((feed_id % 100) / 10)
+    let last_img_id = parseInt(feed_id % 10) - 1
 
     if (now_img_id == 0) {
         $('#' + feeds_id + now_img_id + '_next_button').css({
@@ -685,10 +685,10 @@ $('.prev_image_button').click(function (event) {
 
 // 유재우: 매인에서 이미지 슬라이드를 위해 추가한 이밴트들
 $('.next_image_button').click(function (event) {
-    let feed_id = event.target.attributes.getNamedItem('feed_id').value;
-    feeds_id = parseInt(feed_id / 100)
-    now_img_id = parseInt((feed_id % 100) / 10)
-    last_img_id = parseInt(feed_id % 10) - 1
+    let feed_id = event.target.attributes.getNamedItem('feed_ids').value;
+    let feeds_id = parseInt(feed_id / 100)
+    let now_img_id = parseInt((feed_id % 100) / 10)
+    let last_img_id = parseInt(feed_id % 10) - 1
 
     if (now_img_id == last_img_id) {
         $('#' + feeds_id + now_img_id + '_next_button').css({
@@ -742,7 +742,6 @@ $('.next_image_button').click(function (event) {
         })
     }
 })
-
 // 유재우 : 팔로우 추천 에서 팔로우를 눌렸을 때 이밴트들
 $('.follow_button').click(function (event) {
     let following_id = event.target.attributes.getNamedItem('following_id').value;
@@ -768,7 +767,32 @@ $('.follow_button').click(function (event) {
         }
     });
 })
+// 유재우 : 팔로우 추천 모두보기 모달창 에서 팔로우를 눌렸을 때 이밴트들
+$('.all_follow_button').click(function (event) {
+    let following_id = event.target.attributes.getNamedItem('following_id').value;
+    let user_email = event.target.attributes.getNamedItem('user_email').value;
 
+    // 서버로 보낼 데이터 (json)
+    $.ajax({
+        url: "/user/follow",
+        data: {
+            session_user_email: user_email,
+            user_email: following_id,
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+            location.reload()
+            $('.follow_recommend_list_all').click()
+        }
+    });
+})
 
 // 유재우 : 수정하기에 이미지 추가
 function image_update(e) {

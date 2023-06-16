@@ -11,7 +11,7 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=2">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=5">
     <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=3">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=5">
 
@@ -180,12 +180,12 @@
                                     <div class="feed_image_area_btns">
                                         <!-- 오른쪽 버튼 -->
                                         <span class="prev_image_button material-symbols-outlined"
-                                              feed_id="{{ feed.id }}{{ image.count }}{{ feed.image_count }}"
+                                              feed_ids="{{ feed.id }}{{ image.count }}{{ feed.image_count }}"
                                               style="left: 5px;{% if image.count == 0 %}display: flex; {% else %}display: none{% endif %}"
                                               id="{{ feed.id }}{{ image.count }}_prev_button">arrow_back_ios</span>
                                         <!-- 왼른쪽 버튼 -->
                                         <span class="next_image_button material-symbols-outlined"
-                                              feed_id="{{ feed.id }}{{ image.count }}{{ feed.image_count }}"
+                                              feed_ids="{{ feed.id }}{{ image.count }}{{ feed.image_count }}"
                                               style="{% if image.count == 0 %}display: flex; {% else %}display: none{% endif %}"
                                               id="{{ feed.id }}{{ image.count }}_next_button">arrow_forward_ios</span>
                                     </div>
@@ -194,7 +194,6 @@
                                          class="now_img_count">{{ image.now_count }}/{{ feed.image_count }}</div>
                                 {% endif %}
                             </div>
-
                         {% endfor %}
                     </div>
                 </div>
@@ -829,7 +828,7 @@
                 </div>
 
                 <div>
-                    <a class="follow_button" id="{{ Recommend_ALl_Followers_list.email }}_follwing_btn" href="#"
+                    <a class="all_follow_button" id="{{ Recommend_ALl_Followers_list.email }}_all_follwing_btn" href="#"
                        following_id="{{ Recommend_ALl_Followers_list.email }}"
                        user_email="{{ user_session.email }}">
                         {% if Recommend_ALl_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 4 %}
@@ -850,8 +849,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'js/main.js' %}?ver=1"></script>
-<script src="{% static 'js/main_profile_same.js' %}?ver=4"></script>
-<script src="{% static 'js/allsame.js' %}?ver=93"></script>
+<script src="{% static 'js/main.js' %}?ver=15"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=5"></script>
+<script src="{% static 'js/allsame.js' %}?ver=12"></script>
 </body>
 </html>

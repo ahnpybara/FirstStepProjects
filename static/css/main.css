@@ -382,6 +382,14 @@
     color: rgb(0, 149, 246);
 }
 
+/*팔로우 모두 보기 팔로우 버튼*/
+.all_follow_button{
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(0, 149, 246);
+}
+
 /* 설명란 */
 .Astro_explain1 {
     margin-top: 40px;
