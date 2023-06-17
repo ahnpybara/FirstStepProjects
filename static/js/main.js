@@ -829,3 +829,51 @@ $('.follow_button').click(function (event) {
         }
     });
 });
+
+$('.follow_modal_button').click(function (event) {
+    // 팔로우 당하는 사람의 이메일
+    let user_email = $(this).attr("user_email");
+
+    let follow_id = event.target.id;
+
+    // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
+    let is_followed = $.trim($('#' + follow_id).html());
+
+    console.log(user_email);
+    console.log(follow_id);
+    console.log(is_followed);
+
+
+    // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
+    if (is_followed == '팔로우') {
+        $('#' + follow_id).html('언팔로우');
+        $(this).css({
+            color: 'gray',
+            border: 'none',
+        })
+    } else { // 만약 팔로우 버튼의 글 내용이 언팔로우일 경우 -> css토글
+        $('#' + follow_id).html('팔로우');
+        $(this).css({
+            color: 'rgb(0, 149, 246)',
+            border: 'none',
+        })
+
+    }
+    // 서버로 보낼 데이터 (json)
+    $.ajax({
+        url: "/user/follow",
+        data: {
+            user_email: user_email,
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+        }
+    });
+});

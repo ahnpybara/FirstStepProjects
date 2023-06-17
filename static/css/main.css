@@ -689,7 +689,27 @@
     margin: 8px 0;
 }
 
+/* 모달 팔로우 버튼 */
+.follow_modal_button {
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(0, 149, 246);
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    height: 21px;
+    cursor: pointer;
+}
+
 /* 팔로우 추천 모달창 닫기 */
 .close_follow_modal {
     cursor: pointer;
+}
+
+/* 반응형 */
+@media (max-width: 1000px) {
+    #all_follow_modal {
+        visibility: hidden;
+    }
 }
