@@ -535,7 +535,7 @@ class ReplyProfile(APIView):
     # 팔로우는 내 프로필 페이지가 아닌 다른 사용자의 프로필 페이지에 접속했을 때 가능한 것이므로 ReplyProfile 클래스에 post 함수로 추가
     def post(self, request):
         # 팔로우를 하려는 유저
-        user_follower = request.data.get('session_user_email', None)
+        user_follower = request.session.get('email', None)
         # 팔로우를 당하는 유저
         user_following = request.data.get('user_email', None)
         # 팔로우를 한 내 정보와 팔로우를 당한 상대 정보가 Follow 테이블에 있는지 조회
