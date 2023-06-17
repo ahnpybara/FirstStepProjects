@@ -810,7 +810,7 @@ class Autocomplete(APIView):
             search_box_value = search_box_value.replace("#", "")
             # TODO 우선 해시태그 키워드가 포함된 해시태그 내용만 리스트로 뽑아서 저장(10개만 가져옴) 수정 필요
             hashtag_content_lists = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list(
-                'content', flat=True)[:10]
+                'content', flat=True)
 
             # 정유진: 해시태그 모음 보기
             hashtag_bundle_count = Hashtag.objects.filter(content__contains=search_box_value).distinct().values_list(
@@ -835,7 +835,7 @@ class Autocomplete(APIView):
         else:
             # TODO 검색키워드가 닉네임 또는 이름에 포함되는지 객체를 10개만 뽑아냄
             users = User.objects.filter(
-                Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')[:10]
+                Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')
             # users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
             for user in users:
                 autocomplete_user_list.append(dict(profile_image=user.profile_image,
