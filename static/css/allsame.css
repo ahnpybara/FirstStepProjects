@@ -175,6 +175,36 @@ html {
 }
 
 /* 반응형 웹을 위한 코드 */
+@media (max-width: 1400px) {
+    .chat_user_modal_area {
+        visibility: hidden;
+    }
+
+    .chat_modal_area {
+        visibility: hidden;
+    }
+
+    .alert_modal_area {
+        visibility: hidden;
+    }
+}
+
+/* 반응형 웹을 위한 코드 */
+@media (max-width: 1000px) {
+    #alert_icon {
+        display: none;
+    }
+
+    #send_icon {
+        display: none;
+    }
+
+    #chat_user_modal_id {
+        display: none;
+    }
+}
+
+/* 반응형 웹을 위한 코드 */
 @media (max-width: 870px) {
     .bar_search {
         display: none;
@@ -534,7 +564,7 @@ body::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 28%;
+    top: 260px;
     left: 85.5%;
     transform: translate(-50%, -50%);
     background-color: white;

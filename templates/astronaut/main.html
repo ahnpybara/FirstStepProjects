@@ -12,7 +12,7 @@
 
     <!-- css 분리 -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=19">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=8">
 
     <!--  Google 심볼을 사용하기 위한 선언 -->
@@ -411,8 +411,9 @@
                        following_id="{{ Recommend_Followers_list.email }}"
                        Recommend_Followers_id="{{ Recommend_Followers_list.id }}"
                        now_following_id="{{ Recommend_Followers_list.now_following }}"
-                       user_email="{{ user_session.email }}">{% if Recommend_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 4%}
-                        맞{% endif %}
+                       user_email="{{ user_session.email }}">
+                        {% if Recommend_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 4 %}
+                            맞{% endif %}
                         팔로우</a>
                 </div>
             </div>
@@ -670,7 +671,8 @@
                                 공유
                             </a>
                             <ul class="dropdown-menu shared_category_select_area"
-                                aria-labelledby="dropdownMenuLink" data-bs-popper="end" data-popper-placement="bottom-end">
+                                aria-labelledby="dropdownMenuLink" data-bs-popper="end"
+                                data-popper-placement="bottom-end">
                                 {% if shared_category_nickname_list %}
                                     {% for user in shared_category_nickname_list %}
                                         <li class="text_line shared_category_select">
@@ -939,6 +941,6 @@
 -->
 <script src="{% static 'js/main.js' %}?ver=3"></script>
 <script src="{% static 'js/main_profile_same.js' %}?ver=11"></script>
-<script src="{% static 'js/allsame.js' %}?ver=12"></script>
+<script src="{% static 'js/allsame.js' %}?ver=16"></script>
 </body>
 </html>
