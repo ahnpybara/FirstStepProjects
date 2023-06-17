@@ -224,7 +224,7 @@ $(".upload_reply").click(function (event) {
                 // 수정할 댓글의 id를 가져옴
                 let reply_id = $(this).attr('reply_id');
                 // 댓글 수정 입력박스에 입력된 내용을 가져옴
-                let content = $('#reply_' + reply_id).val();
+                let content = $('#reply_update_' + reply_id).val();
 
 
                 // 댓글의 길이가 0보다 작으면 알림창 뜸
@@ -524,7 +524,7 @@ $('.update_replys').click(function (event) {
     // 수정할 댓글의 id를 가져옴
     let reply_id = $(this).attr('reply_id');
     // 댓글 수정 입력박스에 입력된 내용을 가져옴
-    let content = $('#reply_' + reply_id).val();
+    let content = $('#reply_update_' + reply_id).val();
 
 
     // 댓글의 길이가 0보다 작으면 알림창 뜸

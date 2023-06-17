@@ -183,8 +183,11 @@ class Main(APIView):
                                   is_shared_category_user=is_shared_category_user
                                   ))
         # 정유진: 피드 업로드 및 수정 시 필요한 맞팔되어 있는 유저 리스트
-        follower_user_email_list = list(Follow.objects.filter(follower=user_session.email).values_list('following', flat=True))
-        following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=user_session.email).values_list('follower', flat=True))
+        follower_user_email_list = list(
+            Follow.objects.filter(follower=user_session.email).values_list('following', flat=True))
+        following_user_email_list = list(
+            Follow.objects.filter(follower__in=follower_user_email_list, following=user_session.email).values_list(
+                'follower', flat=True))
 
         shared_category_nickname_list = User.objects.filter(email__in=following_user_email_list)
 
@@ -260,7 +263,7 @@ class UploadFeed(APIView):
             Hashtag.objects.create(content=hashtags_list, feed_id=feed_id.id)
 
         # 정유진: 공유카테고리. 작성자 추가.
-        if shared_category_list :
+        if shared_category_list:
             ShareCategory.objects.create(feed_id=feed_id.id, email=email)
         # 정유진: 공유카테고리는 여러개라 반복문으로 테이블 튜플을 생성.
         for shared_category in shared_category_list:
@@ -289,10 +292,14 @@ class UploadReply(APIView):
         email = request.session.get('email', None)
         user = User.objects.filter(email=email).first()
 
+        # 세션이메일과 알림 받을 유저의 이메일의 타입 형식을 문자열로 변환
+        email_str = str(email)
+        receive_user_email_str = str(receive_user_email)
+
         # 서버로 전달된 데이터를 토대로 Reply 테이블에 새로운 튜플을 생성한 뒤 생성된 객체의 id값을 변수 reply_id에 저장
         reply_id = Reply.objects.create(feed_id=feed_id, reply_content=reply_content, email=email).id
         # 자기 자신의 게시물에 댓글을 작성한 경우 알림이 가지 않게 함 TODO
-        if email != receive_user_email:
+        if email_str != receive_user_email_str:
             Alert.objects.create(send_user=email, receive_user=receive_user_email, alert_content='reply',
                                  feed_id=feed_id, reply_content=reply_content)
         # 성공적으로 전달이 되었다는 응답과 ajax 비동기 처리를 위한 성공 함수 인자인 data에 데이터를 전달하기 위해서 보냄
@@ -321,6 +328,10 @@ class ToggleLike(APIView):
         # 해당 피드에 현재 세션의 사용자가 좋아요를 누른 정보가 있다면 뽑아서 like에 저장
         like = Like.objects.filter(feed_id=feed_id, email=email).first()
 
+        # 세션이메일과 알림 받을 유저의 이메일의 타입 형식을 문자열로 변환
+        email_str = str(email)
+        receive_user_email_str = str(receive_user_email)
+
         # 뽑은 객체가 존재 한다면 like객체를 삭제
         if like is not None:
             like.delete()
@@ -328,7 +339,7 @@ class ToggleLike(APIView):
         else:
             Like.objects.create(feed_id=feed_id, email=email)
             # 자기 자신의 게시물에 좋아요를 누른경우 알림이 가지 않게 함 TODO
-            if email != receive_user_email:
+            if receive_user_email_str != email_str:
                 Alert.objects.create(send_user=email, receive_user=receive_user_email, alert_content='like',
                                      feed_id=feed_id)
 
@@ -675,9 +686,12 @@ class UpdateFeed(APIView):
 
         # 정유진: 공유카테고리. 삭제(feed_id, 맞팔) 후 다시 추가
         follower_user_email_list = list(Follow.objects.filter(follower=email).values_list('following', flat=True))
-        following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=email).values_list('follower', flat=True))
+        following_user_email_list = list(
+            Follow.objects.filter(follower__in=follower_user_email_list, following=email).values_list('follower',
+                                                                                                      flat=True))
 
-        delete_shared_category_user_list = ShareCategory.objects.filter(feed_id=feed_id, email__in=following_user_email_list)
+        delete_shared_category_user_list = ShareCategory.objects.filter(feed_id=feed_id,
+                                                                        email__in=following_user_email_list)
 
         delete_shared_category_user_list.delete()
 
@@ -946,7 +960,7 @@ class FeedUpdateIMG(APIView):
         # 정유진: 기존 공유카테고리
         shared_category_email = list(ShareCategory.objects.filter(feed_id=feed_id).values_list('email', flat=True))
         shared_category_nickname = list(
-        User.objects.filter(email__in=shared_category_email).values_list('nickname', flat=True))
+            User.objects.filter(email__in=shared_category_email).values_list('nickname', flat=True))
 
         # 사용자로 보낼 데이터
         data = {

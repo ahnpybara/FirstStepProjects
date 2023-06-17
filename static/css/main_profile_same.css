@@ -571,9 +571,10 @@ shared_category_select_area {
 .feed_modal_feed_image_next:hover {
     font-variation-settings: 'wght' 700;
 }
+
 /* 유재우 : 이미지 슬라이드 기능 끝 */
 
-.feed_modal_area_images_btn_dele_parent{
+.feed_modal_area_images_btn_dele_parent {
     display: none;
     height: 210px;
     text-align: left;
@@ -598,26 +599,33 @@ shared_category_select_area {
 }
 
 /* 유재우 : 두번째 모달 창으로 가기 위한 다음 버튼 */
-.modal_next_button {
+#modal_next_button {
     margin-left: 10px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* 유재우 : 첫번째 모달 창으로 돌아가기 위한 이전 버튼 */
-.modal_before_button {
+#modal_before_button {
     margin-left: 10px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.update_feed_modal_feed_image_dele{
+.update_feed_modal_feed_image_dele {
     color: red;
     padding-left: 5px;
 }
 
 /*왼쪽버튼*/
-.img_previous_btn{
+.img_previous_btn {
     padding-left: 5px;
 }
 
-/*유재우 : 모달창 상단 바다음 이전 버튼*/
-.feed_upload_modal_bar_btn{
-    padding-left: 10px;
+/* 부트스트랩 버튼 이벤트 제거 */
+.btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
 }

@@ -12,8 +12,8 @@
 
     <!-- css 분리 -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=1">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=19">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=20">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=11">
 
     <!--  Google 심볼을 사용하기 위한 선언 -->
     <link rel="stylesheet"
@@ -323,7 +323,7 @@
                         <!-- 댓글 수정을 영역 -->
                         <div class="reply_update_textbox" id="reply_div{{ reply.id }}">
                             <!-- 댓글 수정 텍스트 박스 -->
-                            <input id="ireply_{{ reply.id }}" type="text" class="input_reply_update form-control"
+                            <input id="reply_update_{{ reply.id }}" type="text" class="input_reply_update form-control"
                                    placeholder="댓글 수정..">
                             <!-- 댓글 수정 버튼 -->
                             <div reply_id="{{ reply.id }}" class="update_replys" id="update_reply_btn">
@@ -462,13 +462,14 @@
             <div class="feed_image_area_img_control_btns_parent">
 
                 <div class="feed_image_area_img_control_btns">
-                    <!--좌우 버튼div-->
+                    <!-- 다음 버튼 이전 버튼 영역 -->
                     <div class="feed_modal_area_images_btn">
-                        <!--좌우 버튼-->
+                        <!-- 이전 버튼-->
                         <div class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn"
                              id="feed_modal_feed_image_before_F">
                             arrow_back_ios
                         </div>
+                        <!-- 이전 버튼-->
                         <div class="feed_modal_feed_image_next material-symbols-outlined"
                              id="feed_modal_feed_image_next_F">
                             arrow_forward_ios
@@ -509,11 +510,14 @@
         <div class="feed_image_text_modal">
             <!-- 이미지 영역 -->
             <div class="img_upload_space">
+                <!-- 이미지 보기 이전 버튼 다음 버튼 영역-->
                 <div class="feed_modal_area_images_btn">
+                    <!-- 이전 버튼-->
                     <div id="feed_modal_feed_image_before_btn"
                          class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn">
                         arrow_back_ios
                     </div>
+                    <!-- 다음 버튼-->
                     <div id="feed_modal_feed_image_next_btn"
                          class="feed_modal_feed_image_next material-symbols-outlined">
                         arrow_forward_ios
@@ -939,7 +943,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'js/main.js' %}?ver=3"></script>
+<script src="{% static 'js/main.js' %}?ver=4"></script>
 <script src="{% static 'js/main_profile_same.js' %}?ver=11"></script>
 <script src="{% static 'js/allsame.js' %}?ver=16"></script>
 </body>

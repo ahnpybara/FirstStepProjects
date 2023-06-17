@@ -256,7 +256,6 @@ $(".modal_upload_reply").click(function (event) {
         method: "POST",
         success: function (data) {
             console.log("성공");
-            alert("댓글 성공");
 
             // <부모 : 특정 피드의 댓글 리스트> append <자식 : 댓글 한 줄 영역 >
             $("#feed_modal_reply_list").append('<div id="feed_modal_reply_' + relpy_upload_id + '" class="feed_modal_reply_area"></div>');
