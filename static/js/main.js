@@ -6,6 +6,13 @@ $(".movetoprofile").click(function (event) {
     location.href = "/user/reprofile?user_nickname=" + user_nickname;
 });
 
+// 유재우 : 팔로우 추천 모두보기 프로필이동
+$('.recommend_all_movetoprofile').click(function (event) {
+    // 이벤트가 발생한 태그의 id를 가져옴 id는 user_nickname 형태
+    let user_nickname = event.target.id;
+    // 해당 url로 요청하게 되면 매핑된 view도 실행되고 url뒤에 데이터를 붙여서 전송이 가능하다.
+    location.href = "/user/reprofile?user_nickname=" + user_nickname;
+});
 // 북마크 아이콘 클릭 이벤트 처리
 $(".bookmark").click(function (event) {
     // 북마크 아이콘 태그의 feed_id 속성 값을 가져옴 ( 피드는 여러개이므로 어떤 피드에 북마크를 했는지 알아야함 )
@@ -357,6 +364,7 @@ $('.update_feed').click(function (event) {
                 "background-position": "center",
                 "margin-right": "1px"
             });
+            // 사진이 1장뿐이라면 좌우 버튼이랑 이미지 삭제 버튼을 숨김
             if (count == 1) {
                 $('.update_feed_modal_image_LR_btns').css({
                     "display": "none"
@@ -425,42 +433,25 @@ $('.update_feed').click(function (event) {
         $.ajax({
             url: "/content/removeimg",
             data: {
-                now_img_count: now_img_count,
-                img_content: imgs_list[now_img_count]
+                now_img_count: parseInt(now_img_count),
+                img_content: imgs_list[now_img_count],
+                img_feed_id: Feeds_id
             },
             method: "POST",
             success: function (data) {
                 console.log("성공");
+                location.reload()
             },
             error: function (request, status, error) {
                 console.log("에러");
             },
             complete: function () {
                 console.log("완료");
+                $('#' + Feeds_id + '_update_feed_btn').click()
             }
         });
-        imgs_list.splice(now_img_count, 1);
-        $('#update_feed_modal_image').css({
-            "background-image": "url(" + "/media/" + imgs_list[0] + ")"
-        });
-        now_img_count = 0
-        img_count--
-
-        if (img_count == 1) {
-            $('.update_feed_modal_image_LR_btns').css({
-                "display": "none"
-            })
-            $('.update_feed_modal_feed_image_dele').css({
-                "display": "none"
-            })
-        }
     })
 
-
-    // 피드 수정 모달창에서 사진 추가 버튼 클릭했을 시 (파일 시스템을 열어서 업로드 하는 경우)
-    $('.update_feed_modal_image_update').click(function () {
-        $('#update_feed_modal_input_image_upload').click()
-    });
 })
 ;
 
@@ -622,10 +613,10 @@ $('#flexSwitchCheckChecked').click(function (event) {
 
 // 유재우: 매인에서 이미지 슬라이드를 위해 추가한 이밴트들
 $('.prev_image_button').click(function (event) {
-    let feed_id = event.target.attributes.getNamedItem('feed_id').value;
-    feeds_id = parseInt(feed_id / 100)
-    now_img_id = parseInt((feed_id % 100) / 10)
-    last_img_id = parseInt(feed_id % 10) - 1
+    let feed_id = event.target.attributes.getNamedItem('feed_ids').value;
+    let feeds_id = parseInt(feed_id / 100)
+    let now_img_id = parseInt((feed_id % 100) / 10)
+    let last_img_id = parseInt(feed_id % 10) - 1
 
     if (now_img_id == 0) {
         $('#' + feeds_id + now_img_id + '_next_button').css({
@@ -682,10 +673,10 @@ $('.prev_image_button').click(function (event) {
 
 // 유재우: 매인에서 이미지 슬라이드를 위해 추가한 이밴트들
 $('.next_image_button').click(function (event) {
-    let feed_id = event.target.attributes.getNamedItem('feed_id').value;
-    feeds_id = parseInt(feed_id / 100)
-    now_img_id = parseInt((feed_id % 100) / 10)
-    last_img_id = parseInt(feed_id % 10) - 1
+    let feed_id = event.target.attributes.getNamedItem('feed_ids').value;
+    let feeds_id = parseInt(feed_id / 100)
+    let now_img_id = parseInt((feed_id % 100) / 10)
+    let last_img_id = parseInt(feed_id % 10) - 1
 
     if (now_img_id == last_img_id) {
         $('#' + feeds_id + now_img_id + '_next_button').css({
@@ -739,11 +730,38 @@ $('.next_image_button').click(function (event) {
         })
     }
 })
-
 // 유재우 : 팔로우 추천 에서 팔로우를 눌렸을 때 이밴트들
 $('.follow_button').click(function (event) {
+    // 팔로우 당하는 사람 이메일
     let following_id = event.target.attributes.getNamedItem('following_id').value;
+    // 필로우 하는 사람 이메일
     let user_email = event.target.attributes.getNamedItem('user_email').value;
+    // 팔로우 id를 특정하기 위해 들고옴
+    let Recommend_Followers_id = event.target.attributes.getNamedItem('Recommend_Followers_id').value;
+    // 팔로우 버튼의 상태를 알기 위해 들고옴
+    let is_followed = $.trim($('#follwing_btn_' + Recommend_Followers_id).html());
+    // 상대가 자신을 팔로우 중인지를 알기 위해 들고 옴
+    let now_following_id = event.target.attributes.getNamedItem('now_following_id').value;
+
+    if (is_followed != "언팔로우") {
+        $('#follwing_btn_' + Recommend_Followers_id).html("언팔로우");
+        $('#follwing_btn_' + Recommend_Followers_id).css({
+            "color": "gray"
+        });
+    } else {
+        if (now_following_id == 1) {
+            $('#follwing_btn_' + Recommend_Followers_id).html("맞 팔로우");
+            $('#follwing_btn_' + Recommend_Followers_id).css({
+                "color": "rgb(0, 149, 246)"
+            });
+        } else {
+            $('#follwing_btn_' + Recommend_Followers_id).html("팔로우");
+            $('#follwing_btn_' + Recommend_Followers_id).css({
+                "color": "rgb(0, 149, 246)"
+            });
+        }
+    }
+
 
     // 서버로 보낼 데이터 (json)
     $.ajax({
@@ -755,17 +773,69 @@ $('.follow_button').click(function (event) {
         method: "POST",
         success: function (data) {
             console.log("성공");
+
         },
         error: function (request, status, error) {
             console.log("에러");
         },
         complete: function () {
             console.log("완료");
-            location.replace("/main")
+
+        }
+    });
+});
+
+// 유재우 : 팔로우 추천 모두보기 모달창 에서 팔로우를 눌렸을 때 이밴트들
+$('.all_follow_button').click(function (event) {
+    // 팔로우 당하는 사람 이메일
+    let following_All_id = event.target.attributes.getNamedItem('following_All_id').value;
+    // 필로우 하는 사람 이메일
+    let user_All_email = event.target.attributes.getNamedItem('user_All_email').value;
+    // 팔로우 id를 특정하기 위해 들고옴
+    let Recommend_All_Followers_id = event.target.attributes.getNamedItem('Recommend_All_Followers_id').value;
+    // 팔로우 버튼의 상태를 알기 위해 들고옴
+    let is_followed = $.trim($('#all_follwing_btn_' + Recommend_All_Followers_id).html());
+    // 상대가 자신을 팔로우 중인지를 알기 위해 들고 옴
+    let now_All_following_id = event.target.attributes.getNamedItem('now_All_following_id').value;
+
+    if (is_followed != "언팔로우") {
+        $('#all_follwing_btn_' + Recommend_All_Followers_id).html("언팔로우");
+        $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
+            "color": "gray"
+        });
+    } else {
+        if (now_All_following_id == 1 || now_All_following_id ==4) {
+            $('#all_follwing_btn_' + Recommend_All_Followers_id).html("맞 팔로우");
+            $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
+                "color": "rgb(0, 149, 246)"
+            });
+        } else {
+            $('#all_follwing_btn_' + Recommend_All_Followers_id).html("팔로우");
+            $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
+                "color": "rgb(0, 149, 246)"
+            });
+        }
+    }
+
+    // 서버로 보낼 데이터 (json)
+    $.ajax({
+        url: "/user/follow",
+        data: {
+            session_user_email: user_All_email,
+            user_email: following_All_id,
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
         }
     });
 })
-
 
 // 유재우 : 수정하기에 이미지 추가
 function image_update(e) {
@@ -794,26 +864,26 @@ function image_update(e) {
         contentType: false,
         success: function (data) {
             console.log("성공");
+            location.reload()
         },
         error: function (request, status, error) {
             console.log("에러");
         },
         complete: function () {
             console.log("완료");
-            $('#modal_close_button').click()
             $('#' + feed_id + '_update_feed_btn').click()
         }
     });
 }
 
-// 피드 수정을 하지 않고 닫고 다음 피드수정을 할 시 앞에 열었던 피드도 같이 수정되는 버그를 막기위해 새로고침함
-$('.update_feed_modal_close').click(function () {
-    location.reload()
-})
-
-// 팔로우 모두 보기 클릭 이밴트
+// 유재우 : 팔로우 모두 보기 클릭 이밴트
 $('.follow_recommend_list_all').click(function () {
     $('#Recommend_Followers_all').css({
-        "display":"flex"
+        "display": "flex"
     })
 })
+
+// 유재우 : 피드 수정 모달창에서 사진 추가 버튼 클릭했을 시 (파일 시스템을 열어서 업로드 하는 경우)
+$('.update_feed_modal_image_update').click(function () {
+    $('.update_feed_modal_input_image_upload_btn').click()
+});
