@@ -729,7 +729,7 @@ $('.follow_button').click(function (event) {
     let Recommend_Followers_id = event.target.attributes.getNamedItem('Recommend_Followers_id').value;
     // 팔로우 버튼의 상태를 알기 위해 들고옴
     let is_followed = $.trim($('#follwing_btn_' + Recommend_Followers_id).html());
-    // 상대가 자신을 빨로우 중인지를 알기 위해 들고 옴
+    // 상대가 자신을 팔로우 중인지를 알기 위해 들고 옴
     let now_following_id = event.target.attributes.getNamedItem('now_following_id').value;
 
     if (is_followed != "언팔로우") {
@@ -776,15 +776,42 @@ $('.follow_button').click(function (event) {
 
 // 유재우 : 팔로우 추천 모두보기 모달창 에서 팔로우를 눌렸을 때 이밴트들
 $('.all_follow_button').click(function (event) {
-    let following_id = event.target.attributes.getNamedItem('following_id').value;
-    let user_email = event.target.attributes.getNamedItem('user_email').value;
+    // 팔로우 당하는 사람 이메일
+    let following_All_id = event.target.attributes.getNamedItem('following_All_id').value;
+    // 필로우 하는 사람 이메일
+    let user_All_email = event.target.attributes.getNamedItem('user_All_email').value;
+    // 팔로우 id를 특정하기 위해 들고옴
+    let Recommend_All_Followers_id = event.target.attributes.getNamedItem('Recommend_All_Followers_id').value;
+    // 팔로우 버튼의 상태를 알기 위해 들고옴
+    let is_followed = $.trim($('#all_follwing_btn_' + Recommend_All_Followers_id).html());
+    // 상대가 자신을 팔로우 중인지를 알기 위해 들고 옴
+    let now_All_following_id = event.target.attributes.getNamedItem('now_All_following_id').value;
+
+    if (is_followed != "언팔로우") {
+        $('#all_follwing_btn_' + Recommend_All_Followers_id).html("언팔로우");
+        $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
+            "color": "gray"
+        });
+    } else {
+        if (now_All_following_id == 1 || now_All_following_id ==4) {
+            $('#all_follwing_btn_' + Recommend_All_Followers_id).html("맞 팔로우");
+            $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
+                "color": "rgb(0, 149, 246)"
+            });
+        } else {
+            $('#all_follwing_btn_' + Recommend_All_Followers_id).html("팔로우");
+            $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
+                "color": "rgb(0, 149, 246)"
+            });
+        }
+    }
 
     // 서버로 보낼 데이터 (json)
     $.ajax({
         url: "/user/follow",
         data: {
-            session_user_email: user_email,
-            user_email: following_id,
+            session_user_email: user_All_email,
+            user_email: following_All_id,
         },
         method: "POST",
         success: function (data) {

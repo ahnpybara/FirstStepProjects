@@ -404,7 +404,7 @@
                        following_id="{{ Recommend_Followers_list.email }}"
                        Recommend_Followers_id="{{ Recommend_Followers_list.id }}"
                        now_following_id="{{ Recommend_Followers_list.now_following }}"
-                       user_email="{{ user_session.email }}">{% if Recommend_Followers_list.now_following == 1 %}
+                       user_email="{{ user_session.email }}">{% if Recommend_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 4%}
                         맞{% endif %}
                         팔로우</a>
                 </div>
@@ -836,12 +836,15 @@
                         </div>
 
                         <div>
-                            <a class="all_follow_button" id="{{ Recommend_ALl_Followers_list.email }}_all_follwing_btn"
+                            <a class="all_follow_button" id="all_follwing_btn_{{ Recommend_ALl_Followers_list.id }}"
                                href="#"
-                               following_id="{{ Recommend_ALl_Followers_list.email }}"
-                               user_email="{{ user_session.email }}">
+                               following_All_id="{{ Recommend_ALl_Followers_list.email }}"
+                               Recommend_All_Followers_id="{{ Recommend_ALl_Followers_list.id }}"
+                               now_All_following_id="{{ Recommend_ALl_Followers_list.now_following }}"
+                               user_All_email="{{ user_session.email }}">
                                 {% if Recommend_ALl_Followers_list.now_following == 1 or Recommend_ALl_Followers_list.now_following == 4 %}
-                                    맞{% endif %} 팔로우</a>
+                                    맞{% endif %}
+                                팔로우</a>
                         </div>
                     </div>
                     <hr>
