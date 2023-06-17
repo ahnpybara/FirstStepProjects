@@ -9,6 +9,7 @@ $('#user_follow_btn').click(function (event) {
     // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
     let is_followed = $.trim($('#' + follow_id).html());
 
+
     // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
     if (is_followed == '팔로우') {
         $('#' + follow_id).html('언팔로우');

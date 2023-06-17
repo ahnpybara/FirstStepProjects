@@ -55,10 +55,13 @@
     margin-bottom: 60px;
     font-weight: bold;
     background-color: rgb(0, 149, 246);
+    border: none;
+    outline: none;
 }
 
 /* 피드 업로드 모달 바 닫기 버튼 */
 #modal_close_button {
+    padding-top: 3px;
     cursor: pointer;
     margin-right: 10px;
 }
@@ -461,8 +464,8 @@
     color: gray;
 }
 
-/*이미지 슬라이드 기능*/
-/*좌우 버튼들의 부모*/
+/* 유재우 : 이미지 슬라이드 기능 */
+/* 유재우 : 좌우 버튼들의 부모 */
 .feed_image_area_img_control_btns_parent {
     display: none;
     position: relative;
@@ -471,39 +474,71 @@
     height: 100%;
 }
 
-/*좌우 버튼들*/
+/* 유재우 : 좌우 버튼들 */
 .feed_image_area_img_control_btns {
+    display: none;
     width: 100%;
 }
 
-/*좌우 버튼*/
+/* 유재우 : 좌우 버튼 */
 .feed_modal_feed_image_before,
 .feed_modal_feed_image_next {
     display: none;
     margin: 0;
-    width: 25px;
 }
 
-/*좌우 버튼에 마우스 유지하면*/
+/* 유재우 : 좌우 버튼에 마우스 유지하면 */
 .feed_modal_feed_image_before:hover,
 .feed_modal_feed_image_next:hover {
     font-variation-settings: 'wght' 700;
 }
-/*이미지 슬라이드 기능 끝*/
+/* 유재우 : 이미지 슬라이드 기능 끝 */
 
-/*피드 업로드 사진 삭제*/
-.feed_modal_area_images_btn_dele {
-    width: 100%;
-    border: #0037AB;
-    color: red;
+.feed_modal_area_images_btn_dele_parent{
     display: none;
-    bottom: 50%;
+    height: 210px;
+    text-align: left;
+    width: 100%;
 }
-/*피드 업로드 좌우 버튼*/
+
+/* 유재우 : 피드 업로드 사진 삭제 */
+.feed_modal_area_images_btn_dele {
+    display: none;
+    color: red;
+    bottom: 50%;
+    padding-left: 5px;
+}
+
+/* 유재우 : 피드 업로드 좌우 버튼 */
 .feed_modal_area_images_btn {
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: left;
     width: 100%;
+}
+
+/* 유재우 : 두번째 모달 창으로 가기 위한 다음 버튼 */
+.modal_next_button {
+    margin-left: 10px;
+}
+
+/* 유재우 : 첫번째 모달 창으로 돌아가기 위한 이전 버튼 */
+.modal_before_button {
+    margin-left: 10px;
+}
+
+.update_feed_modal_feed_image_dele{
+    color: red;
+    padding-left: 5px;
+}
+
+/*왼쪽버튼*/
+.img_previous_btn{
+    padding-left: 5px;
+}
+
+/*유재우 : 모달창 상단 바다음 이전 버튼*/
+.feed_upload_modal_bar_btn{
+    padding-left: 10px;
 }

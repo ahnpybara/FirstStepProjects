@@ -337,6 +337,7 @@
 
 /* 팔로우 추천인 프로필 영역 */
 .follow_recommend_profile_area {
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -345,6 +346,7 @@
 
 /* 팔로우 추천인 프로필 */
 .follow_recommend_profile {
+    padding-left: 15px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -383,7 +385,8 @@
 }
 
 /*팔로우 모두 보기 팔로우 버튼*/
-.all_follow_button{
+.all_follow_button {
+    padding-right: 15px;
     font-size: 14px;
     font-weight: bold;
     text-decoration: none;
@@ -429,21 +432,14 @@
     justify-content: center;
 }
 
-.update_feed_modal_image_file_btn {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-
+/*유재우 : 피드 수정 모달의 추가 버튼*/
 .update_feed_modal_image_update {
     bottom: 0;
 }
 
 /* 업데이트 피드 버튼들 div*/
 .update_feed_modal_feed_image_dele {
+    height: 30px;
     color: red;
     order: 2;
 }
@@ -461,7 +457,7 @@
     align-items: center;
     width: 100%;
     text-align: left;
-    height: 100%;
+    height: 90%;
 }
 
 /* 업데이트 피드 좌우 버튼*/
@@ -473,19 +469,27 @@
 #update_feed_modal_input_image_upload {
     display: none;
 }
+
 .update_feed_modal_image_update_parent {
     width: 100%;
-    position:absolute;
+    position: absolute;
     display: flex;
     justify-content: center;
-    bottom: 0;
+    bottom: 50px;
 }
-
+/*유재우: 피드 업데이트에 사진 추가 버튼*/
 .update_feed_modal_image_update {
     width: 130px;
+    background-color: rgba(150, 150, 150,0.6);
+    color: white;
     font-weight: bold;
-    background-color: rgb(0, 149, 246);
     margin-top: auto;
+    border: none;
+    outline: none;
+}
+/*유재우: 피드 업데이트에 사진 추가 버튼 hover*/
+.update_feed_modal_image_update:hover{
+    background-color: rgba(150, 150, 150,0.9);
 }
 /* 세번째 피드 모달창 버튼들 끝*/
 
@@ -541,22 +545,18 @@
     }
 }
 
-
-.now_img_count {
-    position: center;
-}
-
+/*유재우: 메인 피드에 이미지 슬라이더 부분*/
 .image-slider-container {
     position: relative;
 }
-
+/*유재우: 메인 피드에 이미지 슬라이더 버튼들*/
 .feed_image_area_btns {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     width: 100%;
 }
-
+/*유재우: 메인 피드에 이미지 슬라이더 오른쪽 왼쪽버튼들*/
 .prev_image_button,
 .next_image_button {
     position: absolute;
@@ -564,29 +564,29 @@
     bottom: 0;
     margin: auto;
 }
-
+/*유재우: 이전버튼*/
 .prev_image_button {
     left: 5px;
     color: rgba(0, 0, 0, 0.6);
     height: 25px;
     width: 25px;
 }
-
+/*유재우: 이전버튼 hover*/
 .prev_image_button:hover {
     color: rgba(0, 0, 0, 1);
 }
-
+/*유재우: 다음버튼*/
 .next_image_button {
     color: rgba(0, 0, 0, 0.6);
     right: 0;
     height: 25px;
     width: 25px;
 }
-
+/*유재우: 다음버튼 hover*/
 .next_image_button:hover {
     color: rgba(0, 0, 0, 1);
 }
-
+/*유재우 : 버튼들 끝*/
 /*피드 이미지 카운터*/
 .now_img_count {
     position: absolute;
@@ -596,4 +596,26 @@
     color: #d8d8d8;
     border: black;
     background-color: rgba(0, 0, 0, 0.2); /*까만색(0,0,0) 80% 불투명도*/
+}
+
+/*팔로우 추천 모달창 스크롤 되는 부분 부모*/
+.follow_recommend_profile_scroll_area_parent {
+    display: block;
+    height: 85%;
+    width: 100%
+}
+
+/*팔로우 추천 모달창 스크롤 되는 부분*/
+.follow_recommend_profile_scroll_area {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+/*유재우 : 팔로우 추천 모달창 상단 바*/
+.Recommend_Followers_all_modal_bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
 }

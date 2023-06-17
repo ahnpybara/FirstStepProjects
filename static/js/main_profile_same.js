@@ -291,6 +291,10 @@ $(".modal_upload_reply").click(function (event) {
 
 // 모달창 닫기 버튼 이벤트 처리
 $(".modal_close").click(function () {
+    // 변경됬던 이미지 업로드를 다시 되돌림
+    $('#image_upload_btn').css({
+        "background-color": "rgba(0, 149, 246, 1)"
+    })
     // 모달창 닫았을 때 본문 스크롤 가능
     $(document.body).css({
         overflow: 'visible'
@@ -349,7 +353,7 @@ $(".modal_close").click(function () {
         "display": "flex"
     });
     // 좌우버튼, 삭제 버튼을 안 보이게 함
-    $('.feed_modal_area_images_btn_dele').css({
+    $('.feed_modal_area_images_btn_dele_parent').css({
         "display": "none"
     })
     $('.feed_modal_feed_image_before').css({
@@ -481,6 +485,10 @@ function uploadFiles(e) {
         }
     }
     if (files.length != 0) {
+        //유재우 : 파일 업로드 버튼 색 및 투명도 변경
+        $('#image_upload_btn').css({
+            "background-color": "rgba(150, 150, 150,0.4)"
+        })
         // 업로드 이미지등 필요없는 부분은 안보이게 함
         $('.feed_modal_area_upload_img').css({
             "display": "none"
@@ -488,21 +496,30 @@ function uploadFiles(e) {
         $('.drag_here_image').css({
             "display": "none"
         })
+        // 유재우 버튼들의 배치를위해 숨겨진 삭제버튼들의 div만 표시
+        $('.feed_modal_area_images_btn_dele_parent').css({
+                "display": "flex"
+            })
+        // 유재우 버튼들의 배치를위해 숨겨진 좌우 버튼들의 div만 표시
+        $('.feed_image_area_img_control_btns_parent').css({
+                "display": "flex"
+            })
         // 업로드한 파일이 1장을 초과했을 경우에만 좌우 버튼 및 삭제 버튼을 나타나게 함
         if (files.length > 1) {
-            // 감춰져 있던 좌우 버튼 및 삭제 버튼을 나타나게 함
             $('.feed_modal_area_images_btn_dele').css({
                 "display": "flex"
             })
+            $('.feed_image_area_img_control_btns').css({
+                "display": "flex"
+            })
+            // 감춰져 있던 좌우 버튼 및 삭제 버튼을 나타나게 함
             $('.feed_modal_feed_image_before').css({
                 "display": "flex"
             })
             $('.feed_modal_feed_image_next').css({
                 "display": "flex"
             })
-            $('.feed_image_area_img_control_btns_parent').css({
-                "display": "flex"
-            })
+
         }
         // 이미지를 표시함
         $('.img_upload_space').css({
@@ -566,7 +583,7 @@ function uploadFiles(e) {
             files_Count++
             // 만일 사진이 1장 밖에 안남았을 경우
             if (files.length == 1) {
-                $('.feed_modal_area_images_btn_dele').css({
+                $('.feed_modal_area_images_btn_dele_parent').css({
                     "display": "none"
                 })
                 $('.feed_modal_feed_image_before').css({

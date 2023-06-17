@@ -11,9 +11,9 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <!-- css 분리 -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=5">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=3">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=5">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=8">
 
     <!--  Google 심볼을 사용하기 위한 선언 -->
     <link rel="stylesheet"
@@ -379,12 +379,12 @@
             <div class="follow_recommend_profile_area">
                 <div class="follow_recommend_profile">
                     <div id="f_recommender_profile" class="profile_box">
-                        <img class="recommend_movetoprofile profile" id="{{ Recommend_Followers_list.nicname }}"
+                        <img class="movetoprofile profile" id="{{ Recommend_Followers_list.nicname }}"
                              src="{% get_media_prefix %}{{ Recommend_Followers_list.profile_image }}"
                              alt="text"></a>
                     </div>
                     <div class="follow_profile_nickname_explain">
-                        <div class="recommend_movetoprofile follow_profile_nickname"
+                        <div class="movetoprofile follow_profile_nickname"
                              id="{{ Recommend_Followers_list.nicname }}">
                             {{ Recommend_Followers_list.nicname }}
                         </div>
@@ -400,8 +400,10 @@
                     </div>
                 </div>
                 <div>
-                    <a class="follow_button" id="{{ Recommend_Followers_list.email }}_follwing_btn" href="#"
+                    <a class="follow_button" id="follwing_btn_{{ Recommend_Followers_list.id }}" href="#"
                        following_id="{{ Recommend_Followers_list.email }}"
+                       Recommend_Followers_id="{{ Recommend_Followers_list.id }}"
+                       now_following_id="{{ Recommend_Followers_list.now_following }}"
                        user_email="{{ user_session.email }}">{% if Recommend_Followers_list.now_following == 1 %}
                         맞{% endif %}
                         팔로우</a>
@@ -424,7 +426,7 @@
         <!-- 모달창 상단바 -->
         <div class="feed_upload_modal_bar">
             <div>
-                <div id="modal_next_button">다음</div>
+                <div id="modal_next_button" class="feed_upload_modal_bar_btn">다음</div>
             </div>
             <!-- 설명란 -->
             <div>
@@ -438,8 +440,10 @@
 
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
         <div class="img_upload_space">
-            <div class="feed_modal_area_images_btn_dele">
-                삭제
+            <div class="feed_modal_area_images_btn_dele_parent">
+                <div class="feed_modal_area_images_btn_dele">
+                    삭제
+                </div>
             </div>
             <!--설명란-->
             <img style="width: 100px; height: 100px" class="feed_modal_area_upload_img"
@@ -453,8 +457,8 @@
                     <!--좌우 버튼div-->
                     <div class="feed_modal_area_images_btn">
                         <!--좌우 버튼-->
-                        <div class="feed_modal_feed_image_before material-symbols-outlined"
-                             style="padding-left: 5px;" id="feed_modal_feed_image_before_F">
+                        <div class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn"
+                             id="feed_modal_feed_image_before_F">
                             arrow_back_ios
                         </div>
                         <div class="feed_modal_feed_image_next material-symbols-outlined"
@@ -480,9 +484,8 @@
     <div class="modal_window">
         <!-- 모달창 상단바 -->
         <div class="feed_upload_modal_bar">
-
-            <div id="modal_before_button">
-                <p>이전</p>
+            <div id="modal_before_button" class="feed_upload_modal_bar_btn">
+                이전
             </div>
             <!-- 설명란 -->
             <div>
@@ -500,7 +503,7 @@
             <div class="img_upload_space">
                 <div class="feed_modal_area_images_btn">
                     <div id="feed_modal_feed_image_before_btn"
-                         class="feed_modal_feed_image_before material-symbols-outlined" style="padding-left: 5px">
+                         class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn">
                         arrow_back_ios
                     </div>
                     <div id="feed_modal_feed_image_next_btn"
@@ -573,8 +576,7 @@
                     <div class="update_feed_modal_image_btns">
                         <div class="update_feed_modal_feed_image_dele"> 삭제</div>
                         <div class="update_feed_modal_image_LR_btns">
-                            <div class="update_feed_modal_feed_image_before material-symbols-outlined"
-                                 style="padding-left: 5px">
+                            <div class="update_feed_modal_feed_image_before img_previous_btn material-symbols-outlined">
                                 arrow_back_ios
                             </div>
                             <div class="update_feed_modal_feed_image_next material-symbols-outlined">
@@ -583,13 +585,14 @@
                         </div>
                     </div>
                     <div class="update_feed_modal_image_update_parent">
-                        <button class="update_feed_modal_image_update">추가</button>
+                        <button type="button" class="update_feed_modal_image_update btn">
+                            사진 추가
+                        </button>
                         <input multiple="multiple" type="file" id="update_feed_modal_input_image_upload"
                                class="update_feed_modal_input_image_upload_btn"
                                onchange="image_update();"/>
                     </div>
                 </div>
-
             </div>
             <!-- 텍스트 영역 -->
             <div class="modal_text_area">
@@ -787,7 +790,7 @@
     <!-- 모달창 -->
     <div class="modal_window">
         <!-- 모달창 상단바 -->
-        <div class="feed_upload_modal_bar">
+        <div class="Recommend_Followers_all_modal_bar">
             <!--공백-->
             <div class="space">
             </div>
@@ -802,8 +805,8 @@
             </div>
         </div>
         <hr>
-        <div style="overflow-y: initial !important">
-            <div style="overflow-y: auto;">
+        <div class="follow_recommend_profile_scroll_area_parent">
+            <div class="follow_recommend_profile_scroll_area">
                 {% for Recommend_ALl_Followers_list in Recommend_ALl_Followers_list %}
                     <!-- 팔로우 추천인 프로필 -->
                     <div class="follow_recommend_profile_area">
@@ -857,8 +860,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 -->
-<script src="{% static 'js/main.js' %}?ver=1"></script>
-<script src="{% static 'js/main_profile_same.js' %}?ver=5"></script>
+<script src="{% static 'js/main.js' %}?ver=3"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=11"></script>
 <script src="{% static 'js/allsame.js' %}?ver=12"></script>
 </body>
 </html>
