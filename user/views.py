@@ -172,6 +172,22 @@ class RemoveProfile(APIView):
         following = Follow.objects.filter(following=email)
         following.delete()
 
+        #해당유저가 가지고 있는 공유 카테고리 권한 삭제
+        share_category = ShareCategory.objects.filter(email=email)
+        share_category.delete()
+
+        # 해당 유저의 채팅 목록을 삭제
+        chat_send = Chat.objects.filter(send_user=email)
+        chat_receive = Chat.objects.filter(receive_user=email)
+        chat_send.delete()
+        chat_receive.delete()
+
+        # 해당 유저의 알림 목록 삭제
+        alert_send = Alert.objects.filter(send_user=email)
+        alert_receive = Alert.objects.filter(receive_user=email)
+        alert_send.delete()
+        alert_receive.delete()
+
         # 삭제할 피드 객체를 다시 불러옴 ( 반복문으로 인해서 인덱스 값을 잃어버림)
         feeds = Feed.objects.filter(email=email)
         # 피드 객체 삭제
@@ -255,11 +271,16 @@ class UpdateEmail(APIView):
             reply = Reply.objects.filter(email=user_email)
             # 해당 유저가 작성한 피드 객체를 구함
             feed = Feed.objects.filter(email=user_email)
-            # 해당 유저가 좋아요, 북마크, 팔로워, 팔로잉한 객체를 구함
+            # 해당 유저가 좋아요, 북마크, 팔로워, 팔로잉 등등 한 객체를 구함
             like = Like.objects.filter(email=user_email)
             bookmark = Bookmark.objects.filter(email=user_email)
             follower = Follow.objects.filter(follower=user_email)
             following = Follow.objects.filter(following=user_email)
+            alert_send = Alert.objects.filter(send_user=user_email)
+            alert_receive = Alert.objects.filter(receive_user=user_email)
+            share_category = ShareCategory.objects.filter(email=user_email)
+            chat_send = Chat.objects.filter(send_user=user_email)
+            chat_receive = Chat.objects.filter(receive_user=user_email)
             # 각 객체의 이메일을 수정할 이메일로 변경
             user.email = email
             request.session['email'] = email
@@ -269,6 +290,11 @@ class UpdateEmail(APIView):
             bookmark.update(email=email)
             follower.update(follower=email)
             following.update(following=email)
+            alert_send.update(send_user=email)
+            alert_receive.update(receive_user=email)
+            share_category.update(email=email)
+            chat_receive.update(receive_user=email)
+            chat_send.update(send_user=email)
             user.save()
             return Response(status=200)
 
@@ -481,11 +507,11 @@ class ReplyProfile(APIView):
         following_user_email_list = list(Follow.objects.filter(follower__in=follower_user_email_list, following=email_session).values_list('follower', flat=True))
 
         shared_category_nickname_list = User.objects.filter(email__in=following_user_email_list)
-        # 알림 유무
-        alert_exists = Alert.objects.filter(receive_user=email).exists()
 
+        # 알림 유무
+        alert_exists = Alert.objects.filter(receive_user=email_session).exists()
         # 세션 유저에게 온 채팅 유무
-        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
+        is_delivered_chat = Chat.objects.filter(receive_user=email_session, is_read=True).exists()
 
         # 프로필 화면을 요청한 사용자에게 프로필화면과 해당 데이터를 전달
         return render(request, 'content/profile.html', context=dict(feed_list=feed_list,

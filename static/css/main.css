@@ -331,7 +331,7 @@
 /* 팔로우 추천 리스트 모두 보기 */
 .follow_recommend_list_all {
     font-weight: bold;
-    color: black;
+    color: cornflowerblue;
     text-decoration: none;
 }
 
@@ -628,5 +628,9 @@
     font-size: 14px;
     display: flex;
     align-items: center;
+}
 
+/* 피드 설정 아이콘 */
+.feed_setting_icon {
+    margin-top: 5px;
 }
