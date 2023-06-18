@@ -331,9 +331,11 @@ body::-webkit-scrollbar {
     margin-left: 20px;
 }
 
+/* 채팅 모달창 이전 버튼 */
 .chat_modal_back_btn {
     margin-left: 20px;
     width: 42px;
+    cursor: pointer;
 }
 
 /* 채팅 내역 영역(모달창안에 페이지를 불러옴) */

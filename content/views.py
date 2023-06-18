@@ -18,6 +18,15 @@ class Main(APIView):
     def get(self, request):
         # 세션 정보에 저장된 이메일을 request 요청으로 가져와서 변수 email에 저장
         email = request.session.get('email', None)
+        # 팔로우 스위치 버튼 여부
+        is_checked = request.GET.get('is_checked', None)
+
+        # 만약 팔로우 스위치 버튼 여부가 checked면 True
+        if is_checked == 'checked':
+            is_checked = True
+        else:
+            is_checked = False
+
         # 세션에 이메일 정보가 없는경우 -> 로그인을 하지 않고 메인페이지에 접속했다는 뜻 -> 로그인 페이지로 이동시킴
         if email is None:
             return render(request, "user/login.html")
@@ -28,97 +37,19 @@ class Main(APIView):
         if user_session is None:
             return render(request, "user/login.html")
 
-        # feed_list에 담을 정보를 위해서 Feed 테이블에 있는 모든 객체를 가져와서 필터링을 진행할 예정
-        feed_object_list = Feed.objects.all().order_by('-id')
+        # 내가 팔로우한 리스트 뽑음
+        following_email_list = Follow.objects.filter(follower=email).values_list('following', flat=True)
+
         feed_list = []
-        # 유재우 : 팔로우 추천을 위해 추가
-        Recommend_Followers_list = []
-        Recommend_Followers_count = []
-        Recommend_ALl_Followers_list = []
-
-        now_following = 0
-        added_followers = set()  # 중복 체크를 위한 집합
-        # 세션에 유저가 팔로잉하고 있는 사람들 6명만 뽑아냄
-        user_following = Follow.objects.filter(follower=email)[:6]
-        user_followings_list = Follow.objects.filter(follower=email)
-        user_followings = []
-        for user_followings_list in user_followings_list:
-            user_followings.append(user_followings_list.following)
-
-        for user_following in user_following:
-            # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들(대표로 2명만 뽑음)
-            user_follower = Follow.objects.filter(follower=user_following.following).order_by('-id')[:2]
-            for user_follower in user_follower:
-                # 자신이 이미 팔로잉 하고 있는 사람 자기 자신, 중복 제거
-                if user_follower.following != email and user_follower.following not in added_followers and user_follower.following not in user_followings:
-                    Recommend_Followers = User.objects.filter(email=user_follower.following).first()
-                    Recommend_Following = User.objects.filter(email=user_follower.follower).first()
-                    Recommend_Following_count = -1
-                    Recommend_Following_list = Follow.objects.filter(following=user_follower.following)
-                    for Recommend_Following_list in Recommend_Following_list:
-                        if (Recommend_Following_list.follower in user_followings):
-                            Recommend_Following_count += 1
-                    Recommend_Followers_count.append(Recommend_Followers.email)
-                    added_followers.add(user_follower.following)  # 팔로워 이메일을 추가
-                    if Follow.objects.filter(follower=user_follower.following, following=email).exists():
-                        now_following = 1
-                    Recommend_Followers_list.append(
-                        dict(id=Recommend_Followers.id, nicname=Recommend_Followers.nickname,
-                             now_following=now_following,
-                             Recommend_nicname=Recommend_Following.nickname, email=Recommend_Followers.email,
-                             profile_image=Recommend_Followers.profile_image,
-                             Recommend_Following_count=Recommend_Following_count))
-                    now_following = 0
+        # 팔로우 보기면 팔로우한 사람의 피드만 아니라면 모든 피드를 보여줌
+        if is_checked:
+            feed_object_list = Feed.objects.filter(email__in=following_email_list).order_by('-id')
+        else:
+            feed_object_list = Feed.objects.all().order_by('-id')
 
         # 유저를 검색하기 위해서 유저 정보를 모두 가져옴
         user_object_list = User.objects.all()
 
-        # 팔로잉 추천 모두보기를 위해 모든 유저리스트를 받아 옴
-        Recommend_all_user = user_object_list
-        added_all_followers = set()  # 중복 체크를 위한 집합
-        user_followings_list = Follow.objects.filter(follower=email)
-
-        # 팔로우중인 모든사람
-        for user_followings_list in user_followings_list:
-            # 팔로잉 하고있는 사람들이 팔로잉 하고 있는 사람들
-            user_follower_all = Follow.objects.filter(follower=user_followings_list.following).order_by('-id')
-            for user_follower_all in user_follower_all:
-                # 자신이 이미 팔로잉 하고 있는 사람 자기 자신, 중복 제거
-                if user_follower_all.following != email and user_follower_all.following not in added_all_followers and user_follower_all.following not in user_followings:
-                    Recommend_all_Followers = User.objects.filter(email=user_follower_all.following).first()
-                    Recommend_all_Following = User.objects.filter(email=user_follower_all.follower).first()
-                    Recommend_all_Following_count = -1
-                    Recommend_all_Following_list = Follow.objects.filter(following=user_follower_all.following)
-
-                    for Recommend_all_Following_list in Recommend_all_Following_list:
-                        if (Recommend_all_Following_list.follower in user_followings):
-                            Recommend_all_Following_count += 1
-                    Recommend_Followers_count.append(Recommend_all_Followers.email)
-                    added_all_followers.add(user_follower_all.following)  # 팔로워 이메일을 추가
-                    if Follow.objects.filter(follower=user_follower_all.following, following=email).exists():
-                        now_following = 1
-                    Recommend_ALl_Followers_list.append(
-                        dict(id=Recommend_all_Followers.id, nicname=Recommend_all_Followers.nickname,
-                             now_following=now_following,
-                             Recommend_nicname=Recommend_all_Following.nickname, email=Recommend_all_Followers.email,
-                             profile_image=Recommend_all_Followers.profile_image,
-                             Recommend_all_Following_count=Recommend_all_Following_count))
-                    now_following = 0
-
-        # 모든 사람
-        for Recommend_all_user in Recommend_all_user:
-            # 자기자신 제외
-            if Recommend_all_user.email != email and Recommend_all_user.email not in added_all_followers and Recommend_all_user.email not in user_followings:
-                now_following = 3
-                if Follow.objects.filter(follower=Recommend_all_user.email, following=email).exists():
-                    now_following = 4
-                Recommend_ALl_Followers_list.append(
-                    dict(id=Recommend_all_user.id, nicname=Recommend_all_user.nickname,
-                         now_following=now_following,
-                         Recommend_nicname="Astronaut", email=Recommend_all_user.email,
-                         profile_image=Recommend_all_user.profile_image))
-
-        random.shuffle(Recommend_ALl_Followers_list)
         # 아래 반복문은 메인 페이지에 전달할 정보를 각종 여러 테이블의 필터링을 통해서 구하는 과정
         for feed in feed_object_list:
             count = 0
@@ -196,15 +127,34 @@ class Main(APIView):
 
         # 세션 유저에게 온 채팅 유무
         is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
-        print(is_delivered_chat)
+
+        # 내가 팔로우한 사람들의 이메일을 리스트로 뽑음
+        my_follow_list = list(
+            Follow.objects.filter(follower=email).values_list('following', flat=True))
+        # 내가 팔로우한 사람들은 배제
+        not_follow_list = user_object_list.exclude(email__in=my_follow_list)
+
+        follow_recommend_list = []
+        for index in not_follow_list:
+            # 내가 팔로우 한 사람이 해당 사람도 팔로우 하고 있는 수, 나 자신은 제외
+            if index.email != email:
+                follow_count = Follow.objects.filter(follower__in=my_follow_list, following=index.email).count()
+                is_follow = Follow.objects.filter(follower=email, following=index.email).exists()
+                follow_recommend_list.append(dict(follow_recommend_user=index, follow_count=follow_count, is_follow=is_follow))
+
+        # 메인에서 팔로우 추천이 보여줄 4명보다 적은지 판단
+        if len(follow_recommend_list) < 4:
+            main_recommend_follow_list = follow_recommend_list
+        else:
+            main_recommend_follow_list = random.sample(follow_recommend_list, 4)
 
         # 메인페이지 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
         return render(request, "astronaut/main.html",
                       context=dict(feeds=feed_list, user_session=user_session, user_object_list=user_object_list,
-                                   Recommend_Followers_list=Recommend_Followers_list, alert_exists=alert_exists,
-                                   is_delivered_chat=is_delivered_chat,
-                                   Recommend_ALl_Followers_list=Recommend_ALl_Followers_list,
-                                   shared_category_nickname_list=shared_category_nickname_list
+                                   alert_exists=alert_exists, is_delivered_chat=is_delivered_chat,
+                                   shared_category_nickname_list=shared_category_nickname_list, is_checked=is_checked,
+                                   follow_recommend_list=follow_recommend_list,
+                                   main_recommend_follow_list=main_recommend_follow_list,
                                    ))
 
 
@@ -851,89 +801,6 @@ class Autocomplete(APIView):
 
         json_data = json.dumps(data)
         return HttpResponse(json_data, content_type='application/json')
-
-
-# 팔로우 클래스
-class FollowerFeed(APIView):
-    def get(self, request):
-        # 세션유저 이메일
-        email = request.session.get('email', None)
-        # 세션 유저의 객체
-        user_session = User.objects.filter(email=email).first()
-        # 팔로우 스위치 버튼 여부
-        is_checked = request.GET.get('is_checked', None)
-
-        # 만약 팔로우 스위치 버튼 여부가 checked면 True
-        if is_checked == 'checked':
-            is_checked = True
-        else:
-            is_checked = False
-
-        # 내가 팔로우한 유저의 이메일 목록을 가져옴
-        following_email_list = Follow.objects.filter(follower=email).values_list('following', flat=True)
-        feed_list = []
-
-        # 내가 팔로우한 유저의 피드를 가져오기 위한 작업
-        follwing_feed = Feed.objects.filter(email__in=following_email_list)
-
-        # 내가 팔로우한 유저의 피드의 정보를 가져오기 위한 작업
-        for feed in follwing_feed:
-            count = 0
-            user = User.objects.filter(email=feed.email).first()
-            reply_object_list = Reply.objects.filter(feed_id=feed.id)
-            reply_list = []
-
-            # 해당 feed_id에 존재하는 해시태그들을 가져옴 ,해시태그 리스트 생성
-            hashtag_object_list = Hashtag.objects.filter(feed_id=feed.id)
-            hashtag_list = []
-
-            # 이미지 추가
-            images_object_list = Image.objects.filter(feed_id=feed.id)
-            images_list = []
-            for image in images_object_list:
-                images_feed = Feed.objects.filter(id=feed.id).first()
-                images_list.append(dict(feed_id=images_feed, image=image.image, count=count, now_count=count + 1))
-                count = count + 1
-
-            # 내가 팔로우한 유저의 피드에 달린 댓글을 가져오기 위한 작업
-            for reply in reply_object_list:
-                reply_user = User.objects.filter(email=reply.email).first()
-                reply_list.append(dict(reply_content=reply.reply_content,
-                                       nickname=reply_user.nickname, profile_image=reply_user.profile_image))
-
-            # 내가 팔로우한 유저의 피드에 달린 해시태그를 가져오기 위한 작업
-            for hashtag in hashtag_object_list:
-                hashtag_feed = Feed.objects.filter(id=feed.id).first()
-                hashtag_list.append(dict(feed_id=hashtag_feed, content=hashtag.content))
-
-            # 내가 팔로우한 유저의 피드들의 좋아요 수, 좋아요 여부, 북마크 여부
-            like_count = Like.objects.filter(feed_id=feed.id).count()
-            is_liked = Like.objects.filter(feed_id=feed.id, email=email).exists()
-            is_marked = Bookmark.objects.filter(feed_id=feed.id, email=email).exists()
-            feed_list.append(dict(id=feed.id,
-                                  images_list=images_list,
-                                  content=feed.content,
-                                  like_count=like_count,
-                                  profile_image=user.profile_image,
-                                  nickname=user.nickname,
-                                  reply_list=reply_list,
-                                  is_liked=is_liked,
-                                  is_marked=is_marked,
-                                  create_at=feed.create_at,
-                                  hashtag_list=hashtag_list,
-                                  category=feed.category,
-                                  image_count=count
-                                  ))
-
-        # 알림 유무
-        alert_exists = Alert.objects.filter(receive_user=email).exists()
-        # 세션 유저에게 온 채팅 유무
-        is_delivered_chat = Chat.objects.filter(receive_user=email, is_read=True).exists()
-
-        # 팔로우 스위치 버튼 url을 요청한 사용자에게 메인페이지와 각종 데이터를 전달
-        return render(request, "astronaut/main.html",
-                      context=dict(feeds=feed_list, user_session=user_session, is_checked=is_checked,
-                                   alert_exists=alert_exists, is_delivered_chat=is_delivered_chat))
 
 
 # 피드 수정시 이전 정보를 수정창에 불러오는 클래스

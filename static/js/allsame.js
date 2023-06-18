@@ -206,6 +206,8 @@ var open_article2 = function (url, user_email) {
         document.querySelector('.chat_modal_text_area').innerHTML = text; // 채팅 모달창 내용을 서버로부터 받은 내용으로 셋팅
         document.getElementById('chat_modal_id').style.display = 'flex'; // 채팅 모달창을 flex로 설정하여 보여줌
         document.getElementById('chat_user_modal_id').style.display = 'none'; // 채팅 유저 목록 모달창을 none로 설정
+        // 채팅 스크롤 젤 아래로
+        $('.chat_modal_content_area').scrollTop($('.chat_modal_content_area')[0].scrollHeight);
 
         // 채팅 불러오기 알람 관련 js 코드
         // 새로운 <div> 요소를 생성하여 toastElement 변수에 할당합니다.

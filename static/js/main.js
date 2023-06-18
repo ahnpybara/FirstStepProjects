@@ -6,13 +6,6 @@ $(".movetoprofile").click(function (event) {
     location.href = "/user/reprofile?user_nickname=" + user_nickname;
 });
 
-// 유재우 : 팔로우 추천 모두보기 프로필이동
-$('.recommend_all_movetoprofile').click(function (event) {
-    // 이벤트가 발생한 태그의 id를 가져옴 id는 user_nickname 형태
-    let user_nickname = event.target.id;
-    // 해당 url로 요청하게 되면 매핑된 view도 실행되고 url뒤에 데이터를 붙여서 전송이 가능하다.
-    location.href = "/user/reprofile?user_nickname=" + user_nickname;
-});
 // 북마크 아이콘 클릭 이벤트 처리
 $(".bookmark").click(function (event) {
     // 북마크 아이콘 태그의 feed_id 속성 값을 가져옴 ( 피드는 여러개이므로 어떤 피드에 북마크를 했는지 알아야함 )
@@ -452,8 +445,7 @@ $('.update_feed').click(function (event) {
         });
     })
 
-})
-;
+});
 
 // 피드 수정하기 모달에서 수정하기 버튼 클릭 이벤트 처리
 $('#feed_update_button').click(function (event) {
@@ -603,7 +595,7 @@ $('#flexSwitchCheckChecked').click(function (event) {
     if ($(this).is(":checked") == true) {
         let is_checked = 'checked'
         // 팔로우 체크 했는지에 대한 정보를 서버로 보냄
-        location.href = "/content/follower?is_checked=" + is_checked;
+        location.href = "/content/main?is_checked=" + is_checked;
     } else { // 해당 태그의 checked 여부가 false면 is_checked에 unchecked를 저장한 뒤 메인페이지로 이동
         let is_checked = 'unchecked'
         location.href = "/main";
@@ -730,112 +722,7 @@ $('.next_image_button').click(function (event) {
         })
     }
 })
-// 유재우 : 팔로우 추천 에서 팔로우를 눌렸을 때 이밴트들
-$('.follow_button').click(function (event) {
-    // 팔로우 당하는 사람 이메일
-    let following_id = event.target.attributes.getNamedItem('following_id').value;
-    // 필로우 하는 사람 이메일
-    let user_email = event.target.attributes.getNamedItem('user_email').value;
-    // 팔로우 id를 특정하기 위해 들고옴
-    let Recommend_Followers_id = event.target.attributes.getNamedItem('Recommend_Followers_id').value;
-    // 팔로우 버튼의 상태를 알기 위해 들고옴
-    let is_followed = $.trim($('#follwing_btn_' + Recommend_Followers_id).html());
-    // 상대가 자신을 팔로우 중인지를 알기 위해 들고 옴
-    let now_following_id = event.target.attributes.getNamedItem('now_following_id').value;
 
-    if (is_followed != "언팔로우") {
-        $('#follwing_btn_' + Recommend_Followers_id).html("언팔로우");
-        $('#follwing_btn_' + Recommend_Followers_id).css({
-            "color": "gray"
-        });
-    } else {
-        if (now_following_id == 1) {
-            $('#follwing_btn_' + Recommend_Followers_id).html("맞 팔로우");
-            $('#follwing_btn_' + Recommend_Followers_id).css({
-                "color": "rgb(0, 149, 246)"
-            });
-        } else {
-            $('#follwing_btn_' + Recommend_Followers_id).html("팔로우");
-            $('#follwing_btn_' + Recommend_Followers_id).css({
-                "color": "rgb(0, 149, 246)"
-            });
-        }
-    }
-
-
-    // 서버로 보낼 데이터 (json)
-    $.ajax({
-        url: "/user/follow",
-        data: {
-            session_user_email: user_email,
-            user_email: following_id,
-        },
-        method: "POST",
-        success: function (data) {
-            console.log("성공");
-
-        },
-        error: function (request, status, error) {
-            console.log("에러");
-        },
-        complete: function () {
-            console.log("완료");
-
-        }
-    });
-});
-
-// 유재우 : 팔로우 추천 모두보기 모달창 에서 팔로우를 눌렸을 때 이밴트들
-$('.all_follow_button').click(function (event) {
-    // 팔로우 당하는 사람 이메일
-    let following_All_id = event.target.attributes.getNamedItem('following_All_id').value;
-    // 필로우 하는 사람 이메일
-    let user_All_email = event.target.attributes.getNamedItem('user_All_email').value;
-    // 팔로우 id를 특정하기 위해 들고옴
-    let Recommend_All_Followers_id = event.target.attributes.getNamedItem('Recommend_All_Followers_id').value;
-    // 팔로우 버튼의 상태를 알기 위해 들고옴
-    let is_followed = $.trim($('#all_follwing_btn_' + Recommend_All_Followers_id).html());
-    // 상대가 자신을 팔로우 중인지를 알기 위해 들고 옴
-    let now_All_following_id = event.target.attributes.getNamedItem('now_All_following_id').value;
-
-    if (is_followed != "언팔로우") {
-        $('#all_follwing_btn_' + Recommend_All_Followers_id).html("언팔로우");
-        $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
-            "color": "gray"
-        });
-    } else {
-        if (now_All_following_id == 1 || now_All_following_id ==4) {
-            $('#all_follwing_btn_' + Recommend_All_Followers_id).html("맞 팔로우");
-            $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
-                "color": "rgb(0, 149, 246)"
-            });
-        } else {
-            $('#all_follwing_btn_' + Recommend_All_Followers_id).html("팔로우");
-            $('#all_follwing_btn_' + Recommend_All_Followers_id).css({
-                "color": "rgb(0, 149, 246)"
-            });
-        }
-    }
-
-    // 서버로 보낼 데이터 (json)
-    $.ajax({
-        url: "/user/follow",
-        data: {
-            session_user_email: user_All_email,
-            user_email: following_All_id,
-        },
-        method: "POST",
-        success: function (data) {
-            console.log("성공");
-        },
-        error: function (request, status, error) {
-            console.log("에러");
-        },
-        complete: function () {
-            console.log("완료");
-        }
-    });
-})
 
 // 유재우 : 수정하기에 이미지 추가
 function image_update(e) {
@@ -876,14 +763,117 @@ function image_update(e) {
     });
 }
 
-// 유재우 : 팔로우 모두 보기 클릭 이밴트
-$('.follow_recommend_list_all').click(function () {
-    $('#Recommend_Followers_all').css({
-        "display": "flex"
-    })
-})
-
 // 유재우 : 피드 수정 모달창에서 사진 추가 버튼 클릭했을 시 (파일 시스템을 열어서 업로드 하는 경우)
 $('.update_feed_modal_image_update').click(function () {
     $('.update_feed_modal_input_image_upload_btn').click()
+});
+
+// 팔로우 모두보기 모달창 이벤트 처리
+const follow_recommend_list_all = document.querySelector(".follow_recommend_list_all");
+const all_follow_recommend_list = document.querySelector(".all_follow_recommend_list");
+const close_follow_modal = document.querySelector(".close_follow_modal");
+
+follow_recommend_list_all.addEventListener("click", () => {
+    all_follow_recommend_list.style.display = "flex";
+});
+
+close_follow_modal.addEventListener("click", () => {
+    all_follow_recommend_list.style.display = "none";
+});
+
+
+$('.follow_button').click(function (event) {
+    // 팔로우 당하는 사람의 이메일
+    let user_email = $(this).attr("user_email");
+
+    let follow_id = event.target.id;
+
+    // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
+    let is_followed = $.trim($('#' + follow_id).html());
+
+    console.log(user_email);
+    console.log(follow_id);
+    console.log(is_followed);
+
+
+    // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
+    if (is_followed == '팔로우') {
+        $('#' + follow_id).html('언팔로우');
+        $(this).css({
+            color: 'gray',
+            border: 'none',
+        })
+    } else { // 만약 팔로우 버튼의 글 내용이 언팔로우일 경우 -> css토글
+        $('#' + follow_id).html('팔로우');
+        $(this).css({
+            color: 'rgb(0, 149, 246)',
+            border: 'none',
+        })
+
+    }
+    // 서버로 보낼 데이터 (json)
+    $.ajax({
+        url: "/user/follow",
+        data: {
+            user_email: user_email,
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+        }
+    });
+});
+
+$('.follow_modal_button').click(function (event) {
+    // 팔로우 당하는 사람의 이메일
+    let user_email = $(this).attr("user_email");
+
+    let follow_id = event.target.id;
+
+    // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
+    let is_followed = $.trim($('#' + follow_id).html());
+
+    console.log(user_email);
+    console.log(follow_id);
+    console.log(is_followed);
+
+
+    // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
+    if (is_followed == '팔로우') {
+        $('#' + follow_id).html('언팔로우');
+        $(this).css({
+            color: 'gray',
+            border: 'none',
+        })
+    } else { // 만약 팔로우 버튼의 글 내용이 언팔로우일 경우 -> css토글
+        $('#' + follow_id).html('팔로우');
+        $(this).css({
+            color: 'rgb(0, 149, 246)',
+            border: 'none',
+        })
+
+    }
+    // 서버로 보낼 데이터 (json)
+    $.ajax({
+        url: "/user/follow",
+        data: {
+            user_email: user_email,
+        },
+        method: "POST",
+        success: function (data) {
+            console.log("성공");
+        },
+        error: function (request, status, error) {
+            console.log("에러");
+        },
+        complete: function () {
+            console.log("완료");
+        }
+    });
 });
