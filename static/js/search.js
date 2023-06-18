@@ -148,9 +148,12 @@ $("#button_feed_bookmark_list").click(function () {
     }
 });
 
-document.getElementById('all_end_date').max = new Date().toISOString().substring(0, 10);
-document.getElementById('all_end_date').value = new Date().toISOString().substring(0, 10);
+//날짜 검색 범위를 현재 날짜보다 1일 뒤로 설정
+let currentDate = new Date();
+let futureDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 2);
 
+document.getElementById('all_end_date').max = futureDate.toISOString().substring(0, 10);
+document.getElementById('all_end_date').value = futureDate.toISOString().substring(0, 10);
 
 // 날짜 카테고리 동시 필터링 이벤트 처리
 $("#all_submit").click(function (event) {
