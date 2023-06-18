@@ -224,6 +224,11 @@
     height: 100%;
     display: flex;
     align-items: center;
+    /* 정유진: 이미지 여러장 띄울 때 필요 */
+    position: relative;
+    background-color: rgb(233, 233, 233);
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
 }
 
 /* 피드모달 글 영역 */
@@ -628,4 +633,25 @@ shared_category_select_area {
 .btn:focus {
     outline: none !important;
     box-shadow: none !important;
+}
+
+/* 정유진: 피드모달 이미지 이전, 다음 버튼 영역 */
+.feed_modal_img_control_btns_area {
+    display: flex;
+    position: absolute;
+    position: absolute;
+}
+
+/*유재우 : 버튼들 끝*/
+/*피드 이미지 카운터*/
+.now_img_count {
+    position: absolute;
+    bottom: 10px; /* 원하는 위치로 조정 */
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    border: black;
+    background-color: rgba(0, 0, 0, 0.2); /*까만색(0,0,0) 80% 불투명도*/
+    padding: 0 5px;
+    border-radius: 10px;
 }

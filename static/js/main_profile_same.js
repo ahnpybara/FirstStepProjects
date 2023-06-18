@@ -62,8 +62,62 @@ $(".feed_modal").click(function () {
             var like_count = data['like_count'];
             var feed_create_at = data['feed_create_at'];
 
-            // 게시물 이미지, 내용, 작성자 프로필 이미지, 작성자 닉네임을 알맞는 태그의 본문에 할당
-            $("#feed_modal_image").html('<img style="" src="' + feed_image + '">');
+            // 정유진: 이미지를 가져온다.
+            let now_img_count = 0;
+            var feed_images = data['images_list'];
+            // 정유진: 태그 안 비우기
+            $("#feed_modal_image").html('');
+            // 정유진: 첫 번째 이미지
+            $("#feed_modal_image").html('' +
+                '<img id="feed_modal_image_current" src="/media/' + feed_images[now_img_count].image + '">');
+            // 정유진: 이미지가 2개 이상일 때
+            if (feed_images.length >= 2) {
+                $("#feed_modal_image").append('' +
+                '<div class="feed_image_area_img_control_btns_parent feed_modal_img_control_btns_area">' +
+                '   <div class="feed_image_area_img_control_btns" style="display: flex;justify-content: space-between;">' +
+                '       <!-- 다음 버튼 이전 버튼 영역 -->' +
+                '       <div class="feed_modal_area_images_btn" style="display: flex;">' +
+                '       <!-- 이전 버튼-->' +
+                '           <div class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn"' +
+                '               id="feed_modal_feed_image_before_F">' +
+                '               arrow_back_ios' +
+                '           </div>' +
+                '           <!-- 이전 버튼-->' +
+                '           <div class="feed_modal_feed_image_next material-symbols-outlined"' +
+                '               id="feed_modal_feed_image_next_F">' +
+                '               arrow_forward_ios' +
+                '           </div>' +
+                '       </div>' +
+                '   </div>' +
+                '</div>');
+                $("#feed_modal_image").append('<div id="feed_modal_image_current_number" class="now_img_count" style="display: flex;" className="now_img_count">'+ (now_img_count+1) +'/'+ feed_images.length +'</div>')
+            }
+
+            // 피드 수정하기 에서 이미지 이전 버튼 이밴트
+            $('.feed_modal_feed_image_before').click(function () {
+                if (now_img_count == 0) {
+                    $('#feed_modal_image_current').attr('src', '/media/' + feed_images[feed_images.length - 1].image);
+                    now_img_count = feed_images.length - 1
+                    $('#feed_modal_image_current_number').html((now_img_count+1) + '/' + feed_images.length)
+                } else {
+                    $('#feed_modal_image_current').attr('src', '/media/' + feed_images[now_img_count - 1].image);
+                    now_img_count--
+                    $('#feed_modal_image_current_number').html((now_img_count+1) + '/' + feed_images.length)
+                }
+            });
+            // 피드 수정하기 에서 이미지 다음 버튼 이밴트
+            $('.feed_modal_feed_image_next').click(function () {
+                if (now_img_count == feed_images.length - 1) {
+                    $('#feed_modal_image_current').attr('src', '/media/' + feed_images[0].image);
+                    now_img_count = 0
+                    $('#feed_modal_image_current_number').html((now_img_count+1) + '/' + feed_images.length)
+                } else {
+                    $('#feed_modal_image_current').attr('src', '/media/' + feed_images[now_img_count + 1].image);
+                    now_img_count++
+                    $('#feed_modal_image_current_number').html((now_img_count+1) + '/' + feed_images.length)
+                }
+            });
+
             $("#feed_modal_feed_content").html('<div>' + feed_content + '</div>');
             $(".feed_modal_profile_image").html('<img id="' + writer_nickname + '" class="movetoprofile" src="' + writer_profile_image + '">');
             $(".feed_modal_nickname").html('<div id="' + writer_nickname + '" class="movetoprofile">' + writer_nickname + '</div>');
@@ -529,12 +583,12 @@ function uploadFiles(e) {
         })
         // 유재우 버튼들의 배치를위해 숨겨진 삭제버튼들의 div만 표시
         $('.feed_modal_area_images_btn_dele_parent').css({
-                "display": "flex"
-            })
+            "display": "flex"
+        })
         // 유재우 버튼들의 배치를위해 숨겨진 좌우 버튼들의 div만 표시
         $('.feed_image_area_img_control_btns_parent').css({
-                "display": "flex"
-            })
+            "display": "flex"
+        })
         // 업로드한 파일이 1장을 초과했을 경우에만 좌우 버튼 및 삭제 버튼을 나타나게 함
         if (files.length > 1) {
             $('.feed_modal_area_images_btn_dele').css({

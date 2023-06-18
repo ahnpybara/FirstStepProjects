@@ -538,21 +538,6 @@
     color: rgba(0, 0, 0, 1);
 }
 
-/*유재우 : 버튼들 끝*/
-/*피드 이미지 카운터*/
-.now_img_count {
-    position: absolute;
-    bottom: 10px; /* 원하는 위치로 조정 */
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    border: black;
-    background-color: rgba(0, 0, 0, 0.2); /*까만색(0,0,0) 80% 불투명도*/
-    padding: 0 5px;
-    border-radius: 10px;
-}
-
-
 /* 정유진: 피드 공유카테고리  */
 .feed_is_shared_category {
     margin-right: 10px;

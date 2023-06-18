@@ -713,10 +713,19 @@ class FeedModal(APIView):
         # 정유진: 피드의 공유 유무.
         is_shared_category = ShareCategory.objects.filter(feed_id=feed_modal.id).exists()
 
+        # 이미지 추가
+        count = 0
+        images_object_list = Image.objects.filter(feed_id=feed_id)
+        images_list = []
+        for image in images_object_list:
+            images_feed = Feed.objects.filter(id=feed_id).first()
+            images_list.append(dict(feed_id=images_feed.id, image=image.image, count=count, now_count=count + 1))
+            count = count + 1
         # 사용자로 보낼 json 형식의 데이터
         data = {
             'id': feed_modal.id,
             'image': feed_modal.image,
+            'images_list': images_list,
             'feed_content': feed_modal.content,
             'hashtag_list': hashtag_list,
 
