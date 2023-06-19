@@ -275,14 +275,12 @@ body::-webkit-scrollbar {
     font-size: 14px;
 }
 
-/* 채팅 모달창 */
 .chat_modal_area, .chat_user_modal_area {
     display: flex;
     flex-direction: column;
     position: fixed;
     top: 53%;
     left: 85%;
-    transform: translate(-50%, -50%);
     background-color: white;
     border: 1px solid #d8d8d8;
     width: 400px;
@@ -385,6 +383,7 @@ body::-webkit-scrollbar {
 #chat_modal_id, #chat_user_modal_id, #alert_modal_id {
     display: none;
 }
+
 
 /* 채팅 친구 목록 영역(모달창안에 페이지를 불러옴) */
 .chat_user_list_modal_area {
