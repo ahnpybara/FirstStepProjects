@@ -347,14 +347,14 @@ $(".chat_modal_close").click(function () {
     // 채팅 모달창 숨김, 채팅 모달창 위치 초기화
     $('#chat_modal_id').css({
         display: 'none',
-        top: '500.438px',
-        left: '1630.6px',
+        top: '100px',
+        left: 'calc(50% - -100px)',
     });
     // 채팅 유저 목록 모달창 숨김, 채팅 유저 목록 모달창 위치 초기화
     $('#chat_user_modal_id').css({
         display: 'none',
-        top: '500.438px',
-        left: '1630.6px',
+        top: '100px',
+        left: 'calc(50% - -100px)',
     });
 });
 
