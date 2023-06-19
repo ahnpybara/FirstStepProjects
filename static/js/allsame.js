@@ -276,24 +276,28 @@ var open_article2 = function (url, user_email) {
 
 // 채팅 유저 목록 모달창 드래그로 이동하는 코드, 문서가 로드되면 실행할 함수.
 $(document).ready(function () {
-    //모달과 모달헤더를 각각 잡아주고 마우스 위치의 오프셋 값을 저장하는 객체 변수를 초기화합니다. 드래그 동작 여부를 저장하는 변수를 초기화합니다.
+    // 채팅 유저 모달과 헤더를 jQuery 객체로 가져온 후, 마우스 오프셋과 드래그 상태 변수를 선언합니다.
     var modal = $('.chat_user_modal_area');
     var modalHeader = $('.chat_user_modal_header');
     var mouseOffset = {x: 0, y: 0};
     var isDragging = false;
 
-    // 모달 헤더에서 마우스를 눌렀을 때 실행할 함수를 정의. 마우스 위치와 모달의 현재 위치 간의 상대적인 오프셋 값을 계산하여 저장
+    // 모달 헤더를 마우스로 클릭할 때, 드래그 시작으로 설정하고 오프셋 값을 계산합니다.
     modalHeader.mousedown(function (e) {
         isDragging = true;
         mouseOffset = {x: e.pageX - modal.offset().left, y: e.pageY - modal.offset().top};
+        e.preventDefault(); // 기본 브라우저 드래그 기능을 비활성화합니다.
     });
 
-    // 모달 헤더에서 마우스 버튼을 놓았을 때 실행할 함수를 정의.
+    // 문서에서 마우스 버튼을 놓을 때, 드래그가 끝난 상태로 설정하고 onDragEnd() 함수를 실행합니다.
     $(document).mouseup(function () {
-        isDragging = false;
+        if (isDragging) {
+            isDragging = false;
+            onDragEnd();
+        }
     });
 
-    // 모달 헤더에서 마우스를 움직일 때 실행할 함수를 정의. 드래그 동작 중일 때만 실행 마우스의 움직임에 따라 모달의 위치를 변경합니다. 상대적인 오프셋 값으로 모달의 위치를 설정합니다.
+    // 문서에서 마우스를 움직일 때, 드래그 동작 중일 경우 모달의 위치를 변경합니다.
     $(document).mousemove(function (e) {
         if (isDragging) {
             modal.offset({
@@ -302,32 +306,49 @@ $(document).ready(function () {
             });
         }
     });
-    //모달 영역에서 마우스가 벗어났을 때 실행할 함수를 정의.
+
+    // 모달에서 마우스가 벗어날 때, 드래그 상태를 false로 설정합니다.
     modal.mouseleave(function () {
         isDragging = false;
     });
+
+    // 드래그가 끝나면, chat_modal_id 요소의 위치를 업데이트하는 onDragEnd() 함수를 정의합니다.
+    function onDragEnd() {
+        let chatUserModal = modal[0]; // jQuery 객체에서 DOM 객체를 가져옵니다.
+        let rect = chatUserModal.getBoundingClientRect();
+        let left_value = rect.left;
+        let top_value = rect.top;
+
+        let chat_modal = document.getElementById('chat_modal_id');
+        chat_modal.style.left = left_value + 'px';
+        chat_modal.style.top = top_value + 'px';
+    }
 });
 
 // 채팅창 모달창 드래그로 이동하는 코드 문서가 로드되면 실행할 함수.
 $(document).ready(function () {
-    //모달과 모달헤더를 각각 잡아주고 마우스 위치의 오프셋 값을 저장하는 객체 변수를 초기화합니다. 드래그 동작 여부를 저장하는 변수를 초기화합니다.
+    // 채팅 모달과 헤더를 jQuery 객체로 가져온 후, 마우스 오프셋과 드래그 상태 변수를 선언합니다.
     var modal = $('.chat_modal_area');
     var modalHeader = $('.chat_modal_header');
     var mouseOffset = {x: 0, y: 0};
     var isDragging = false;
 
-    // 모달 헤더에서 마우스를 눌렀을 때 실행할 함수를 정의. 마우스 위치와 모달의 현재 위치 간의 상대적인 오프셋 값을 계산하여 저장
+    // 모달 헤더를 마우스로 클릭할 때, 드래그 시작으로 설정하고 오프셋 값을 계산합니다.
     modalHeader.mousedown(function (e) {
         isDragging = true;
         mouseOffset = {x: e.pageX - modal.offset().left, y: e.pageY - modal.offset().top};
+        e.preventDefault(); // 기본 브라우저 드래그 기능을 비활성화합니다.
     });
 
-    // 모달 헤더에서 마우스 버튼을 놓았을 때 실행할 함수를 정의.
+    // 문서에서 마우스 버튼을 놓을 때, 드래그가 끝난 상태로 설정하고 onDragEnd() 함수를 실행합니다.
     $(document).mouseup(function () {
-        isDragging = false;
+        if (isDragging) {
+            isDragging = false;
+            onDragEnd();
+        }
     });
 
-    // 모달 헤더에서 마우스를 움직일 때 실행할 함수를 정의. 드래그 동작 중일 때만 실행 마우스의 움직임에 따라 모달의 위치를 변경합니다. 상대적인 오프셋 값으로 모달의 위치를 설정합니다.
+    // 문서에서 마우스를 움직일 때, 드래그 동작 중일 경우 모달의 위치를 변경합니다.
     $(document).mousemove(function (e) {
         if (isDragging) {
             modal.offset({
@@ -336,11 +357,25 @@ $(document).ready(function () {
             });
         }
     });
-    //모달 영역에서 마우스가 벗어났을 때 실행할 함수를 정의.
+
+    // 모달에서 마우스가 벗어날 때, 드래그 상태를 false로 설정합니다.
     modal.mouseleave(function () {
         isDragging = false;
     });
+
+    // 드래그가 끝나면, chat_user_modal_id 요소의 위치를 업데이트하는 onDragEnd() 함수를 정의합니다.
+    function onDragEnd() {
+        let chatModal = modal[0]; // jQuery 객체에서 DOM 객체를 가져옵니다.
+        let rect = chatModal.getBoundingClientRect();
+        let left_value = rect.left;
+        let top_value = rect.top;
+
+        let chat_user_modal = document.getElementById('chat_user_modal_id');
+        chat_user_modal.style.left = left_value + 'px';
+        chat_user_modal.style.top = top_value + 'px';
+    }
 });
+
 
 // 채팅 모달창 닫기 버튼 이벤트 처리 (클래스명으로 해야함 why? TODO)
 $(".chat_modal_close").click(function () {
