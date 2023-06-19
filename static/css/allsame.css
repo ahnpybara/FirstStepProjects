@@ -280,9 +280,8 @@ body::-webkit-scrollbar {
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 400px;
-    left: calc(50% - -300px);
-    transform: translate(-50%, -50%);
+    top: 100px;
+    left: calc(50% - -100px);
     background-color: white;
     border: 1px solid #d8d8d8;
     width: 400px;
