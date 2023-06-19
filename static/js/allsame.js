@@ -391,7 +391,15 @@ $(".chat_modal_close").click(function () {
         top: '500.438px',
         left: '1630.6px',
     });
+
+    // chat_modal_id 요소의 위치를 초기화합니다.
+    $('.chat_modal_area').css('top', '0');
+    $('.chat_modal_area').css('left', '0');
+    // chat_user_modal_id 요소의 위치를 초기화합니다.
+    $('.chat_user_modal_area').css('top', '0');
+    $('.chat_user_modal_area').css('left', '0');
 });
+
 
 // 알림 목록 모달창 여는 이벤트 처리 ajax
 var ajax_call3 = function (url) {
