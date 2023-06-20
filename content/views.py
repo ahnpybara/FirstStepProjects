@@ -768,6 +768,8 @@ class Autocomplete(APIView):
     def get(self, request):
         # 서버로 전달된 검색창에 있는 키워드
         search_box_value = request.GET.get('search_box_value', None)
+        # 정유진: 세션 유저의 email
+        email = request.session.get('email', None)
 
         # 데이터를 저장할 리스트를 선언
         autocomplete_user_list = []
@@ -800,12 +802,12 @@ class Autocomplete(APIView):
                                                reverse=True)
             autocomplete_hashtag_list.insert(0, dict(content=search_box_value,
                                                      hashtag_count=hashtag_bundle_count))
-            print(autocomplete_hashtag_list[0])
         # 만약 유저 검색일 경우
         else:
             # TODO 검색키워드가 닉네임 또는 이름에 포함되는지 객체를 10개만 뽑아냄
             users = User.objects.filter(
-                Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).order_by('nickname')
+                Q(nickname__contains=search_box_value) | Q(name__contains=search_box_value)).exclude(Q(email="acy87@naver.com") | Q(email=email)).order_by('nickname')
+            # print(users)
             # users를 그대로 쓰면 이메일만 나온다. 필요한 데이터만 뽑아서 리스트에 저장
             for user in users:
                 autocomplete_user_list.append(dict(profile_image=user.profile_image,
