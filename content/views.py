@@ -86,15 +86,23 @@ class Main(APIView):
                 category_kr = '여행'
             elif feed.category == 'food':
                 category_kr = '음식'
-            elif feed.category == 'movie':
-                category_kr = '영화'
-            elif feed.category == 'book':
-                category_kr = '책'
+            elif feed.category == 'daily':
+                category_kr = '일상'
+            elif feed.category == 'sports':
+                category_kr = '스포츠'
+            elif feed.category == 'companion_animal':
+                category_kr = '반려동물'
 
             # 정유진: 피드의 공유 유무.
-            is_shared_category = ShareCategory.objects.filter(feed_id=feed.id).exists()
+            shared_category_user_list = ShareCategory.objects.filter(feed_id=feed.id).values_list('email', flat=True)
+            is_shared_category = shared_category_user_list.exists()
             is_shared_category_user = ShareCategory.objects.filter(feed_id=feed.id, email=email).exists()
 
+            # 정유진: 피드의 공유 유저 리스트
+            if is_shared_category:
+                shared_category_user_nickname_list = User.objects.filter(email__in=shared_category_user_list).values_list('nickname', flat=True)
+            else:
+                shared_category_user_nickname_list = []
             # 각종 데이터를 feed_list에 담음
             feed_list.append(dict(id=feed.id,
                                   images_list=images_list,
@@ -111,7 +119,8 @@ class Main(APIView):
                                   category_kr=category_kr,
                                   image_count=count,
                                   is_shared_category=is_shared_category,
-                                  is_shared_category_user=is_shared_category_user
+                                  is_shared_category_user=is_shared_category_user,
+                                  shared_category_user_nickname_list=shared_category_user_nickname_list
                                   ))
         # 정유진: 피드 업로드 및 수정 시 필요한 맞팔되어 있는 유저 리스트
         follower_user_email_list = list(
@@ -684,10 +693,12 @@ class FeedModal(APIView):
             category_kr = '여행'
         elif feed_modal.category == 'food':
             category_kr = '음식'
-        elif feed_modal.category == 'movie':
-            category_kr = '영화'
-        elif feed_modal.category == 'book':
-            category_kr = '책'
+        elif feed_modal.category == 'daily':
+            category_kr = '일상'
+        elif feed_modal.category == 'sports':
+            category_kr = '스포츠'
+        elif feed_modal.category == 'companion_animal':
+            category_kr = '반려동물'
 
         # 게시물에 달린 해시태그들을 뽑아냄
         feed_modal_hashtag_object_list = Hashtag.objects.filter(feed_id=feed_id)
