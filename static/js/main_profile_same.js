@@ -621,7 +621,7 @@ function uploadFiles(e) {
 
     }
 }
-
+// 다음사진 보기
 $('.feed_modal_feed_image_next').click(function () {
     files_Count++
     if (files_Count < files.length && files_Count >= 0) {
@@ -643,7 +643,7 @@ $('.feed_modal_feed_image_next').click(function () {
         });
     }
 });
-
+// 이전사진
 $('.feed_modal_feed_image_before').click(function () {
     files_Count--
     if (files_Count < files.length && files_Count >= 0) {
