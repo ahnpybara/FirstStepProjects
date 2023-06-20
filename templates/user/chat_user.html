@@ -32,7 +32,7 @@
                     <!-- 마지막으로 보낸 채팅 영역 -->
                     {% for chat in send_chat_list %}
                         {% if chat.send_user_chat.send_user == user.email %}
-                            <span class="send_user_chat">{{ chat.send_user_chat.chat_content }}</span>
+                            <span class="send_user_chat">{{ chat.send_user_chat.chat_content|truncatechars:10 }}</span>
                         {% endif %}
                     {% endfor %}
                 </div>

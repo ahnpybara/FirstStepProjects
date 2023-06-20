@@ -638,12 +638,17 @@ class AlertAll(APIView):
         for alert in receive_alert_me:
             alert_send_user = User.objects.filter(email=alert.send_user).first()
             alert_feed = Feed.objects.filter(id=alert.feed_id).first()
+            # 정유진 댓글 길이가 10자 이상일 경우 글자가 잘리고 '...'이 붙는다
+            if len(alert.reply_content) >= 10:
+                alert_reply = alert.reply_content[:10] + '...'
+            else:
+                alert_reply = alert.reply_content
             alert_list.append(dict(alert_id=alert.id,
                                    alert_send_user=alert_send_user,
                                    alert_content=alert.alert_content,
                                    alert_time=alert.alert_time,
                                    alert_feed=alert_feed,
-                                   alert_reply=alert.reply_content))
+                                   alert_reply=alert_reply))
 
         return render(request, "content/alert.html", context=dict(alert_list=alert_list))
 
