@@ -616,7 +616,7 @@ body::-webkit-scrollbar {
 .alert_content_area {
     display: flex;
     flex-direction: column;
-    padding-right: 24px;
+    margin-right: 20px;
     font-size: 13px;
 }
 
@@ -624,7 +624,7 @@ body::-webkit-scrollbar {
 .reply_alert_content_area {
     display: flex;
     flex-direction: column;
-    padding-right: 8px;
+    margin-right: 20px;
     font-size: 13px;
 }
 
