@@ -1,0 +1,657 @@
+/* 모달창의 바깥 영역 */
+.modal_overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 10000;
+}
+
+/* 모달창의 영역 */
+.modal_window {
+    background: white;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 10px;
+    width: 45%;
+    height: 575px;
+    min-width: 500px;
+}
+
+/* 피드 업로드 모달 바  */
+.feed_upload_modal_bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+/* 피드 업로드 모달 바 공백 */
+.space {
+    margin-left: 30px;
+}
+
+/* 이미지를 여기로 드래그 하세요 */
+.drag_here_image {
+    color: black;
+    font-weight: 500;
+    font-size: 22px;
+    margin: 5px 0;
+}
+
+/* 피드 업로드 모달창 이미지 업로드 버튼 */
+#image_upload_btn {
+    width: 130px;
+    margin-top: 20px;
+    margin-bottom: 60px;
+    font-weight: bold;
+    background-color: rgb(0, 149, 246);
+    border: none;
+    outline: none;
+}
+
+/* 피드 업로드 모달 바 닫기 버튼 */
+#modal_close_button {
+    padding-top: 3px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* 피드 업로드 모달창 이미지 영역 */
+.img_upload_space {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-top: solid 1px #d8d8d8;
+    width: 100%;
+    height: 91.5%;
+    text-align: center;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+/* 파일 시스템 */
+#input_image_upload {
+    display: none;
+}
+
+/* 피드 업로드 후 두 번째 텍스트 모달창 */
+.feed_image_text_modal {
+    border-top: solid 1px #d8d8d8;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 91.5%;
+
+}
+
+/* 두 번째 모달창 이미지 공간 */
+.feed_image_text_modal > .img_upload_space {
+    border: none;
+    width: 100%;
+    height: 99.2%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 0;
+}
+
+/* 두 번째 모달창 텍스트 및 카테고리 영역 */
+.modal_text_area {
+    height: 98.9%;
+    border-left: 1px #d8d8d8 solid;
+}
+
+/* 두 번째 글 내용 영역 */
+.feed_text_area {
+    border-bottom: solid 1px #d8d8d8;
+}
+
+/* 두 번째 모달창  해시태그 내용 영역 */
+.feed_hashtag_area {
+    border-bottom: solid 1px #d8d8d8;
+}
+
+/* 두 번째 모달창 글 영역(글내용,해시태그) */
+.feed_content_input {
+    display: flex;
+    flex-direction: column;
+    height: 484px;
+}
+
+/* 두 번째 모달창 글 내용 입력 창 */
+#input_feed_content {
+    width: 276px;
+    height: 255px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+/* 두 번째 모달창 해시태그 내용 입력 창 */
+#input_feed_hashtag {
+    width: 276px;
+    height: 160px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+/* 두 번째 모달창 피드 생성버튼 */
+#feed_create_button {
+    width: 277px;
+    background-color: rgb(0, 149, 246);
+    padding-top: 5.3px;
+    border-radius: 0;
+    border-bottom-right-radius: 10px;
+    margin-left: -0.5px;
+}
+
+/* 피드 모달 스크롤은 동작하지만 보이지 않게 함 */
+.modal_text_area {
+    -ms-overflow-style: none; /* 인터넷 익스플로러 */
+    scrollbar-width: none; /* 파이어폭스 */
+}
+
+.modal_text_area::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+/* 피드 내용 줄바꿈*/
+.text_line {
+    overflow-wrap: anywhere;
+    margin-bottom: 0 !important;
+}
+
+/* 구글 심볼 아이콘이 true인 경우 */
+.uTrue {
+    cursor: pointer;
+    color: rgb(0, 0, 1);
+    font-size: 28px;
+    font-variation-settings: 'FILL' 1,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+/* 구글 심볼 아이콘이 false인 경우 */
+.uFalse {
+    cursor: pointer;
+    color: black;
+    font-size: 28px;
+    font-variation-settings: 'FILL' 0,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 48
+}
+
+/* 최상위 피드모달 창 */
+#root_feed_modal_window {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 50%;
+    height: 83%;
+}
+
+/* 피드모달 영역 부모 */
+.feed_modal_area_parents {
+    width: 100%;
+    height: 100%;
+}
+
+/* 피드모달 영역 자식 */
+.feed_modal_area_son {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+/* 피드모달 게시글 이미지 */
+#feed_modal_image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    /* 정유진: 이미지 여러장 띄울 때 필요 */
+    position: relative;
+    background-color: rgb(233, 233, 233);
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+/* 피드모달 글 영역 */
+.feed_modal_text_area_parents {
+    width: 70%;
+    border-left: solid 1px #e1e1e1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 피드모달 글 영역 상단바 */
+.feed_modal_text_area {
+    text-align: right;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+/* 피드 모달 상단 메뉴바 작성자 정보 영역 */
+.feed_modal_menu_bar_area {
+    display: flex;
+    margin: 15px;
+    align-items: center;
+    flex-direction: row;
+}
+
+/* 피드 모달 작성자 프로필 이미지 */
+.feed_modal_profile_image {
+    width: 32px;
+    height: 32px;
+    margin-right: 15px;
+    min-width: 32px !important;
+}
+
+/* 피드 모달 작성 글내용 및 해시태그, 댓글 리스트 영역 */
+.feed_modal_contents_area {
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* 피드 모달 작성자 정보와 글내용 영역 */
+.feed_modal_contents_writer {
+    display: flex;
+    margin: 15px;
+    align-items: start;
+    flex-direction: row;
+}
+
+/* 피드 모달 글내용 */
+#feed_modal_feed_content {
+    font-size: 14px;
+}
+
+/* 피드 모달 댓글 리스트 */
+#feed_modal_reply_list {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+    align-items: flex-start;
+}
+
+/* 피드 모달 좋아요 북마크, 좋아요 수 영역 */
+.feed_modal_like_bookmark_area {
+    border-top: 1px solid #e1e1e1;
+}
+
+/* 피드 모달 좋아요 북마크 */
+.feed_modal_like_bookmark {
+    display: flex;
+    margin: 15px;
+    justify-content: space-between;
+}
+
+/* 피드 모달 좋아요 수 */
+#feed_modal_like_count {
+    margin: 15px;
+}
+
+/* 피드 모달 댓글 입력 영역 */
+.feed_modal_reply_upload_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top: solid 1px #e1e1e1;
+    margin-top: 10px;
+}
+
+/* 피드 모달 댓글 작성란 */
+#reply_content_text {
+    height: 53px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    background-color: white;
+}
+
+/* 피드 모달 댓글 게시 버튼 */
+#reply_content_upload {
+    width: 50px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 해시태그 */
+.hashtags {
+    color: #0037AB;
+    font-size: 14px;
+    cursor: pointer;
+    padding-right: 5px;
+}
+
+/* js로 생서되는 css 영역 */
+/********************************/
+.feed_modal_hashtags {
+    padding: 0 15px;
+}
+
+/* 피드모달 댓글들 */
+.feed_modal_reply_area {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+/* 피드모달 댓글 프로필 이미지 공간  */
+.feed_modal_reply_profile_image_area {
+    width: 32px;
+    height: 32px;
+    margin-right: 15px;
+    min-width: 32px;
+}
+
+/* 피드모달 댓글 닉네임, 내용 공간 */
+.feed_modal_reply_nickname_content_area {
+    display: flex;
+    align-items: start;
+}
+
+/* 피드모달 댓글 닉네임 공간 */
+.feed_modal_reply_nickname_area {
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+/* 피드모달 댓글 내용 공간 */
+.feed_modal_reply_content_area {
+    font-size: 14px;
+}
+
+/* 피드모달 댓글 프로필 이미지 */
+.feed_modal_reply_profile_image {
+    width: 100%;
+    height: 100%;
+}
+
+/* 피드모달 댓글 닉네임 */
+.feed_modal_reply_nickname {
+    padding-top: 3px;
+}
+
+/* 피드모달 댓글 내용 */
+.feed_modal_reply_content {
+    padding-top: 3px;
+}
+
+/* 피드모달 게시물 이미지 */
+#feed_modal_image > img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+/* 피드모달 게시자 프로필 이미지 */
+.feed_modal_profile_image > img {
+    width: 100%;
+    height: 100%;
+}
+
+/* 피드모달 게시자 닉네임 */
+.feed_modal_nickname > div {
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+/* 피드모달 좋아요 수 */
+.feed_modal_like_count {
+    font-size: 14px;
+}
+
+/* 피드모달 피드 공유 시간 */
+.feed_modal_feed_create_at {
+    font-size: 12px;
+    color: gray;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-left: 16px;
+}
+
+/* 정유진: 카테고리 */
+.feed_modal_category {
+    font-size: 14px;
+    font-weight: bold;
+    color: darkgray;
+    text-align: left;
+    margin: 2px 15px;
+}
+
+/* 정유진: 피드업로드 및 피드수정 모달 카테고리 */
+.second_third_modal_category {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-items: center;
+}
+
+/* 피드 업로드시 카테고리 설명란 */
+.feed_category_explain {
+    margin-right: 3px;
+    color: gray;
+    font-size: 15px;
+
+}
+
+/* 피드 업로드시 카테고리 메뉴 */
+#input_feed_category {
+    width: 70px;
+    text-align: center;
+    text-align-last: center;
+    padding: 0;
+    color: gray;
+    box-shadow: none;
+}
+
+/* 정유진: 공유카테고리 버튼 */
+.shared_category_btn {
+    height: 100%;
+    border: 1px solid #ced4da;
+    padding: 0 3px;
+    border-radius: .25rem;
+    color: gray !important;
+    text-decoration: none;
+}
+
+/* 정유진: 카테고리 영역. 피드업로드, 피드수정 모달에 사용*/
+.modal_category_select_area {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 정유진: 공유카테고리 */
+#feed_modal_shared_category {
+    font-size: 14px;
+    font-weight: bold;
+    color: darkgray;
+    text-align: right;
+    margin: 2px 15px;
+}
+
+/* 정유진: 피드 공유카테고리  */
+.feed_modal_category_area {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* 정유진: 공유카테고리 영역*/
+.shared_category_area {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 정유진: 공유카테고리 선택 영역*/
+shared_category_select_area {
+    overflow: auto;
+    overflow-y: auto;
+    width: 20px;
+    max-height: 200px;
+}
+
+/* 정유진: 공유카테고리의 접근제안 텍스트*/
+.shared_category_approach_suggestion_text {
+    font-size: 15px;
+    color: gray;
+    margin-bottom: 0px;
+    margin-right: 3px;
+}
+
+/* 정유진: 공유카테고리 닉네임 영역*/
+.shared_category_nickname_select {
+    width: 100%;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+/* 정유진: 공유카테고리 선택지 영역*/
+.shared_category_select {
+    margin: 0 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+/* 정유진: 공유카테고리 체크박스*/
+.shared_category_checkbox {
+    margin: 0 5px;
+}
+
+/* 유재우 : 이미지 슬라이드 기능 */
+/* 유재우 : 좌우 버튼들의 부모 */
+.feed_image_area_img_control_btns_parent {
+    display: none;
+    position: relative;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* 유재우 : 좌우 버튼들 */
+.feed_image_area_img_control_btns {
+    display: none;
+    width: 100%;
+}
+
+/* 유재우 : 좌우 버튼 */
+.feed_modal_feed_image_before,
+.feed_modal_feed_image_next {
+    display: none;
+    margin: 0;
+}
+
+/* 유재우 : 좌우 버튼에 마우스 유지하면 */
+.feed_modal_feed_image_before:hover,
+.feed_modal_feed_image_next:hover {
+    font-variation-settings: 'wght' 700;
+}
+
+/* 유재우 : 이미지 슬라이드 기능 끝 */
+
+.feed_modal_area_images_btn_dele_parent {
+    display: none;
+    height: 210px;
+    text-align: left;
+    width: 100%;
+}
+
+/* 유재우 : 피드 업로드 사진 삭제 */
+.feed_modal_area_images_btn_dele {
+    display: none;
+    color: red;
+    bottom: 50%;
+    padding-left: 5px;
+}
+
+/* 유재우 : 피드 업로드 좌우 버튼 */
+.feed_modal_area_images_btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+}
+
+/* 유재우 : 두번째 모달 창으로 가기 위한 다음 버튼 */
+#modal_next_button {
+    margin-left: 10px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 유재우 : 첫번째 모달 창으로 돌아가기 위한 이전 버튼 */
+#modal_before_button {
+    margin-left: 10px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.update_feed_modal_feed_image_dele {
+    color: red;
+    padding-left: 5px;
+}
+
+/*왼쪽버튼*/
+.img_previous_btn {
+    padding-left: 5px;
+}
+
+/* 부트스트랩 버튼 이벤트 제거 */
+.btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* 정유진: 피드모달 이미지 이전, 다음 버튼 영역 */
+.feed_modal_img_control_btns_area {
+    display: flex;
+    position: absolute;
+    position: absolute;
+}
+
+/*유재우 : 버튼들 끝*/
+/*피드 이미지 카운터*/
+.now_img_count {
+    position: absolute;
+    bottom: 10px; /* 원하는 위치로 조정 */
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    border: black;
+    background-color: rgba(0, 0, 0, 0.2); /*까만색(0,0,0) 80% 불투명도*/
+    padding: 0 5px;
+    border-radius: 10px;
+}

@@ -1,0 +1,714 @@
+/* 상단 메뉴바 팔로우 스위치 */
+#follow_switch_btn {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    padding-bottom: 5px;
+}
+
+/* 상단 메뉴바 팔로우 버튼 라벨 */
+#follow_btn_label {
+    margin-left: 8px;
+    font-weight: bold;
+    padding-top: 4px;
+}
+
+/* 상단 메뉴바 언팔로우 버튼 라벨 */
+#unfollow_btn_label {
+    margin-left: 8px;
+    font-weight: bold;
+    padding-top: 4px;
+}
+
+/* 팔로우 스위치 버튼 */
+.follow_switch_button {
+    cursor: pointer;
+}
+
+/* 팔로우 스위치 버튼 */
+.unfollow_switch_button {
+    cursor: pointer;
+}
+
+/* 피드 생성 영역과 팔로우 영역 */
+.main_container {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    padding-top: 40px;
+    background-color: #FAFAFA
+}
+
+/* 피드들이 생성되는 공간 */
+.feed_area {
+    width: 480px;
+    min-width: 480px;
+    margin-right: 0px;
+    margin-top: 30px;
+}
+
+/* 피드 박스 */
+.feed_box {
+    margin: 30px 0;
+    border: solid 1px #e1e1e1;
+    background-color: white;
+    border-radius: 2%;
+}
+
+/* 피드 상단 부분 */
+.feed_bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 20px;
+    justify-content: space-between;
+}
+
+/* 피드 작성자 정보 */
+.feed_user_writer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 피드 작성자 프로필 사진*/
+.feed_bar > .profile_box {
+    width: 35px;
+    height: 35px;
+}
+
+/* 피드 작성자 닉네임 */
+.feed_nickname {
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* 작성자의 피드 이미지 */
+.feed_writer_image {
+    width: 100%;
+}
+
+/* 피드 드롭다운 메뉴 */
+#dropdownMenuLink {
+    color: gray;
+}
+
+/* 피드 하위 드롭 다운 메뉴 */
+#feed_dropdown > .dropdown-menu {
+    text-align: center;
+    min-width: 6rem;
+    border-radius: 9%
+}
+
+/* 드롭다운 삭제 관련 텍스트 일괄 설정 */
+.delete_text {
+    color: red;
+}
+
+/* 하위 피드 수정 메뉴 */
+.update_feed {
+    color: cornflowerblue !important;
+    font-weight: bold !important;
+}
+
+/* 북마크와 좋아요 영역 */
+.like_bookmark {
+    margin: 0 10px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* 좋아요 아이콘 */
+.likeicon > .uTrue {
+    color: red;
+}
+
+/* 피드 좋아요 수 */
+.feed_like_count {
+    margin: 4px 10px;
+    text-align: left;
+    font-size: 14px
+}
+
+/* 피드 작성 시간 */
+.feed_create_time {
+    font-size: 12px;
+    color: gray;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+/* 피드 작성 글 내용 */
+.feed_writer_content {
+    margin-left: 10px;
+    margin-bottom: 7px;
+    text-align: left;
+    font-size: 14px
+}
+
+/* 해시태그와 글내용 사이 간격 */
+.feed_area_hashtag_space {
+    display: none
+}
+
+/* 해시태그 리스트 영역 */
+.feed_area_hashtags {
+    display: none;
+    flex-direction: row;
+    text-align: left;
+    width: 100%;
+    flex-flow: wrap;
+}
+
+/* 피드 내용 영역 */
+#feed_more_show {
+    display: flex;
+}
+
+/* 글내용 더 보기*/
+.feed_content_more {
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 7px;
+    cursor: pointer;
+}
+
+/* 댓글 모두 보기 */
+.show_all_reply {
+    font-size: 14px;
+    color: gray;
+    cursor: pointer;
+}
+
+/* 댓글 한 줄 영역 */
+.user_reply_list_area {
+    margin: 0 10px;
+    text-align: left;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* 댓글 작성자 닉네임과 댓글 내용 크기 만큼의 영역 */
+.user_reply {
+    overflow-wrap: break-word;
+}
+
+/* 댓글 설정 주메뉴 */
+#reply_delete_update_menu {
+    text-align: center;
+    min-width: 6rem;
+    border-radius: 9%;
+}
+
+/* 댓글 드롭 다운 하위 메뉴 삭제 */
+.remove_reply {
+    cursor: pointer;
+}
+
+/* 댓글 수정하기 위한 텍스트박스 */
+.reply_update_textbox {
+    display: none;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 댓글 드롭 다운 수정 하기 버튼 */
+#update_reply_btn {
+    width: 50px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 댓글 수정하기 위한 인풋 입력박스 */
+.reply_update_textbox .input_reply_update {
+    box-shadow: none !important;
+    border-top: 1px solid #e1e1e1;
+    border-bottom: 1px solid #e1e1e1;
+    outline: none !important;
+    background-color: white !important;
+}
+
+/* 댓글 수정 닫기 버튼 */
+#reply_close_button {
+    cursor: pointer;
+    margin-right: 7px;
+}
+
+/* 댓글 입력하기 위한 인풋 입력 박스 */
+.reply_add_textbox .input_reply_add {
+    box-shadow: none !important;
+    border: none !important;
+    outline: none !important;
+    background-color: white !important;
+}
+
+/* 댓글 입력하기 위한 텍스트 박스 */
+.reply_add_textbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top: solid 1px #e1e1e1;
+    margin-top: 10px;
+}
+
+/* 댓글 게시 버튼 */
+.upload_reply {
+    width: 50px;
+    color: cornflowerblue;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 작성자 프로필 */
+.feed_writer_content > .movetoprofile {
+    margin-right: 10px;
+}
+
+/* 내 프로필 표시 및 팔로우 추천 영역 */
+.follow_side_area {
+    width: 320px;
+    height: 1000px;
+    z-index: 0;
+    margin-left: 100px
+}
+
+/* 내 프로필 표시 영역 */
+.my_profile_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 60px;
+    margin-bottom: 30px;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+/* 팔로우 영역에서의 자신 프로필 사진 */
+#my_profile_image {
+    width: 70px;
+    height: 70px;
+}
+
+/* 팔로우 영역 닉네임 이름영역 */
+.my_profile_nickname_name {
+    margin-left: 20px;
+    text-align: left
+}
+
+/* 팔로우 영역 닉네임 */
+#my_profile_nickname {
+    color: black;
+    text-decoration: none
+}
+
+/* 팔로우 영역 이름 */
+.my_profile_name {
+    color: gray;
+}
+
+/* 팔로우 추천 시작 영역 */
+.follow_recommend_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* 회원님을 위한 추천 */
+.follow_recommend_text {
+    font-weight: bold;
+    color: gray;
+    margin-bottom: 10px
+}
+
+/* 팔로우 추천 리스트 모두 보기 */
+.follow_recommend_list_all {
+    font-weight: bold;
+    color: cornflowerblue;
+    text-decoration: none;
+}
+
+/* 설명란 */
+.Astro_explain1 {
+    margin-top: 40px;
+    font-size: 12px;
+    color: gray;
+    text-align: left;
+}
+
+.Astro_explain2 {
+    margin-top: 20px;
+    font-size: 12px;
+    color: gray;
+    text-align: left;
+}
+
+/* 피드 수정 모달 수정 영역 */
+.feed_image_text_modal {
+    border-top: 1px solid #e1e1e1;
+}
+
+/* 세번째 피드 모달창 */
+#update_feed_modal_image {
+    border-top: none;
+    width: 100%;
+    height: 100%;
+    margin: 0 !important;
+    border-bottom-left-radius: 10px;
+}
+
+/* 세번째 피드 모달창 버튼들*/
+.update_feed_modal_image_btns_parent {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    align-items: center;
+    justify-content: center;
+}
+
+/*유재우 : 피드 수정 모달의 추가 버튼*/
+.update_feed_modal_image_update {
+    bottom: 0;
+}
+
+/* 업데이트 피드 버튼들 div*/
+.update_feed_modal_feed_image_dele {
+    height: 30px;
+    color: red;
+    order: 2;
+}
+
+/* 업데이트 피드 버튼들 div*/
+.update_feed_modal_image_btns {
+    width: 100%;
+}
+
+/* 업데이트 피드 좌우 버튼 div*/
+.update_feed_modal_image_LR_btns {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-align: left;
+    height: 90%;
+}
+
+/* 업데이트 피드 좌우 버튼*/
+.update_feed_modal_feed_image_before,
+.update_feed_modal_feed_image_next {
+    margin: 0;
+}
+
+#update_feed_modal_input_image_upload {
+    display: none;
+}
+
+.update_feed_modal_image_update_parent {
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    bottom: 50px;
+}
+
+/*유재우: 피드 업데이트에 사진 추가 버튼*/
+.update_feed_modal_image_update {
+    width: 130px;
+    background-color: rgba(150, 150, 150, 0.6);
+    color: white;
+    font-weight: bold;
+    margin-top: auto;
+    border: none;
+    outline: none;
+}
+
+/*유재우: 피드 업데이트에 사진 추가 버튼 hover*/
+.update_feed_modal_image_update:hover {
+    background-color: rgba(150, 150, 150, 0.9);
+}
+
+/* 세번째 피드 모달창 버튼들 끝*/
+
+/* 글 내용 입력 창 */
+#input_updatefeed_content {
+    width: 276px;
+    height: 255px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+/* 해시태그 입력 창 */
+#input_updatefeed_hashtag {
+    width: 276px;
+    height: 160px;
+    box-shadow: none;
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+/* 피드 수정버튼 */
+#feed_update_button {
+    width: 277px;
+    background-color: rgb(0, 149, 246);
+    padding-top: 9.3px;
+    border-radius: 0;
+    border-bottom-right-radius: 10px;
+    margin-left: 0.5px;
+}
+
+/* 메인피드 카테고리 숨김 */
+.feed_category {
+    display: none;
+    margin: 2px 0 !important;
+}
+
+/* 피드 수정하기 카테고리 메뉴 */
+#input_updatefeed_category {
+    width: 70px;
+    text-align: center;
+    text-align-last: center;
+    padding: 0;
+    color: gray;
+}
+
+/* 반응형 웹 */
+@media (max-width: 1000px) {
+    .follow_side_area {
+        display: none;
+    }
+}
+
+/*유재우: 메인 피드에 이미지 슬라이더 부분*/
+.image-slider-container {
+    position: relative;
+}
+
+/*유재우: 메인 피드에 이미지 슬라이더 버튼들*/
+.feed_image_area_btns {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+}
+
+/*유재우: 메인 피드에 이미지 슬라이더 오른쪽 왼쪽버튼들*/
+.prev_image_button,
+.next_image_button {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+/*유재우: 이전버튼*/
+.prev_image_button {
+    left: 5px;
+    color: rgba(0, 0, 0, 0.6);
+    height: 25px;
+    width: 25px;
+}
+
+/*유재우: 이전버튼 hover*/
+.prev_image_button:hover {
+    color: rgba(0, 0, 0, 1);
+}
+
+/*유재우: 다음버튼*/
+.next_image_button {
+    color: rgba(0, 0, 0, 0.6);
+    right: 0;
+    height: 25px;
+    width: 25px;
+}
+
+/*유재우: 다음버튼 hover*/
+.next_image_button:hover {
+    color: rgba(0, 0, 0, 1);
+}
+
+/* 정유진: 피드 공유카테고리  */
+.feed_is_shared_category {
+    margin-right: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+/* 피드 설정 아이콘 */
+.feed_setting_icon {
+    margin-top: 5px;
+}
+
+/* 팔로우 추천 리스트 영역 */
+.follow_recommend_list_area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+
+/* 팔로우 추천 리스트 한사람 영역 */
+.follow_recommend_list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    margin: 5px 0;
+}
+
+/* 팔로우 추천 리스트 닉네임 프로필 사진 영역 */
+.follow_user_profile_area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* 추천인 수 및 닉네임 영역 */
+.follow_nickname_count_area {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-left: 10px;
+}
+
+/*  추천인 닉네임 */
+.recommend_user_nickname {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 추천인의 내가 팔로우한 사람들의  수 */
+.recommend_follow_count {
+    font-size: 12px;
+    color: gray;
+}
+
+/* 팔로우 버튼 */
+.follow_button {
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(0, 149, 246);
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    height: 21px;
+    cursor: pointer;
+}
+
+/* 팔로우 모두보기 모달창 */
+.all_follow_recommend_list {
+    display: none;
+    position: fixed;
+    width: 360px;
+    height: 450px;
+    top: 14%;
+    left: 58%;
+    background-color: white;
+    border: 1px solid #d8d8d8;
+    overflow-y: auto;
+}
+
+/* 팔로우 추천 리스트 모두 보기 */
+.follow_recommend_list_all {
+    font-weight: bold;
+    color: cornflowerblue;
+    text-decoration: none;
+}
+
+/* 모달창 팔로우 추천 모두보기 영역1 */
+.all_follow_recommend_display {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 모달창 팔로우 추천 상단바 */
+.all_follow_recommend_bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #d8d8d8;
+    padding: 5px;
+    background-color: #eaeaf9;
+}
+
+/* 모달창 팔로우 추천 상단바 설명란 */
+.all_follow_recommend_bar_explain {
+    font-weight: bold;
+}
+
+/* 모달창 팔로우 추천 모두보기 영역2 */
+.all_follow_recommend_list_area {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 20px;
+
+}
+
+/* 모달창 팔로우 추천 모두보기 사람 한명 영역 */
+.all_user_follow_recommend_list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 8px 0;
+}
+
+/* 모달 팔로우 버튼 */
+.follow_modal_button {
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(0, 149, 246);
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    height: 21px;
+    cursor: pointer;
+}
+
+/* 팔로우 추천 모달창 닫기 */
+.close_follow_modal {
+    cursor: pointer;
+}
+
+/* 반응형 */
+@media (max-width: 1000px) {
+    #all_follow_modal {
+        visibility: hidden;
+    }
+}
+
+/* 정유진: 피드의 공유피드 클릭 시 드롭다운으로 해당 유저 리스트 */
+.feed_shared_category_user_list {
+    max-height: 150px;
+    width: 110px;
+    overflow-y: auto;
+    border-radius: 8px !important;
+}
+
+/* 정유진: 메인피드의 공유피드 드롭다운의 유저 닉네임 */
+.feed_shared_category_user_nickname {
+    padding: 5px;
+    font-size: 14px;
+}

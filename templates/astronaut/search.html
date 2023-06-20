@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <!-- css 분리 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=4">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/search.css' %}?ver=14">
+
+    <!-- Bootstrap CSS 사용하기 위한 선언  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!--  Google 심볼을 사용하기 위한 선언 -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+
+    <!--  Google 아이콘 사용하기 위한 선언 -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+            rel="stylesheet">
+
+    <!--  jQuery를 사용하기 위한 선언  -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <title>검색결과</title>
+
+    <style>
+        /* 구글 머리티얼 아이콘은 css 분리가 안됨 */
+        .menu_icon {
+            font-size: 32px;
+            wght: 100;
+            padding-right: 20px;
+            cursor: pointer;
+            color: black;
+        }
+    </style>
+</head>
+<body style="background: white!important;">
+<!-- 맨 위 상단 메뉴바(로고 검색 기타메뉴)를 만드는 코드 -->
+<nav class="navbar navbar-expand-lg navbar-white bg-white">
+    <!-- 메뉴바 -->
+    <div class="menu_bar">
+        <!-- 로고 -->
+        <a class="navbar-brand" href="/main"><img class="astro_logo"
+                                                  src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png"
+                                                  alt="text">
+        </a>
+        <!-- 검색창 -->
+        <form id="search_bar" class="bar_search" action="/content/search" method="GET">
+            <input id="search_box" type="text" name="search" placeholder="Search" autocomplete="off">
+        </form>
+        <!-- 메뉴 아이콘 들 -->
+        <div class="menu_icons">
+            <a href="/main"><span id="home_icon" class="menu_icon material-icons"> home</span></a>
+            <span id="nav_bar_add_box" class="menu_icon material-icons-outlined">add_box</span>
+            <!-- 나에게 온 알림이 있다면 아이콘을 다르게 표시 -->
+            {% if alert_exists %}
+                <span id="alert_icon" onclick="open_article3('/user/alert');"
+                      class="alert_is_exist material-symbols-outlined">favorite</span>
+            {% else %}
+                <span id="alert_icon" onclick="open_article3('/user/alert');"
+                      class="material-symbols-outlined">favorite</span>
+            {% endif %}
+            <!-- 나에게 온 채팅이 있다면 아이콘을 다르게 표시 -->
+            {% if is_delivered_chat %}
+                <span id="send_icon" onclick="open_article1('/user/chat');"
+                      class="chat_is_exist material-symbols-outlined">send</span>
+            {% else %}
+                <span id="send_icon" onclick="open_article1('/user/chat');"
+                      class="material-symbols-outlined">send</span>
+            {% endif %}            <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
+            <div class="dropdown">
+                <a href="#" role="button" id="dropdownMenuLink"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <!-- 주 메뉴(프로필 사진)-->
+                    <div class="profile_box">
+
+                        <img class="profile"
+                             src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
+
+                    </div>
+                </a>
+                <!-- 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
+                <ul id="nav_dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li><a class="dropdown-item" href="/user/profile"><b>프로필</b></a></li>
+                    <li>
+                        <!-- 구분선 -->
+                        <hr class="dropdown-divider">
+                    </li>
+                    <!-- 로그아웃 버튼 클릭시 현재 경로에서 /user/logout으로 이동 -->
+                    <li><a id="logout_menu" class="dropdown-item" href="/user/logout">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 피드 이미지와 해시태그 및 글내용 영역 -->
+<div class="search_total_area">
+    <!-- 피드 대표 이미지 영역 -->
+    <div class="feed_image_area">
+        <div class="box">
+            <!--해시태그나 검색어관련 피드의 대표 이미지를 하나 표시함 -->
+            <img class="search_feed_image"
+                 src="{% get_media_prefix %}{{ feed_main_image.image }}" alt="text">
+        </div>
+    </div>
+    <!-- 해시태그 및 글내용 영역 -->
+    <div class="search_imformation_area">
+        <!-- 게시물수와 팔로우 버튼 영역 -->
+        <div class="search_imformation">
+            <!-- 검색 키워드 -->
+            <div class="search_keyword">
+                {{ searchKeyword }}
+            </div>
+            <!-- 게시물 수 -->
+            <div class="feed_text_count">
+                게시물
+                <span><b>{{ feed_all_count }}</b></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 검색결과를 사용자가 어떤 방식으로 볼건지 결정하는 버튼 부모 -->
+<div class="show_feed_root_area">
+    <!-- 검색결과를 사용자가 어떤 방식으로 볼건지 결정하는 버튼 -->
+    <div class="show_feed_list_area">
+        <!-- 일반 순으로 보기 위한 피드 만약 서버에서 recent값이 주어지면 최신순으로 보겠다는 뜻-->
+        {% if show_method_recent %}
+            <div id="button_feed_list" class="ableTrue" show_method_recent="recent_sort"><span
+                    class="feed_list_icons material-icons-outlined">grid_on</span><b
+                    class="feed_select_button">
+                최신 순</b>
+            </div>
+        {% else %}
+            <div id="button_feed_list" show_method_recent="recent_sort"><span
+                    class="feed_list_icons material-icons-outlined">grid_on</span><b class="feed_select_button">
+                최신 순</b>
+            </div>
+        {% endif %}
+        <!-- 좋아요 순으로 보기 위한 피드 서버에서 like_sort값이 주어지면 최신순으로 보겠다는 뜻 -->
+        {% if show_method_like %}
+            <div id="button_feed_like_list" class="ableTrue" show_method_like="like_sort"><span
+                    class="material-icons-outlined">favorite_border</span><b
+                    class="feed_select_button">좋아요 순</b>
+            </div>
+        {% else %}
+            <div id="button_feed_like_list" show_method_like="like_sort"><span
+                    class="material-icons-outlined">favorite_border</span><b
+                    class="feed_select_button">좋아요 순</b>
+            </div>
+        {% endif %}
+        <!-- 댓글 순으로 보기 위한 피드 서버에서 reply_sort값이 주어지면 최신순으로 보겠다는 뜻 -->
+        {% if show_method_reply %}
+            <div id="button_feed_bookmark_list" class="ableTrue" show_method_reply="reply_sort"><span
+                    class="material-icons-outlined">bookmark_border</span><b
+                    class="feed_select_button">댓글 순</b>
+            </div>
+        {% else %}
+            <div id="button_feed_bookmark_list" show_method_reply="reply_sort"><span
+                    class="material-icons-outlined">bookmark_border</span><b
+                    class="feed_select_button">댓글 순</b>
+            </div>
+        {% endif %}
+
+        <!-- 고급필터링 기능 -->
+        <div class="btn-group">
+            <button id="more_filter_option" type="button" class="btn btn-danger dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                고급필터링
+            </button>
+            <ul id="filter_option_area" class="dropdown-menu">
+                <!-- 날짜 필터링 최상위 경로 앞에 / 필수 -->
+                <form id="data_select" action="/content/search" method="GET">
+                    <!-- 정렬 방식 -->
+                    <input id="recent_sort" type="text" name="show_recent" value="{{ show_method_recent }}"
+                           style="display: none">
+                    <input id="like_sort" type="text" name="show_like" value="{{ show_method_like }}"
+                           style="display: none">
+                    <input id="reply_sort" type="text" name="show_reply" value="{{ show_method_reply }}"
+                           style="display: none">
+                    <!-- 검색 키워드 -->
+                    <input id="all_search_keyword" type="text" name="search" value="{{ searchKeyword }}"
+                           style="display: none">
+                    <!-- 시작 날짜 TODO -->
+                    <input id="all_start_date" type="date" name="start_date"
+                           value="2023-06-06"
+                           min="2022-01-01" max="2023-06-06">
+                    <!-- 끝 날짜 -->
+                    <input id="all_end_date" type="date" name="end_date"
+                           value=""
+                           min="2022-01-01" max="2023-06-09">
+                    <!-- 등록 버튼 -->
+                    <button id="date_search_btn" type="submit">등록</button>
+                </form>
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+                <form id="category_select" action="/content/search" method="get">
+                    <!-- 정렬 방식 -->
+                    <input type="text" name="show_recent" value="{{ show_method_recent }}" style="display: none">
+                    <input type="text" name="show_like" value="{{ show_method_like }}" style="display: none">
+                    <input type="text" name="show_reply" value="{{ show_method_reply }}" style="display: none">
+                    <!-- 검색 키워드 -->
+                    <input type="text" name="search" value="{{ searchKeyword }}" style="display: none">
+                    <!-- 카테고리 영역 -->
+                    <span class="feed_category_explain_filter">카테고리</span>
+                    <!-- 카테고리1 -->
+                    <select id="feed_category_search1" name="category_option1" class="form-control"
+                            style="box-shadow: none">
+                        <option value="">선택</option>
+                        <option value="travel">여행</option>
+                        <option value="food">음식</option>
+                        <option value="movie">영화</option>
+                        <option value="book">책</option>
+                    </select>
+                    <!-- 카테고리2 -->
+                    <select id="feed_category_search2" name="category_option2" class="form-control"
+                            style="box-shadow: none">
+                        <option value="">선택</option>
+                        <option value="travel">여행</option>
+                        <option value="food">음식</option>
+                        <option value="movie">영화</option>
+                        <option value="book">책</option>
+                    </select>
+                    <input id="category_select_btn" type="submit">
+                </form>
+                <!-- 필터링 버튼 영역 -->
+                <div id="filter_btn_area">
+                    <Button id="all_submit">모두전송</Button>
+                    <Button id="all_filter_rest">초기화</Button>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!--검색된 피드 목록-->
+<div id="feed_list">
+    <!-- 피드가 보여질 영역-->
+    <div class="feed_list_area">
+        <!--피드 리스트를 보여주는 반복문-->
+        {% for feed in feed_search_list %}
+            <!-- 보여질 하나의 피드의 크기 -->
+            <div class="feed_size_root">
+                <!-- div를 겹치기 위한 부모 창 -->
+                <div class="show_count_area">
+                    <!-- mouse over시 좋아요 북마크 수 보여주기 위한 창  -->
+                    <div id="feed_modal_view_{{ feed.id }}" feed_id="{{ feed.id }}"
+                         class="profile_feed_mouse_over feed_modal">
+                        <!-- 좋아요 수 -->
+                        <div class="feed_count">
+                            <span class="icon_like_bookmark material-icons-outlined">favorite</span>
+                            <p>{{ feed.like_count }}</p>
+                        </div>
+                        <!-- 댓글 수 -->
+                        <div class="feed_count">
+                            <span class="material-icons-outlined">comment</span>
+                            <p>{{ feed.reply_count }}</p>
+                        </div>
+                    </div>
+                    <!-- 실제 피드 이미지 -->
+                    <div>
+                        <img class="img_feed_list"
+                             src="{% get_media_prefix %}{{ feed.image }}" alt="text">
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- 사진 업로드 창 첫번째 모달 -->
+<div id="first_modal" class="modal_overlay">
+    <!-- 모달창 -->
+    <div class="modal_window">
+        <!-- 모달창 상단바 -->
+        <div class="feed_upload_modal_bar">
+            <div>
+                <div id="modal_next_button" class="feed_upload_modal_bar_btn">다음</div>
+            </div>
+            <!-- 설명란 -->
+            <div>
+                <b>새로운 피드 생성</b>
+            </div>
+            <!-- 모달창 닫기 버튼 -->
+            <div>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+            </div>
+        </div>
+
+        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <div class="img_upload_space">
+            <div class="feed_modal_area_images_btn_dele_parent">
+                <div class="feed_modal_area_images_btn_dele">
+                    삭제
+                </div>
+            </div>
+            <!--설명란-->
+            <img style="width: 100px; height: 100px" class="feed_modal_area_upload_img"
+                 src="https://postfiles.pstatic.net/MjAyMzA2MDdfMTQ5/MDAxNjg2MDcyNjc2MTk5.kQ06b73EUSfcUf1MYitpo1G_ROPvHbLujMhgqfvbws4g.cGAAR3fMuv49g1R6afB1rBxxZyBbRcbQRksW_nT3yUUg.PNG.roedeer0807/imageuplod-removebg-preview.png?type=w966">
+            <div class="drag_here_image">
+                이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
+            </div>
+            <div class="feed_image_area_img_control_btns_parent">
+
+                <div class="feed_image_area_img_control_btns">
+                    <!--좌우 버튼div-->
+                    <div class="feed_modal_area_images_btn">
+                        <!--좌우 버튼-->
+                        <div class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn"
+                             id="feed_modal_feed_image_before_F">
+                            arrow_back_ios
+                        </div>
+                        <div class="feed_modal_feed_image_next material-symbols-outlined"
+                             id="feed_modal_feed_image_next_F">
+                            arrow_forward_ios
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--사진 찾는 파일 시스템을 여는 버튼-->
+            <button id="image_upload_btn" type="button" class="btn btn-primary">
+                사진 추가
+            </button>
+            <!--파일 입력 폼-->
+            <input multiple="multiple" type="file" id="input_image_upload" onchange="image_upload();"/>
+        </div>
+    </div>
+</div>
+
+<!-- 글 내용 작성 모달창 두번째 모달 -->
+<div id="second_modal" class="modal_overlay">
+    <!-- 모달창 -->
+    <div class="modal_window">
+        <!-- 모달창 상단바 -->
+        <div class="feed_upload_modal_bar">
+            <div id="modal_before_button" class="feed_upload_modal_bar_btn">
+                이전
+            </div>
+            <!-- 설명란 -->
+            <div>
+                <b>새로운 피드 생성</b>
+            </div>
+
+            <!-- 모달창 닫기 버튼 -->
+            <div>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+            </div>
+        </div>
+        <!-- 이미지 영역과 글 영역 -->
+        <div class="feed_image_text_modal">
+            <!-- 이미지 영역 -->
+            <div class="img_upload_space">
+                <div class="feed_modal_area_images_btn">
+                    <div id="feed_modal_feed_image_before_btn"
+                         class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn">
+                        arrow_back_ios
+                    </div>
+                    <div id="feed_modal_feed_image_next_btn"
+                         class="feed_modal_feed_image_next material-symbols-outlined">
+                        arrow_forward_ios
+                    </div>
+                </div>
+            </div>
+            <!-- 글 영역 -->
+            <div class="modal_text_area">
+                <!-- 게시글 작성 (글내용과 해시태그) 영역 -->
+                <div class="feed_content_input">
+                    <!-- 글내용 영역 -->
+                    <div class="feed_text_area">
+                        <textarea id="input_feed_content" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="글 내용 작성..."></textarea>
+                    </div>
+                    <!-- 해시태그 영역 -->
+                    <div class="feed_hashtag_area">
+                        <textarea id="input_feed_hashtag" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="해시태그 내용 작성..."></textarea>
+                    </div>
+                    <!-- 정유진: 카테고리 선택 영역 -->
+                    <div class="second_third_modal_category">
+                        <span class="feed_category_explain">카테고리</span>
+                        <select id="input_feed_category" class="form-control" style="box-shadow: none">
+                            <option value="">선택</option>
+                            <option value="travel">여행</option>
+                            <option value="food">음식</option>
+                            <option value="movie">영화</option>
+                            <option value="book">책</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- 공유하기 버튼 -->
+                <button id="feed_create_button" type="button" class="btn btn-primary">
+                    공유하기
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 자동완성 모달창 -->
+<div id="auto_modal">
+    <!-- 자동완성 리스트 -->
+    <div id="auto_modal_list" class="auto_madal_list_area">
+    </div>
+</div>
+
+<!-- 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
+<div id="feed_modal" class="modal_overlay">
+    <!-- 최상위 모달창 -->
+    <div id="root_feed_modal_window" class="modal_window">
+        <!-- 부모 모달창 -->
+        <div class="feed_modal_area_parents">
+            <!-- 모달창 -->
+            <div class="feed_modal_area_son">
+                <!-- 이미지 영역 -->
+                <div id="feed_modal_image">
+                    <!-- ajax로 이미지를 받아옴 -->
+                </div>
+                <!-- 글 영역 -->
+                <div class="feed_modal_text_area_parents">
+                    <!-- 글 영역 상단바 -->
+                    <div class="feed_modal_text_area">
+                        <!-- 작성자 프로필 사진과 닉네임 영역 -->
+                        <div class="feed_modal_menu_bar_area">
+                            <div id="feed_modal_menu_writer_profile_image" class="box profile feed_modal_profile_image">
+                                <!-- ajax로 받아옴 작성자 프로필 사진 -->
+                            </div>
+                            <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
+                                <!-- ajax로 받아옴 작성자 닉네임 -->
+                            </div>
+                        </div>
+                        <!-- 닫기 버튼 -->
+                        <div>
+                            <span id="modal_close_button"
+                                  class="feed_mdoal_close_like_count modal_close material-icons-outlined">close</span>
+                        </div>
+                    </div>
+                    <!-- 글내용과 댓글 리스트, 해시태그 영역 -->
+                    <div class="feed_modal_contents_area">
+                        <div>
+                            <!-- 작성자 정보 영역 -->
+                            <div class="feed_modal_contents_writer">
+                                <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image">
+                                    <!-- ajax로 받아옴 작성자 프로필 사진 -->
+                                </div>
+                                <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
+                                    <!-- ajax로 받아옴 작성자 닉네임 -->
+                                </div>
+                                <div id="feed_modal_feed_content" class="text_line">
+                                    <!-- ajax로 받아옴 게시물 내용 -->
+                                </div>
+                            </div>
+                            <!-- 정유진: 피드모달 카테고리 추가 -->
+                            <div>
+                                <div id="feed_modal_category" class="feed_modal_category">
+                                    <!-- ajax로 받아옴 카테고리 -->
+                                </div>
+                            </div>
+                            <!-- 해시태그 -->
+                            <div class="feed_modal_contents_writer_hashtags">
+                                <!-- ajax로 받아옴 해시태그 내용 -->
+                            </div>
+                        </div>
+                        <!-- 댓글 리스트 -->
+                        <div id="feed_modal_reply_list">
+                            {#                            <div id="feed_modal_reply_profile_image_">#}
+                            {#                                <!-- 댓글 작성자 프로필 사진 -->#}
+                            {#                            </div>#}
+                            {#                            <div id="feed_modal_reply_nickname_content_">#}
+                            {#                                <div id="feed_modal_reply_nickname_">#}
+                            {#                                    <!-- 댓글 작성자 닉네임 -->#}
+                            {#                                </div>#}
+                            {#                                <div id="feed_modal_reply_content_">#}
+                            {#                                    <!-- 댓글 내용 -->#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                        </div>
+                    </div>
+                    <div>
+                        <!-- 게시물의 좋아요, 북마크, 좋아요 수 -->
+                        <div class="feed_modal_like_bookmark_area">
+                            <div class="feed_modal_like_bookmark">
+                                <div id="feed_modal_is_liked">
+                                    <!-- ajax로 받아옴 좋아요 -->
+                                </div>
+                                <div id="feed_modal_is_marked">
+                                    <!-- ajax로 받아옴 북마크 -->
+                                </div>
+                            </div>
+                            <div id="feed_modal_like_count">
+                                <!-- ajax로 받아옴 좋아요 수 -->
+                            </div>
+                        </div>
+                        <!-- 작성 시간 -->
+                        <div id="feed_modal_feed_create_at">
+                            <!-- ajax로 받아옴 게시물 업로드 시간-->
+                        </div>
+                        <!-- 댓글 작성 영역 -->
+                        <div class="feed_modal_reply_upload_area">
+                            <!-- 댓글 입력 텍스트 박스 -->
+                            <input id="reply_content_text" type="text" class="form-control"
+                                   placeholder="댓글 달기..">
+                            <!-- 댓글 게시 버튼 -->
+                            <div id="reply_content_upload" class="modal_upload_reply">
+                                게시
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 채팅 친구 목록 모달창 -->
+<div id="chat_user_modal_id" class="chat_user_modal_area">
+    <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
+    <div class="chat_modal_bar_area">
+        <div class="chat_modal_blank"></div>
+        <div class="chat_user_modal_header">팔로우 목록</div>
+        <span class="chat_modal_close material-icons-outlined">close</span>
+    </div>
+    <!-- 채팅할 친구 목록이 리스트 영역 -->
+    <div class="chat_modal_user_area"></div>
+    <div class="refresh_chat_modal_user_area" onclick="open_article1('/user/chat');">새로고침</div>
+</div>
+
+<!-- 채팅 모달창 -->
+<div id="chat_modal_id" class="chat_modal_area">
+    <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
+    <div class="chat_modal_bar_area">
+        <div class="chat_modal_back_btn" onclick="open_article1('/user/chat');">이전</div>
+        <div class="chat_modal_header">쪽지</div>
+        <span class="chat_modal_close material-icons-outlined">close</span>
+    </div>
+    <!-- 채팅창 내용 영역 -->
+    <div class="chat_modal_text_area"></div>
+</div>
+
+<!-- 알림 목록 모달창 -->
+<div id="alert_modal_id" class="alert_modal_area">
+    <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
+    <div class="alert_modal_bar chat_modal_bar_area">
+        <div class="chat_modal_blank"></div>
+        <div class="alert_modal_header">알림 목록</div>
+        <div class="chat_modal_blank"></div>
+    </div>
+    <!-- 채팅할 친구 목록이 리스트 영역 -->
+    <div class="alert_list_modal_area"></div>
+    <div class="alert_all_remove">모두 확인</div>
+</div>
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+<script src="{% static 'js/search.js' %}?ver=5"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=1"></script>
+<script src="{% static 'js/allsame.js' %}?ver=3"></script>
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+<!--
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+-->
+</body>
+</html>
