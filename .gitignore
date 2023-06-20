@@ -133,6 +133,7 @@ env.bak/
 venv.bak/
 media/*
 !media/default_profile.png
+!media/white.png
 
 # Spyder project settings
 .spyderproject

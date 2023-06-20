@@ -68,9 +68,15 @@
                          src="{% get_media_prefix %}{{ index.alert_send_user.profile_image }}" alt="text">
                 </div>
                 <!-- 알림 내용 영역 -->
-                <div class="follow_alert_content_area alertprofile_move" alert_id="{{ index.alert_send_user.nickname }}">
+                <div class="follow_alert_content_area alertprofile_move"
+                     alert_id="{{ index.alert_send_user.nickname }}">
                     <div><b>{{ index.alert_send_user.nickname }}</b> 님이 회원님을 팔로우 했습니다.</div>
                     <div class="alert_time">{{ index.alert_time }}</div>
+                </div>
+                <!--빈칸-->
+                <div>
+                    <img class="white"
+                         src="{% get_media_prefix %}white.png" alt="text">
                 </div>
             </div>
         {% endif %}
