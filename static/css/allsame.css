@@ -666,7 +666,7 @@ body::-webkit-scrollbar {
     overflow: hidden;
     min-width: 32px;
     min-height: 32px;
-    margin-left: 10px;
+    margin-left: 18px;
 }
 
 /* 알림 모두 삭제 영역 */
