@@ -803,6 +803,8 @@ class Autocomplete(APIView):
                                                reverse=True)
             autocomplete_hashtag_list.insert(0, dict(content=search_box_value,
                                                      hashtag_count=hashtag_bundle_count))
+
+
         # 만약 유저 검색일 경우
         else:
             # TODO 검색키워드가 닉네임 또는 이름에 포함되는지 객체를 10개만 뽑아냄

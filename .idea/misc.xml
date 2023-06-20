@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (Astronaut_SNS_Project-master) (3)" project-jdk-type="Python SDK" />
+=======
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.7 (Astronaut_SNS_Project)" project-jdk-type="Python SDK" />
+>>>>>>> f2c16ef7a9dc2aa00a577ce68323535721de2c6e
 </project>

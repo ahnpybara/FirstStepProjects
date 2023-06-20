@@ -383,7 +383,6 @@ $('.update_feed').click(function (event) {
             selectedOption.selected = true;
             // 정유진: 바로 적용이 되지 않으면 selectedIndex를 사용해야 한다
             selectElement.selectedIndex = selectedOption.index;
-
             // 정유진: 모달창 띄울 때 현재 선택된 유저가 나오도록 한다
             for (var i = 0; i < shared_category.length; i++) {
                 $("#update_shared_user_nickname_" + shared_category[i]).prop('checked', true);
@@ -438,7 +437,8 @@ $('.update_feed').click(function (event) {
             method: "POST",
             success: function (data) {
                 console.log("성공");
-                location.reload()
+                 // 유재우 : 새로고침대신 넣은 닫기 버튼 본인 컴퓨터에서 닫기 버튼을 눌르는게 아닌 새로고침을 하게 될 경우 새로고침이 되기 전 피드가 클릭되는 현상이 발생하였고 그것을 방지하기 위함과 초기화를 위해서임
+                 $('.modal_close_button').click()
             },
             error: function (request, status, error) {
                 console.log("에러");
@@ -449,8 +449,16 @@ $('.update_feed').click(function (event) {
             }
         });
     })
-
 });
+// 피드 수정창을 닫을 경우 여러가지 값이 초기화가 안되며, 파일쪽에 오류가 발생하는 것을 방지하기 위해서 모달창을 닫을 시 새로고침
+$('.update_feed_modal_close').click(function (){
+    $('.third_modal').css(
+        {
+            display: 'none'
+        }
+    )
+    location.reload()
+})
 
 // 피드 수정하기 모달에서 수정하기 버튼 클릭 이벤트 처리
 $('#feed_update_button').click(function (event) {
@@ -756,7 +764,7 @@ function image_update(e) {
         contentType: false,
         success: function (data) {
             console.log("성공");
-            location.reload()
+            $('.modal_close_button').click();
         },
         error: function (request, status, error) {
             console.log("에러");
@@ -799,6 +807,7 @@ $('.follow_button').click(function (event) {
     // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
     let is_followed = $.trim($('#' + follow_id).html());
 
+
     // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
     if (is_followed == '팔로우') {
         $('#' + follow_id).html('언팔로우');
@@ -832,7 +841,6 @@ $('.follow_button').click(function (event) {
         }
     });
 });
-
 // 팔로우 모달창에서 팔로우 버튼을 클릭했을때 (모달창과 이벤트가 겹치면 오류가발생 )
 $('.follow_modal_button').click(function (event) {
     // 팔로우 당하는 사람의 이메일과 팔로우 버튼 id를 가져옴
@@ -842,6 +850,7 @@ $('.follow_modal_button').click(function (event) {
 
     // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
     let is_followed = $.trim($('#' + follow_id).html());
+
 
     // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
     if (is_followed == '팔로우') {
