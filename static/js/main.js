@@ -378,7 +378,12 @@ $('.update_feed').click(function (event) {
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
             // 정유진: 모달창 띄울 때 현재 적용된 카테고리 종류가 나오도록 한다
-            $("#category_" + category).attr('selected', true);
+            var selectElement = document.getElementById('input_updatefeed_category');
+            var selectedOption = document.getElementById('category_' + category);
+            selectedOption.selected = true;
+            // 정유진: 바로 적용이 되지 않으면 selectedIndex를 사용해야 한다
+            selectElement.selectedIndex = selectedOption.index;
+
             // 정유진: 모달창 띄울 때 현재 선택된 유저가 나오도록 한다
             for (var i = 0; i < shared_category.length; i++) {
                 $("#update_shared_user_nickname_" + shared_category[i]).prop('checked', true);
