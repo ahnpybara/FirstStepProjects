@@ -392,6 +392,12 @@ $(".modal_close").click(function () {
         checkboxes[i].checked = false;
     }
     // 정유진: 피드수정모달창 닫기와 닫았을 때 카테고리 내용을 리셋하는 부분
+    var optionElements = document.querySelectorAll('#input_updatefeed_category option');
+    optionElements.forEach(function (option) {
+        option.selected = false;
+    });
+
+    // 정유진: 피드수정모달창 닫기와 닫았을 때 공유카테고리 내용을 리셋하는 부분
     var selectboxes = document.querySelectorAll('input[name="update_shared_category_nickname_list"]:checked');
     for (var i = 0; i < selectboxes.length; i++) {
         selectboxes[i].checked = false;
