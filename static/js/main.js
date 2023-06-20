@@ -378,7 +378,11 @@ $('.update_feed').click(function (event) {
             $("#input_updatefeed_content").html(feed_content);
             $("#input_updatefeed_hashtag").html(hashtag_content);
             // 정유진: 모달창 띄울 때 현재 적용된 카테고리 종류가 나오도록 한다
-            $("#category_" + category).attr('selected', true);
+            var selectElement = document.getElementById('input_updatefeed_category');
+            var selectedOption = document.getElementById('category_' + category);
+            selectedOption.selected = true;
+            // 정유진: 바로 적용이 되지 않으면 selectedIndex를 사용해야 한다
+            selectElement.selectedIndex = selectedOption.index;
             // 정유진: 모달창 띄울 때 현재 선택된 유저가 나오도록 한다
             for (var i = 0; i < shared_category.length; i++) {
                 $("#update_shared_user_nickname_" + shared_category[i]).prop('checked', true);
@@ -782,27 +786,26 @@ const follow_recommend_list_all = document.querySelector(".follow_recommend_list
 const all_follow_recommend_list = document.querySelector(".all_follow_recommend_list");
 const close_follow_modal = document.querySelector(".close_follow_modal");
 
+// 팔로우 모두보기 클릭시 이벤트 처리
 follow_recommend_list_all.addEventListener("click", () => {
     all_follow_recommend_list.style.display = "flex";
 });
 
+// 팔로우 모달창 닫기 버튼 이벤트 처리
 close_follow_modal.addEventListener("click", () => {
     all_follow_recommend_list.style.display = "none";
 });
 
 
+// 메인에서 팔로우 버튼을 클릭했을때 (모달창과 이벤트가 겹치면 오류가발생 )
 $('.follow_button').click(function (event) {
-    // 팔로우 당하는 사람의 이메일
+    // 팔로우 당하는 사람의 이메일과 팔로우 버튼 id를 가져옴
     let user_email = $(this).attr("user_email");
 
     let follow_id = event.target.id;
 
     // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
     let is_followed = $.trim($('#' + follow_id).html());
-
-    console.log(user_email);
-    console.log(follow_id);
-    console.log(is_followed);
 
 
     // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
@@ -838,19 +841,15 @@ $('.follow_button').click(function (event) {
         }
     });
 });
-
+// 팔로우 모달창에서 팔로우 버튼을 클릭했을때 (모달창과 이벤트가 겹치면 오류가발생 )
 $('.follow_modal_button').click(function (event) {
-    // 팔로우 당하는 사람의 이메일
+    // 팔로우 당하는 사람의 이메일과 팔로우 버튼 id를 가져옴
     let user_email = $(this).attr("user_email");
 
     let follow_id = event.target.id;
 
     // 팔로우 버튼의 글 내용으로 팔로우 여부를 따지기 위해서 가져옴
     let is_followed = $.trim($('#' + follow_id).html());
-
-    console.log(user_email);
-    console.log(follow_id);
-    console.log(is_followed);
 
 
     // 만약 팔로우 버튼의 글 내용이 팔로우일 경우 -> css토글
