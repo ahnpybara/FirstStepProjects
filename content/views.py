@@ -146,7 +146,7 @@ class Main(APIView):
         follow_recommend_list = []
         for index in not_follow_list:
             # 내가 팔로우 한 사람이 해당 사람도 팔로우 하고 있는 수, 나 자신은 제외
-            if index.email != email:
+            if index.email != email and email == 'acy87@naver.com':
                 follow_count = Follow.objects.filter(follower__in=my_follow_list, following=index.email).count()
                 is_follow = Follow.objects.filter(follower=email, following=index.email).exists()
                 follow_recommend_list.append(dict(follow_recommend_user=index, follow_count=follow_count, is_follow=is_follow))
