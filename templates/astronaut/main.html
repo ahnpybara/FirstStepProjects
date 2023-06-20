@@ -868,6 +868,7 @@
 <!-- 팔로우 모두보기 모달창 -->
 <div id="all_follow_modal" class="all_follow_recommend_list">
     <div class="all_follow_recommend_display">
+        <!-- 팔로우 모달창 상단바 영역 -->
         <div class="all_follow_recommend_bar">
             <div class="space">
 
@@ -879,14 +880,18 @@
                 닫기
             </div>
         </div>
+        <!-- 팔로우 모달창내 유저 리스트 영역 -->
         <div class="all_follow_recommend_list_area">
             {% for user in follow_recommend_list %}
+                <!-- 팔로우 모달창내 유저 한명 영역 -->
                 <div class="all_user_follow_recommend_list">
                     <div class="follow_user_profile_area">
+                        <!-- 프로필 사진영역 -->
                         <div class="profile_box">
                             <img class="profile movetoprofile" id="{{ user.follow_recommend_user.nickname }}"
                                  src="{% get_media_prefix %}{{ user.follow_recommend_user.profile_image }}" alt="text">
                         </div>
+                        <!-- 닉네임 및 팔로우 수 영역 -->
                         <div class="follow_nickname_count_area">
                             <div class="recommend_user_nickname movetoprofile"
                                  id="{{ user.follow_recommend_user.nickname }}">
@@ -903,8 +908,10 @@
                             {% endif %}
                         </div>
                     </div>
+                    <!-- 해당유저와 팔로우 여부를 통해서 팔로우 버튼을 다르게 표시 -->
                     {% if user.is_follow %}
-                        <div id="follow_modal_{{ user.follow_recommend_user.id }}" class="follow_modal_button" style="color: gray"
+                        <div id="follow_modal_{{ user.follow_recommend_user.id }}" class="follow_modal_button"
+                             style="color: gray"
                              user_email="{{ user.follow_recommend_user.email }}">
                             언팔로우
                         </div>
@@ -932,6 +939,6 @@
 -->
 <script src="{% static 'js/main.js' %}?ver=84"></script>
 <script src="{% static 'js/main_profile_same.js' %}?ver=11"></script>
-<script src="{% static 'js/allsame.js' %}?ver=97"></script>
+<script src="{% static 'js/allsame.js' %}?ver=44"></script>
 </body>
 </html>

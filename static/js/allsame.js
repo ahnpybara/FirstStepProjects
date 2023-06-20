@@ -391,13 +391,6 @@ $(".chat_modal_close").click(function () {
         top: '100px',
         left: 'calc(50% - -100px)',
     });
-
-    // chat_modal_id 요소의 위치를 초기화합니다.
-    $('.chat_modal_area').css('top', '0');
-    $('.chat_modal_area').css('left', '0');
-    // chat_user_modal_id 요소의 위치를 초기화합니다.
-    $('.chat_user_modal_area').css('top', '0');
-    $('.chat_user_modal_area').css('left', '0');
 });
 
 
