@@ -570,7 +570,7 @@ class ChatView(APIView):
         chat_user = User.objects.filter(Q(email__in=user_following) | Q(email__in=user_follower))
 
         # 내가 해당 유저에게 보낸 채팅과 해당유저가 받은 채팅 객체들 뽑음 (최신순으로 정렬)
-        receive_chat = Chat.objects.filter(receive_user=email_session, send_user__in=user_following).order_by('-id')
+        receive_chat = Chat.objects.filter(receive_user=email_session).order_by('-id')
 
         # receive_chat에서 중복을 제거하여 발신자(send_user)의 고유한 목록을 저장합니다.
         send_user_set = set(chat.send_user for chat in receive_chat)
