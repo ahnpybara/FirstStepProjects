@@ -242,7 +242,7 @@ $(".upload_reply").click(function (event) {
                     },
                     complete: function () {
                         console.log("완료");
-                        location.replace("/main");
+                        location.reload();
                     }
                 });
             });
