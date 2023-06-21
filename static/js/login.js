@@ -77,7 +77,7 @@ $('#access_button').click(function () {
                 emailError.css("color", "#ff0000");
                 emailError.show().text(data.message);
             } else {
-                alert("로그인 성공");
+                alert("환영 합니다");
                 location.replace('/main');
             }
         },

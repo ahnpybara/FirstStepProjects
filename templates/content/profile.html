@@ -358,7 +358,7 @@
         <!-- 모달창 상단바 -->
         <div class="feed_upload_modal_bar">
             <div>
-                <div id="modal_next_button" style="margin-left: 10px">다음</div>
+                <div id="modal_next_button" class="feed_upload_modal_bar_btn">다음</div>
             </div>
             <!-- 설명란 -->
             <div>
@@ -372,8 +372,10 @@
 
         <!-- 이미지를 드래그 앤 드롭할 공간 -->
         <div class="img_upload_space">
-            <div class="feed_modal_area_images_btn_dele">
-                삭제
+            <div class="feed_modal_area_images_btn_dele_parent">
+                <div class="feed_modal_area_images_btn_dele">
+                    삭제
+                </div>
             </div>
             <!--설명란-->
             <img style="width: 100px; height: 100px" class="feed_modal_area_upload_img"
@@ -384,13 +386,14 @@
             <div class="feed_image_area_img_control_btns_parent">
 
                 <div class="feed_image_area_img_control_btns">
-                    <!--좌우 버튼div-->
+                    <!-- 다음 버튼 이전 버튼 영역 -->
                     <div class="feed_modal_area_images_btn">
-                        <!--좌우 버튼-->
-                        <div class="feed_modal_feed_image_before material-symbols-outlined"
-                             style="padding-left: 5px;" id="feed_modal_feed_image_before_F">
+                        <!-- 이전 버튼-->
+                        <div class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn"
+                             id="feed_modal_feed_image_before_F">
                             arrow_back_ios
                         </div>
+                        <!-- 이전 버튼-->
                         <div class="feed_modal_feed_image_next material-symbols-outlined"
                              id="feed_modal_feed_image_next_F">
                             arrow_forward_ios
@@ -414,7 +417,7 @@
     <div class="modal_window">
         <!-- 모달창 상단바 -->
         <div class="feed_upload_modal_bar">
-            <div id="modal_before_button" style="margin-left: 10px">
+            <div id="modal_before_button" class="feed_upload_modal_bar_btn">
                 이전
             </div>
             <!-- 설명란 -->
@@ -431,11 +434,14 @@
         <div class="feed_image_text_modal">
             <!-- 이미지 영역 -->
             <div class="img_upload_space">
+                <!-- 이미지 보기 이전 버튼 다음 버튼 영역-->
                 <div class="feed_modal_area_images_btn">
+                    <!-- 이전 버튼-->
                     <div id="feed_modal_feed_image_before_btn"
-                         class="feed_modal_feed_image_before material-symbols-outlined" style="padding-left: 5px">
+                         class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn">
                         arrow_back_ios
                     </div>
+                    <!-- 다음 버튼-->
                     <div id="feed_modal_feed_image_next_btn"
                          class="feed_modal_feed_image_next material-symbols-outlined">
                         arrow_forward_ios
@@ -462,7 +468,7 @@
                     <div class="second_third_modal_category">
                         <div class="modal_category_select_area">
                             <span class="feed_category_explain">카테고리</span>
-                            <select id="input_feed_category" class="form-control" style="box-shadow: none">
+                            <select id="input_feed_category" class="form-control">
                                 <option value="">선택</option>
                                 <option value="food">음식</option>
                                 <option value="daily">일상</option>
@@ -482,17 +488,22 @@
                             </a>
                             <ul class="dropdown-menu shared_category_select_area"
                                 aria-labelledby="dropdownMenuLink" data-popper-placement="top-start">
-                                {% for user in shared_category_nickname_list %}
-                                    <li class="text_line shared_category_select">
-                                        <div>
-                                            <input class="shared_category_select" input type="checkbox" name="shared_category_nickname_list"
-                                                   value="{{ user.nickname }}"/>
-                                        </div>
-                                        <p class="dropdown-item_shared_category shared_category_select"
-                                           onclick="toggleCheckbox(event)">{{ user.nickname }}</p>
-                                        </input>
-                                    </li>
-                                {% endfor %}
+                                {% if shared_category_nickname_list %}
+                                    {% for user in shared_category_nickname_list %}
+                                        <li class="text_line shared_category_select">
+                                            <div>
+                                                <input class="shared_category_checkbox" input type="checkbox"
+                                                       name="shared_category_nickname_list"
+                                                       value="{{ user.nickname }}"/>
+                                            </div>
+                                            <p class="dropdown-item_shared_category shared_category_nickname_select"
+                                               onclick="toggleCheckbox(event)">{{ user.nickname }}</p>
+                                            </input>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <p style="margin: 0 5px; color: #737373">없음</p>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -505,7 +516,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- 자동완성 모달창 -->
 <div id="auto_modal">

@@ -1,4 +1,4 @@
-// 화면에서 다른사용자의 프로필 클릭시 해당 사용자의 프로필로 이동
+
 $(".movetoprofile").click(function (event) {
     // 이벤트가 발생한 태그의 id를 가져옴 id는 user_nickname 형태
     let user_nickname = event.target.id;
