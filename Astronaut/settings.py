@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'content',
-    'user',
+    'user.apps.UserConfig',
     'Astronaut'
 ]
 
