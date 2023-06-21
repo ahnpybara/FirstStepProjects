@@ -70,4 +70,3 @@ class Alert(models.Model):
     alert_content = models.TextField()  # 알림 내용
     alert_time = models.DateTimeField(auto_now_add=True)  # 알림 시간
     reply_content = models.TextField(default='')
-

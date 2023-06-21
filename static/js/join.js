@@ -1,3 +1,7 @@
+$.ajaxSetup({
+    headers: { "X-CSRFToken": $('meta[name="csrf-token"]').attr("content") }
+});
+
 // 처음엔 아무 값도 입력되지 않았기 때문에 기본 값은 가입 버튼 비활성화
 document.getElementById("access_button").disabled = true;
 // W3C에 나와있는 정규식은 /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
