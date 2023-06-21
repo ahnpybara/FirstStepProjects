@@ -720,6 +720,7 @@ $('#image_upload_btn').click(function () {
 
 // 파일 입력 폼에서 변화 발생시 해당 함수가 실행(
 function image_upload() {
+    alert("123")
 }
 
 // 유재우 : 두번째 모달창을 보기위한 다음으로 버튼

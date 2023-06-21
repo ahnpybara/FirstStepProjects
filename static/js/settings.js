@@ -200,7 +200,7 @@ $('#button_profile_reset').click(function () {
         method: "POST",
         success: function (data) {
             console.log("성공");
-            alert("프로필이 성공적으로 삭제 되었습니다.");
+            alert("프로필 사진이 성공적으로 삭제 되었습니다.");
             location.replace("/user/profile/setting");
         },
         error: function (request, status, error) {
