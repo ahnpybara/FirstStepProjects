@@ -1,3 +1,17 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 $(".movetoprofile").click(function (event) {
     // 이벤트가 발생한 태그의 id를 가져옴 id는 user_nickname 형태
@@ -106,6 +120,7 @@ $(".upload_reply").click(function (event) {
     // 댓글 입력 폼의 아이디를 이용해서 입력 폼의 내용을 가져옴
     let reply_content = $('#' + reply_id).val();
     let feed_user_nickname = event.target.attributes.getNamedItem('feed_user_nickname').value;
+    let csrfmiddlewaretoken = getCookie('csrftoken');
 
     // 댓글의 길이가 0보다 작으면 알림창 뜸
     if (reply_content.length <= 0) {
@@ -122,6 +137,9 @@ $(".upload_reply").click(function (event) {
             feed_user_nickname: feed_user_nickname,
         },
         method: "POST",
+        headers: {
+            'X-CSRFToken': csrfmiddlewaretoken
+        },
         success: function (data) {
             // 비동기식 댓글 업로드를 위한 구현 data에는 댓글을 쓴 유저의 정보가 들어있다
             console.log("성공");
@@ -437,8 +455,8 @@ $('.update_feed').click(function (event) {
             method: "POST",
             success: function (data) {
                 console.log("성공");
-                 // 유재우 : 새로고침대신 넣은 닫기 버튼 본인 컴퓨터에서 닫기 버튼을 눌르는게 아닌 새로고침을 하게 될 경우 새로고침이 되기 전 피드가 클릭되는 현상이 발생하였고 그것을 방지하기 위함과 초기화를 위해서임
-                 $('.modal_close_button').click()
+                // 유재우 : 새로고침대신 넣은 닫기 버튼 본인 컴퓨터에서 닫기 버튼을 눌르는게 아닌 새로고침을 하게 될 경우 새로고침이 되기 전 피드가 클릭되는 현상이 발생하였고 그것을 방지하기 위함과 초기화를 위해서임
+                $('.modal_close_button').click()
             },
             error: function (request, status, error) {
                 console.log("에러");
@@ -451,7 +469,7 @@ $('.update_feed').click(function (event) {
     })
 });
 // 피드 수정창을 닫을 경우 여러가지 값이 초기화가 안되며, 파일쪽에 오류가 발생하는 것을 방지하기 위해서 모달창을 닫을 시 새로고침
-$('.update_feed_modal_close').click(function (){
+$('.update_feed_modal_close').click(function () {
     $('.third_modal').css(
         {
             display: 'none'
