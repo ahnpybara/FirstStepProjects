@@ -794,6 +794,7 @@ follow_recommend_list_all.addEventListener("click", () => {
 // 팔로우 모달창 닫기 버튼 이벤트 처리
 close_follow_modal.addEventListener("click", () => {
     all_follow_recommend_list.style.display = "none";
+    location.reload()
 });
 
 
