@@ -569,6 +569,7 @@ function uploadFiles(e) {
         alert("파일의 개수는 6장 넘을 수 없습니다.");
         return;
     }
+    console.log(newFiles);
 
 
     for (let i = 0; i < newFiles.length; i++) {
@@ -625,6 +626,7 @@ function uploadFiles(e) {
             "background-repeat": "no-repeat",
             "background-position": "center",
         });
+        console.log("변경이되었다");
 
         // 몇번쨰 파일인지를 알기위해 추가
         files_Count = 0
