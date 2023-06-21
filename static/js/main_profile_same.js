@@ -679,7 +679,6 @@ $('.feed_modal_feed_image_before').click(function () {
 // 유재우 업로드한 이미지 삭제
 $('.feed_modal_area_images_btn_dele').click(function () {
     files.splice(files_Count, 1);
-    files_Count--
     // 만일 사진이 1장 밖에 안남았을 경우
     if (files.length == 1) {
         $('.feed_modal_area_images_btn_dele_parent').css({
@@ -749,53 +748,6 @@ $('#modal_next_button').click(function () {
             "background-repeat": "no-repeat",
             "background-position": "center"
         });
-        // 몇번쨰 파일인지를 알기위해 추가
-        let files_Count = 0
-
-
-        $('#feed_modal_feed_image_next_btn').click(function () {
-            files_Count++
-            if (files_Count < files.length && files_Count >= 0) {
-                $('.img_upload_space').css({
-                    "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
-                    "outline": "none",
-                    "background-size": "contain",
-                    "background-repeat": "no-repeat",
-                    "background-position": "center"
-                });
-            } else {
-                files_Count = 0;
-                $('.img_upload_space').css({
-                    "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-                    "outline": "none",
-                    "background-size": "contain",
-                    "background-repeat": "no-repeat",
-                    "background-position": "center"
-                });
-            }
-        });
-
-        $('#feed_modal_feed_image_before_btn').click(function () {
-            files_Count--
-            if (files_Count < files.length && files_Count >= 0) {
-                $('.img_upload_space').css({
-                    "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
-                    "outline": "none",
-                    "background-size": "contain",
-                    "background-repeat": "no-repeat",
-                    "background-position": "center"
-                });
-            } else {
-                files_Count = files.length - 1;
-                $('.img_upload_space').css({
-                    "background-image": "url(" + window.URL.createObjectURL(files[files.length - 1]) + ")",
-                    "outline": "none",
-                    "background-size": "contain",
-                    "background-repeat": "no-repeat",
-                    "background-position": "center"
-                });
-            }
-        });
     }
 });
 
@@ -832,90 +784,6 @@ $('#modal_before_button').click(function () {
         "background-repeat": "no-repeat",
         "background-position": "center",
     });
-    // 몇번쨰 파일인지를 알기위해 추가
-    var files_Count = 0
-
-
-    // 이미지 슬라이드
-    $('.feed_modal_feed_image_next').click(function () {
-        files_Count++
-        if (files_Count < files.length && files_Count >= 0) {
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        } else {
-            files_Count = 0;
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        }
-    });
-
-    $('.feed_modal_feed_image_before').click(function () {
-        files_Count--
-        if (files_Count < files.length && files_Count >= 0) {
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        } else {
-            files_Count = files.length - 1;
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[files.length - 1]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        }
-    });
-    // 유재우 업로드한 이미지 삭제
-    $('.feed_modal_area_images_btn_dele').click(function () {
-        files.splice(files_Count, 1);
-        files_Count++
-        // 만일 사진이 1장 밖에 안남았을 경우
-        if (files.length == 1) {
-            $('.feed_modal_area_images_btn_dele').css({
-                "display": "none"
-            })
-            $('.feed_modal_feed_image_before').css({
-                "display": "none"
-            })
-            $('.feed_modal_feed_image_next').css({
-                "display": "none"
-            })
-        }
-
-        if (files_Count < files.length && files_Count >= 0) {
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[files_Count]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        } else {
-            files_Count = 0;
-            $('.img_upload_space').css({
-                "background-image": "url(" + window.URL.createObjectURL(files[0]) + ")",
-                "outline": "none",
-                "background-size": "contain",
-                "background-repeat": "no-repeat",
-                "background-position": "center"
-            });
-        }
-    })
 });
 
 // 정유진: 공유카테고리의 항목 선택 시 닉네임을 눌러도 체그된다.
