@@ -4,7 +4,7 @@ import dao.AccountDAO;
 import dto.AccountDTO;
 
 public class AccountBIZ {
-	
+	// test
 	// 로그인 관련 메서드
 	public boolean accountLogin(String email, String password) {
 		AccountDAO accountDao = new AccountDAO();
