@@ -10,7 +10,8 @@ import java.sql.SQLException;
 import dto.AccountDTO;
 
 public class AccountDAO {
-
+	
+	// 로그인을 위해 DB에 접근하는 로직
 	public boolean accountLogin(String email, String password) {
 		boolean islogin = false;
 		Connection conn = getConnection();
