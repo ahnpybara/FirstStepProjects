@@ -46,7 +46,7 @@
 		<a href="#search">
 			<div class="navbar_menu_pos">
 				<span class="material-symbols-outlined">search</span>
-				<div class="navbar_menu_text"></div>
+				<div class="navbar_menu_text">검색</div>
 			</div>
 		</a> 
 		<a class="link_tag_display" href="#send">
@@ -83,13 +83,12 @@
 
 	<!-- 메인 콘텐츠 영역(피드와 팔로우추천) -->
 	<div class="main_root_content">
-		<!-- 메인화면 피드 테두리 영역  -->
+		<!-- 메인화면 피드가 보여질 영역  -->
 		<div class="main_feed_area">
-			<!-- 메인화면 피드 -->
+			<!-- 메인화면 피드 테두리  -->
 			<div class="main_feed_outline">
 				<!-- 메인 피드 상단부분 -->
 				<div class="main_feed_Top">
-					<!-- 메인 피드 유저 프로필 영역 -->
 					<div class="main_feed_user_profile">
 						<div class="main_feed_user_profile_image_box">
 							<img class="main_feed_user_profile_image"
@@ -156,13 +155,13 @@
 					<div class="main_user_nickname">ahnchi0807</div>
 				</div>
 			</div>
-			<!-- 메인 화면 팔로우 추천 영역 -->
+			<!-- 메인 화면의 팔로우 추천 영역 -->
 			<div class="main_follow_recommend_intro_area">
 				<div class="main_follow_recommend_text">회원님을 위한 추천</div>
 				<div class="main_follow_recommend_all_btn">모두보기</div>
 			</div>
 			<div class="main_follow_recommend_list">
-				<!-- 메인 화면 팔로우 추천 유저 프로필 영역 -->
+				<!-- 메인 화면의 팔로우 추천 유저 프로필 영역 -->
 				<div class="main_user_profile">
 					<div class="main_follow_recommend_profile_image_box">
 						<img class="main_user_profile_image"
@@ -190,9 +189,11 @@
 				<div>새 피드 추가하기</div>
 				<div><span id="modal_close_btn" class="material-symbols-outlined">close</span></div>
 			</div>
-			<!-- 모달창 사진과 피드 내용 작성 -->
+			<!-- 모달창 : 사진과 피드 내용 작성 영역 -->
 			<div class="modal_feed_upload_area">
-				<form id="modal_feed_upload_form" action="/maums/upload" method="POST" enctype="multipart/form-data">
+				<!-- 모달창 : form 태그 -->
+				<form id="modal_feed_upload_form" action="/maums/feedUpload" method="POST" enctype="multipart/form-data">
+					<!-- 모달창 : 이미지 업로드 영역 -->
 					<div class="modal_feed_image_area">
 						<div class="modal_feed_image_upload_area">
 							<div class="image_upload_explain">사진 추가 버튼을 클릭 하세요</div>
@@ -200,6 +201,7 @@
 						</div>
 						<input type="file" id="fileInput" name="feed_image">
 					</div>
+					<!-- 모달창 : 텍스트 업로드 영역 -->
 					<div class="modal_feed_text_area">
 						<div class="modal_feed_text_box_area">
 							<textarea id="modal_feed_text_box" name="feed_text" placeholder="글 내용을 입력하세요"></textarea>

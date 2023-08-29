@@ -1,4 +1,4 @@
-package account;
+package controller.account;
 
 import java.io.IOException;
 
