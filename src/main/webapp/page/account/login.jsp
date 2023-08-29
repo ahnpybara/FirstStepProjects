@@ -27,8 +27,8 @@
 			<form action="/maums/login" method="post">
 			<!-- 이메일 입력란 -->
             <div class="input_userData_area form-floating mb-3">
-                <input id="input_eamil" type="text" name="email" class="input_userData form-control" placeholder="name@example.com">
-				<label id="text_floating_label" for="input_eamil">이메일주소</label>
+                <input id="input_email" type="text" name="email" class="input_userData form-control" placeholder="name@example.com">
+				<label id="text_floating_label" for="input_email">이메일주소</label>
 			</div>
 			<!-- 비밀번호 입력란 -->
             <div class="input_userData_area form-floating mb-3">
