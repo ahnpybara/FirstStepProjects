@@ -1,0 +1,79 @@
+@charset "UTF-8";
+
+/* 로그인 및 회원가입의 영역인 최상위 부모태그 */
+#root_div {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+/* 회원가입 창 테투리 태그 */
+.join_border_outline {
+	text-align: center;
+	border: solid 1px rgba(219, 219, 219, 1);
+	width: 380px;
+	height: 490px;
+	background: white;
+	padding-bottom: 30px;
+}
+
+/* 회원가입 창 로고 */
+.join_login_logo {
+	width: 184px;
+	height: 53px;
+	margin-top: 25px;
+}
+
+/* 인사말 */
+.greetings {
+	font-weight: bold;
+	color: gray;
+	margin: 19px 0;
+}
+
+/* 이메일 입력란 */
+.input_userData_area {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+/* 이메일 입력란 */
+.input_userData {
+    font-size: 15px !important;
+    width: 308px !important;
+    height: 43px !important;
+    background: #FAFAFA !important;
+}
+
+/* 플로팅라벨 */
+#text_floating_label {
+	font-size: 12px;
+    width: 100%;
+    padding: 12px 44px;
+    text-align: left;
+    color: gray;
+}
+
+/* 회원가입 로그인 버튼 */
+.log_join_btn {
+	width: 302px;
+	height: 40px;
+	font-size: 18px;
+	color: white;
+	background-color: #b2c3ff;
+	border: none; 
+	border-radius: 5px;
+	margin: 11px 0;
+}
+
+/* 로그인 창 테투리 태그 */
+.login_border_outline{
+	text-align: center;
+	border: solid 1px rgba(219, 219, 219, 1);
+	width: 380px;
+	height: 380px;
+	background: white;
+}
