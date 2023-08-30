@@ -5,7 +5,7 @@ public class AccountDTO {
 	private String password;
 	private String name;
 	private String nickname;
-	private String profile_image = "default";
+	private String profile_image = "default_profile.jpg";
 	
 	public AccountDTO() {}
 	

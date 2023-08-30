@@ -8,8 +8,8 @@ public class AccountBIZ {
 	// 로그인 관련 메서드
 	public boolean accountLogin(String email, String password) {
 		AccountDAO accountDao = new AccountDAO();
-		boolean islogin = accountDao.accountLogin(email, password);
-		return islogin;
+		boolean isLogin = accountDao.accountLogin(email, password);
+		return isLogin;
 	}
 	
 	// 회원가입 관련 메서드
@@ -17,5 +17,12 @@ public class AccountBIZ {
 		AccountDAO accountDao = new AccountDAO();
 		boolean success = accountDao.accountRegister(accountDto);
 		return success;
+	}
+	
+	// 회원가입시 중복체크
+	public String accountCheck(AccountDTO accountDto) {
+		AccountDAO accountDao = new AccountDAO();
+		String isPossible = accountDao.accountCheck(accountDto);
+		return isPossible;
 	}
 }

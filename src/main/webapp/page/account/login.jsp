@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
+<%
+String login_fail_error = request.getParameter("login_fail_error");
+if (login_fail_error != null) {
+	out.print("<script>alert('아이디 비밀번호가 옳바르지 않습니다.');</script>");
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
