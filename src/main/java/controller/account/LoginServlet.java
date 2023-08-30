@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
 		if(success) {
 			// 연결된 세션을 가져와서 세션에 값을 세팅한 후 메인페이지로 이동
 			HttpSession session = request.getSession();
-			session.setAttribute(accountDto.getEmail(), accountDto); 
+			session.setAttribute("email", accountDto); 
 			response.sendRedirect("/maums/page/main_page.jsp");
 			System.out.println("login OK");
 		} else {
