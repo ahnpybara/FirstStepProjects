@@ -50,7 +50,7 @@ public class AccountDAO {
 		PreparedStatement pstmt = null;
 		
 		try {
-			String sql = "insert into users(user_num, email, name, nickname, password) "
+			String sql = "insert into users(user_id, email, name, nickname, password) "
 					+ "values(seq_user_num.NEXTVAL,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, accountDto.getEmail());
