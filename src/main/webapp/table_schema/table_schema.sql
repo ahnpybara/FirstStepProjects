@@ -13,12 +13,14 @@ CREATE TABLE feeds (
 	feed_id number(6) PRIMARY KEY,
     email VARCHAR2(20) UNIQUE NOT NULL,
     feed_image VARCHAR2(255) NOT NULL,
+    feed_content VARCHAR2(255) NOT NULL,
     
     CONSTRAINT fk_feeds_users FOREIGN KEY (email)
 	REFERENCES users(email)
 );
 
 select * from USERS;
+select * from feeds;
 SELECT user_num, email, name, nickname, password FROM users;
 INSERT INTO users (user_num, email, name, nickname, password)
 VALUES (seq_user_num.NEXTVAL, 'acy87@naver.com', '안치윤', 'ahnroe', 'your_password');
@@ -28,6 +30,7 @@ nocycle nocache;
 create sequence seq_feed_num increment by 1 start with 1
 nocycle nocache;
 
+DROP SEQUENCE seq_user_num;
 drop table users;
 
 select * from tab;

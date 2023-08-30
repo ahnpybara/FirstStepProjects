@@ -1,15 +1,20 @@
 package controller.upload;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+
+import biz.FeedBIZ;
+import dto.AccountDTO;
+import dto.FeedDTO;
 
 @WebServlet(name = "FeedUpload", urlPatterns = { "/feedUpload" })
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
@@ -35,9 +40,25 @@ public class FeedUploadServlet extends HttpServlet {
 			String uuidFileName = UUID.randomUUID().toString() + extension;
 			// 지정된 경로에 저장
 			filePart.write(basePath + uuidFileName);
-
+			
+			String content = request.getParameter("feed_text");
+			
+			HttpSession session = request.getSession();
+	        AccountDTO user = (AccountDTO) session.getAttribute("email");
+			System.out.println(user.getEmail());
+			FeedDTO feedDto = new FeedDTO(user.getEmail(),uuidFileName,content);
+			FeedBIZ feedBiz = new FeedBIZ();
+			boolean success = feedBiz.feedUploaded(feedDto);
+			
+			if(success) {
+				System.out.println("성공");
+			}
+			else {
+				System.out.println("실패");
+			}	
+			
 		} catch (Exception e) {
-			throw new ServletException("File upload failed", e);
+			throw new ServletException(e);
 		}
 	}
 }

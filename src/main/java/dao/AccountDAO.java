@@ -13,7 +13,7 @@ public class AccountDAO {
 	
 	// 로그인을 위해 DB에 접근하는 로직
 	public boolean accountLogin(String email, String password) {
-		boolean islogin = false;
+		boolean isLogin = false;
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		AccountDTO accountDto = new AccountDTO();
@@ -30,7 +30,7 @@ public class AccountDAO {
 				accountDto = new AccountDTO();
 				accountDto.setEmail(rs.getString("email"));
 				accountDto.setEmail(rs.getString("password"));
-				islogin = true;
+				isLogin = true;
 			}
 		} catch (SQLException e) {
 			//TODO
@@ -40,7 +40,7 @@ public class AccountDAO {
 			close(rs);
 			close(pstmt);
 		}
-		return islogin;
+		return isLogin;
 	}
 
 	//회원가입을 위해 데이터베이스에 접근하는 로직
@@ -50,13 +50,13 @@ public class AccountDAO {
 		PreparedStatement pstmt = null;
 		
 		try {
-			String sql = "insert into users(user_id, email, name, nickname, password) "
-					+ "values(seq_user_num.NEXTVAL,?,?,?,?)";
+			String sql = "insert into users values(seq_user_num.NEXTVAL,?,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, accountDto.getEmail());
 			pstmt.setString(2, accountDto.getName());
 			pstmt.setString(3, accountDto.getNickname());
 			pstmt.setString(4, accountDto.getPassword());
+			pstmt.setString(5, accountDto.getProfile_image());
 			int n = pstmt.executeUpdate();
 			
 			if(n > 0) { //db에 데이터 추가를 성공한 경우
