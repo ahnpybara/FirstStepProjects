@@ -32,12 +32,15 @@ nocycle nocache;
 
 DROP SEQUENCE seq_user_num;
 drop table users;
+drop table feeds;
 
 select * from tab;
 
 
 
-
+SELECT f.feed_id, f.email, f.feed_image, f.feed_content, u.name, u.nickname
+FROM feeds f
+JOIN users u ON f.email = u.email;
 
 
 

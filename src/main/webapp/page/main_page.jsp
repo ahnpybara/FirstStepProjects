@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="dto.AccountDTO"%>
+
+<%
+	AccountDTO user = (AccountDTO) session.getAttribute("email");
+    if (user == null) {
+		response.sendRedirect("/maums/page/account/login.jsp");
+    }
+%>
+	
 <!DOCTYPE html>
 <html>
 <head>
