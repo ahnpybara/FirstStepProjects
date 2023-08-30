@@ -6,10 +6,10 @@ import dto.AccountDTO;
 public class AccountBIZ {
 	
 	// 로그인 관련 메서드
-	public boolean accountLogin(String email, String password) {
+	public AccountDTO accountLogin(String email, String password) {
 		AccountDAO accountDao = new AccountDAO();
-		boolean isLogin = accountDao.accountLogin(email, password);
-		return isLogin;
+		AccountDTO sessionUser = accountDao.accountLogin(email, password);
+		return sessionUser;
 	}
 	
 	// 회원가입 관련 메서드

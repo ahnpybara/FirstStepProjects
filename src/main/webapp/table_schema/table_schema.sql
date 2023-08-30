@@ -30,7 +30,7 @@ nocycle nocache;
 create sequence seq_feed_num increment by 1 start with 1
 nocycle nocache;
 
-DROP SEQUENCE seq_user_num;
+DROP SEQUENCE seq_feed_num;
 drop table users;
 drop table feeds;
 
@@ -42,7 +42,7 @@ SELECT f.feed_id, f.email, f.feed_image, f.feed_content, u.name, u.nickname
 FROM feeds f
 JOIN users u ON f.email = u.email;
 
-
+SELECT f.feed_id, f.email, f.feed_image, f.feed_content, u.name, u.nickname FROM feeds f JOIN users u ON f.email = u.email
 
 
 

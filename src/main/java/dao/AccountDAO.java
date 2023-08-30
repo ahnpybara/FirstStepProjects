@@ -12,8 +12,7 @@ import dto.AccountDTO;
 public class AccountDAO {
 
 	// 로그인을 위해 DB에 접근하는 로직
-	public boolean accountLogin(String email, String password) {
-		boolean isLogin = false;
+	public AccountDTO accountLogin(String email, String password) {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
 		AccountDTO accountDto = new AccountDTO();
@@ -29,8 +28,10 @@ public class AccountDAO {
 			if (rs.next()) {
 				accountDto = new AccountDTO();
 				accountDto.setEmail(rs.getString("email"));
-				accountDto.setEmail(rs.getString("password"));
-				isLogin = true;
+				accountDto.setPassword(rs.getString("password"));
+				accountDto.setName(rs.getString("name"));
+				accountDto.setNickname(rs.getString("nickname"));
+				accountDto.setProfile_image(rs.getString("profile_image"));
 			}
 		} catch (SQLException e) {
 			// TODO
@@ -40,7 +41,7 @@ public class AccountDAO {
 			close(rs);
 			close(pstmt);
 		}
-		return isLogin;
+		return accountDto;
 	}
 
 	// 회원가입을 위해 데이터베이스에 접근하는 로직
@@ -79,30 +80,28 @@ public class AccountDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		// 회원가입 중복을 체크할 변수
-		String duplicate_data = null;
-		
+		String duplicate_data = "non_duplicate";
 		try {
 			String sql = "select * from users where email=? or nickname=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, accountDto.getEmail());
 			pstmt.setString(2, accountDto.getNickname());
 			rs = pstmt.executeQuery();
-						
+
 			if (rs.next()) {
 				// 중복체크 로직
-			    String existingEmail = rs.getString("email");
-			    String existingNickname = rs.getString("nickname");
-			    // 중복 체크
-			    if (existingEmail.equals(accountDto.getEmail())) {
-			    	duplicate_data = "email";
-			    } else if (existingNickname.equals(accountDto.getNickname())) {
-			    	duplicate_data = "nickname";
-			    } else {
-			    	duplicate_data = "non_duplicate";
-			    }
+				String existingEmail = rs.getString("email");
+				String existingNickname = rs.getString("nickname");
+				// 중복 체크
+				if (existingEmail.equals(accountDto.getEmail())) {
+					duplicate_data = "email";
+				} else if (existingNickname.equals(accountDto.getNickname())) {
+					duplicate_data = "nickname";
+				}
 			}
-			
-			
+
+			System.out.println(duplicate_data);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
