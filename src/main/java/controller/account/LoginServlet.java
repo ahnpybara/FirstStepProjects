@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
 			response.sendRedirect("/maums/page/main_page.jsp");
 			System.out.println("login OK");
 		} else {
-			response.sendRedirect("/maums/page/account/login.jsp");
+			response.sendRedirect("/maums/page/account/login.jsp?login_fail_error=error");
 			System.out.println("login fail");
 		}
 	}

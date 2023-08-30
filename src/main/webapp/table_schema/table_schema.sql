@@ -1,17 +1,17 @@
 --primary key : unique + not null
 CREATE TABLE users (
 	user_id number(6) UNIQUE NOT NULL,
-    email VARCHAR2(20) PRIMARY KEY,
-    name VARCHAR2(10) NOT NULL,
-    nickname VARCHAR2(20) UNIQUE NOT NULL,
-    password VARCHAR2(20) NOT NULL,
+    email VARCHAR2(40) PRIMARY KEY,
+    name VARCHAR2(40) NOT NULL,
+    nickname VARCHAR2(40) UNIQUE NOT NULL,
+    password VARCHAR2(40) NOT NULL,
 	profile_image VARCHAR2(255)
 );
 
 --primary key : unique + not null
 CREATE TABLE feeds (
 	feed_id number(6) PRIMARY KEY,
-    email VARCHAR2(20) UNIQUE NOT NULL,
+    email VARCHAR2(40) UNIQUE NOT NULL,
     feed_image VARCHAR2(255) NOT NULL,
     feed_content VARCHAR2(255) NOT NULL,
     

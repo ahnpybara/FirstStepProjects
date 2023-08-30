@@ -1,5 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
+<%
+String access_error = request.getParameter("access_error");
+String duplicate_error = request.getParameter("duplicate_error");
+if (access_error != null) {
+	out.print("<script>alert('유효하지 않은 접근입니다.');</script>");
+}
+
+if (duplicate_error != null) {
+	if (duplicate_error.equals("email")) {
+		out.print("<script>alert('이메일 중복입니다');</script>");
+	} else if (duplicate_error.equals("nickname")) {
+		out.print("<script>alert('닉네임 중복입니다');</script>");
+	}
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,7 +77,8 @@
 				</div>
 
 				<!-- 가입 버튼 -->
-				<input id="signup_button" class="log_join_btn" type="submit" value="가입">
+				<input id="signup_button" class="log_join_btn" type="submit"
+					value="가입">
 			</form>
 			<!-- 로그인 페이지로 이동 -->
 			<div>
@@ -83,9 +100,8 @@
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
 		integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
 		crossorigin="anonymous"></script>
-		
+
 	<!-- 사용자 정의 스크립트 -->
-	<script
-		src="${pageContext.request.contextPath}/js/account/join.js"></script>
+	<script src="${pageContext.request.contextPath}/js/account/join.js"></script>
 </body>
 </html>

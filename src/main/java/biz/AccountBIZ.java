@@ -18,4 +18,11 @@ public class AccountBIZ {
 		boolean success = accountDao.accountRegister(accountDto);
 		return success;
 	}
+	
+	// 회원가입시 중복체크
+	public String accountCheck(AccountDTO accountDto) {
+		AccountDAO accountDao = new AccountDAO();
+		String isPossible = accountDao.accountCheck(accountDto);
+		return isPossible;
+	}
 }
