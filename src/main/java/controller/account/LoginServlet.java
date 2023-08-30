@@ -25,15 +25,14 @@ public class LoginServlet extends HttpServlet {
 		
 		// 전달 받은 정보를 토대로 처리할 메서드를 호출
 		AccountBIZ accountBiz = new AccountBIZ();
-		Boolean success = accountBiz.accountLogin(email, password);
-		AccountDTO accountDto = new AccountDTO(email, password);
+		AccountDTO sessionUser = accountBiz.accountLogin(email, password);
 		
 		// 로그인 성공 여부
-		if(success) {
+		if(sessionUser != null) {
 			// 연결된 세션을 가져와서 세션에 값을 세팅한 후 메인페이지로 이동
 			HttpSession session = request.getSession();
-			session.setAttribute("email", accountDto); 
-			response.sendRedirect("/maums/page/main_page.jsp");
+			session.setAttribute("sessionUser", sessionUser); 
+			response.sendRedirect("/maums/feedlist");
 			System.out.println("login OK");
 		} else {
 			response.sendRedirect("/maums/page/account/login.jsp?login_fail_error=error");
