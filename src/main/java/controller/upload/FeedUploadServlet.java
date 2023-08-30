@@ -44,7 +44,7 @@ public class FeedUploadServlet extends HttpServlet {
 			String content = request.getParameter("feed_text");
 			
 			HttpSession session = request.getSession();
-	        AccountDTO user = (AccountDTO) session.getAttribute("email");
+	        AccountDTO user = (AccountDTO) session.getAttribute("sessionUser");
 			System.out.println(user.getEmail());
 			FeedDTO feedDto = new FeedDTO(user.getEmail(),uuidFileName,content);
 			FeedBIZ feedBiz = new FeedBIZ();
@@ -52,6 +52,7 @@ public class FeedUploadServlet extends HttpServlet {
 			
 			if(success) {
 				System.out.println("성공");
+				response.sendRedirect("/maums/feedlist");
 			}
 			else {
 				System.out.println("실패");

@@ -5,11 +5,13 @@
 <%@ page import="dto.FeedListDTO"%>
 
 <%
+	//세션 유저 객체 가져오기
 	AccountDTO user = (AccountDTO) session.getAttribute("sessionUser");
 	if (user == null) {
 		response.sendRedirect("/maums/page/account/login.jsp");
 	}
 	
+	// 메인에 가져올 피드 리스트 가져오기
 	List<FeedListDTO> list = (List<FeedListDTO>) request.getAttribute("feed_list");
 %>
 
