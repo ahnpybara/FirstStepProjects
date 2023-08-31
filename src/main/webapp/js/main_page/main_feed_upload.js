@@ -61,7 +61,8 @@ $("#fileInput").on('click', function() {
 					borderBottomLeftRadius: "10px",
 					overflow: "hidden",
 					backgroundRepeat: "no-repeat",
-					backgroundPosition: "center center",
+					backgroundPosition: "center",
+					backgroundSize: "100%", 
 				});
 			}
 

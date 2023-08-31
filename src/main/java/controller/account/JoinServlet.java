@@ -14,7 +14,8 @@ import dto.AccountDTO;
 @WebServlet(name = "Join", urlPatterns = { "/join" })
 public class JoinServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	// 회원가입 요청시 처리할 코드
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
@@ -51,12 +52,11 @@ public class JoinServlet extends HttpServlet {
 			return;
 		}
 
-		// 회원가입 중복 체크 로
+		// 회원가입 중복 체크 로직
 		AccountBIZ accountBiz = new AccountBIZ();
 		AccountDTO accountDto = new AccountDTO(email, name, nickname, password);
 		String isPossible = accountBiz.accountCheck(accountDto);
 		
-		System.out.println(isPossible);
 		if (isPossible.equals("non_duplicate")) {
 			// 회원가입 로직
 			boolean success = accountBiz.accountRegister(accountDto);

@@ -17,6 +17,7 @@ function validate(inputType, value) {
     return regularExpression.test(value);
 }
 
+// 입력 이벤트의 리스너
 function addListeners(inputId, index, labelName) {
     var inputElement = document.getElementById(inputId);
 

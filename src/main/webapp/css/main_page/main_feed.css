@@ -79,7 +79,7 @@
 	object-fit: cover
 }
 
-/* 메인 피드 아이콘 영역 */
+/* 메인 피드 아이콘 영역(좋아요 북마크) */
 .main_feed_icon_area {
 	display: flex;
 	flex-direction: row;
@@ -135,7 +135,7 @@
 	margin-top: 5px;
 }
 
-/* 메인 피드 댓글 입력 영역 */
+/* 메인 피드 댓글 입력 */
 .main_feed_reply_text_box {
 	border: none;
 	border-top: 1px solid #d3d3d3; 
@@ -148,7 +148,7 @@
 	font-size: 14px
 }
 
-/* 메인 피드 댓글 입력 영역 */
+/* 메인 피드 댓글 업로드 버튼 */
 .main_feed_reply_upload_btn {
 	display: none;
 }

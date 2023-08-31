@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JdbcTemplate {
-
+	//DB 연결 및 자원 해제 관련 static 메서드
 	public static Connection getConnection() {
 		Connection conn = null;
 
