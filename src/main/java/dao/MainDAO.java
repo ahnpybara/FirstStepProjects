@@ -12,6 +12,7 @@ import static common.JdbcTemplate.*;
 
 public class MainDAO {
 
+	// 피드리스트 반환을 위해 DB에 접근하는 로직
 	public List<FeedListDTO> getFeedList() {
 		List<FeedListDTO> list = new ArrayList<FeedListDTO>();
 		FeedListDTO feedListDto = null;

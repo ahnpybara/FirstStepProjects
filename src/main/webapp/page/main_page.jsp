@@ -5,12 +5,14 @@
 <%@ page import="dto.FeedListDTO"%>
 
 <%
-	AccountDTO user = (AccountDTO) session.getAttribute("sessionUser");
-	if (user == null) {
-		response.sendRedirect("/maums/page/account/login.jsp");
-	}
-	
-	List<FeedListDTO> list = (List<FeedListDTO>) request.getAttribute("feed_list");
+//세션 유저 객체 가져오기
+AccountDTO user = (AccountDTO) session.getAttribute("sessionUser");
+if (user == null) {
+	response.sendRedirect("/maums/page/account/login.jsp");
+}
+
+// 메인에 가져올 피드 리스트 가져오기
+List<FeedListDTO> list = (List<FeedListDTO>) request.getAttribute("feed_list");
 %>
 
 <!DOCTYPE html>
@@ -55,32 +57,38 @@
 				<span class="material-symbols-outlined">home</span>
 				<div class="navbar_menu_text">홈</div>
 			</div>
-		</a> <a href="#search">
+		</a> 
+		<a href="#search">
 			<div class="navbar_menu_pos">
 				<span class="material-symbols-outlined">search</span>
 				<div class="navbar_menu_text">검색</div>
 			</div>
-		</a> <a class="link_tag_display" href="#send">
+		</a> 
+		<a href="#send">
 			<div class="navbar_menu_pos">
 				<span class="material-symbols-outlined">send</span>
 				<div class="navbar_menu_text">메시지</div>
 			</div>
-		</a> <a id="feed_upload_menu" class="link_tag_display" href="#add">
+		</a> 
+		<a id="feed_upload_menu" href="#add">
 			<div class="navbar_menu_pos">
 				<span class="material-symbols-outlined">add_box</span>
 				<div class="navbar_menu_text">피드추가</div>
 			</div>
-		</a> <a href="#settings">
+		</a> 
+		<a href="#settings">
 			<div class="navbar_menu_pos">
 				<span class="material-symbols-outlined">settings</span>
 				<div class="navbar_menu_text">설정</div>
 			</div>
-		</a> <a href="#favorite">
+		</a> 
+		<a href="#favorite">
 			<div class="navbar_menu_pos">
 				<span class="material-symbols-outlined">favorite</span>
 				<div class="navbar_menu_text">좋아요</div>
 			</div>
-		</a> <a href="#logout">
+		</a> 
+		<a href="#logout">
 			<div class="navbar_menu_pos">
 				<span class="material-symbols-outlined">logout</span>
 				<div class="navbar_menu_text">로그아웃</div>
@@ -164,8 +172,8 @@
 						alt="프로필">
 				</div>
 				<div class="main_user_nick_name_area">
-					<div class="main_user_name"><%=user.getName() %></div>
-					<div class="main_user_nickname"><%=user.getNickname() %></div>
+					<div class="main_user_name"><%=user.getName()%></div>
+					<div class="main_user_nickname"><%=user.getNickname()%></div>
 				</div>
 			</div>
 			<!-- 메인 화면의 팔로우 추천 영역 -->

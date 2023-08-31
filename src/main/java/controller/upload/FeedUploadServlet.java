@@ -23,8 +23,12 @@ import dto.FeedDTO;
 public class FeedUploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	// 피드 업로드 요청시 처리할 코드
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
+		request.setCharacterEncoding("utf-8");
+
 		try {
 			// 멀티파트 요청에서 한 부분(이미지)만 가져옴
 			Part filePart = request.getPart("feed_image");
@@ -40,23 +44,24 @@ public class FeedUploadServlet extends HttpServlet {
 			String uuidFileName = UUID.randomUUID().toString() + extension;
 			// 지정된 경로에 저장
 			filePart.write(basePath + uuidFileName);
-			
+
 			String content = request.getParameter("feed_text");
 			
+			// 피드 업로드 관련 로직
 			HttpSession session = request.getSession();
-	        AccountDTO user = (AccountDTO) session.getAttribute("email");
-			System.out.println(user.getEmail());
-			FeedDTO feedDto = new FeedDTO(user.getEmail(),uuidFileName,content);
+			AccountDTO user = (AccountDTO) session.getAttribute("sessionUser");
+			FeedDTO feedDto = new FeedDTO(user.getEmail(), uuidFileName, content);
 			FeedBIZ feedBiz = new FeedBIZ();
 			boolean success = feedBiz.feedUploaded(feedDto);
 			
-			if(success) {
+			// 피드 업로드 성공시 다시 피드리스트를 불러옴
+			if (success) {
 				System.out.println("성공");
-			}
-			else {
+				response.sendRedirect("/maums/feedlist");
+			} else {
 				System.out.println("실패");
-			}	
-			
+			}
+
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}

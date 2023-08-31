@@ -40,7 +40,7 @@ a {
 	border-right: 1px solid #d3d3d3;
 }
 
-/* 사이드 네비바의 링크 메뉴 */
+/* 사이드 네비바의 메뉴 */
 .side_navbar a {
 	padding: 8px 16px 8px 16px;
 	text-decoration: none;
@@ -73,13 +73,8 @@ a {
 	width: 100%;
 }
 
-/*  네비바 메뉴 텍스트 */
+/*  네비바 메뉴의 텍스트 */
 .navbar_menu_text {
 	padding-bottom: 3px;
 	padding-left: 20px;
-}
-
-/* 네비바 메뉴 */
-.link_tag_display {
-	display: block;
 }

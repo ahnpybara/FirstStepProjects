@@ -14,6 +14,7 @@ import dto.FeedDTO;
 
 public class FeedDAO {
 
+	// 회원가입을 위해 DB에 접근하는 로직
 	public boolean feedUploaded(FeedDTO feedDto) {
 		boolean isUpload = false;
 		Connection conn = getConnection();

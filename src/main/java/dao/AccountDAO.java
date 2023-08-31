@@ -15,7 +15,7 @@ public class AccountDAO {
 	public AccountDTO accountLogin(String email, String password) {
 		Connection conn = getConnection();
 		PreparedStatement pstmt = null;
-		AccountDTO accountDto = new AccountDTO();
+		AccountDTO accountDto = null;
 		ResultSet rs = null;
 
 		try {
@@ -24,7 +24,8 @@ public class AccountDAO {
 			pstmt.setString(1, email);
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
-
+			
+			// 나머지 세션 유저의 정보가 필요하므로 세션유저 객체에 나머지 데이터를 저장
 			if (rs.next()) {
 				accountDto = new AccountDTO();
 				accountDto.setEmail(rs.getString("email"));
@@ -81,6 +82,7 @@ public class AccountDAO {
 		ResultSet rs = null;
 		// 회원가입 중복을 체크할 변수
 		String duplicate_data = "non_duplicate";
+		
 		try {
 			String sql = "select * from users where email=? or nickname=?";
 			pstmt = conn.prepareStatement(sql);
@@ -89,19 +91,16 @@ public class AccountDAO {
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
-				// 중복체크 로직
+				// 중복체크할 변수
 				String existingEmail = rs.getString("email");
 				String existingNickname = rs.getString("nickname");
-				// 중복 체크
+				// 중복 체크, 이메일 또는 닉네임이 중복이 되었는지 확인
 				if (existingEmail.equals(accountDto.getEmail())) {
 					duplicate_data = "email";
 				} else if (existingNickname.equals(accountDto.getNickname())) {
 					duplicate_data = "nickname";
 				}
 			}
-
-			System.out.println(duplicate_data);
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

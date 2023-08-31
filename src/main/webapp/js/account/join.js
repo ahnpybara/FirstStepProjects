@@ -21,6 +21,7 @@ function validate(inputType, value) {
     return regularExpression.test(value);
 }
 
+// 입력 이벤트의 리스너
 function addListeners(inputId, index, labelName) {
     var inputElement = document.getElementById(inputId);
 
@@ -89,7 +90,7 @@ function updateSignUpButtonStatus() {
         signUpButton.disabled = false; // 활성화
         signUpButton.style.backgroundColor = "#6b6bef"; // 파란색 배경색으로 변경
     } else {
-        signUpButton.disabled = true; // 비활성화
+        signUpButton.disabled = false; // 비활성화
         signUpButton.style.backgroundColor = ""; // 원래 색상으로 되돌리기 (기본값 또는 다른 스타일 시트에 정의된 값)
     }
 }
