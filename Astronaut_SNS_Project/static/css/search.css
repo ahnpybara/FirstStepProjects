@@ -1,0 +1,336 @@
+/* 메뉴 홈 아이콘에 패딩을 줘서 로고와 검색창 간격을 조절 */
+#home_icon {
+    padding-left: 108px;
+}
+
+/* 피드 이미지와 검색 키워드 영역*/
+.search_total_area {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px;
+    background-color: #FAFAFA;
+}
+
+/* 대표 피드 이미지 영역 */
+.feed_image_area {
+    padding: 30px 100px;
+}
+
+/* 피드 사진 외부 박스 */
+.feed_image_area > .box {
+    width: 160px;
+    height: 160px;
+    border-radius: 70%;
+    overflow: hidden;
+    margin-left: 350px;
+}
+
+/* 대표 피드 사진 */
+.search_feed_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+/* 검색 키워드 */
+.search_keyword {
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+/* 게시물 수와 팔로우 버튼 영역 */
+.search_imformation {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    font-size: 16px;
+    text-align: left;
+    width: 600px;
+}
+
+/* 게시물 개수 */
+.feed_text_count {
+    margin: 20px 0;
+}
+
+/* 검색결과를 사용자가 어떤 방식으로 볼건지 결정하는 버튼 부모 */
+.show_feed_root_area {
+    border-top: solid 2px rgba(50, 50, 50, 0.1);
+    width: 100%;
+}
+
+/* 검색결과를 사용자가 어떤 방식으로 볼건지 결정하는 버튼 부모 */
+.show_feed_list_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
+
+/* 일반순 */
+#button_feed_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 좋아요 순 */
+#button_feed_like_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 북마크순 */
+#button_feed_bookmark_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 피드 보여주는 아이콘들 */
+.feed_list_icons {
+    margin-right: 5px !important;
+}
+
+/* 검색된 피드 목록*/
+#feed_list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 피드가 보여질 영역 */
+.feed_list_area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 1000px;
+    justify-content: center;
+}
+
+/*피드 한칸 최상위 태그*/
+.feed_size_root {
+    width: 30%;
+    height: 30%;
+    margin: 10px 5px 0 5px;
+}
+
+/* div를 겹치기 위한 부모 창 */
+.show_count_area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* mouse over시 좋아요 북마크 수 보여주기 위한 창 */
+.profile_feed_mouse_over {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 좋아요 수나 댓글 수를 보여줌 */
+.feed_count {
+    margin: 10px;
+}
+
+/* 좋아요 북마크 아이콘 영역 */
+.icon_like_bookmark {
+    margin-right: 5px;
+}
+
+/* 실제 이미지 */
+.img_feed_list {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+/* class profile_feed_mouse_over 와 feed_count 추가 */
+/* 게시물에 마우스 커서룰 올리기 전 상태.*/
+.profile_feed_mouse_over {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* 게시물에 마우스 커서를 올리면 밝기가 낮아진다.*/
+.profile_feed_mouse_over:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 게시글 좋아요 수와 댓글을 숨긴다.*/
+.profile_feed_mouse_over > .feed_count {
+    display: none;
+}
+
+/*정유진: 게시물의 좋아요 수와 댓글 수를 보여준다.*/
+.profile_feed_mouse_over:hover > .feed_count {
+    color: white;
+    display: flex;
+}
+
+/* 지금 보고있는 검색결과 방식을 표시  */
+.ableTrue {
+    border-top: 1px black solid;
+}
+
+/* 고급필터링 */
+#more_filter_option {
+    background-color: white;
+    border: none;
+    box-shadow: none;
+    position: absolute;
+    left: 50vh;
+    margin-top: 10px;
+    color: #737373;
+
+}
+
+/* 고급 필터링 주메뉴 */
+#filter_option_area {
+    width: 19rem;
+    text-align: center;
+    background-color: #FAFAFA;
+}
+
+/* 날짜 필터링 */
+#all_start_date, #all_end_date {
+    color: gray;
+    border: 1px solid lightgray;
+}
+
+/* 날짜 필터링 전송 버튼 */
+#date_search_btn {
+    background-color: lightsteelblue;
+    border: none;
+    font-size: 14px;
+    color: white;
+}
+
+/* 카테고리 영역 */
+#category_select {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 카테고리 설명란 */
+.feed_category_explain_filter {
+    margin-right: 10px;
+    font-size: 15px;
+    color: gray;
+}
+
+/* 카테고리 1*/
+#feed_category_search1 {
+    width: 70px;
+    text-align: center;
+    margin-right: 10px;
+    text-align-last: center;
+    padding: 0;
+}
+
+/* 카테고리 2 */
+#feed_category_search2 {
+    width: 70px;
+    text-align: center;
+    margin-left: 10px;
+    text-align-last: center;
+    padding: 0;
+}
+
+/* 카테고리 필터링 버튼 */
+#category_select_btn {
+    background-color: lightsteelblue;
+    border: none;
+    font-size: 14px;
+    color: white;
+    margin-left: 8px;
+}
+
+/* 일괄 필터링 버튼 영역 */
+#filter_btn_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+/* 일괄 필터링 버튼 */
+#all_submit {
+    background-color: lightsteelblue;
+    border: none;
+    font-size: 14px;
+    color: white;
+}
+
+/* 필터링 설정 초기화 버튼 */
+#all_filter_rest {
+    background-color: lightcoral;
+    border: none;
+    font-size: 14px;
+    color: white;
+    margin-left: 8px;
+}
+
+/* 반응형 웹 */
+@media (max-width: 1450px) {
+    #more_filter_option {
+        display: none;
+    }
+
+    #filter_option_area {
+        display: none;
+    }
+}
+
+@media (max-width: 725px) {
+    .profile_feed_follow_area {
+        display: none !important;
+    }
+
+    .settigns_icon {
+        display: none !important;
+    }
+
+    .feed_select_button {
+        display: none;
+    }
+
+    .profile_image_area {
+        padding-right: 70px !important;
+        padding-left: 50px !important;
+    }
+}

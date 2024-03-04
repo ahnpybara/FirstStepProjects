@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <link rel="shortcut icon" href="#">
+    <!-- Bootstrap CSS 사용하기 위한 선언  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <!-- css 분리 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}?ver=77">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=716">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main_profile_same.css' %}?ver=11">
+
+    <!--  Google 심볼을 사용하기 위한 선언 -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+
+
+    <!--  Google 아이콘 사용하기 위한 선언 -->
+    <link
+            href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+            rel="stylesheet">
+
+    <!--  jQuery를 사용하기 위한 선언  -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <title>Astroaunt</title>
+
+    <style>
+        /* 구글 머리티얼 아이콘은 css 분리가 안됨 */
+        .menu_icon {
+            font-size: 32px;
+            wght: 100;
+            padding-right: 20px;
+            cursor: pointer;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<!-- 맨 위 상단 메뉴바( 로고 검색 기타메뉴 )-->
+<nav class="navbar navbar-expand-lg navbar-white bg-white">
+    <!-- 메뉴바 -->
+    <div class="menu_bar">
+        <!-- 로고 -->
+        <a class="navbar-brand" href="/main"><img class="astro_logo"
+                                                  src="https://blogfiles.pstatic.net/MjAyMzA0MDJfMjg2/MDAxNjgwNDIzNjk3ODAy.ZI7uM4QmLKs-KeALJ8LcUl2x9LnJ1Sd2WV-4P_8bI1cg.IBIosSfIcz-cwb4zg7t4LDWdSRJztgSX2skoCOGk3j8g.PNG.roedeer0807/mainLogo_removebg.png"
+                                                  alt="text">
+        </a>
+        <!-- 검색창 -->
+        <form id="search_bar" class="bar_search" action="/content/search" method="GET">
+            <input id="search_box" type="text" name="search" placeholder="Search" autocomplete="off">
+        </form>
+        <!-- 메뉴 아이콘 들 -->
+        <div class="menu_icons">
+            <!-- 팔로우된 유저 게시물을 보기 위한 스위치 -->
+            <div id="follow_switch_btn" class="form-check form-switch">
+                {% if is_checked %}
+                    <input class="follow_switch_button form-check-input" type="checkbox" role="switch"
+                           id="flexSwitchCheckChecked" checked>
+                    <label id="follow_btn_label" class="form-check-label" for="flexSwitchCheckChecked">팔로우</label>
+                {% else %}
+                    <input class="unfollow_switch_button form-check-input" type="checkbox" role="switch"
+                           id="flexSwitchCheckChecked">
+                    <label id="unfollow_btn_label" class="form-check-label" for="flexSwitchCheckChecked">팔로우</label>
+                {% endif %}
+            </div>
+            <!-- 네비바 메뉴아이콘 (홈, 채팅, 알림, 피드추가, 프로필) -->
+            <a href="/main"><span class="menu_icon material-icons"> home</span></a>
+            <span id="nav_bar_add_box" class="menu_icon material-icons-outlined">add_box</span>
+            <!-- 나에게 온 알림이 있다면 아이콘을 다르게 표시 -->
+            {% if alert_exists %}
+                <span id="alert_icon" onclick="open_article3('/user/alert');"
+                      class="alert_is_exist material-symbols-outlined">favorite</span>
+            {% else %}
+                <span id="alert_icon" onclick="open_article3('/user/alert');"
+                      class="material-symbols-outlined">favorite</span>
+            {% endif %}
+            <!-- 나에게 온 채팅이 있다면 아이콘을 다르게 표시 -->
+            {% if is_delivered_chat %}
+                <span id="send_icon" onclick="open_article1('/user/chat');"
+                      class="chat_is_exist material-symbols-outlined">send</span>
+            {% else %}
+                <span id="send_icon" onclick="open_article1('/user/chat');"
+                      class="material-symbols-outlined">send</span>
+            {% endif %}
+            <!-- 프로필 사진 선택시 드롭다운 메뉴 -->
+            <div class="dropdown">
+                <a href="#" role="button" id="dropdownMenuLink"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <!-- 주 메뉴(프로필 사진)-->
+                    <div class="profile_box">
+                        <img class="profile"
+                             src="{% get_media_prefix %}{{ user_session.profile_image }}" alt="text">
+                    </div>
+                </a>
+                <!-- 드롭다운의 하위 메뉴(프로필, 로그아웃) -->
+                <ul id="nav_dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <!-- 프로필 -->
+                    <li><a class="dropdown-item" href="/user/profile"><b>프로필</b></a></li>
+                    <li>
+                        <!-- 구분선 -->
+                        <hr class="dropdown-divider">
+                    </li>
+                    <!-- 로그아웃 -->
+                    <li><a id="logout_menu" class="dropdown-item" href="/user/logout">로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- 피드가 생성되는 영역과 팔로우 추천 영역 -->
+<div class="main_container">
+    <!--피드들이 생성되는 영역 -->
+    <div class="feed_area">
+        <!-- 반복문을 통한 피드를 생성 -->
+        {% for feed in feeds %}
+            <!-- 피드 박스 -->
+            <div class="feed_box">
+                <!-- 피드 상단 (작성자 프로필과 닉네임, 설정메뉴) -->
+                <div class="feed_bar">
+                    <!-- 작성자 프로필과 닉네임 영역 -->
+                    <div class="feed_user_writer">
+                        <div class="profile_box">
+                            <!-- 피드 작성자 프로필 사진  -->
+                            <img class="movetoprofile profile feed_profile_image" id="{{ feed.nickname }}"
+                                 src="{% get_media_prefix %}{{ feed.profile_image }}"
+                                 alt="text">
+                        </div>
+                        <div>
+                            <!-- 피드 작성자 닉네임 -->
+                            <span class="movetoprofile feed_nickname"
+                                  id="{{ feed.nickname }}">{{ feed.nickname }}</span>
+                        </div>
+                    </div>
+                    <!-- 피드 삭제 및 수정 드롭 메뉴-->
+                    <div id="feed_dropdown"
+                         style="{% if feed.is_shared_category or feed.nickname == user_session.nickname %} display: flex {% else %} display: none {% endif %}">
+                        {% if feed.is_shared_category %}
+                            <a id="feed_shared_category_user_list_btn" feed_id="feed.id" href="#" role="button"
+                               id="dropdownMenuLink" class="feed_is_shared_category"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <div style="color:gray;">
+                                    공유 피드
+                                </div>
+                            </a>
+                            <ul id="feed_shared_category_user_list" class="dropdown-menu feed_shared_category_user_list"
+                                aria-labelledby="dropdownMenuLink">
+                                {% for shared_category_user_nickname in feed.shared_category_user_nickname_list %}
+                                    <li id="{{ shared_category_user_nickname }}"
+                                        class="movetoprofile feed_shared_category_user_nickname text_line">
+                                        {{ shared_category_user_nickname }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if feed.nickname == user_session.nickname or feed.is_shared_category_user %}
+                            <!-- 파드 설정 아이콘 -->
+                            <a href="#" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="feed_setting_icon material-icons-round">more_horiz</span>
+                            </a>
+                            <ul class="dropdown-menu"
+                                aria-labelledby="dropdownMenuLink">
+                                <!-- 피드 삭제 -->
+                                <li feed_id="{{ feed.id }}" class="remove_feed dropdown-item">
+                                    <b class="delete_text">삭제</b>
+                                </li>
+                                <li>
+                                    <!-- 구분선 -->
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <!-- 피드 수정 -->
+                                    <!-- 유재우 id 추가(feed.id_update_feed_btn으로 설정) 피드 수정에서 이미지 추가시 쓰기 위해 추가함 -->
+                                    <div feed_id="{{ feed.id }}" id="{{ feed.id }}_update_feed_btn"
+                                         class="update_feed dropdown-item" href="#"> 수정
+                                    </div>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <!--게시글 이미지-->
+                <div class="image-slider-container">
+                    <div class="image-slider">
+                        {% for image in feed.images_list %}
+                            <div class="slide">
+                                <img class="feed_writer_image"
+                                     style="{% if image.count == 0 %}display: flex; {% else %}display: none{% endif %} "
+                                     src="{% get_media_prefix %}{{ image.image }}" alt="text"
+                                     id="{{ feed.id }}{{ image.count }}_img">
+                                {% if feed.image_count != 1 %}
+                                    <!-- 좌우 버튼 div -->
+                                    <div class="feed_image_area_btns">
+                                        <!-- 오른쪽 버튼 -->
+                                        <span class="prev_image_button material-symbols-outlined"
+                                              feed_ids="{{ feed.id }}{{ image.count }}{{ feed.image_count }}"
+                                              style="left: 5px;{% if image.count == 0 %}display: flex; {% else %}display: none{% endif %}"
+                                              id="{{ feed.id }}{{ image.count }}_prev_button">arrow_back_ios</span>
+                                        <!-- 왼른쪽 버튼 -->
+                                        <span class="next_image_button material-symbols-outlined"
+                                              feed_ids="{{ feed.id }}{{ image.count }}{{ feed.image_count }}"
+                                              style="{% if image.count == 0 %}display: flex; {% else %}display: none{% endif %}"
+                                              id="{{ feed.id }}{{ image.count }}_next_button">arrow_forward_ios</span>
+                                    </div>
+                                    <div style="{% if image.count == 0 %}display: flex; {% else %}display: none{% endif %}"
+                                         id="{{ feed.id }}{{ image.count }}_now_count"
+                                         class="now_img_count">{{ image.now_count }}/{{ feed.image_count }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!--좋아요와 북마크 영역 -->
+                <div class="like_bookmark">
+                    <!-- 좋아요 -->
+                    <div class="likeicon">
+                        {% if feed.is_liked %}
+                            <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  feed_user_nickname="{{ feed.nickname }}"
+                                  class="uTrue favorite material-symbols-outlined">favorite</span>
+                        {% else %}
+                            <span id="favorite_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  feed_user_nickname="{{ feed.nickname }}"
+                                  class="uFalse favorite material-symbols-outlined">favorite</span>
+                        {% endif %}
+                    </div>
+                    <!--북마크-->
+                    <div>
+                        {% if feed.is_marked %}
+                            <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  class="uTrue bookmark material-symbols-outlined">bookmark</span>
+                        {% else %}
+                            <span id="bookmark_{{ feed.id }}" feed_id="{{ feed.id }}"
+                                  class="uFalse bookmark material-symbols-outlined">bookmark</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- 피드 좋아요 수-->
+                <div class="feed_like_count"> 이 게시글을 <b id="async_like_count_{{ feed.id }}">{{ feed.like_count }}명</b>이
+                    좋아합니다.
+                </div>
+                <!--피드 작성 시간-->
+                <div class="feed_create_time">
+                    {{ feed.create_at }}
+                </div>
+                <!-- 피드의 글내용 및 해시태그 ,댓글 내용 영역 -->
+                <div class="feed_writer_content">
+                    <!-- 작성자 닉네임과 피드 내용 영역 -->
+                    <div id="feed_more_show">
+                        <p id="feed_content_limit_{{ feed.id }}" class="text_line">
+                            <!-- 작성자 닉네임 -->
+                            <b class="movetoprofile feed_content_nickname" id="{{ feed.nickname }}">
+                                {{ feed.nickname }}
+                            </b>
+                            <!-- 피드 글내용 10글자만 표현 -->
+                            {{ feed.content|truncatechars:10 }}
+                        </p>
+                    </div>
+                    <!-- 해시태그와 글내용 공백 간격 -->
+                    <div class="feed_area_hashtag_space" id="hashtag_space_div_{{ feed.id }}">
+                        <br>
+                    </div>
+                    <!-- 정유진: 카테고리 -->
+                    <div class="feed_category feed_modal_category" id="feed_category_{{ feed.id }}">
+                        {{ feed.category_kr }}
+                    </div>
+                    <!-- 해시태그 영역 -->
+                    <div class="feed_area_hashtags" id="hashtag_div_{{ feed.id }}">
+                        {% for hashtag in feed.hashtag_list %}
+                            <!-- 해시태그 -->
+                            <div id="hashtags_list" class="hashtags" hashtag_content="{{ hashtag.content }}">
+                                #{{ hashtag.content }}</div>
+                        {% endfor %}
+                    </div>
+                    <!-- 글내용 더보기 -->
+                    <p id="{{ feed.id }}" class="feed_content_more" feed_nickname="{{ feed.nickname }}"
+                       feed_content="{{ feed.content }}">더 보기</p>
+
+
+                    <!-- 댓글 모두 보기 -->
+                    <div class="show_all_reply feed_modal" feed_id="{{ feed.id }}">
+                        댓글 모두 보기
+                    </div>
+                </div>
+                <!-- 댓글 리스트 -->
+                <div id="reply_list_{{ feed.id }}">
+                    {% for reply in feed.reply_list %}
+                        <!-- 댓글 한 줄 영역 -->
+                        <div class="user_reply_list_area">
+                            <!-- 댓글 작성하 닉네임과 댓글 내용 크기 만큼의 영역 -->
+                            <div class="user_reply text_line">
+                                <!--댓글 닉네임과 댓글 내용 -->
+                                <b class="movetoprofile reply_nickname"
+                                   id="{{ reply.nickname }}">{{ reply.nickname }}</b> {{ reply.reply_content }}
+                            </div>
+                            <!-- 댓글 수정 메뉴 -->
+                            <div>
+                                <div id="reply_menu_{{ reply.id }}" reply_id="{{ reply.id }}" class="dropdown"
+                                     style="display: none; {% if reply.nickname == user_session.nickname %} display: flex; {% elif feed.nickname == user_session.nickname %} display: flex  {% endif %}">
+                                    <!-- 댓글 삭제 및 수정 아이콘 -->
+                                    <a href="#" role="button" id="dropdownMenuLink"
+                                       data-bs-toggle="dropdown" aria-expanded="false"
+                                       style="color: gray;
+                                               {% if feed.nickname != user_session.nickname or reply.nickname != user_session.nickname %} display: none {% endif %}}">
+                                        <span class="material-icons-round">more_horiz</span>
+                                    </a>
+                                    <ul id="reply_delete_update_menu" class="dropdown-menu"
+                                        aria-labelledby="dropdownMenuLink">
+                                        <!-- 댓글 삭제 메뉴 -->
+                                        <li reply_id="{{ reply.id }}" class="remove_reply dropdown-item">
+                                            <b class="delete_text">삭제</b>
+                                        </li>
+                                        <li>
+                                            <!-- 구분선 -->
+                                            <hr style="display: none;{% if reply.nickname == user_session.nickname %} display: flex {% endif %}"
+                                                class="dropdown-divider">
+                                        </li>
+                                        <!-- 댓글 수정 메뉴 -->
+                                        <li style="display: none;{% if reply.nickname == user_session.nickname %} display: flex {% endif %}">
+                                            <div id="{{ reply.id }}" reply_id="{{ reply.id }}"
+                                                 class="update_reply dropdown-item">
+                                                수정
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 댓글 수정을 영역 -->
+                        <div class="reply_update_textbox" id="reply_div{{ reply.id }}">
+                            <!-- 댓글 수정 텍스트 박스 -->
+                            <input id="reply_update_{{ reply.id }}" type="text" class="input_reply_update form-control"
+                                   placeholder="댓글 수정..">
+                            <!-- 댓글 수정 버튼 -->
+                            <div reply_id="{{ reply.id }}" class="update_replys" id="update_reply_btn">
+                                수정
+                            </div>
+                            <!-- 댓글 수정 닫기 버튼 -->
+                            <span reply_id="{{ reply.id }}" id="reply_close_button"
+                                  class="reply_close_btn material-icons-outlined">close</span>
+                        </div>
+                    {% endfor %}
+                </div>
+                <!-- 댓글을 입력 영역 -->
+                <div class="reply_add_textbox">
+                    <!-- 댓글 입력 박스 -->
+                    <input id="reply_{{ feed.id }}" type="text" class="input_reply_add form-control"
+                           placeholder="댓글 달기..">
+                    <!-- 댓글 게시 버튼 TODO user_session 이게 왜 있어야 하는가? -->
+                    <div feed_id="{{ feed.id }}" user_session="{{ user_session.nickname }}"
+                         feed_user_nickname="{{ feed.nickname }}" class="upload_reply">
+                        게시
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <!--  팔로우 추천 화면 및 내 프로필 표시 영역 -->
+    <div class="follow_side_area">
+        <!-- 내 프로필 표시 영역 -->
+        <div class="my_profile_area">
+            <!-- 프로필 이미지 영역 -->
+            <div id="my_profile_image" class="profile_box">
+                <!-- 내 프로필 사진-->
+                <a href="/user/profile"> <img class="profile"
+                                              src="{% get_media_prefix %}{{ user_session.profile_image }}"
+                                              alt="text"></a>
+            </div>
+            <!-- 프로필 닉네임 이름 영역 -->
+            <div class="my_profile_nickname_name">
+                <!-- 내 프로필 닉네임-->
+                <div>
+                    <b><a id="my_profile_nickname" href="/user/profile">{{ user_session.nickname }}</a></b>
+                </div>
+                <!--내 프로필 이름-->
+                <div class="my_profile_name">
+                    {{ user_session.name }}
+                </div>
+            </div>
+        </div>
+        <!-- 추천 목록 표시 -->
+        <div class="follow_recommend_area">
+            <div class="follow_recommend_text">
+                회원님을 위한 추천
+            </div>
+            <div>
+                <a class="follow_recommend_list_all" href="#">모두보기</a>
+            </div>
+        </div>
+        <div class="follow_recommend_list_area">
+            {% for user in main_recommend_follow_list %}
+                <div class="follow_recommend_list">
+                    <div class="follow_user_profile_area">
+                        <div class="profile_box">
+                            <img class="profile movetoprofile" id="{{ user.follow_recommend_user.nickname }}"
+                                 src="{% get_media_prefix %}{{ user.follow_recommend_user.profile_image }}" alt="text">
+                        </div>
+                        <div class="follow_nickname_count_area">
+                            <div class="recommend_user_nickname">
+                                {{ user.follow_recommend_user.nickname }}
+                            </div>
+                            {% if user.follow_count == 0 %}
+                                <div class="recommend_follow_count">
+                                    회원님을 위한 추천
+                                </div>
+                            {% else %}
+                                <div class="recommend_follow_count">
+                                    회원님 외 {{ user.follow_count }}명이 팔로우합니다.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if user.is_follow %}
+                        <div id="follow_{{ user.follow_recommend_user.id }}" class="follow_button" style="color: gray"
+                             user_email="{{ user.follow_recommend_user.email }}">
+                            언팔로우
+                        </div>
+                    {% else %}
+                        <div id="follow_{{ user.follow_recommend_user.id }}" class="follow_button"
+                             user_email="{{ user.follow_recommend_user.email }}">
+                            팔로우
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <!-- 도움말 -->
+        <div class="Astro_explain1"> 소개 도움말 홍보센터 API <br> 개인정보처리방침 약관 위치
+            인기 계정 해시태그 언어
+        </div>
+        <div class="Astro_explain2"> 2021 인스타그램 프롬 페이스북</div>
+
+    </div>
+</div>
+
+<!-- 사진 업로드 창 첫번째 모달 -->
+<div id="first_modal" class="modal_overlay">
+    <!-- 모달창 -->
+    <div class="modal_window">
+        <!-- 모달창 상단바 -->
+        <div class="feed_upload_modal_bar">
+            <div>
+                <div id="modal_next_button" class="feed_upload_modal_bar_btn">다음</div>
+            </div>
+            <!-- 설명란 -->
+            <div>
+                <b>새로운 피드 생성</b>
+            </div>
+            <!-- 모달창 닫기 버튼 -->
+            <div>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+            </div>
+        </div>
+
+        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <div class="img_upload_space">
+            <div class="feed_modal_area_images_btn_dele_parent">
+                <div class="feed_modal_area_images_btn_dele">
+                    삭제
+                </div>
+            </div>
+            <!--설명란-->
+            <img style="width: 100px; height: 100px" class="feed_modal_area_upload_img"
+                 src="https://postfiles.pstatic.net/MjAyMzA2MDdfMTQ5/MDAxNjg2MDcyNjc2MTk5.kQ06b73EUSfcUf1MYitpo1G_ROPvHbLujMhgqfvbws4g.cGAAR3fMuv49g1R6afB1rBxxZyBbRcbQRksW_nT3yUUg.PNG.roedeer0807/imageuplod-removebg-preview.png?type=w966">
+            <div class="drag_here_image">
+                이미지를 여기에 드롭 하거나 사진 추가 버튼을 클릭 하세요
+            </div>
+            <div class="feed_image_area_img_control_btns_parent">
+
+                <div class="feed_image_area_img_control_btns">
+                    <!-- 다음 버튼 이전 버튼 영역 -->
+                    <div class="feed_modal_area_images_btn">
+                        <!-- 이전 버튼-->
+                        <div class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn"
+                             id="feed_modal_feed_image_before_F">
+                            arrow_back_ios
+                        </div>
+                        <!-- 이전 버튼-->
+                        <div class="feed_modal_feed_image_next material-symbols-outlined"
+                             id="feed_modal_feed_image_next_F">
+                            arrow_forward_ios
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--사진 찾는 파일 시스템을 여는 버튼-->
+            <button id="image_upload_btn" type="button" class="btn btn-primary">
+                사진 추가
+            </button>
+            <!--파일 입력 폼-->
+            <input multiple="multiple" type="file" id="input_image_upload" onchange="image_upload();"/>
+        </div>
+    </div>
+</div>
+
+<!-- 글 내용 작성 모달창 두번째 모달 -->
+<div id="second_modal" class="modal_overlay">
+    <!-- 모달창 -->
+    <div class="modal_window">
+        <!-- 모달창 상단바 -->
+        <div class="feed_upload_modal_bar">
+            <div id="modal_before_button" class="feed_upload_modal_bar_btn">
+                이전
+            </div>
+            <!-- 설명란 -->
+            <div>
+                <b>새로운 피드 생성</b>
+            </div>
+
+            <!-- 모달창 닫기 버튼 -->
+            <div>
+                <span id="modal_close_button" class="modal_close material-icons-outlined">close</span>
+            </div>
+        </div>
+        <!-- 이미지 영역과 글 영역 -->
+        <div class="feed_image_text_modal">
+            <!-- 이미지 영역 -->
+            <div class="img_upload_space">
+                <!-- 이미지 보기 이전 버튼 다음 버튼 영역-->
+                <div class="feed_modal_area_images_btn">
+                    <!-- 이전 버튼-->
+                    <div id="feed_modal_feed_image_before_btn"
+                         class="feed_modal_feed_image_before material-symbols-outlined img_previous_btn">
+                        arrow_back_ios
+                    </div>
+                    <!-- 다음 버튼-->
+                    <div id="feed_modal_feed_image_next_btn"
+                         class="feed_modal_feed_image_next material-symbols-outlined">
+                        arrow_forward_ios
+                    </div>
+                </div>
+            </div>
+            <!-- 글 영역 -->
+            <div class="modal_text_area">
+                <!-- 게시글 작성 (글내용과 해시태그) 영역 -->
+                <div class="feed_content_input">
+                    <!-- 글내용 영역 -->
+                    <div class="feed_text_area">
+                        <textarea id="input_feed_content" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="글 내용 작성..."></textarea>
+                    </div>
+                    <!-- 해시태그 영역 -->
+                    <div class="feed_hashtag_area">
+                        <textarea id="input_feed_hashtag" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="해시태그 내용 작성..."></textarea>
+                    </div>
+                    <!-- 정유진: 카테고리 선택 영역 -->
+                    <div class="second_third_modal_category">
+                        <div class="modal_category_select_area">
+                            <span class="feed_category_explain">카테고리</span>
+                            <select id="input_feed_category" class="form-control">
+                                <option value="">선택</option>
+                                <option value="food">음식</option>
+                                <option value="daily">일상</option>
+                                <option value="sports">스포츠</option>
+                                <option value="travel">여행</option>
+                                <option value="companion_animal">반려동물</option>
+                            </select>
+                        </div>
+                        <!-- 정유진: 공유카테고리 선택 영역 -->
+                        <div class="dropdown shared_category_area">
+                            <p class="shared_category_approach_suggestion_text">
+                                접근제어
+                            </p>
+                            <a class="shared_category_btn" href="#" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                공유
+                            </a>
+                            <ul class="dropdown-menu shared_category_select_area"
+                                aria-labelledby="dropdownMenuLink" data-popper-placement="top-start">
+                                {% if shared_category_nickname_list %}
+                                    {% for user in shared_category_nickname_list %}
+                                        <li class="text_line shared_category_select">
+                                            <div>
+                                                <input class="shared_category_checkbox" input type="checkbox"
+                                                       name="shared_category_nickname_list"
+                                                       value="{{ user.nickname }}"/>
+                                            </div>
+                                            <p class="dropdown-item_shared_category shared_category_nickname_select"
+                                               onclick="toggleCheckbox(event)">{{ user.nickname }}</p>
+                                            </input>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <p style="margin: 0 5px; color: #737373">없음</p>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- 공유하기 버튼 -->
+                <button id="feed_create_button" type="button" class="btn btn-primary">
+                    공유하기
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 모달창 피드 수정 -->
+<div id="third_modal" class="modal_overlay">
+    <!-- 모달창 -->
+    <div class="modal_window">
+        <!-- 모달창 상단바 -->
+        <div class="feed_upload_modal_bar">
+            <!-- 공백 -->
+            <div>
+                <p class="space"></p>
+            </div>
+            <!-- 설명란 -->
+            <div>
+                <b>피드 수정</b>
+            </div>
+            <!-- 모달창 닫기 버튼 -->
+            <div>
+                <span id="modal_close_button"
+                      class="update_feed_modal_close material-icons-outlined modal_close">close</span>
+            </div>
+        </div>
+        <!-- 이미지를 드래그 앤 드롭할 공간 -->
+        <div class="feed_image_text_modal">
+            <!-- 이미지 영역 -->
+            <div id="update_feed_modal_image">
+                <div class="update_feed_modal_image_btns_parent">
+                    <div class="update_feed_modal_image_btns">
+                        <div class="update_feed_modal_feed_image_dele"> 삭제</div>
+                        <div class="update_feed_modal_image_LR_btns">
+                            <div class="update_feed_modal_feed_image_before img_previous_btn material-symbols-outlined">
+                                arrow_back_ios
+                            </div>
+                            <div class="update_feed_modal_feed_image_next material-symbols-outlined">
+                                arrow_forward_ios
+                            </div>
+                        </div>
+                    </div>
+                    <div class="update_feed_modal_image_update_parent">
+                        <button type="button" class="update_feed_modal_image_update btn">
+                            사진 추가
+                        </button>
+                        <input multiple="multiple" type="file" id="update_feed_modal_input_image_upload"
+                               class="update_feed_modal_input_image_upload_btn"
+                               onchange="image_update();"/>
+                    </div>
+                </div>
+            </div>
+            <!-- 텍스트 영역 -->
+            <div class="modal_text_area">
+                <!-- 해시태그, 게시글 작성 텍스트박스 -->
+                <div class="feed_content_input">
+                    <!-- 글내용 영역 -->
+                    <div class="feed_text_area">
+                        <textarea id="input_updatefeed_content" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="글 내용 작성..."></textarea>
+                    </div>
+                    <!-- 해시태그 영역 -->
+                    <div class="feed_hashtag_area">
+                        <textarea id="input_updatefeed_hashtag" class="form-control"
+                                  id="exampleFormControlTextarea1" rows="5"
+                                  placeholder="해시태그 내용 작성..."></textarea>
+                    </div>
+                    <!-- 정유진: 카테고리 선택 영역 -->
+                    <div class="second_third_modal_category">
+                        <div class="modal_category_select_area">
+                            <span class="feed_category_explain">카테고리</span>
+                            <select id="input_updatefeed_category" class="form-control" style="box-shadow: none">
+                                <option id="category_food" value="food">음식</option>
+                                <option id="category_daily" value="daily">일상</option>
+                                <option id="category_sports" value="sports">스포츠</option>
+                                <option id="category_travel" value="travel">여행</option>
+                                <option id="category_companion_animal" value="companion_animal">반려동물</option>
+                            </select>
+                        </div>
+                        <!-- 정유진: 공유카테고리 선택 영역 -->
+                        <div class="dropdown shared_category_area">
+                            <p class="shared_category_approach_suggestion_text">
+                                접근제어
+                            </p>
+                            <a class="shared_category_btn" href="#" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                공유
+                            </a>
+                            <ul class="dropdown-menu shared_category_select_area"
+                                aria-labelledby="dropdownMenuLink" data-bs-popper="end"
+                                data-popper-placement="bottom-end">
+                                {% if shared_category_nickname_list %}
+                                    {% for user in shared_category_nickname_list %}
+                                        <li class="text_line shared_category_select">
+                                            <div>
+                                                <input class="shared_category_checkbox"
+                                                       id="update_shared_user_nickname_{{ user.nickname }}"
+                                                       type="checkbox"
+                                                       name="update_shared_category_nickname_list"
+                                                       value="{{ user.nickname }}">
+                                            </div>
+                                            <p class="dropdown-item_shared_category shared_category_nickname_select"
+                                               onclick="toggleCheckbox(event)">{{ user.nickname }}</p>
+                                            </input>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <p style="margin: 0 5px; color: #737373">없음</p>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- 공유하기 버튼 -->
+                <button id="feed_update_button" type="button" class="btn btn-primary">
+                    수정하기
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 자동완성 모달창 -->
+<div id="auto_modal">
+    <!-- 자동완성 리스트 -->
+    <div id="auto_modal_list" class="auto_madal_list_area">
+    </div>
+</div>
+
+<!-- 하나의 게시물를 보는 모달창. 태그의 id 값는 모두 앞에 feed_modal을 붙였다. -->
+<div id="feed_modal" class="modal_overlay">
+    <!-- 최상위 모달창 -->
+    <div id="root_feed_modal_window" class="modal_window">
+        <!-- 부모 모달창 -->
+        <div class="feed_modal_area_parents">
+            <!-- 모달창 -->
+            <div class="feed_modal_area_son">
+                <!-- 이미지 영역 -->
+                <div id="feed_modal_image">
+                    <!-- ajax로 이미지를 받아옴 -->
+                </div>
+                <!-- 글 영역 -->
+                <div class="feed_modal_text_area_parents">
+                    <!-- 글 영역 상단바 -->
+                    <div class="feed_modal_text_area">
+                        <!-- 작성자 프로필 사진과 닉네임 영역 -->
+                        <div class="feed_modal_menu_bar_area">
+                            <div id="feed_modal_menu_writer_profile_image" class="box profile feed_modal_profile_image">
+                                <!-- ajax로 받아옴 작성자 프로필 사진 -->
+                            </div>
+                            <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
+                                <!-- ajax로 받아옴 작성자 닉네임 -->
+                            </div>
+                        </div>
+                        <!-- 닫기 버튼 -->
+                        <div>
+                            <span id="modal_close_button"
+                                  class="feed_mdoal_close_like_count feed_modal_close material-icons-outlined">close</span>
+                        </div>
+                    </div>
+                    <!-- 글내용과 댓글 리스트, 해시태그 영역 -->
+                    <div class="feed_modal_contents_area">
+                        <div>
+                            <!-- 작성자 정보 영역 -->
+                            <div class="feed_modal_contents_writer">
+                                <div id="feed_modal_writer_profile_image" class="box profile feed_modal_profile_image">
+                                    <!-- ajax로 받아옴 작성자 프로필 사진 -->
+                                </div>
+                                <div id="feed_modal_writer_nickname" class="feed_modal_nickname">
+                                    <!-- ajax로 받아옴 작성자 닉네임 -->
+                                </div>
+                                <div id="feed_modal_feed_content" class="text_line">
+                                    <!-- ajax로 받아옴 게시물 내용 -->
+                                </div>
+                            </div>
+                            <!-- 정유진: 피드모달 카테고리 영역 추가 -->
+                            <div class="feed_modal_category_area">
+                                <div id="feed_modal_category" class="feed_modal_category">
+                                    <!-- ajax로 받아옴 카테고리 -->
+                                </div>
+                                <div id="feed_modal_shared_category">
+                                    <!-- ajax로 받아옴 공유카테고리 -->
+                                </div>
+                            </div>
+                            <!-- 해시태그 -->
+                            <div class="feed_modal_contents_writer_hashtags">
+                                <!-- ajax로 받아옴 해시태그 내용 -->
+                            </div>
+                        </div>
+                        <!-- 댓글 리스트 -->
+                        <div id="feed_modal_reply_list">
+                            {#                            <div id="feed_modal_reply_profile_image_">#}
+                            {#                                <!-- 댓글 작성자 프로필 사진 -->#}
+                            {#                            </div>#}
+                            {#                            <div id="feed_modal_reply_nickname_content_">#}
+                            {#                                <div id="feed_modal_reply_nickname_">#}
+                            {#                                    <!-- 댓글 작성자 닉네임 -->#}
+                            {#                                </div>#}
+                            {#                                <div id="feed_modal_reply_content_">#}
+                            {#                                    <!-- 댓글 내용 -->#}
+                            {#                                </div>#}
+                            {#                            </div>#}
+                        </div>
+                    </div>
+                    <div>
+                        <!-- 게시물의 좋아요, 북마크, 좋아요 수 -->
+                        <div class="feed_modal_like_bookmark_area">
+                            <div class="feed_modal_like_bookmark">
+                                <div id="feed_modal_is_liked">
+                                    <!-- ajax로 받아옴 좋아요 -->
+                                </div>
+                                <div id="feed_modal_is_marked">
+                                    <!-- ajax로 받아옴 북마크 -->
+                                </div>
+                            </div>
+                            <div id="feed_modal_like_count">
+                                <!-- ajax로 받아옴 좋아요 수 -->
+                            </div>
+                        </div>
+                        <!-- 작성 시간 -->
+                        <div id="feed_modal_feed_create_at">
+                            <!-- ajax로 받아옴 게시물 업로드 시간-->
+                        </div>
+                        <!-- 댓글 작성 영역 -->
+                        <div class="feed_modal_reply_upload_area">
+                            <!-- 댓글 입력 텍스트 박스 -->
+                            <input id="reply_content_text" type="text" class="form-control"
+                                   placeholder="댓글 달기..">
+                            <!-- 댓글 게시 버튼 -->
+                            <div id="reply_content_upload" class="modal_upload_reply">
+                                게시
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 채팅 친구 목록 모달창 -->
+<div id="chat_user_modal_id" class="chat_user_modal_area">
+    <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
+    <div class="chat_modal_bar_area">
+        <div class="chat_modal_blank"></div>
+        <div class="chat_user_modal_header">팔로우 목록</div>
+        <span class="chat_modal_close material-icons-outlined">close</span>
+    </div>
+    <!-- 채팅할 친구 목록이 리스트 영역 -->
+    <div class="chat_modal_user_area"></div>
+    <div class="refresh_chat_modal_user_area" onclick="open_article1('/user/chat');">새로고침</div>
+</div>
+
+<!-- 채팅 모달창 -->
+<div id="chat_modal_id" class="chat_modal_area">
+    <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
+    <div class="chat_modal_bar_area">
+        <div class="chat_modal_back_btn" onclick="open_article1('/user/chat');">이전</div>
+        <div class="chat_modal_header">쪽지</div>
+        <span class="chat_modal_close material-icons-outlined">close</span>
+    </div>
+    <!-- 채팅창 내용 영역 -->
+    <div class="chat_modal_text_area"></div>
+</div>
+
+<!-- 알림 목록 모달창 -->
+<div id="alert_modal_id" class="alert_modal_area">
+    <!-- 채팅 모달 상단바 (공백, 제목, 닫기 버튼) -->
+    <div class="alert_modal_bar chat_modal_bar_area">
+        <div class="chat_modal_blank"></div>
+        <div class="alert_modal_header">알림 목록</div>
+        <div class="chat_modal_blank"></div>
+    </div>
+    <!-- 채팅할 친구 목록이 리스트 영역 -->
+    <div class="alert_list_modal_area"></div>
+    <div class="alert_all_remove">모두 확인</div>
+</div>
+
+<!-- 팔로우 모두보기 모달창 -->
+<div id="all_follow_modal" class="all_follow_recommend_list">
+    <div class="all_follow_recommend_display">
+        <!-- 팔로우 모달창 상단바 영역 -->
+        <div class="all_follow_recommend_bar">
+            <div class="space">
+
+            </div>
+            <div class="all_follow_recommend_bar_explain">
+                팔로우 추천 모두보기
+            </div>
+            <div class="close_follow_modal">
+                닫기
+            </div>
+        </div>
+        <!-- 팔로우 모달창내 유저 리스트 영역 -->
+        <div class="all_follow_recommend_list_area">
+            {% for user in follow_recommend_list %}
+                <!-- 팔로우 모달창내 유저 한명 영역 -->
+                <div class="all_user_follow_recommend_list">
+                    <div class="follow_user_profile_area">
+                        <!-- 프로필 사진영역 -->
+                        <div class="profile_box">
+                            <img class="profile movetoprofile" id="{{ user.follow_recommend_user.nickname }}"
+                                 src="{% get_media_prefix %}{{ user.follow_recommend_user.profile_image }}" alt="text">
+                        </div>
+                        <!-- 닉네임 및 팔로우 수 영역 -->
+                        <div class="follow_nickname_count_area">
+                            <div class="recommend_user_nickname movetoprofile"
+                                 id="{{ user.follow_recommend_user.nickname }}">
+                                {{ user.follow_recommend_user.nickname }}
+                            </div>
+                            {% if user.follow_count == 0 %}
+                                <div class="recommend_follow_count">
+                                    회원님을 위한 추천
+                                </div>
+                            {% else %}
+                                <div class="recommend_follow_count">
+                                    회원님 외 {{ user.follow_count }}명이 팔로우합니다.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- 해당유저와 팔로우 여부를 통해서 팔로우 버튼을 다르게 표시 -->
+                    {% if user.is_follow %}
+                        <div id="follow_modal_{{ user.follow_recommend_user.id }}" class="follow_modal_button"
+                             style="color: gray"
+                             user_email="{{ user.follow_recommend_user.email }}">
+                            언팔로우
+                        </div>
+                    {% else %}
+                        <div id="follow_modal_{{ user.follow_recommend_user.id }}" class="follow_modal_button"
+                             user_email="{{ user.follow_recommend_user.email }}">
+                            팔로우
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Option 1: Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+<!--
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+-->
+<script src="{% static 'js/main.js' %}?ver=5"></script>
+<script src="{% static 'js/main_profile_same.js' %}?ver=12"></script>
+<script src="{% static 'js/allsame.js' %}?ver=44"></script>
+</body>
+</html>

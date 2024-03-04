@@ -1,0 +1,271 @@
+/* 메뉴 홈 아이콘에 패딩을 줘서 로고와 검색창 간격을 조절 */
+#home_icon {
+    padding-left: 108px;
+}
+
+/* 프로필 사진과 프로필 정보 텍스트 영역*/
+.profile_total_area {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px;
+    background-color: #FAFAFA;
+}
+
+/* 프로필 사진 */
+.profile_image_area {
+    padding: 30px 100px;
+}
+
+/* 프로필 설명란 */
+.profile_imformation {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+/* 사용자 이름, 설정창, 팔로우버튼 영역 */
+.profile_text_area {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 18px;
+    align-items: center;
+}
+
+/* 프로필 닉네임 */
+.profile_nickname {
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+/* 설정 아이콘 */
+.settigns_icon {
+    margin-top: 3px;
+}
+
+/* 프로필 설명란(게시물 수, 팔로워 수, 팔로잉 수, 사용자 이름) */
+.profile_feed_follow_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+    margin-right: 40px;
+    font-size: 16px;
+}
+
+/* 게시물 개수 */
+.feed_text_count {
+    margin-right: 40px;
+    margin-bottom: 1px;
+}
+
+/* 사용자가 게시, 좋아요, 북마크한 게시글을 보여주기 위한 영역 */
+.show_feed_root_area {
+    border-top: solid 2px rgba(50, 50, 50, 0.1);
+    width: 100%;
+}
+
+/* 내가 게시, 좋아요, 북마크한 게시글을 보여주기 위한 버튼 영역 */
+.show_feed_list_area {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
+
+/* 내가 작성한 게시글들을 보기 위한 버튼 */
+#button_feed_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 내가 좋아요한 게시글을 보기 위한 버튼 */
+#button_feed_like_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 내가 북마크한 게시글을 보기 위한 버튼 */
+#button_feed_bookmark_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 정유진: 공유카테고리 게시글을 보기 위한 버튼 */
+#button_feed_shared_category_list {
+    color: #737373;
+    font-size: 12px;
+    cursor: pointer;
+    height: 52px;
+    margin: 0 50px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-top-width: 1px;
+}
+
+/* 상황에 맞는 피드 보여주는 아이콘들 */
+.feed_list_icons {
+    margin-right: 5px !important;
+}
+
+/* 내가 작성한 게시글 목록 root */
+#feed_list {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 피드가 보여질 영역 */
+.feed_list_area {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 1000px;
+    justify-content: center;
+}
+
+/* 피드 한칸 최상위 태그*/
+.feed_size_root {
+    width: 30%;
+    height: 30%;
+    margin: 10px 5px 0 5px;
+}
+
+/* div를 겹치기 위한 부모 창 */
+.show_count_area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* mouse over시 좋아요 북마크 수 보여주기 위한 창 */
+.profile_feed_mouse_over {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 좋아요 수나 댓글 수를 보여줌 */
+.feed_count {
+    margin: 10px;
+}
+
+/* 좋아요 북마크 아이콘 */
+.icon_like_bookmark {
+    margin-right: 5px;
+}
+
+/* 실제 이미지 */
+.img_feed_list {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+/* 게시물에 마우스 커서룰 올리기 전 상태.*/
+.profile_feed_mouse_over {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* 게시물에 마우스 커서를 올리면 밝기가 낮아진다.*/
+.profile_feed_mouse_over:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 게시글 좋아요 수와 댓글을 숨긴다.*/
+.profile_feed_mouse_over > .feed_count {
+    display: none;
+}
+
+/*정유진: 게시물의 좋아요 수와 댓글 수를 보여준다.*/
+.profile_feed_mouse_over:hover > .feed_count {
+    color: white;
+    display: flex;
+}
+
+/* 내가 좋아요한 게시글 목록 */
+#like_feed_list {
+    width: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 내가 북마크한 게시글 목록 */
+#bookmark_feed_list {
+    width: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 정유진: 공유카테고리 게시글 목록 */
+#shared_category_list {
+    width: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 프로필 화면에서 프로필 사진 */
+.profile_image_area > .box {
+    width: 160px!important;
+    height: 160px!important;
+}
+
+/* 프로필 화면 프로필 이미지 */
+#profile_user_image {
+    cursor: default!important;
+}
+
+/* 반응형 웹 */
+@media (max-width: 725px) {
+    .profile_feed_follow_area {
+        display: none !important;
+    }
+
+    .settigns_icon {
+        display: none !important;
+    }
+
+    .feed_select_button {
+        display: none;
+    }
+
+    .profile_image_area {
+        padding-right: 70px !important;
+        padding-left: 50px !important;
+    }
+}

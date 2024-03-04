@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="shortcut icon" href="#">
+    <!-- css 분리 -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/allsame.css' %}?ver=10">
+    <!--  jQuery를 사용하기 위한 선언  -->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <title>Title</title>
+</head>
+<body>
+<div class="alert_root_area">
+    {% for index in alert_list %}
+        <!-- 좋아요 알림 경우 -->
+        {% if index.alert_content == 'like' %}
+            <!-- 알림 영역 -->
+            <div id="{{ index.alert_id }}" class="alert_list">
+                <!-- 유저 프로필 사진 영역 -->
+                <div class="alert_profile">
+                    <img class="profile alertprofile_move" alert_id="{{ index.alert_send_user.nickname }}"
+                         src="{% get_media_prefix %}{{ index.alert_send_user.profile_image }}" alt="text">
+                </div>
+                <!-- 알림 내용 영역 -->
+                <div class="alert_content_area feed_modal" feed_id="{{ index.alert_feed.id }}">
+                    <div><b>{{ index.alert_send_user.nickname }}</b> 님이</div>
+                    <div>회원님의 <a>게시물</a>에 좋아요를 했습니다.</div>
+                    <div class="alert_time">{{ index.alert_time }}</div>
+                </div>
+                <!-- 알림이 발생한 게시물 -->
+                <div>
+                    <img class="alert_feed_image feed_modal" feed_id="{{ index.alert_feed.id }}"
+                         src="{% get_media_prefix %}{{ index.alert_feed.image }}" alt="text">
+                </div>
+            </div>
+        {% endif %}
+        <!-- 댓글 알림 경우 -->
+        {% if index.alert_content == 'reply' %}
+            <!-- 알림 영역 -->
+            <div id="{{ index.alert_id }}" class="alert_list">
+                <!-- 유저 프로필 사진 영역 -->
+                <div class="alert_profile">
+                    <img class="profile alertprofile_move" alert_id="{{ index.alert_send_user.nickname }}"
+                         src="{% get_media_prefix %}{{ index.alert_send_user.profile_image }}" alt="text">
+                </div>
+                <!-- 알림 내용 영역  -->
+                <div class="reply_alert_content_area feed_modal" feed_id="{{ index.alert_feed.id }}">
+                    <div><b>{{ index.alert_send_user.nickname }}</b> 님이</div>
+                    <div>회원님의 <a>게시물</a>에 댓글을 작성 했습니다.</div>
+                    <div class="alert_reply_content">{{ index.alert_reply }}</div>
+                    <div class="alert_time">{{ index.alert_time }}</div>
+                </div>
+                <!-- 알림이 발생한 게시물 -->
+                <div>
+                    <img class="alert_feed_image feed_modal" feed_id="{{ index.alert_feed.id }}"
+                         src="{% get_media_prefix %}{{ index.alert_feed.image }}" alt="text">
+                </div>
+            </div>
+        {% endif %}
+        <!-- 팔로우 알림 경우 -->
+        {% if index.alert_content == 'follow' %}
+            <!-- 알림 영역 -->
+            <div id="{{ index.alert_id }}" class="alert_list follow_alert">
+                <!-- 유저 프로필 사진 영역 -->
+                <div class="alert_profile">
+                    <img class="profile alertprofile_move" alert_id="{{ index.alert_send_user.nickname }}"
+                         src="{% get_media_prefix %}{{ index.alert_send_user.profile_image }}" alt="text">
+                </div>
+                <!-- 알림 내용 영역 -->
+                <div class="follow_alert_content_area alertprofile_move"
+                     alert_id="{{ index.alert_send_user.nickname }}">
+                    <div><b>{{ index.alert_send_user.nickname }}</b> 님이 회원님을 팔로우 했습니다.</div>
+                    <div class="alert_time">{{ index.alert_time }}</div>
+                </div>
+                <!--빈칸-->
+                <div>
+                    <img class="white"
+                         src="{% get_media_prefix %}white.png" alt="text">
+                </div>
+            </div>
+        {% endif %}
+
+    {% endfor %}
+</div>
+<script src="{% static 'js/main_profile_same.js' %}?ver=2"></script>
+<script src="{% static 'js/allsame.js' %}?ver=4"></script>
+</body>
+</html>
