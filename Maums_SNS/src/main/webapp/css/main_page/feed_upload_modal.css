@@ -1,0 +1,151 @@
+@charset "UTF-8";
+
+/* 모달창 오버레이 */
+.modal_overlay {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	left: 0;
+	top: 0;
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(1.5px);
+	-webkit-backdrop-filter: blur(1.5px);
+	z-index: 10000;
+}
+
+/* 모달창  */
+.modal_window {
+	background: white;
+	backdrop-filter: blur(13.5px);
+	-webkit-backdrop-filter: blur(13.5px);
+	border-radius: 10px;
+	border: none;
+	width: 40%;
+	height: 600px;
+	position: relative;
+	width: 40%;
+}
+
+/* 모달창 : 상단바 */
+.modal_window_top {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px;
+	border-bottom: 1px solid #d3d3d3;
+	font-weight: bold;
+	height: 10%;
+	width: 100%;
+}
+
+/* 모달창 : 상단바 공백부분 */
+.modal_window_top_nbsp {
+	width: 32px;
+}
+
+/* 모달창 : 피드 업로드 영역 */
+.modal_feed_upload_area {
+	width: 100%;
+	height: 90%;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-right: 1px solid #d3d3d3;
+}
+
+/* 모달창 : 피드 업로드 폼 */
+#modal_feed_upload_form {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 100%;
+}
+
+/* 모달창 : 내가 올릴 이미지 표시 영역 */
+.modal_feed_image_area {
+	width: 60%;
+	height: 100%;
+	border-right: 1px solid #d3d3d3;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* 모달창 : 이미지 업로드 영역 */
+.modal_feed_image_upload_area {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items:center; 
+}
+
+/* 모달창 : 이미지 업로드 input태그 */
+#fileInput {
+	display: none;
+}
+
+/* 모달창 : 사진 추가 버튼을 클릭 하세요 */
+.image_upload_explain {
+	font-size: 18px;
+	color: gray;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+/* 모달창 : 이미지 추가 버튼 */
+#image_upload_btn {
+	width: 100px;
+}
+
+/* 모달창 : 피드 글내용(글,해시태그) 적을 영역*/
+.modal_feed_text_area {
+	display: flex;
+	flex-direction: column;
+	width: 40%;
+	height: 100%
+}
+
+/* 모달창 : 피드에 올릴 글내용 영역 */
+.modal_feed_text_box_area {
+	width: 100%;
+	height: 51%;
+}
+
+/* 모달창 : 피드에 올릴 글내용 */
+#modal_feed_text_box {
+	width: 100%;
+	height: 100%;
+	border: none;
+	resize: none;
+	border-bottom: 1px solid #d3d3d3;
+}
+
+/* 모달창 : 피드에 올릴 해쉬태그 영역 */
+.modal_feed_hashtag_box_area {
+	width: 100%;
+	height: 43%;
+}
+
+/* 모달창 : 피드에 올릴 해시태그 */
+#modal_feed_hashtag_box {
+	width: 100%;
+	height: 100%;
+	resize: none;
+	border: none;
+}
+
+/* 모달창 : 피드 업로드 인풋태그 */
+#feedInput {
+	display:none;
+}
+
+/* 모달창 : 피드 업로드 버튼 */
+#feed_upload_btn {
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 10px;
+	width: 100%;
+}
