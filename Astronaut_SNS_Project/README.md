@@ -1,6 +1,6 @@
-# Astronaut_SNS_Project
+# Astronaut_SNS_Project : 편의성이 보완된 인스타그램
 
-장고를 이용한 인스타그램 코딩입니다.
+프로젝트에 대한 상세한 내용은 [여기에서 프로젝트 PPT를 확인](https://drive.google.com/file/d/1Gmdw3Ck8y76JJo2a4wKFJAAaWwMUcd3Q/view?usp=sharing)하세요.
 
 ---
 
